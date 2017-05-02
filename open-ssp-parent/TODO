@@ -1,0 +1,4 @@
+TODO List
+
+- Change to a more elegant and common used generic caching system.
+- Moving stopwatch with a more general context beahviour like MetricRegistry

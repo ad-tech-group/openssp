@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<!-- switch to enable/disable rtb support -->
+	<entry key="rtb">false</entry>
+	
+	<!-- switch to enable/disable ssp support -->
+	<entry key="ssp">false</entry>
+	
+	<!-- switch to enable/disable adserving support -->
+	<entry key="adserving">true</entry>
+	
+	<!-- switch to enable/disable debugging -->
+	<!-- outout of debug info will be stored in debug.log file. See logging-service#LogFacade and log4j2.xml for more information -->	
+	<entry key="debug">true</entry>
+	
+	<!-- switch to enable/disable verbose output -->
+	<entry key="verbose">false</entry>
+	
+	<!-- switch to enable/disable metrics support -->
+	<!-- tc restart necessary-->
+	<entry key="metrics">false</entry>
+</properties>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<!-- trigger expression for the cache jobs -->
+	<entry key="cache-trigger-expression"><![CDATA[0 0/5 * * * ?]]></entry>
+	
+	<!-- factor to reduce the winnerbid price in case of only one bidder and no floor price -->
+	<!-- deful is 0.3 -->
+	<entry key="draw-moderation">0.3</entry>
+	
+	<!-- the timeout in ms for execution the executor service -->
+	<!-- default is 500ms --> 
+	<entry key="cdl-timeout">1000</entry>
+	
+	<!-- url of the data provider where the cache is updated from -->
+	<entry key="data-provider-url"></entry>
+	
+	<!-- credential for remote access -->
+	<entry key="master_pw"></entry>
+	
+	<!-- credential for remote access -->
+	<entry key="master_user"></entry>
+</properties>
