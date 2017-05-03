@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.atg.service.LogFacade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author André Schmer
@@ -12,12 +13,12 @@ import com.atg.service.LogFacade;
  */
 public class MavenProperties {
 
+	private static final Logger log = LoggerFactory.getLogger(MavenProperties.class);
+
 	private String version = "";
 
 	/**
-	 * Uses the resource path from class to load the pom.properties
-	 * of the given groupID and artifactID. {final-name}, {groupId},
-	 * {artifactId}
+	 * Uses the resource path from class to load the pom.properties of the given groupID and artifactID. {final-name}, {groupId}, {artifactId}
 	 */
 	public MavenProperties() {
 		try {
@@ -26,13 +27,12 @@ public class MavenProperties {
 			properties.load(is);
 			version = properties.getProperty("version");
 		} catch (final IOException e) {
-			LogFacade.logException(getClass(), e.getMessage());
+			log.error(e.getMessage());
 		}
 	}
 
 	/**
-	 * Returns the version number from the Maven generated pom.properies or ""
-	 * if not available.
+	 * Returns the version number from the Maven generated pom.properies or "" if not available.
 	 * 
 	 * @return version as String
 	 */

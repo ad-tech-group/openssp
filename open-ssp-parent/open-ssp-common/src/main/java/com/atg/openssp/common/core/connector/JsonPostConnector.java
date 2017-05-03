@@ -15,9 +15,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atg.service.LogFacade;
-
-import common.BidProcessingException;
+import com.atg.openssp.common.exception.BidProcessingException;
 
 /**
  * 
@@ -56,7 +54,7 @@ public class JsonPostConnector extends DefaultConnector {
 					}
 					return content;
 				} else {
-					LogFacade.logDebug("bad result: " + statusCode);
+					log.debug("bad result: {}", statusCode);
 				}
 			}
 		} catch (final IOException e) {

@@ -6,10 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.atg.openssp.common.core.entry.CoreSupplyServlet;
 import com.atg.openssp.common.core.exchange.Exchange;
+import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.exchange.ExchangeServer;
 import com.atg.openssp.core.exchange.RequestSessionAgent;
-
-import common.RequestException;
 
 /**
  * Servlet implementation class SupplyVideoService

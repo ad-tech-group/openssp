@@ -3,11 +3,13 @@ package com.atg.openssp.core.cache.broker.remote;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.dto.Website;
 import com.atg.openssp.common.dto.Zone;
 import com.atg.openssp.core.cache.type.WebsiteDataCache;
 import com.atg.openssp.core.cache.type.ZoneDataCache;
-import com.atg.service.LogFacade;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -25,6 +27,8 @@ import restful.exception.RestException;
  */
 public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 
+	private static final Logger log = LoggerFactory.getLogger(RemoteWebsiteDataBroker.class);
+
 	final private Gson gson;
 
 	public RemoteWebsiteDataBroker() {
@@ -37,7 +41,7 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 			final String jsonString = super.connect();
 			final Website[] data = gson.fromJson(jsonString, Website[].class);
 			if (data != null && data.length > 0) {
-				LogFacade.logSystemInfo(this.getClass().getSimpleName() + " [REMOTE] sizeof Website data=" + data.length);
+				log.info(this.getClass().getSimpleName() + " [REMOTE] sizeof Website data=" + data.length);
 				Arrays.stream(data).forEach(c -> WebsiteDataCache.instance.put(c.getWebsiteId(), c));
 
 				Arrays.stream(data).forEach(c -> Arrays.stream(c.getZones()).forEach(new Consumer<Zone>() {
@@ -49,11 +53,9 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 				}));
 				return true;
 			}
-			LogFacade.logException(this.getClass(), " no data");
-		} catch (final JsonSyntaxException e) {
-			LogFacade.logException(this.getClass(), "JsonSyntaxException: " + e.getMessage());
-		} catch (final RestException e) {
-			LogFacade.logException(this.getClass(), "RestException: " + e.getMessage());
+			log.error("no data");
+		} catch (final JsonSyntaxException | RestException e) {
+			log.error(e.getMessage());
 		}
 		return false;
 	}

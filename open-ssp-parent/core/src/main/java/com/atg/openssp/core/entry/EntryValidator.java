@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.common.exception.ERROR_CODE;
+import com.atg.openssp.common.exception.EmptyCacheException;
+import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.cache.type.VideoAdDataCache;
 import com.atg.openssp.core.cache.type.WebsiteDataCache;
 import com.atg.openssp.core.cache.type.ZoneDataCache;
 
-import common.ERROR_CODE;
-import common.EmptyCacheException;
-import common.RequestException;
 import openrtb.tables.VideoBidResponseProtocol;
 
 /**

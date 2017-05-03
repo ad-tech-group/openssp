@@ -6,8 +6,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
 import com.atg.openssp.common.core.connector.JsonPostConnector;
-
-import common.BidProcessingException;
+import com.atg.openssp.common.exception.BidProcessingException;
 
 /**
  * A wrapper to a concrete connector using JSON notation and post method.

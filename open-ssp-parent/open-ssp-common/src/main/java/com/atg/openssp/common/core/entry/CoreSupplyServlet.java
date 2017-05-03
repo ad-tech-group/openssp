@@ -13,9 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.buffer.SSPLatencyBuffer;
 import com.atg.openssp.common.core.exchange.Exchange;
+import com.atg.openssp.common.exception.RequestException;
 import com.google.common.base.Stopwatch;
-
-import common.RequestException;
 
 /**
  * @author André Schmer

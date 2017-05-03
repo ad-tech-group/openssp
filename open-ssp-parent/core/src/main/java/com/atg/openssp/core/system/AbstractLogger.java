@@ -3,9 +3,8 @@ package com.atg.openssp.core.system;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
-
-import com.atg.service.LogFacade;
 
 /**
  * @author André Schmer
@@ -13,9 +12,11 @@ import com.atg.service.LogFacade;
  */
 class AbstractLogger implements Logger {
 
+	private static final Logger log = LoggerFactory.getLogger(AbstractLogger.class);
+
 	@Override
 	public void info(final String msg) {
-		LogFacade.logInfo(msg);
+		log.info(msg);
 	}
 
 	@Override

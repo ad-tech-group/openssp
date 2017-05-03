@@ -18,22 +18,13 @@ public class LogFacade {
 	private static Logger rtbResponseLogger;
 	private static Logger rtbRequestLogger;
 	private static Logger systemRequestLogger;
-	private static Logger infoLogger;
-	private static Logger systemInfoLogger;
-	private static Logger exceptionLogger;
-	private static Logger systemErrorLogger;
 	// private static Logger pidLogger;
 	private static Logger providerLogger;
-	// private static Logger latencyLogger;
 	// private static Logger adservingRequestLogger;
 	// private static Logger adservingResponseLogger;
 
 	private static String REQUEST_INFO = "request";
-	private static String SYSTEM_INFO = "systeminfo";
 	// private static String DEBUGGING = "debugging";
-	private static String INFO = "info";
-	private static String ERROR = "error";
-	private static String SYS_ERROR = "systemerror";
 	private static String PROVIDER = "provider";
 	// private static String PID = "pid";
 
@@ -49,10 +40,6 @@ public class LogFacade {
 
 	static {
 		systemRequestLogger = LogManager.getLogger(REQUEST_INFO);
-		infoLogger = LogManager.getLogger(INFO);
-		systemInfoLogger = LogManager.getLogger(SYSTEM_INFO);
-		exceptionLogger = LogManager.getLogger(ERROR);
-		systemErrorLogger = LogManager.getLogger(SYS_ERROR);
 		// pidLogger = LogManager.getLogger(PID);
 		rtbResponseLogger = LogManager.getLogger(BID_RESPONSE);
 		rtbRequestLogger = LogManager.getLogger(BID_REQUEST);
@@ -94,28 +81,12 @@ public class LogFacade {
 	// adservingResponseLogger.info("{} {}", msg, params);
 	// }
 
-	public static void logInfo(final String msg) {
-		infoLogger.info(msg);
-	}
-
 	public static void logRequestAsync(final String msg) {
 		systemRequestLogger.info(msg);
 	}
 
-	public static void logSystemInfo(final String msg) {
-		systemInfoLogger.info(msg);
-	}
-
 	public static void logProviderAsync(final String msg) {
 		providerLogger.info(msg);
-	}
-
-	public static void logException(final Class<?> clazz, final String msg) {
-		exceptionLogger.error("{} {} ", clazz.getSimpleName(), msg);
-	}
-
-	public static void logSystemError(final Class<?> clazz, final String msg) {
-		systemErrorLogger.fatal("{} {}", clazz.getSimpleName(), msg);
 	}
 
 	public static String getLogLevel() {

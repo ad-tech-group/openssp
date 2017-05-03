@@ -5,18 +5,19 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.ResponseContainer;
+import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.Auction;
 import com.atg.openssp.core.exchange.BidRequestBuilder;
-import com.atg.service.ExceptionCode;
-import com.atg.service.LogFacade;
 
-import common.InvalidBidException;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Impression;
 
@@ -25,6 +26,8 @@ import openrtb.bidrequest.model.Impression;
  *
  */
 public class DemandService implements Callable<AdProviderReader> {
+
+	private static final Logger log = LoggerFactory.getLogger(DemandService.class);
 
 	private final SessionAgent agent;
 
@@ -73,17 +76,17 @@ public class DemandService implements Callable<AdProviderReader> {
 					// }
 					agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
 				} catch (final ExecutionException | InterruptedException e) {
-					LogFacade.logException(this.getClass(), agent.getRequestid() + " " + e.getMessage());
+					log.error("{} {}", agent.getRequestid(), e.getMessage());
 				}
 			});
 
 			try {
 				adProvider = Auction.auctioneer(agent.getBidExchange());
 			} catch (final InvalidBidException e) {
-				LogFacade.logException(getClass(), ExceptionCode.E002, agent.getRequestid(), e.getMessage());
+				log.error("{} {}", agent.getRequestid(), e.getMessage());
 			}
 		} catch (final InterruptedException e) {
-			LogFacade.logException(getClass(), " InterruptedException (outer) " + agent.getRequestid() + " " + e.getMessage());
+			log.error(" InterruptedException (outer) {} {}", agent.getRequestid(), e.getMessage());
 		}
 
 		return adProvider;

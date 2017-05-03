@@ -2,12 +2,14 @@ package com.atg.openssp.core.cache.broker.context;
 
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.channel.rtb.DemandBroker;
 import com.atg.openssp.core.exchange.channel.rtb.OpenRtbConnector;
-import com.atg.service.LogFacade;
 
 import restful.context.Path;
 import restful.context.PathBuilder;
@@ -25,6 +27,8 @@ import restful.exception.RestException;
  */
 public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 
+	private static final Logger log = LoggerFactory.getLogger(SupplierDataBroker.class);
+
 	public SupplierDataBroker() {}
 
 	@Override
@@ -32,7 +36,7 @@ public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 		try {
 			final SupplierDto dto = super.connect(SupplierDto.class);
 			if (dto != null) {
-				LogFacade.logSystemInfo("sizeof supplier data=" + dto.getData().size());
+				log.info("sizeof supplier data=" + dto.getData().size());
 				dto.getData().forEach(new Consumer<Supplier>() {
 					@Override
 					public void accept(final Supplier supplier) {
@@ -43,9 +47,9 @@ public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 				});
 				return true;
 			}
-			LogFacade.logException(getClass(), " no data");
+			log.error("no data");
 		} catch (final RestException e) {
-			LogFacade.logException(this.getClass(), "RestException: " + e.getMessage());
+			log.error(e.getMessage());
 		}
 		return false;
 	}

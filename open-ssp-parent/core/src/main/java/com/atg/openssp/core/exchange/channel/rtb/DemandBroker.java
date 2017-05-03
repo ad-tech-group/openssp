@@ -7,13 +7,14 @@ import org.apache.http.message.BasicHeader;
 import org.openrtb.validator.OpenRtbInputType;
 import org.openrtb.validator.OpenRtbValidator;
 import org.openrtb.validator.OpenRtbValidatorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.core.broker.AbstractBroker;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
-import com.atg.service.LogFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -29,6 +30,8 @@ import openrtb.bidresponse.model.BidResponse;
  *
  */
 public final class DemandBroker extends AbstractBroker implements Callable<ResponseContainer> {
+
+	private static final Logger log = LoggerFactory.getLogger(DemandBroker.class);
 
 	private final Supplier supplier;
 
@@ -65,18 +68,18 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			// System.out.println("request is not valid");
 			// }
 
-			LogFacade.logDebug(jsonBidrequest);
+			log.debug(jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", String.valueOf(supplier.getSupplierId()));
 
 			final String result = connector.connect(jsonBidrequest, headers);
-			LogFacade.logDebug("result: " + result);
+			log.debug("result: " + result);
 			if (result != null) {
 				final BidResponse.Builder bidResponse = ResponseParser.parse(result, supplier);
 				sessionAgent.getBidExchange().setBidResponse(supplier, bidResponse);
 				return new ResponseContainer(supplier, bidResponse);
 			}
 		} catch (final Exception ignore) {
-			LogFacade.logDebug(ignore.getMessage());
+			//
 		}
 		return null;
 	}
@@ -97,7 +100,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 				}
 
 			} catch (final JsonIOException | JsonSyntaxException e) {
-				LogFacade.logException(ResponseParser.class, e.getMessage());
+				log.error(e.getMessage());
 			}
 			return null;
 		}

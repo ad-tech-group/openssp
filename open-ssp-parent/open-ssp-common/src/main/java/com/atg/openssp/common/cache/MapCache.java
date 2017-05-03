@@ -5,9 +5,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.atg.openssp.common.configuration.Context;
+import com.atg.openssp.common.exception.EmptyCacheException;
 import com.google.common.base.Preconditions;
-
-import common.EmptyCacheException;
 
 /**
  * @author André Schmer

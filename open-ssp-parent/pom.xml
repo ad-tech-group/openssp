@@ -20,6 +20,8 @@
 		<module>open-ssp-restful-client</module>
 		<module>channel-adserver</module>
 		<module>channel-ssp</module>
+		<module>open-ssp-openrtb</module>
+		<module>open-ssp-openrtb-validator</module>
 	</modules>
 
 	<build>

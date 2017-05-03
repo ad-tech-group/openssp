@@ -9,8 +9,8 @@ import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
+import com.atg.openssp.common.exception.InvalidBidException;
 
-import common.InvalidBidException;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.DirectDeal;
 import openrtb.bidrequest.model.Impression;

@@ -2,9 +2,11 @@ package com.atg.openssp.core.cache.broker.remote;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.dto.VideoAd;
 import com.atg.openssp.core.cache.type.VideoAdDataCache;
-import com.atg.service.LogFacade;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -22,6 +24,8 @@ import restful.exception.RestException;
  */
 public final class RemoteVideoadDataBroker extends AbstractRemoteDataProvider {
 
+	private static final Logger log = LoggerFactory.getLogger(RemoteVideoadDataBroker.class);
+
 	final private Gson gson;
 
 	public RemoteVideoadDataBroker() {
@@ -34,15 +38,13 @@ public final class RemoteVideoadDataBroker extends AbstractRemoteDataProvider {
 			final String jsonString = super.connect();
 			final VideoAd[] data = gson.fromJson(jsonString, VideoAd[].class);
 			if (data != null && data.length > 0) {
-				LogFacade.logSystemInfo(this.getClass().getSimpleName() + " [REMOTE] sizeof VideoAd data=" + data.length);
+				log.info(this.getClass().getSimpleName() + " [REMOTE] sizeof VideoAd data=" + data.length);
 				Arrays.stream(data).forEach(c -> VideoAdDataCache.instance.put(c.getVideoadId(), c));
 				return true;
 			}
-			LogFacade.logException(this.getClass(), " no data");
-		} catch (final JsonSyntaxException e) {
-			LogFacade.logException(this.getClass(), "JsonSyntaxException: " + e.getMessage());
-		} catch (final RestException e) {
-			LogFacade.logException(this.getClass(), "RestException: " + e.getMessage());
+			log.error("no data");
+		} catch (final JsonSyntaxException | RestException e) {
+			log.error(e.getMessage());
 		}
 		return false;
 	}

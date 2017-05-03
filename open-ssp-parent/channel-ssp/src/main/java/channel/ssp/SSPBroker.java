@@ -2,10 +2,12 @@ package channel.ssp;
 
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.core.broker.AbstractBroker;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
-import com.atg.service.LogFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
@@ -23,6 +25,8 @@ import openrtb.bidresponse.model.BidResponse;
  *
  */
 public final class SSPBroker extends AbstractBroker implements Callable<ResponseContainer> {
+
+	private static final Logger log = LoggerFactory.getLogger(SSPBroker.class);
 
 	private final SSPAdapter sspAdapter;
 
@@ -54,7 +58,7 @@ public final class SSPBroker extends AbstractBroker implements Callable<Response
 				final BidResponse response = gson.fromJson(result, BidResponse.class);
 				return response.getBuilder();
 			} catch (final JsonIOException | JsonSyntaxException e) {
-				LogFacade.logException(ResponseParser.class, e.getMessage());
+				log.error(e.getMessage());
 			}
 			return null;
 		}

@@ -11,10 +11,10 @@ import org.junit.Test;
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
+import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.core.exchange.Auction;
 import com.atg.openssp.core.exchange.RtbAdProvider;
 
-import common.InvalidBidException;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidresponse.model.BidResponse;
 import util.math.FloatComparator;

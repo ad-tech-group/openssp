@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.atg.service.LogFacade;
-
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.BidRequest.Builder;
 import openrtb.bidresponse.model.BidResponse;
@@ -88,7 +86,7 @@ public class BidExchange {
 			for (final Supplier supplier : getSupplierList()) {
 				final StringBuilder sb = new StringBuilder();
 				final long supplierId = supplier.getSupplierId();
-				sb.append(supplierId).append(LogFacade.LOG_DELIMITER);
+				sb.append(supplierId).append("#");
 				if (supplierId == getWinnerId()) {
 					sb.append("1");
 				} else {

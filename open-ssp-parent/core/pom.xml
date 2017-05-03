@@ -88,26 +88,11 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
 			</plugin>
-
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
-				<version>3.5.1</version> <configuration> <source>1.8</source> <target>1.8</target> 
-				</configuration> </plugin> -->
-
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
-				<version>${maven.surefire.plugin.version}</version> <dependencies> <dependency> 
-				<groupId>org.apache.maven.surefire</groupId> <artifactId>surefire-junit47</artifactId> 
-				<version>${maven.surefire.plugin.version}</version> </dependency> </dependencies> 
-				</plugin> -->
 		</plugins>
 	</build>
 
 	<dependencies>
 
-		<dependency>
-			<artifactId>logging-service</artifactId>
-			<groupId>com.atg.ssp.common</groupId>
-			<version>2.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.atg.openssp</groupId>
@@ -123,11 +108,11 @@
 			<artifactId>open-ssp-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>com.atg.common</groupId>
-			<artifactId>jobservice</artifactId>
-			<version>1.0</version>
+			<groupId>com.atg.openssp</groupId>
+			<artifactId>open-ssp-openrtb-validator</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -196,18 +181,11 @@
 			<artifactId>truth</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+		
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>2.8</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openrtb</groupId>
-			<artifactId>openrtb-validator</artifactId>
-			<version>2.3.2</version>
 		</dependency>
 
 		<!-- <dependency> <groupId>org.cache2k</groupId> <artifactId>cache2k-api</artifactId> 

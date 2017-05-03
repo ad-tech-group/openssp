@@ -8,21 +8,24 @@ import java.util.concurrent.CountDownLatch;
 import javax.xml.bind.PropertyException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.annotation.RuntimeMeta;
 import com.atg.openssp.common.annotation.Scope;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
-import com.atg.service.LogFacade;
+import com.atg.openssp.common.watchdog.DynamicLoadable;
 
 import util.properties.ProjectProperty;
-import watchdog.DynamicLoadable;
 
 /**
  * @author André Schmer
  * 
  */
 public abstract class AbstractConfigurationLoader implements DynamicLoadable {
+
+	private static final Logger log = LoggerFactory.getLogger(AbstractConfigurationLoader.class);
 
 	private Properties properties;
 	private final String propertiesFile;
@@ -56,11 +59,11 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 					if (isPrintable) {
 						final Scope type = propertyField.getAnnotation(RuntimeMeta.class).type();
 						final String typeValue = type != null ? type.getValue() : "";
-						LogFacade.logSystemInfo(typeValue + ": " + contextProps + "=" + value);
+						log.info(typeValue + ": " + contextProps + "=" + value);
 					}
 					ContextCache.instance.put(contextProps, value);
 				} catch (final NoSuchFieldException | SecurityException e) {
-					LogFacade.logException(getClass(), e.getMessage());
+					log.error(e.getMessage());
 				}
 				readSpecials(contextProps, value);
 			}
@@ -82,7 +85,7 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 		try {
 			return ProjectProperty.getPropertiesResourceLocation();
 		} catch (final PropertyException e) {
-			LogFacade.logException(getClass(), e.getMessage());
+			log.error(e.getMessage());
 		}
 		return null;
 	}
@@ -103,7 +106,7 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 				properties = ProjectProperty.getRuntimeProperties(propertiesFile);
 			}
 		} catch (final PropertyException e) {
-			LogFacade.logException(getClass(), e.getMessage());
+			log.error(e.getMessage());
 		}
 	}
 

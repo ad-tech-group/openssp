@@ -15,6 +15,7 @@ import com.atg.openssp.common.buffer.AdservingLatencyBuffer;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
+import com.atg.openssp.common.logadapter.LogFacade;
 import com.atg.openssp.core.cache.broker.CacheController;
 import com.atg.openssp.core.exchange.channel.rtb.DemandExecutorServiceFacade;
 import com.atg.openssp.core.system.job.CoreCacheLoaderJob;
@@ -26,7 +27,6 @@ import com.atg.openssp.core.system.job.WatchdogService;
 import com.atg.openssp.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.core.system.loader.LocalContextLoader;
 import com.atg.openssp.core.system.properties.MavenProperties;
-import com.atg.service.LogFacade;
 
 import util.CatalinaUtil;
 
@@ -43,9 +43,9 @@ public class ApplicationInit extends GenericServlet {
 	@Override
 	public void init() {
 		InitLogging.setSystemProperties();
-		LogFacade.logSystemInfo("**** Initing core application ****");
+		log.info("**** Initing core application ****");
 		LocalContext.setVersion(new MavenProperties().getVersion());
-		LogFacade.logSystemInfo("**** SSP Version: " + LocalContext.getVersion() + " ****");
+		log.info("**** SSP Version: " + LocalContext.getVersion() + " ****");
 
 		final CountDownLatch cdl = new CountDownLatch(2);
 		// initing watchdogs
@@ -78,11 +78,11 @@ public class ApplicationInit extends GenericServlet {
 		}
 
 		// retrieving system informations
-		LogFacade.logSystemInfo("**** Initial Loglevel: " + LogFacade.getLogLevel() + " ****");
-		LogFacade.logSystemInfo("**** SSP instance name: " + CatalinaUtil.instanceName() + " ****");
-		LogFacade.logSystemInfo("**** SSP pid: " + CatalinaUtil.pid() + " ****");
-		LogFacade.logSystemInfo("**** SSP uptime: " + LocalContext.getUptime() + " ****");
-		LogFacade.logPid(CatalinaUtil.pid());
+		log.info("**** Initial Loglevel: " + LogFacade.getLogLevel() + " ****");
+		log.info("**** SSP instance name: " + CatalinaUtil.instanceName() + " ****");
+		log.info("**** SSP pid: " + CatalinaUtil.pid() + " ****");
+		log.info("**** SSP uptime: " + LocalContext.getUptime() + " ****");
+		log.info(CatalinaUtil.pid());
 	}
 
 	@Override

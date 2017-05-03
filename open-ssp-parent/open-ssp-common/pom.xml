@@ -32,26 +32,42 @@
 		<dependency>
 			<groupId>com.atg.openssp</groupId>
 			<artifactId>open-ssp-utilities</artifactId>
-			<version>1.0</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.atg.ssp.common</groupId>
-			<artifactId>exception-package</artifactId>
-			<version>1.0</version>
+			<groupId>com.atg.openssp</groupId>
+			<artifactId>open-ssp-openrtb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
-			<groupId>com.atg.ssp.common</groupId>
-			<artifactId>ssp-openrtb</artifactId>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.3</version>
+		</dependency>
+		
+		<!-- <dependency>
+			<groupId>com.atg</groupId>
+			<artifactId>watchdog</artifactId>
 			<version>1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.atg.ssp.common</groupId>
-			<artifactId>logging-service</artifactId>
-			<version>2.0</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -76,6 +92,12 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.6.2</version>
 		</dependency>
 
 	</dependencies>

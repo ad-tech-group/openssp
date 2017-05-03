@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jobservice.CommonJobTrigger;
+import com.atg.openssp.common.jobservice.CommonJobTrigger;
 
 /**
  * @author André Schmer

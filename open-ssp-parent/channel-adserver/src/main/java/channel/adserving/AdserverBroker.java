@@ -6,11 +6,10 @@ import org.apache.http.client.utils.URIBuilder;
 
 import com.atg.openssp.common.core.broker.AbstractBroker;
 import com.atg.openssp.common.core.connector.JsonGetConnector;
+import com.atg.openssp.common.exception.BidProcessingException;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
-
-import common.BidProcessingException;
 
 /**
  * This class acts as Broker to the adserver connector. It uses a get-connector to connect direct to the adserver and retrieves the result from it.
@@ -43,7 +42,7 @@ public class AdserverBroker extends AbstractBroker {
 	 * @return {@link AdProviderReader}
 	 * @throws BidProcessingException
 	 */
-	public AdProviderReader call() /* throws BidProcessingException */ throws Exception {
+	public AdProviderReader call() throws BidProcessingException {
 		final Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
 			uriBuilder.setParameter("zoneid", String.valueOf(sessionAgent.getParamValues().getZone().getZoneId()));
@@ -57,7 +56,7 @@ public class AdserverBroker extends AbstractBroker {
 			// + (adProvider
 			// .buildResponse() != null));
 			return adProvider;
-		} catch (final Exception e) { // BidProcessingException
+		} catch (final BidProcessingException e) {
 			// LogFacade.logAdservingResponse("Adserving Error", sessionAgent.getRequestid(), e.getMessage());
 			throw e;
 		} finally {

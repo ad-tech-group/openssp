@@ -8,13 +8,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import com.atg.openssp.common.dto.VideoAd;
 import com.atg.openssp.common.dto.Website;
 import com.atg.openssp.common.dto.Zone;
+import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.cache.type.VideoAdDataCache;
 import com.atg.openssp.core.cache.type.WebsiteDataCache;
 import com.atg.openssp.core.cache.type.ZoneDataCache;
 import com.atg.openssp.core.exchange.RequestSessionAgent;
 import com.atg.openssp.core.system.MetricFactory;
 
-import common.RequestException;
 import junit.framework.Assert;
 
 /**

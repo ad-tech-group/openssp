@@ -1,6 +1,6 @@
 package com.atg.openssp.core.system.job;
 
-import jobservice.CommonJobTrigger;
+import com.atg.openssp.common.jobservice.CommonJobTrigger;
 
 /**
  * This class is useful to set a configuration for a job which can than be used by {@link CommonJobTrigger}.

@@ -2,8 +2,10 @@ package channel.cache;
 
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
-import com.atg.service.LogFacade;
 
 import channel.ssp.SSPAdapterCache;
 import channel.ssp.SSPBroker;
@@ -19,6 +21,8 @@ import restful.exception.RestException;
  */
 public final class SSPAdapterDataBroker extends AbstractDataBroker<SSPAdapterDto> {
 
+	private static final Logger log = LoggerFactory.getLogger(SSPAdapterDataBroker.class);
+
 	public SSPAdapterDataBroker() {}
 
 	@Override
@@ -26,7 +30,7 @@ public final class SSPAdapterDataBroker extends AbstractDataBroker<SSPAdapterDto
 		try {
 			final SSPAdapterDto dto = super.connect(SSPAdapterDto.class);
 			if (dto != null) {
-				LogFacade.logDebug("sizeof sspadapter data=" + dto.getData().size());
+				log.debug("sizeof sspadapter data= {}", dto.getData().size());
 
 				dto.getData().forEach(new Consumer<BasicAdapter>() {
 					@Override
@@ -37,9 +41,9 @@ public final class SSPAdapterDataBroker extends AbstractDataBroker<SSPAdapterDto
 				});
 				return true;
 			}
-			LogFacade.logException(this.getClass(), " dto is null");
+			log.error("dto is null");
 		} catch (final RestException e) {
-			LogFacade.logException(this.getClass(), "RestException: " + e.getMessage());
+			log.error(e.getMessage());
 		}
 		return false;
 	}

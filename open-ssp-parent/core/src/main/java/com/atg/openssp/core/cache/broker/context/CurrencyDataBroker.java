@@ -1,8 +1,10 @@
 package com.atg.openssp.core.cache.broker.context;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
-import com.atg.service.LogFacade;
 
 import restful.context.Path;
 import restful.context.PathBuilder;
@@ -19,6 +21,8 @@ import restful.exception.RestException;
  */
 public final class CurrencyDataBroker extends AbstractDataBroker<CurrencyDto> {
 
+	private static final Logger log = LoggerFactory.getLogger(CurrencyDataBroker.class);
+
 	public CurrencyDataBroker() {}
 
 	@Override
@@ -26,13 +30,13 @@ public final class CurrencyDataBroker extends AbstractDataBroker<CurrencyDto> {
 		try {
 			final CurrencyDto dto = super.connect(CurrencyDto.class);
 			if (dto != null) {
-				LogFacade.logSystemInfo("sizeof Currency data=" + dto.getData().size());
+				log.info("sizeof Currency data=" + dto.getData().size());
 				dto.getData().forEach(c -> CurrencyCache.instance.put(c.getCurrency(), c.getRate()));
 				return true;
 			}
-			LogFacade.logException(getClass(), " no data");
+			log.error("no data");
 		} catch (final RestException e) {
-			LogFacade.logException(this.getClass(), e.getMessage());
+			log.error(e.getMessage());
 		}
 		return false;
 	}
