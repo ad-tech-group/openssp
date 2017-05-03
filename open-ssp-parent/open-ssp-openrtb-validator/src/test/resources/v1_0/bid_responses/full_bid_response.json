@@ -1,0 +1,29 @@
+{
+    "id": "some_id",
+    "bidid": "some_bid_id",
+    "nbr": 0,
+    "cur": "USD",
+    "units": 0,
+    "seatbid": [
+        {
+            "seat": "some_seat_id",
+            "group": 0,
+            "bid": [
+                {
+                    "impid": "some_impression_id",
+                    "price": 0.05,
+                    "adid": "some_ad_id",
+                    "nurl": "http://winnoticeurl.com",
+                    "adm": "<xhtml/>",
+                    "adomain": "adomain.com",
+                    "iurl": "http://imageurl.com",
+                    "cid": "some_campaign_id",
+                    "crid": "some_creative_id",
+                    "attr": [
+                        1
+                    ]
+                }
+            ]
+        }
+    ]
+}

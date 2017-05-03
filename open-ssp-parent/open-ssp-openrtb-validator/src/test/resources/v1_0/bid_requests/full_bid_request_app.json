@@ -1,0 +1,69 @@
+{
+    "id": "some_id",
+    "at": 1,
+    "tmax": 120,
+    "imp": [
+        {
+            "impid": "some_imp_id",
+            "wseat": [
+                "seat1",
+                "seat2"
+            ],
+            "h": 50,
+            "w": 320,
+            "pos": 1,
+            "instl": 0,
+            "btype": [
+                1
+            ],
+            "battr": [
+                1
+            ]
+        }
+    ],
+    "app": {
+        "aid": "some_sid",
+        "name": "some_name",
+        "domain": "foo.com",
+        "pid": "some_pid",
+        "pub": "some_publisher_name",
+        "pdomain": "foopub.com",
+        "cat": [
+            "IAB1"
+        ],
+        "keywords": "some_keyword1,some_keyword2",
+        "ver": "some_version",
+        "bundle": "com.foo.mygame",
+        "paid": 0
+    },
+    "device": {
+        "did": "some_did",
+        "dpid": "some_dpid",
+        "ip": "127.0.0.1",
+        "country": "USA",
+        "carrier": "some_carrier",
+        "ua": "some_user_agent",
+        "make": "some_make",
+        "model": "some_model",
+        "os": "some_os",
+        "osv": "some_os_version",
+        "js": 0,
+        "loc": "-999.99,-999.99"
+    },
+    "user": {
+        "uid": "some_uid",
+        "yob": 1981,
+        "gender": "F",
+        "zip": "02116",
+        "country": "USA",
+        "keywords": "some_keyword1,some_keyword2"
+    },
+    "restrictions": {
+        "bcat": [
+            "IAB1"
+        ],
+        "badv": [
+            "blockeduserdomain.com"
+        ]
+    }
+}
