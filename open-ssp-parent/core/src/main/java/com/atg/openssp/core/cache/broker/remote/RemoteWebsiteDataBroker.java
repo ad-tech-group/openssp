@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.dto.Website;
 import com.atg.openssp.common.dto.Zone;
+import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.core.cache.type.WebsiteDataCache;
 import com.atg.openssp.core.cache.type.ZoneDataCache;
 import com.google.gson.Gson;
@@ -41,7 +42,7 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 			final String jsonString = super.connect();
 			final Website[] data = gson.fromJson(jsonString, Website[].class);
 			if (data != null && data.length > 0) {
-				log.info(this.getClass().getSimpleName() + " [REMOTE] sizeof Website data=" + data.length);
+				log.info(this.getClass().getSimpleName() + " sizeof Website data=" + data.length);
 				Arrays.stream(data).forEach(c -> WebsiteDataCache.instance.put(c.getWebsiteId(), c));
 
 				Arrays.stream(data).forEach(c -> Arrays.stream(c.getZones()).forEach(new Consumer<Zone>() {
@@ -53,15 +54,15 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 				}));
 				return true;
 			}
-			log.error("no data");
-		} catch (final JsonSyntaxException | RestException e) {
+			log.error("no Website data");
+		} catch (final JsonSyntaxException | RestException | EmptyHostException e) {
 			log.error(e.getMessage());
 		}
 		return false;
 	}
 
 	@Override
-	public PathBuilder getRestfulContext() {
+	public PathBuilder getRestfulContext() throws EmptyHostException {
 		return getDefaulPathBuilder().addParam("websites", "1");
 	}
 

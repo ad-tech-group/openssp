@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.demand.Supplier;
+import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.channel.rtb.DemandBroker;
 import com.atg.openssp.core.exchange.channel.rtb.OpenRtbConnector;
@@ -47,8 +48,8 @@ public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 				});
 				return true;
 			}
-			log.error("no data");
-		} catch (final RestException e) {
+			log.error("no Supplier data");
+		} catch (final RestException | EmptyHostException e) {
 			log.error(e.getMessage());
 		}
 		return false;

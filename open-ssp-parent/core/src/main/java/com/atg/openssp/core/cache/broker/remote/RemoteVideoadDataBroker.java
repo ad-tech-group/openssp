@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.dto.VideoAd;
+import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.core.cache.type.VideoAdDataCache;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -38,19 +39,19 @@ public final class RemoteVideoadDataBroker extends AbstractRemoteDataProvider {
 			final String jsonString = super.connect();
 			final VideoAd[] data = gson.fromJson(jsonString, VideoAd[].class);
 			if (data != null && data.length > 0) {
-				log.info(this.getClass().getSimpleName() + " [REMOTE] sizeof VideoAd data=" + data.length);
+				log.info(this.getClass().getSimpleName() + " sizeof VideoAd data=" + data.length);
 				Arrays.stream(data).forEach(c -> VideoAdDataCache.instance.put(c.getVideoadId(), c));
 				return true;
 			}
-			log.error("no data");
-		} catch (final JsonSyntaxException | RestException e) {
+			log.error("no VideoAd data");
+		} catch (final JsonSyntaxException | RestException | EmptyHostException e) {
 			log.error(e.getMessage());
 		}
 		return false;
 	}
 
 	@Override
-	public PathBuilder getRestfulContext() {
+	public PathBuilder getRestfulContext() throws EmptyHostException {
 		return getDefaulPathBuilder();
 	}
 

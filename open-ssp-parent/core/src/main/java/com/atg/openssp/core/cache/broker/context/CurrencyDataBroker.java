@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
+import com.atg.openssp.common.exception.EmptyHostException;
 
 import restful.context.Path;
 import restful.context.PathBuilder;
@@ -34,8 +35,8 @@ public final class CurrencyDataBroker extends AbstractDataBroker<CurrencyDto> {
 				dto.getData().forEach(c -> CurrencyCache.instance.put(c.getCurrency(), c.getRate()));
 				return true;
 			}
-			log.error("no data");
-		} catch (final RestException e) {
+			log.error("no Currency data");
+		} catch (final RestException | EmptyHostException e) {
 			log.error(e.getMessage());
 		}
 		return false;

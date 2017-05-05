@@ -6,6 +6,7 @@ import java.util.List;
 import com.atg.openssp.common.demand.Supplier;
 
 /**
+ * 
  * @author André Schmer
  *
  */
@@ -27,7 +28,7 @@ class SupplierDto implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("SupplierDTO [supplier=%s]", data);
+		return String.format("SupplierDto [supplier=%s]", data);
 	}
 
 }
