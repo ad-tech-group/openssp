@@ -48,7 +48,7 @@ public class ApplicationInit extends GenericServlet {
 		log.info("**** SSP Version: " + LocalContext.getVersion() + " ****");
 
 		final CountDownLatch cdl = new CountDownLatch(2);
-		// initing watchdogs
+		// initing watchdogs for global.runtime.xml and local.runtime.xml
 		WatchdogService.instance.initLoaderWatchdog(new LocalContextLoader(cdl), true).initLoaderWatchdog(new GlobalContextLoader(cdl), true).startWatchdogs();
 		try {
 			cdl.await();
@@ -82,7 +82,6 @@ public class ApplicationInit extends GenericServlet {
 		log.info("**** SSP instance name: " + CatalinaUtil.instanceName() + " ****");
 		log.info("**** SSP pid: " + CatalinaUtil.pid() + " ****");
 		log.info("**** SSP uptime: " + LocalContext.getUptime() + " ****");
-		log.info(CatalinaUtil.pid());
 	}
 
 	@Override
