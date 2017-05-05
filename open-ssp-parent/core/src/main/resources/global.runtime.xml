@@ -6,12 +6,12 @@
 	<entry key="cache-trigger-expression"><![CDATA[0 0/5 * * * ?]]></entry>
 	
 	<!-- factor to reduce the winnerbid price in case of only one bidder and no floor price -->
-	<!-- deful is 0.3 -->
+	<!-- default is 0.3 -->
 	<entry key="draw-moderation">0.3</entry>
 	
 	<!-- the timeout in ms for execution the executor service -->
 	<!-- default is 500ms --> 
-	<entry key="cdl-timeout">1000</entry>
+	<entry key="cdl-timeout">500</entry>
 	
 	<!-- url of the data provider where the cache is updated from -->
 	<entry key="data-provider-url"></entry>
