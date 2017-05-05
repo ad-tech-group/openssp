@@ -7,7 +7,7 @@ import com.atg.openssp.core.cache.broker.remote.RemoteWebsiteDataBroker;
 
 /**
  * 
- * CacheController manages the list of available observers to cache accessors.
+ * CacheController manages the list of available observers to cache broker.
  * 
  * @author André Schmer
  */
