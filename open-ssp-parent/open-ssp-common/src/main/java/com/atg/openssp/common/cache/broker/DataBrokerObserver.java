@@ -3,6 +3,8 @@ package com.atg.openssp.common.cache.broker;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.atg.openssp.common.exception.EmptyHostException;
+
 import restful.context.PathBuilder;
 
 /**
@@ -39,7 +41,8 @@ public abstract class DataBrokerObserver implements Observer {
 
 	/**
 	 * @return the context of the restful service to connect with {see PathBuilder}.
+	 * @throws EmptyHostException
 	 */
-	public abstract PathBuilder getRestfulContext();
+	public abstract PathBuilder getRestfulContext() throws EmptyHostException;
 
 }

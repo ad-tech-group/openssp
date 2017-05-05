@@ -2,6 +2,7 @@ package com.atg.openssp.common.cache.broker;
 
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
+import com.atg.openssp.common.exception.EmptyHostException;
 
 import restful.client.JsonDataProviderConnector;
 import restful.context.PathBuilder;
@@ -15,7 +16,7 @@ import restful.exception.RestException;
  */
 public abstract class AbstractDataBroker<T> extends DataBrokerObserver {
 
-	protected T connect(final Class<T> clazz) throws RestException {
+	protected T connect(final Class<T> clazz) throws RestException, EmptyHostException {
 		return new JsonDataProviderConnector<>(clazz).connectDataProvider(getRestfulContext());
 	}
 
