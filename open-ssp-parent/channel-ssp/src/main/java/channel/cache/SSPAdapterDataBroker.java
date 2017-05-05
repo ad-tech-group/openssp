@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
+import com.atg.openssp.common.exception.EmptyHostException;
 
 import channel.ssp.SSPAdapterCache;
 import channel.ssp.SSPBroker;
@@ -42,7 +43,7 @@ public final class SSPAdapterDataBroker extends AbstractDataBroker<SSPAdapterDto
 				return true;
 			}
 			log.error("dto is null");
-		} catch (final RestException e) {
+		} catch (final RestException | EmptyHostException e) {
 			log.error(e.getMessage());
 		}
 		return false;
