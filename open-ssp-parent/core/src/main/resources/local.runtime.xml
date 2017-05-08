@@ -15,8 +15,4 @@
 	
 	<!-- switch to enable/disable verbose output -->
 	<entry key="verbose">false</entry>
-	
-	<!-- switch to enable/disable metrics support -->
-	<!-- tc restart necessary-->
-	<entry key="metrics">false</entry>
 </properties>

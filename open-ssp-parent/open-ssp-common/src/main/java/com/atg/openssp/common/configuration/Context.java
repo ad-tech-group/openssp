@@ -35,6 +35,11 @@ public class Context {
 	public static final String RUNTIME_GLOBAL_XML = "global.runtime.xml";
 
 	/**
+	 * {@value #CONFIG_XML}
+	 */
+	public static final String CONFIG_XML = "config.xml";
+
+	/**
 	 * {@value #SOCKET_TO}
 	 */
 	public static final int SOCKET_TO = 2000;

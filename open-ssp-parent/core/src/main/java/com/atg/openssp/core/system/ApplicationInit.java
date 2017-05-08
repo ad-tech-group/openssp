@@ -24,6 +24,7 @@ import com.atg.openssp.core.system.job.JobConfig;
 import com.atg.openssp.core.system.job.JobService;
 import com.atg.openssp.core.system.job.ResetCounterJob;
 import com.atg.openssp.core.system.job.WatchdogService;
+import com.atg.openssp.core.system.loader.ConfigLoader;
 import com.atg.openssp.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.core.system.loader.LocalContextLoader;
 import com.atg.openssp.core.system.properties.MavenProperties;
@@ -47,7 +48,9 @@ public class ApplicationInit extends GenericServlet {
 		LocalContext.setVersion(new MavenProperties().getVersion());
 		log.info("**** SSP Version: " + LocalContext.getVersion() + " ****");
 
-		final CountDownLatch cdl = new CountDownLatch(2);
+		final CountDownLatch cdl = new CountDownLatch(3);
+		// loading static config
+		new ConfigLoader(cdl).readValues();
 		// initing watchdogs for global.runtime.xml and local.runtime.xml
 		WatchdogService.instance.initLoaderWatchdog(new LocalContextLoader(cdl), true).initLoaderWatchdog(new GlobalContextLoader(cdl), true).startWatchdogs();
 		try {
