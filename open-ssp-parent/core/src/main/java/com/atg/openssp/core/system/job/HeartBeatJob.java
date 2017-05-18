@@ -55,7 +55,7 @@ public class HeartBeatJob implements Job {
 			// rtb enabled
 			sb.append("#rtb:" + LocalContext.isDSPChannelEnabled());
 
-			// campaign enabled
+			// adserving enabled
 			sb.append("#adserving:" + LocalContext.isAdservingChannelEnabled());
 
 			// cdl-timeout
