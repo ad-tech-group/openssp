@@ -12,8 +12,6 @@ import java.util.Properties;
 
 import javax.xml.bind.PropertyException;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author André Schmer
  * 
@@ -21,8 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ProjectProperty {
 
 	/**
-	 * Returns user properties from path under ${catalina.home}. The user
-	 * Properties must comply with standard properties rules.
+	 * Returns user properties from path under ${catalina.home}. The user Properties must comply with standard properties rules.
 	 * 
 	 * @param propertiesPath
 	 *            the path to user property
@@ -52,10 +49,8 @@ public class ProjectProperty {
 	}
 
 	/**
-	 * Return runtime properties of given {@code runtimeProperties}. Looks
-	 * first, if application is running on a dev machine and returns in this
-	 * case the properties from the resource context. Otherwise a lookup in
-	 * properties folder in webapps context is fullfilled.
+	 * Return runtime properties of given {@code runtimeProperties}. Looks first, if application is running on a dev machine and returns in this case the
+	 * properties from the resource context. Otherwise a lookup in properties folder in webapps context is fullfilled.
 	 * 
 	 * @param runtimeProperties
 	 * @return properties {@link Properties}
@@ -67,8 +62,7 @@ public class ProjectProperty {
 		}
 
 		final Properties properties = new Properties();
-		final String fileType = runtimeProperties.substring(runtimeProperties.lastIndexOf(".") + 1, runtimeProperties
-				.length());
+		final String fileType = runtimeProperties.substring(runtimeProperties.lastIndexOf(".") + 1, runtimeProperties.length());
 		final File propFile = readFile(runtimeProperties);
 		try (FileInputStream fi = new FileInputStream(propFile);) {
 			if ("xml".equals(fileType)) {
@@ -77,8 +71,7 @@ public class ProjectProperty {
 				properties.load(fi);
 			}
 		} catch (final IOException e) {
-			System.err.println(ProjectProperty.class.getSimpleName() + " IOException for " + runtimeProperties + " " + e
-					.getMessage());
+			System.err.println(ProjectProperty.class.getSimpleName() + " IOException for " + runtimeProperties + " " + e.getMessage());
 		}
 		return properties;
 	}
@@ -91,10 +84,13 @@ public class ProjectProperty {
 				propPath = "/" + propPath;
 			}
 			String toDecode = null;
+
 			final String catalinaHome = System.getProperty("catalina.home", System.getProperty("user.dir"));
-			if (StringUtils.isEmpty(catalinaHome) || catalinaHome.contains("workspace") || catalinaHome.contains(
-					"git")) {
+			final File f = new File(catalinaHome + "/properties" + propPath);
+			if (!f.exists()) {
 				toDecode = Thread.currentThread().getContextClassLoader().getResource("").getFile() + propPath;
+				// if (StringUtils.isEmpty(catalinaHome) || catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
+
 			} else {
 				toDecode = catalinaHome + "/properties" + propPath;
 			}
@@ -183,8 +179,7 @@ public class ProjectProperty {
 				properties.load(fi);
 			}
 		} catch (final IOException e) {
-			System.err.println(ProjectProperty.class.getSimpleName() + " IOException for " + property + " " + e
-					.getMessage());
+			System.err.println(ProjectProperty.class.getSimpleName() + " IOException for " + property + " " + e.getMessage());
 		}
 
 		return properties;
