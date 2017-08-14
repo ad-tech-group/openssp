@@ -2,23 +2,18 @@ package com.atg.openssp.core.exchange.channel.rtb;
 
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
-import org.openrtb.validator.OpenRtbInputType;
-import org.openrtb.validator.OpenRtbValidator;
-import org.openrtb.validator.OpenRtbValidatorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.core.broker.AbstractBroker;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.demand.Supplier;
-import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
-import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
+import com.atg.openssp.common.exception.BidProcessingException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
 
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidresponse.model.BidResponse;
@@ -41,8 +36,6 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	private final Gson gson;
 
-	private static OpenRtbValidator responseValidator;
-
 	public DemandBroker(final Supplier supplier, final OpenRtbConnector connector) {
 		this.supplier = supplier;
 		this.connector = connector;
@@ -54,32 +47,30 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		headers[3] = new BasicHeader("Content-Encoding", supplier.getContentEncoding());
 
 		gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
-		responseValidator = OpenRtbValidatorFactory.getValidatorWithFactual(OpenRtbInputType.BID_RESPONSE, supplier.getOpenRtbVersion());
 	}
 
 	@Override
 	public ResponseContainer call() throws Exception {
+		final BidRequest bidrequest = sessionAgent.getBidExchange().getBidRequest(supplier);
+		if (bidrequest == null) {
+			return null;
+		}
+
 		try {
-			final String jsonBidrequest = gson.toJson(sessionAgent.getBidExchange().getBidRequest(supplier).build(), BidRequest.class);
-
-			// To decide: BidRequest validation necessary?
-			// final OpenRtbValidator requestValidator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, supplier.getOpenRtbVersion());
-			// if (!requestValidator.isValid(jsonBidrequest)) {
-			// System.out.println("request is not valid");
-			// }
-
+			final String jsonBidrequest = gson.toJson(bidrequest, BidRequest.class);
 			log.debug(jsonBidrequest);
-			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", String.valueOf(supplier.getSupplierId()));
-
 			final String result = connector.connect(jsonBidrequest, headers);
-			log.debug("result: " + result);
-			if (result != null) {
-				final BidResponse.Builder bidResponse = ResponseParser.parse(result, supplier);
-				sessionAgent.getBidExchange().setBidResponse(supplier, bidResponse);
+			if (!StringUtils.isEmpty(result)) {
+				log.debug(result);
+
+				final BidResponse bidResponse = gson.fromJson(result, BidResponse.class);
+
 				return new ResponseContainer(supplier, bidResponse);
 			}
-		} catch (final Exception ignore) {
-			//
+		} catch (final BidProcessingException e) {
+			log.error(e.getMessage());
+		} catch (final Exception e) {
+			log.error(e.getMessage());
 		}
 		return null;
 	}
@@ -88,21 +79,4 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		return supplier;
 	}
 
-	private static class ResponseParser {
-		private static Gson gson = new Gson();
-
-		private static BidResponse.Builder parse(final String json, final Supplier supplier) {
-			RtbResponseLogProcessor.instance.setLogData(json, "bidresponse", String.valueOf(supplier.getSupplierId()));
-			try {
-				if (responseValidator.isValid(json)) {
-					final BidResponse response = gson.fromJson(json, BidResponse.class);
-					return response.getBuilder();
-				}
-
-			} catch (final JsonIOException | JsonSyntaxException e) {
-				log.error(e.getMessage());
-			}
-			return null;
-		}
-	}
 }
