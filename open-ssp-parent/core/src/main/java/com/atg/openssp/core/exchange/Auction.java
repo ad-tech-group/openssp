@@ -73,12 +73,12 @@ public class Auction {
 		// }
 		// });
 
-		for (final Entry<Supplier, BidResponse.Builder> bidResponses : bidExchange.getAllBidResponses().entrySet()) {
-			final BidResponse bidResponse = bidResponses.getValue().build();
+		for (final Entry<Supplier, BidResponse> bidResponses : bidExchange.getAllBidResponses().entrySet()) {
+			final BidResponse bidResponse = bidResponses.getValue();
 			if (bidResponse == null) {
 				continue;
 			}
-			final BidRequest request = bidExchange.getBidRequest(bidResponses.getKey()).build();
+			final BidRequest request = bidExchange.getBidRequest(bidResponses.getKey());
 			// considering that only ONE impression containing the bidrequest
 			final Impression imp = request.getImp().get(0);
 			for (final SeatBid seatBid : bidResponse.getSeatbid()) {

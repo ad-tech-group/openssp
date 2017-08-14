@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import openrtb.bidrequest.model.BidRequest;
-import openrtb.bidrequest.model.BidRequest.Builder;
 import openrtb.bidresponse.model.BidResponse;
 
 /**
@@ -20,9 +19,9 @@ public class BidExchange {
 
 	private final List<BidRequest> bidRequestList;
 
-	private final Map<Supplier, BidRequest.Builder> bidRequestMap;
+	private final Map<Supplier, BidRequest> bidRequestMap;
 
-	private final Map<Supplier, BidResponse.Builder> bidResponseMap;
+	private final Map<Supplier, BidResponse> bidResponseMap;
 
 	private long winnerId;
 
@@ -33,27 +32,27 @@ public class BidExchange {
 		bidRequestList = new ArrayList<>();
 	}
 
-	public Map<Supplier, BidRequest.Builder> getAllBidRequests() {
+	public Map<Supplier, BidRequest> getAllBidRequests() {
 		return bidRequestMap;
 	}
 
-	public Map<Supplier, BidResponse.Builder> getAllBidResponses() {
+	public Map<Supplier, BidResponse> getAllBidResponses() {
 		return bidResponseMap;
 	}
 
-	public BidRequest.Builder getBidRequest(final Supplier supplier) {
+	public BidRequest getBidRequest(final Supplier supplier) {
 		return bidRequestMap.get(supplier);
 	}
 
-	public void setBidRequest(final Supplier supplier, final Builder bidRequest1) {
-		bidRequestMap.put(supplier, bidRequest1);
+	public void setBidRequest(final Supplier supplier, final BidRequest bidRequest) {
+		bidRequestMap.put(supplier, bidRequest);
 	}
 
-	public BidResponse.Builder getBidResponse(final Supplier supplier) {
+	public BidResponse getBidResponse(final Supplier supplier) {
 		return bidResponseMap.get(supplier);
 	}
 
-	public void setBidResponse(final Supplier supplier, final BidResponse.Builder bidResponse) {
+	public void setBidResponse(final Supplier supplier, final BidResponse bidResponse) {
 		bidResponseMap.put(supplier, bidResponse);
 	}
 

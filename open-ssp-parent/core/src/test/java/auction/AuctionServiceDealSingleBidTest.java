@@ -59,11 +59,11 @@ public class AuctionServiceDealSingleBidTest {
 		final float impFloor = 0.88f;
 		final float dealFloor = 3.f;
 		final String currency = "USD";
-		final BidRequest.Builder bidRequest = createRequest(impFloor, dealFloor, currency, true);
+		final BidRequest bidRequest = createRequest(impFloor, dealFloor, currency, true).build();
 
 		// bidresponse
 		final float bidPrice = 3.5f;
-		final BidResponse.Builder response = createResponse(bidPrice, currency, "998877");
+		final BidResponse response = createResponse(bidPrice, currency, "998877");
 
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
@@ -85,10 +85,10 @@ public class AuctionServiceDealSingleBidTest {
 		final String currency = "USD";
 
 		// bidrequest
-		final BidRequest.Builder bidRequest = createRequest(impFloor, dealFloor, currency, true);
+		final BidRequest bidRequest = createRequest(impFloor, dealFloor, currency, true).build();
 
 		// bidresponse
-		final BidResponse.Builder response = createResponse(bidPrice, currency, "998877");
+		final BidResponse response = createResponse(bidPrice, currency, "998877");
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
 		Auction.auctioneer(bidExchange);
@@ -103,10 +103,10 @@ public class AuctionServiceDealSingleBidTest {
 		final String currency = "USD";
 
 		// bidrequest
-		final BidRequest.Builder bidRequest = createRequest(impFloor, dealFloor, currency, true);
+		final BidRequest bidRequest = createRequest(impFloor, dealFloor, currency, true).build();
 
 		// bidresponse
-		final BidResponse.Builder response = createResponse(bidPrice, currency, "998877");
+		final BidResponse response = createResponse(bidPrice, currency, "998877");
 
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
@@ -130,10 +130,10 @@ public class AuctionServiceDealSingleBidTest {
 		final String currency = "USD";
 
 		// bidrequest
-		final BidRequest.Builder bidRequest = createRequest(impFloor, dealFloor, currency, true);
+		final BidRequest bidRequest = createRequest(impFloor, dealFloor, currency, true).build();
 
 		// bidresponse
-		final BidResponse.Builder response = createResponse(bidPrice, currency, "998877");
+		final BidResponse response = createResponse(bidPrice, currency, "998877");
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
 		try {
@@ -156,17 +156,17 @@ public class AuctionServiceDealSingleBidTest {
 		final String currency = "USD";
 
 		// bidrequest
-		final BidRequest.Builder bidRequest = createRequest(impFloor, dealFloor, currency, true);
+		final BidRequest bidRequest = createRequest(impFloor, dealFloor, currency, true).build();
 
 		// bidresponse
-		final BidResponse.Builder response = createResponse(bidPrice, currency, "998877");
+		final BidResponse response = createResponse(bidPrice, currency, "998877");
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
 		Auction.auctioneer(bidExchange);
 	}
 
-	private static Bid.Builder createBid(final float price, final String dealID) {
-		final Bid.Builder bid = new Bid.Builder();
+	private static Bid createBid(final float price, final String dealID) {
+		final Bid bid = new Bid();
 		bid.setId("1");
 		bid.setPrice(price);
 		bid.setImpid("1");
@@ -174,10 +174,10 @@ public class AuctionServiceDealSingleBidTest {
 		return bid;
 	}
 
-	private static SeatBid.Builder createSeatBid(final Bid.Builder[] bids) {
-		final SeatBid.Builder seatBid = new SeatBid.Builder();
-		for (final Bid.Builder builder : bids) {
-			seatBid.addBid(builder);
+	private static SeatBid createSeatBid(final Bid[] bids) {
+		final SeatBid seatBid = new SeatBid();
+		for (final Bid builder : bids) {
+			seatBid.getBid().add(builder);
 		}
 		return seatBid;
 	}
@@ -217,19 +217,19 @@ public class AuctionServiceDealSingleBidTest {
 		return bidRequest;
 	}
 
-	private static BidResponse.Builder createResponse(final float price, final String cur, final String dealId) {
-		final BidResponse.Builder response = new BidResponse.Builder();
+	private static BidResponse createResponse(final float price, final String cur, final String dealId) {
+		final BidResponse response = new BidResponse();
 		// Bid
-		final Bid.Builder[] bids = new Bid.Builder[1];
+		final Bid[] bids = new Bid[1];
 		bids[0] = createBid(price, dealId);
 
 		// SeatBid
-		final SeatBid.Builder[] seats = new SeatBid.Builder[1];
+		final SeatBid[] seats = new SeatBid[1];
 		seats[0] = createSeatBid(bids);
 
 		// response
-		for (final SeatBid.Builder seatBid : seats) {
-			response.addSeatbidBuilder(seatBid);
+		for (final SeatBid seatBid : seats) {
+			response.addSeatBid(seatBid);
 		}
 		response.setCur(cur);
 		return response;
