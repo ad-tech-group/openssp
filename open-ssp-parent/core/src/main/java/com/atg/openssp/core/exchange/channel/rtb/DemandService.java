@@ -115,7 +115,7 @@ public class DemandService implements Callable<AdProviderReader> {
 			}
 
 			broker.setSessionAgent(agent);
-			agent.getBidExchange().setBidRequest(broker.getSupplier(), bidRequest.getBuilder());
+			agent.getBidExchange().setBidRequest(broker.getSupplier(), bidRequest);
 		});
 
 		return brokerList;
