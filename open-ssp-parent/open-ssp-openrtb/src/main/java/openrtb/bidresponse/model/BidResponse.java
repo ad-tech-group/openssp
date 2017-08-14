@@ -11,7 +11,7 @@ import com.google.gson.annotations.Since;
  * @version 2.1, 2.2, 2.3, 2.4
  * 
  */
-public final class BidResponse {
+public class BidResponse {
 
 	// required
 	// corresponds to requestid {@see BidRequest.id}
@@ -22,6 +22,7 @@ public final class BidResponse {
 
 	// optional
 	private String customdata;
+
 	private Object ext;
 
 	@Since(2.2)
@@ -34,11 +35,21 @@ public final class BidResponse {
 		seatbid = new ArrayList<>();
 	}
 
+	public BidResponse(final Builder builder) {
+		this();
+		id = builder.id;
+		cur = builder.currency;
+		// ext = builder.extension;
+		bidid = builder.bidid;
+		customdata = builder.customdata;
+		nbr = builder.nbr;
+	}
+
 	public String getId() {
 		return id;
 	}
 
-	protected void setId(final String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -46,7 +57,7 @@ public final class BidResponse {
 		return cur;
 	}
 
-	protected void setCur(final String cur) {
+	public void setCur(final String cur) {
 		this.cur = cur;
 	}
 
@@ -54,11 +65,11 @@ public final class BidResponse {
 		return seatbid;
 	}
 
-	protected void setSeatbid(final List<SeatBid> seatbid) {
+	public void setSeatbid(final List<SeatBid> seatbid) {
 		this.seatbid = seatbid;
 	}
 
-	protected void addSeatBid(final SeatBid seatBid) {
+	public void addSeatBid(final SeatBid seatBid) {
 		seatbid.add(seatBid);
 	}
 
@@ -66,7 +77,7 @@ public final class BidResponse {
 		return bidid;
 	}
 
-	protected void setBidid(final String bidid) {
+	public void setBidid(final String bidid) {
 		this.bidid = bidid;
 	}
 
@@ -74,7 +85,7 @@ public final class BidResponse {
 		return customdata;
 	}
 
-	protected void setCustomdata(final String customdata) {
+	public void setCustomdata(final String customdata) {
 		this.customdata = customdata;
 	}
 
@@ -82,7 +93,7 @@ public final class BidResponse {
 		return ext;
 	}
 
-	protected void setExt(final Object ext) {
+	public void setExt(final Object ext) {
 		this.ext = ext;
 	}
 
@@ -90,7 +101,7 @@ public final class BidResponse {
 		return winningSeat;
 	}
 
-	protected void setWinningSeat(final SeatBid bid) {
+	public void setWinningSeat(final SeatBid bid) {
 		winningSeat = bid;
 	}
 
@@ -98,7 +109,7 @@ public final class BidResponse {
 		return nbr;
 	}
 
-	protected void setNbr(final int nbr) {
+	public void setNbr(final int nbr) {
 		this.nbr = nbr;
 	}
 
@@ -116,15 +127,25 @@ public final class BidResponse {
 		return new Builder(this);
 	}
 
-	public static class Builder {
+	public static final class Builder {
 
-		private final BidResponse bidResponse;
+		private BidResponse bidResponse;
 
 		private final List<SeatBid.Builder> seatBidBuilderList = new ArrayList<>();
 
-		public Builder() {
-			bidResponse = new BidResponse();
-		}
+		private String id;
+
+		private String currency;
+
+		private String bidid;
+
+		private Object extension;
+
+		private String customdata;
+
+		private int nbr = -1;
+
+		public Builder() {}
 
 		public Builder(final BidResponse bidResponse) {
 			for (final SeatBid seatBid : bidResponse.seatbid) {
@@ -143,42 +164,68 @@ public final class BidResponse {
 		}
 
 		public Builder setId(final String id) {
-			bidResponse.setId(id);
-			return this;
-		}
-
-		public Builder setSeatbid(final List<SeatBid> seatbid) {
-			bidResponse.setSeatbid(seatbid);
+			this.id = id;
 			return this;
 		}
 
 		public Builder setCur(final String cur) {
-			bidResponse.setCur(cur);
+			currency = cur;
 			return this;
 		}
 
 		public Builder setNbr(final int nbr) {
-			bidResponse.setNbr(nbr);
+			this.nbr = nbr;
 			return this;
 		}
 
 		public Builder setBidid(final String bidid) {
-			bidResponse.setBidid(bidid);
+			this.bidid = bidid;
 			return this;
 		}
 
 		public Builder setCustomdata(final String customdata) {
-			bidResponse.setCustomdata(customdata);
+			this.customdata = customdata;
 			return this;
 		}
 
 		public Builder setExt(final Object ext) {
-			bidResponse.setExt(ext);
+			extension = ext;
 			return this;
 		}
 
 		public BidResponse build() {
+			if (bidResponse == null) {
+				bidResponse = new BidResponse(this);
+			} else {
+
+				if (id != null) {
+					bidResponse.setId(id);
+				}
+
+				if (bidid != null) {
+					bidResponse.setBidid(bidid);
+				}
+
+				if (currency != null) {
+					bidResponse.setCur(currency);
+				}
+
+				if (extension != null) {
+					bidResponse.setExt(extension);
+				}
+
+				if (customdata != null) {
+					bidResponse.setCustomdata(customdata);
+				}
+
+				if (nbr != -1) {
+					bidResponse.setNbr(nbr);
+				}
+
+				bidResponse.getSeatbid().clear();
+			}
 			seatBidBuilderList.forEach((b) -> bidResponse.addSeatBid(b.build()));
+
 			return bidResponse;
 		}
 	}

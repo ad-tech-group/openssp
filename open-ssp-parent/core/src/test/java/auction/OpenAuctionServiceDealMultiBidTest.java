@@ -76,19 +76,19 @@ public class OpenAuctionServiceDealMultiBidTest {
 		final String currency = "USD";
 
 		// bidrequest1
-		final BidRequest.Builder bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0);
+		final BidRequest bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0).build();
 		// bidrequest1
-		final BidRequest.Builder bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0);
+		final BidRequest bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0).build();
 
 		// bidresponse
 		final float bidPrice1 = 3.5f;
-		final BidResponse.Builder response = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
+		final BidResponse response = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
 		bidExchange.setBidRequest(supplier1, bidRequest1);
 		bidExchange.setBidResponse(supplier1, response);
 
 		// bidresponse2
 		final float bidPrice2 = 4.10f;
-		final BidResponse.Builder response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
+		final BidResponse response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
 		bidExchange.setBidRequest(supplier2, bidRequest2);
 		bidExchange.setBidResponse(supplier2, response2);
 
@@ -113,24 +113,24 @@ public class OpenAuctionServiceDealMultiBidTest {
 		final String currency = "USD";
 
 		// bidrequest1
-		final BidRequest.Builder bidRequest = RequestResponseHelper.createRequest(impFloor, 0, currency, null, 0);
+		final BidRequest bidRequest = RequestResponseHelper.createRequest(impFloor, 0, currency, null, 0).build();
 		for (int i = 0; i < 100; i++) {
 			final Supplier supplier = new Supplier();
 			supplier.setSupplierId(Long.valueOf(i));
 			supplier.setShortName("looser" + i);
 			bidExchange.setBidRequest(supplier, bidRequest);
 			final float bidPrice = new Random().nextFloat();
-			final BidResponse.Builder response = RequestResponseHelper.createResponse(bidPrice, currency, null);
+			final BidResponse response = RequestResponseHelper.createResponse(bidPrice, currency, null);
 			bidExchange.setBidResponse(supplier, response);
 		}
 
 		final float bidPrice2 = 2.5f;
-		final BidResponse.Builder response2 = RequestResponseHelper.createResponse(bidPrice2, currency, null);
+		final BidResponse response2 = RequestResponseHelper.createResponse(bidPrice2, currency, null);
 		bidExchange.setBidRequest(supplier2, bidRequest);
 		bidExchange.setBidResponse(supplier2, response2);
 
 		final float bidPrice1 = 2.8f;
-		final BidResponse.Builder response1 = RequestResponseHelper.createResponse(bidPrice1, currency, null);
+		final BidResponse response1 = RequestResponseHelper.createResponse(bidPrice1, currency, null);
 		bidExchange.setBidRequest(supplier1, bidRequest);
 		bidExchange.setBidResponse(supplier1, response1);
 
@@ -159,25 +159,25 @@ public class OpenAuctionServiceDealMultiBidTest {
 		final String deal_id_2 = "998866";
 
 		// bidrequest1
-		final BidRequest.Builder bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0);
+		final BidRequest bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0).build();
 		// bidrequest2
-		final BidRequest.Builder bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0);
+		final BidRequest bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0).build();
 
 		// bidresponse1 Deal
 		final float bidPrice1 = 2.8f;
-		final BidResponse.Builder response1 = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
+		final BidResponse response1 = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
 		bidExchange.setBidRequest(supplier1, bidRequest1);
 		bidExchange.setBidResponse(supplier1, response1);
 
 		// bidresponse2 Deal
 		final float bidPrice2 = 2.9f;
-		final BidResponse.Builder response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
+		final BidResponse response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
 		bidExchange.setBidRequest(supplier3, bidRequest2);
 		bidExchange.setBidResponse(supplier3, response2);
 
 		// bidresponse3 NON Deal
 		final float bidPrice3 = 1.10f;
-		final BidResponse.Builder response3 = RequestResponseHelper.createResponse(bidPrice3, currency, null);
+		final BidResponse response3 = RequestResponseHelper.createResponse(bidPrice3, currency, null);
 		bidExchange.setBidRequest(supplier2, bidRequest1);
 		bidExchange.setBidResponse(supplier2, response3);
 
@@ -206,30 +206,30 @@ public class OpenAuctionServiceDealMultiBidTest {
 		final String deal_id_2 = "998866";
 
 		// bidrequest
-		final BidRequest.Builder bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0);
+		final BidRequest bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0).build();
 		// bidresponse1 Deal
 		final float bidPrice1 = 2.8f;
-		final BidResponse.Builder response1 = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
+		final BidResponse response1 = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
 		bidExchange.setBidRequest(supplier1, bidRequest1);
 		bidExchange.setBidResponse(supplier1, response1);
 
 		// bidrequest
-		final BidRequest.Builder bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0);
+		final BidRequest bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0).build();
 		// bidresponse2 Deal
 		final float bidPrice2 = 3.20f;
-		final BidResponse.Builder response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
+		final BidResponse response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
 		bidExchange.setBidRequest(supplier3, bidRequest2);
 		bidExchange.setBidResponse(supplier3, response2);
 
 		// bidresponse3 NON Deal
 		final float bidPrice3 = 1.10f;
-		final BidResponse.Builder response3 = RequestResponseHelper.createResponse(bidPrice3, currency, null);
+		final BidResponse response3 = RequestResponseHelper.createResponse(bidPrice3, currency, null);
 		bidExchange.setBidRequest(supplier2, bidRequest1);
 		bidExchange.setBidResponse(supplier2, response3);
 
 		// bidresponse4 NON Deal
 		final float bidPrice4 = 1.50f;
-		final BidResponse.Builder response4 = RequestResponseHelper.createResponse(bidPrice4, currency, null);
+		final BidResponse response4 = RequestResponseHelper.createResponse(bidPrice4, currency, null);
 		bidExchange.setBidRequest(supplier4, bidRequest1);
 		bidExchange.setBidResponse(supplier4, response4);
 
@@ -258,32 +258,32 @@ public class OpenAuctionServiceDealMultiBidTest {
 		final String deal_id_2 = "998866";
 
 		// bidrequest
-		final BidRequest.Builder bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0);
+		final BidRequest bidRequest1 = RequestResponseHelper.createRequest(impFloor, dealFloor1, currency, deal_id_1, 0).build();
 		// bidresponse1 Deal
 		final float bidPrice1 = 2.8f;
-		final BidResponse.Builder response1 = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
+		final BidResponse response1 = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
 		// response1.setSupplier(supplier1);
 		bidExchange.setBidRequest(supplier1, bidRequest1);
 		bidExchange.setBidResponse(supplier1, response1);
 
 		// bidrequest
-		final BidRequest.Builder bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0);
+		final BidRequest bidRequest2 = RequestResponseHelper.createRequest(impFloor, dealFloor2, currency, deal_id_2, 0).build();
 		// bidresponse2 Deal
 		final float bidPrice2 = 2.20f;
-		final BidResponse.Builder response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
+		final BidResponse response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
 		bidExchange.setBidRequest(supplier3, bidRequest2);
 		bidExchange.setBidResponse(supplier3, response2);
 
 		// bidresponse3 NON Deal
 		final float bidPrice3 = 1.10f;
-		final BidResponse.Builder response3 = RequestResponseHelper.createResponse(bidPrice3, currency, null);
+		final BidResponse response3 = RequestResponseHelper.createResponse(bidPrice3, currency, null);
 		// response3.setSupplier(supplier2);
 		bidExchange.setBidRequest(supplier2, bidRequest1);
 		bidExchange.setBidResponse(supplier2, response3);
 
 		// bidresponse4 NON Deal
 		final float bidPrice4 = 1.50f;
-		final BidResponse.Builder response4 = RequestResponseHelper.createResponse(bidPrice4, currency, null);
+		final BidResponse response4 = RequestResponseHelper.createResponse(bidPrice4, currency, null);
 		bidExchange.setBidRequest(supplier4, bidRequest1);
 		bidExchange.setBidResponse(supplier4, response4);
 
@@ -306,11 +306,11 @@ public class OpenAuctionServiceDealMultiBidTest {
 		final float impFloor = 0.88f;
 		final String currency = "USD";
 
-		final BidRequest.Builder bidRequest = RequestResponseHelper.createRequest(impFloor, 0, currency, null, 0);
+		final BidRequest bidRequest = RequestResponseHelper.createRequest(impFloor, 0, currency, null, 0).build();
 		bidExchange.setBidRequest(supplier1, bidRequest);
 
 		final float[] prices = { 2.8f, 2.5f, 2.3f, 2.6f, 1.3f, 1.77f };
-		final BidResponse.Builder response = RequestResponseHelper.createResponseMultiBid(prices, currency);
+		final BidResponse response = RequestResponseHelper.createResponseMultiBid(prices, currency);
 		bidExchange.setBidResponse(supplier1, response);
 
 		try {
@@ -332,11 +332,11 @@ public class OpenAuctionServiceDealMultiBidTest {
 		final float impFloor = 0.88f;
 		final String currency = "USD";
 
-		final BidRequest.Builder bidRequest = RequestResponseHelper.createRequest(impFloor, 0, currency, null, 0);
+		final BidRequest bidRequest = RequestResponseHelper.createRequest(impFloor, 0, currency, null, 0).build();
 		bidExchange.setBidRequest(supplier1, bidRequest);
 
 		final float[][] prices = { { 2.8f, 2.5f }, { 2.3f, 2.6f }, { 1.3f, 1.77f } };
-		final BidResponse.Builder response = RequestResponseHelper.createResponseMultiBidMultiSeat(prices, currency);
+		final BidResponse response = RequestResponseHelper.createResponseMultiBidMultiSeat(prices, currency);
 		bidExchange.setBidResponse(supplier1, response);
 
 		try {

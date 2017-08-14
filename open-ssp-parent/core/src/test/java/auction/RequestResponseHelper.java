@@ -17,26 +17,25 @@ import openrtb.bidresponse.model.SeatBid;
  */
 public class RequestResponseHelper {
 
-	private static Bid.Builder createBid(final float price, final String dealID) {
-		final Bid.Builder bidBuilder = new Bid.Builder();
-		bidBuilder.setId("1");
-		bidBuilder.setPrice(price);
-		bidBuilder.setImpid("1");
-		bidBuilder.setDealid(dealID);
+	private static Bid createBid(final float price, final String dealID) {
+		final Bid bid = new Bid();
+		bid.setId("1");
+		bid.setPrice(price);
+		bid.setImpid("1");
+		bid.setDealid(dealID);
 
-		return bidBuilder;
+		return bid;
 	}
 
-	private static SeatBid.Builder createSeatBid(final Bid.Builder[] bids) {
-		final SeatBid.Builder seatBid = new SeatBid.Builder();
-		for (final Bid.Builder bid : bids) {
-			seatBid.addBid(bid);
+	private static SeatBid createSeatBid(final Bid[] bids) {
+		final SeatBid seatBid = new SeatBid();
+		for (final Bid bid : bids) {
+			seatBid.getBid().add(bid);
 		}
 		return seatBid;
 	}
 
-	private static Impression.Builder createImpression(final float floor, final float dealFloor, final String cur,
-			final String dealid, final int private_auction) {
+	private static Impression.Builder createImpression(final float floor, final float dealFloor, final String cur, final String dealid, final int private_auction) {
 		final Impression.Builder imp = new Impression.Builder();
 		imp.setId("1").setBidfloor(floor).setBidfloorcurrency(cur);
 		if (dealid != null) {
@@ -45,16 +44,14 @@ public class RequestResponseHelper {
 		return imp;
 	}
 
-	private static PMP.Builder createPMP(final int privateAuction, final int countDeals, final float dealFloor,
-			final String dealid) {
+	private static PMP.Builder createPMP(final int privateAuction, final int countDeals, final float dealFloor, final String dealid) {
 		final PMP.Builder pmp = new PMP.Builder();
 		pmp.setPrivateAuction(privateAuction);
 		createDeals(countDeals, dealFloor, dealid).forEach(d -> pmp.addDirectDeal(d));
 		return pmp;
 	}
 
-	private static List<DirectDeal.Builder> createDeals(final int countDeals, final float dealFloor,
-			final String dealid) {
+	private static List<DirectDeal.Builder> createDeals(final int countDeals, final float dealFloor, final String dealid) {
 		final List<DirectDeal.Builder> deals = new ArrayList<>();
 		for (int i = 0; i < countDeals; i++) {
 			final DirectDeal.Builder directDeal = new DirectDeal.Builder();
@@ -64,8 +61,7 @@ public class RequestResponseHelper {
 		return deals;
 	}
 
-	public static BidRequest.Builder createRequest(final float floor, final float dealFloor, final String cur,
-			final String dealid, final int private_auction) {
+	public static BidRequest.Builder createRequest(final float floor, final float dealFloor, final String cur, final String dealid, final int private_auction) {
 		final BidRequest.Builder bidRequest = new BidRequest.Builder();
 		// impression
 		final Impression.Builder[] imps = new Impression.Builder[1];
@@ -74,27 +70,29 @@ public class RequestResponseHelper {
 		return bidRequest;
 	}
 
-	public static BidResponse.Builder createResponse(final float price, final String cur, final String dealId) {
-		final BidResponse.Builder responseBuilder = new BidResponse.Builder();
+	public static BidResponse createResponse(final float price, final String cur, final String dealId) {
+
+		final BidResponse responseBuilder = new BidResponse();
 		// Bid
-		final Bid.Builder[] bids = new Bid.Builder[1];
+		final Bid[] bids = new Bid[1];
 		bids[0] = createBid(price, dealId);
 
 		// SeatBid
-		final SeatBid.Builder[] seats = new SeatBid.Builder[1];
+		final SeatBid[] seats = new SeatBid[1];
 		seats[0] = createSeatBid(bids);
+		responseBuilder.setCur(cur);
+		responseBuilder.addSeatBid(seats[0]);
 
 		// response
-		return responseBuilder.addSeatbidBuilder(seats[0]).setCur(cur);
+		return responseBuilder;
 	}
 
-	public static BidResponse.Builder createResponseMultiBidMultiSeat(final float[][] prices, final String cur) {
-		final BidResponse.Builder response = new BidResponse.Builder();
-		// Bid
+	public static BidResponse createResponseMultiBidMultiSeat(final float[][] prices, final String cur) {
+		final BidResponse response = new BidResponse();
 
-		final SeatBid.Builder[] seats = new SeatBid.Builder[prices.length];
+		final SeatBid[] seats = new SeatBid[prices.length];
 		for (int i = 0; i < prices.length; i++) {
-			final Bid.Builder[] bids = new Bid.Builder[prices[i].length];
+			final Bid[] bids = new Bid[prices[i].length];
 			for (int j = 0; j < prices[i].length; j++) {
 				bids[j] = createBid(prices[i][j], null);
 			}
@@ -103,28 +101,28 @@ public class RequestResponseHelper {
 		}
 
 		// response
-		for (final SeatBid.Builder seatBid : seats) {
-			response.addSeatbidBuilder(seatBid);
+		for (final SeatBid seatBid : seats) {
+			response.addSeatBid(seatBid);
 		}
 		response.setCur(cur);
 		return response;
 	}
 
-	public static BidResponse.Builder createResponseMultiBid(final float[] prices, final String cur) {
-		final BidResponse.Builder response = new BidResponse.Builder();
+	public static BidResponse createResponseMultiBid(final float[] prices, final String cur) {
+		final BidResponse response = new BidResponse();
 		// Bid
 
-		final Bid.Builder[] bids = new Bid.Builder[prices.length];
+		final Bid[] bids = new Bid[prices.length];
 		for (int i = 0; i < prices.length; i++) {
 			bids[i] = createBid(prices[i], null);
 		}
-		final SeatBid.Builder[] seats = new SeatBid.Builder[1];
+		final SeatBid[] seats = new SeatBid[1];
 		// SeatBid
 		seats[0] = createSeatBid(bids);
 
 		// response
-		for (final SeatBid.Builder seatBid : seats) {
-			response.addSeatbidBuilder(seatBid);
+		for (final SeatBid seatBid : seats) {
+			response.addSeatBid(seatBid);
 		}
 		response.setCur(cur);
 		return response;

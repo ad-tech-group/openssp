@@ -10,9 +10,9 @@ public class ResponseContainer {
 
 	private final Supplier supplier;
 
-	private final BidResponse.Builder bidResponse;
+	private final BidResponse bidResponse;
 
-	public ResponseContainer(final Supplier supplier, final BidResponse.Builder bidResponse) {
+	public ResponseContainer(final Supplier supplier, final BidResponse bidResponse) {
 		this.supplier = supplier;
 		this.bidResponse = bidResponse;
 	}
@@ -21,7 +21,7 @@ public class ResponseContainer {
 		return supplier;
 	}
 
-	public BidResponse.Builder getBidResponse() {
+	public BidResponse getBidResponse() {
 		return bidResponse;
 	}
 
