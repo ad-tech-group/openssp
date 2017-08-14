@@ -1,6 +1,7 @@
 package channel.adserving;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import org.apache.http.client.utils.URIBuilder;
 
@@ -39,10 +40,10 @@ public class AdserverBroker extends AbstractBroker {
 	/**
 	 * Connects to the Adserver.
 	 * 
-	 * @return {@link AdProviderReader}
+	 * @return Optional of {@link AdProviderReader}
 	 * @throws BidProcessingException
 	 */
-	public AdProviderReader call() throws BidProcessingException {
+	public Optional<AdProviderReader> call() throws BidProcessingException {
 		final Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
 			uriBuilder.setParameter("zoneid", String.valueOf(sessionAgent.getParamValues().getZone().getZoneId()));
@@ -55,7 +56,7 @@ public class AdserverBroker extends AbstractBroker {
 			// LogFacade.logAdservingResponse("Adserving", sessionAgent.getRequestid(), String.valueOf(stopwatch.elapsed(TimeUnit.MILLISECONDS)), " hasResult: "
 			// + (adProvider
 			// .buildResponse() != null));
-			return adProvider;
+			return Optional.ofNullable(adProvider);
 		} catch (final BidProcessingException e) {
 			// LogFacade.logAdservingResponse("Adserving Error", sessionAgent.getRequestid(), e.getMessage());
 			throw e;

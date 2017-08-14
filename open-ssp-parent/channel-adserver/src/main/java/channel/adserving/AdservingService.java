@@ -1,5 +1,6 @@
 package channel.adserving;
 
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import com.atg.openssp.common.core.entry.SessionAgent;
@@ -35,11 +36,15 @@ public class AdservingService implements Callable<AdProviderReader> {
 	 */
 	@Override
 	public AdProviderReader call() throws Exception {
-		final AdProviderReader adProvider = broker.call();
+		final Optional<AdProviderReader> adProvider = broker.call();
 
-		// check if the ad response price is greator or equal the floorprice
-		if (FloatComparator.greaterOrEqual(adProvider.getPriceEur(), agent.getParamValues().getVideoad().getBidfloorPrice())) {
-			return adProvider;
+		if (adProvider.isPresent()) {
+			final AdProviderReader provider = adProvider.get();
+
+			// check if the ad response price is greator or equal the floorprice
+			if (FloatComparator.greaterOrEqual(provider.getPriceEur(), agent.getParamValues().getVideoad().getBidfloorPrice())) {
+				return provider;
+			}
 		}
 		// LogFacade.logException(this.getClass(), ExceptionCode.E002, agent.getRequestid(), "adid: " + adProvider.getAdid() + ", " + adProvider.getPriceEur() +
 		// " < " + agent
