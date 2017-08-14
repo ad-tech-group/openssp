@@ -49,7 +49,7 @@ public final class Bid implements Comparable<Bid> {
 		attr = new ArrayList<>();
 	}
 
-	protected void setId(final String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -61,7 +61,7 @@ public final class Bid implements Comparable<Bid> {
 		return impid;
 	}
 
-	protected void setImpid(final String impid) {
+	public void setImpid(final String impid) {
 		this.impid = impid;
 	}
 
@@ -69,7 +69,7 @@ public final class Bid implements Comparable<Bid> {
 		return price;
 	}
 
-	protected void setPrice(final float price) {
+	public void setPrice(final float price) {
 		this.price = price;
 	}
 
@@ -77,7 +77,7 @@ public final class Bid implements Comparable<Bid> {
 		return nurl;
 	}
 
-	protected void setNurl(final String nurl) {
+	public void setNurl(final String nurl) {
 		this.nurl = nurl;
 	}
 
@@ -85,7 +85,7 @@ public final class Bid implements Comparable<Bid> {
 		return adid;
 	}
 
-	protected void setAdid(final String adid) {
+	public void setAdid(final String adid) {
 		this.adid = adid;
 	}
 
@@ -93,7 +93,7 @@ public final class Bid implements Comparable<Bid> {
 		return adm;
 	}
 
-	protected void setAdm(final String adm) {
+	public void setAdm(final String adm) {
 		this.adm = adm;
 	}
 
@@ -101,7 +101,7 @@ public final class Bid implements Comparable<Bid> {
 		return adomain;
 	}
 
-	protected void setAdomain(final List<String> adomain) {
+	public void setAdomain(final List<String> adomain) {
 		this.adomain = adomain;
 	}
 
@@ -113,7 +113,7 @@ public final class Bid implements Comparable<Bid> {
 		return iurl;
 	}
 
-	protected void setIurl(final String iurl) {
+	public void setIurl(final String iurl) {
 		this.iurl = iurl;
 	}
 
@@ -121,7 +121,7 @@ public final class Bid implements Comparable<Bid> {
 		return cid;
 	}
 
-	protected void setCid(final String cid) {
+	public void setCid(final String cid) {
 		this.cid = cid;
 	}
 
@@ -129,7 +129,7 @@ public final class Bid implements Comparable<Bid> {
 		return crid;
 	}
 
-	protected void setCrid(final String crid) {
+	public void setCrid(final String crid) {
 		this.crid = crid;
 	}
 
@@ -137,7 +137,7 @@ public final class Bid implements Comparable<Bid> {
 		return attr;
 	}
 
-	protected void setAttr(final List<Integer> attr) {
+	public void setAttr(final List<Integer> attr) {
 		this.attr = attr;
 	}
 
@@ -149,7 +149,7 @@ public final class Bid implements Comparable<Bid> {
 		return dealid;
 	}
 
-	protected void setDealid(final String dealid) {
+	public void setDealid(final String dealid) {
 		this.dealid = dealid;
 	}
 
@@ -157,7 +157,7 @@ public final class Bid implements Comparable<Bid> {
 		return h;
 	}
 
-	protected void setH(final int h) {
+	public void setH(final int h) {
 		this.h = h;
 	}
 
@@ -165,7 +165,7 @@ public final class Bid implements Comparable<Bid> {
 		return w;
 	}
 
-	protected void setW(final int w) {
+	public void setW(final int w) {
 		this.w = w;
 	}
 
@@ -197,7 +197,7 @@ public final class Bid implements Comparable<Bid> {
 		return ext;
 	}
 
-	protected void setExt(final Object ext) {
+	public void setExt(final Object ext) {
 		this.ext = ext;
 	}
 
