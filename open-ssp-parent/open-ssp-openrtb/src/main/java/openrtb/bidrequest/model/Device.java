@@ -128,10 +128,13 @@ public final class Device implements Cloneable, Serializable {
 		}
 
 		public Builder setIp(final String ip) {
-			if (ip.contains(":")) {
-				device.setIpv6(ip);
-			} else {
-				device.setIp(ip);
+			System.out.println("ip: " + ip);
+			if (ip != null) {
+				if (ip.contains(":")) {
+					device.setIpv6(ip);
+				} else {
+					device.setIp(ip);
+				}
 			}
 			return this;
 		}
