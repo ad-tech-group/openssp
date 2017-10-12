@@ -36,7 +36,12 @@ public class EntryValidator {
 	 */
 	public ParamValue validateEntryParams(final HttpServletRequest request) throws RequestException {
 
+		// Note:
+		// You may define your individual parameter or payloadto work with.
+		// Neither the "ParamValue" - object nor the list of params may fit to your requirements out of the box.
+
 		final ParamValue pm = new ParamValue();
+
 		try {
 			final int zoneid = Integer.valueOf(request.getParameter("zone"));
 			pm.setZone(ZoneDataCache.instance.get(zoneid));
