@@ -14,7 +14,7 @@ import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.common.provider.AdProviderReader;
-import com.atg.openssp.core.cache.type.ConnectorCache;
+import com.atg.openssp.core.cache.type.SupplierCache;
 import com.atg.openssp.core.exchange.Auction;
 import com.atg.openssp.core.exchange.BidRequestBuilder;
 
@@ -102,7 +102,7 @@ public class DemandService implements Callable<AdProviderReader> {
 	 * @link SessionAgent
 	 */
 	private List<DemandBroker> loadSupplierConnectors() {
-		final List<DemandBroker> brokerList = ConnectorCache.instance.getAll();
+		final List<DemandBroker> brokerList = SupplierCache.instance.getAll();
 		final BidRequest bidRequest = BidRequestBuilder.build(agent);
 		brokerList.forEach(broker -> {
 			final Impression imp = bidRequest.getImp().get(0);

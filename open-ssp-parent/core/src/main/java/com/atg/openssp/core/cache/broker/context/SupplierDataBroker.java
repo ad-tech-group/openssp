@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.EmptyHostException;
-import com.atg.openssp.core.cache.type.ConnectorCache;
+import com.atg.openssp.core.cache.type.SupplierCache;
 import com.atg.openssp.core.exchange.channel.rtb.DemandBroker;
 import com.atg.openssp.core.exchange.channel.rtb.OpenRtbConnector;
 
@@ -43,7 +43,7 @@ public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 					public void accept(final Supplier supplier) {
 						final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier.getEndPoint());
 						final DemandBroker broker = new DemandBroker(supplier, openRtbConnector);
-						ConnectorCache.instance.add(broker);
+						SupplierCache.instance.add(broker);
 					}
 				});
 				return true;
@@ -63,7 +63,7 @@ public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 	@Override
 	protected void finalWork() {
 		// need to switch the intermediate cache to make the data available
-		ConnectorCache.instance.switchCache();
+		SupplierCache.instance.switchCache();
 	}
 
 }
