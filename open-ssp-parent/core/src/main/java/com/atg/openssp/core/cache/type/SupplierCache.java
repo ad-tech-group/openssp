@@ -7,11 +7,11 @@ import com.atg.openssp.core.exchange.channel.rtb.DemandBroker;
  * @author André Schmer
  *
  */
-public final class ConnectorCache extends ListCache<DemandBroker> {
+public final class SupplierCache extends ListCache<DemandBroker> {
 
-	public static final ConnectorCache instance = new ConnectorCache();
+	public static final SupplierCache instance = new SupplierCache();
 
-	private ConnectorCache() {
+	private SupplierCache() {
 		super();
 	}
 
