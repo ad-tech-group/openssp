@@ -60,7 +60,7 @@ public class DemandService implements Callable<AdProviderReader> {
 	public AdProviderReader call() throws Exception {
 		AdProviderReader adProvider = null;
 		try {
-			final List<DemandBroker> connectors = loadConnectors();
+			final List<DemandBroker> connectors = loadSupplierConnectors();
 			final List<Future<ResponseContainer>> futures = DemandExecutorServiceFacade.instance.invokeAll(connectors);
 
 			futures.parallelStream().filter(f -> f != null).forEach(future -> {
@@ -93,7 +93,7 @@ public class DemandService implements Callable<AdProviderReader> {
 	}
 
 	/**
-	 * Loads the connectors from the cache.
+	 * Loads the connectors for supplier from the cache.
 	 * <p>
 	 * Therefore it prepares the {@link BidRequest} for every connector, which is a representant to a demand connection.
 	 * 
@@ -101,7 +101,7 @@ public class DemandService implements Callable<AdProviderReader> {
 	 * 
 	 * @link SessionAgent
 	 */
-	private List<DemandBroker> loadConnectors() {
+	private List<DemandBroker> loadSupplierConnectors() {
 		final List<DemandBroker> brokerList = ConnectorCache.instance.getAll();
 		final BidRequest bidRequest = BidRequestBuilder.build(agent);
 		brokerList.forEach(broker -> {
