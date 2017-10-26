@@ -27,6 +27,8 @@ abstract class AbstractRemoteDataProvider extends DataBrokerObserver {
 		return new RemoteDataProviderConnector().connect(getRestfulContext());
 	}
 
+	protected abstract PathBuilder getRestfulContext() throws EmptyHostException;
+
 	protected PathBuilder getDefaulPathBuilder() throws EmptyHostException {
 		final PathBuilder pathBuilder = new PathBuilder();
 
