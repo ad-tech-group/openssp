@@ -27,4 +27,10 @@ public abstract class AbstractDataBroker<T> extends DataBrokerObserver {
 		pathBuilder.setServer(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_URL));
 		return pathBuilder;
 	}
+
+	/**
+	 * @return the context of the restful service to connect with {see PathBuilder}.
+	 * @throws EmptyHostException
+	 */
+	public abstract PathBuilder getRestfulContext() throws EmptyHostException;
 }
