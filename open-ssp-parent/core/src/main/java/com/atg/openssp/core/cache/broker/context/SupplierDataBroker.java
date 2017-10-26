@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.EmptyHostException;
-import com.atg.openssp.core.cache.type.SupplierCache;
-import com.atg.openssp.core.exchange.channel.rtb.DemandBroker;
+import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.channel.rtb.OpenRtbConnector;
 
 import restful.context.Path;
@@ -32,18 +31,20 @@ public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 
 	public SupplierDataBroker() {}
 
+	/**
+	 * Do this for example if you wish to load supplier data from an external service like a REST webservice.
+	 */
 	@Override
 	public boolean doCaching() {
 		try {
 			final SupplierDto dto = super.connect(SupplierDto.class);
 			if (dto != null) {
-				log.info("sizeof supplier data=" + dto.getData().size());
-				dto.getData().forEach(new Consumer<Supplier>() {
+				log.info("sizeof supplier data=" + dto.getSupplier().size());
+				dto.getSupplier().forEach(new Consumer<Supplier>() {
 					@Override
 					public void accept(final Supplier supplier) {
-						final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier.getEndPoint());
-						final DemandBroker broker = new DemandBroker(supplier, openRtbConnector);
-						SupplierCache.instance.add(broker);
+						final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);
+						ConnectorCache.instance.add(openRtbConnector);
 					}
 				});
 				return true;
@@ -63,7 +64,7 @@ public final class SupplierDataBroker extends AbstractDataBroker<SupplierDto> {
 	@Override
 	protected void finalWork() {
 		// need to switch the intermediate cache to make the data available
-		SupplierCache.instance.switchCache();
+		ConnectorCache.instance.switchCache();
 	}
 
 }
