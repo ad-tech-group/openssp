@@ -34,9 +34,6 @@ public class BidRequestBuilder {
 		                        "application/x-shockwave-flash").setH(400).setW(600).setMaxduration(100).setMinduration(30).addProtocol(VideoBidResponseProtocol.VAST_2_0
 		                                .getValue()).setStartdelay(1).build()).build()).setUser(new User.Builder().setBuyeruid("HHcFrt-76Gh4aPl").setGender(Gender.MALE).setId("99")
 		                                        .setYob(1981).build()).build();
-		// .setExtension(new
-		// TargetGroupBuilder().addTargetGroup(TargetGroup.newBuilder().setAgeinterval("20-29")
-		// .setTargetCount(3).setGender(Gender.MALE).build()).build())
 
 		return bidRequest;
 	}

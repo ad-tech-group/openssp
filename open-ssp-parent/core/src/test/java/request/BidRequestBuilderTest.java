@@ -16,9 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import openrtb.bidrequest.extension.Contact;
-import openrtb.bidrequest.extension.ContactGroup;
-import openrtb.bidrequest.extension.ContactGroupBuilder;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Device;
 import openrtb.bidrequest.model.Gender;
@@ -48,8 +45,7 @@ public class BidRequestBuilderTest {
 		                9.925742f).setZip("22761").build()).build()).addImp(new Impression.Builder().setId("45").setVideo(new Video.Builder().addMime(
 		                        "application/x-shockwave-flash").setH(400).setW(600).setMaxduration(100).setMinduration(30).addProtocol(VideoBidResponseProtocol.VAST_2_0
 		                                .getValue()).setStartdelay(1).build()).build()).setUser(new User.Builder().setBuyeruid("HHcFrt-76Gh4aPl").setGender(Gender.MALE).setId("99")
-		                                        .setYob(1981).build()).setExtension(new ContactGroupBuilder().addContactGroup(new Contact.Builder().setAgevarianz("20-29").setAge(
-		                                                "23").setGender(Gender.MALE).build()).build()).build();
+		                                        .setYob(1981).build()).build();
 
 		gson = new GsonBuilder().setVersion(2.4).create();
 	}
@@ -91,12 +87,6 @@ public class BidRequestBuilderTest {
 		Assert.assertEquals("HHcFrt-76Gh4aPl", bidRequest.getUser().getBuyeruid());
 		Assert.assertEquals("M", bidRequest.getUser().getGender());
 		Assert.assertEquals(1981, bidRequest.getUser().getYob());
-
-		// Extension
-		final ContactGroup cg = (ContactGroup) bidRequest.getExt();
-		Assert.assertEquals("23", cg.getContacts().get(0).getAge());
-		Assert.assertEquals("20-29", cg.getContacts().get(0).getAgevarianz());
-		Assert.assertEquals("M", cg.getContacts().get(0).getGender());
 	}
 
 	@Test
