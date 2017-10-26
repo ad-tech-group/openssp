@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.core.broker.AbstractBroker;
+import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.BidProcessingException;
@@ -36,7 +37,10 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	private final Gson gson;
 
-	public DemandBroker(final Supplier supplier, final OpenRtbConnector connector) {
+	private BidRequest bidrequest;
+
+	public DemandBroker(final Supplier supplier, final OpenRtbConnector connector, final SessionAgent agent) {
+		sessionAgent = agent;
 		this.supplier = supplier;
 		this.connector = connector;
 
@@ -51,7 +55,6 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	@Override
 	public ResponseContainer call() throws Exception {
-		final BidRequest bidrequest = sessionAgent.getBidExchange().getBidRequest(supplier);
 		if (bidrequest == null) {
 			return null;
 		}
@@ -75,8 +78,8 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		return null;
 	}
 
-	public Supplier getSupplier() {
-		return supplier;
+	public void setBidRequest(final BidRequest bidrequest) {
+		this.bidrequest = bidrequest;
 	}
 
 }
