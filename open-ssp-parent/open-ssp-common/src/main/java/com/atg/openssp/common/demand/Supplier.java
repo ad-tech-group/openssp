@@ -14,11 +14,9 @@ public class Supplier implements Serializable {
 
 	private String endPoint;
 
-	private String version;
+	private boolean connectionKeepAlive;
 
-	private final boolean connectionKeepAlive = true;
-
-	private String openRtbVersion = "2.2";
+	private String openRtbVersion;
 
 	private String contentType;
 
@@ -29,6 +27,10 @@ public class Supplier implements Serializable {
 	private Long supplierId;
 
 	private String currency;
+
+	private int underTest;
+
+	private int active;
 
 	public Supplier() {}
 
@@ -46,14 +48,6 @@ public class Supplier implements Serializable {
 
 	public void setEndPoint(final String endPoint) {
 		this.endPoint = endPoint;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(final String version) {
-		this.version = version;
 	}
 
 	public boolean isConnectionKeepAlive() {
@@ -108,6 +102,22 @@ public class Supplier implements Serializable {
 		this.currency = currency;
 	}
 
+	public int getUnderTest() {
+		return underTest;
+	}
+
+	public void setUnderTest(final int underTest) {
+		this.underTest = underTest;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(final int active) {
+		this.active = active;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -119,7 +129,6 @@ public class Supplier implements Serializable {
 		result = prime * result + ((openRtbVersion == null) ? 0 : openRtbVersion.hashCode());
 		result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
 		result = prime * result + ((supplierId == null) ? 0 : supplierId.hashCode());
-		result = prime * result + ((version == null) ? 0 : version.hashCode());
 		return result;
 	}
 
@@ -176,19 +185,13 @@ public class Supplier implements Serializable {
 		} else if (!supplierId.equals(other.supplierId)) {
 			return false;
 		}
-		if (version == null) {
-			if (other.version != null) {
-				return false;
-			}
-		} else if (!version.equals(other.version)) {
-			return false;
-		}
+
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Supplier [shortName=%s, endPoint=%s, version=%s]", shortName, endPoint, version);
+		return String.format("Supplier [shortName=%s, endPoint=%s, openRtbVersion=%s]", shortName, endPoint, openRtbVersion);
 	}
 
 }
