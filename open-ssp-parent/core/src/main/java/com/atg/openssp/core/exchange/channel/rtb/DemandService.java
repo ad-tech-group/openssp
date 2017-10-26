@@ -1,5 +1,6 @@
 package com.atg.openssp.core.exchange.channel.rtb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -14,7 +15,7 @@ import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.common.provider.AdProviderReader;
-import com.atg.openssp.core.cache.type.SupplierCache;
+import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.Auction;
 import com.atg.openssp.core.exchange.BidRequestBuilder;
 
@@ -102,23 +103,30 @@ public class DemandService implements Callable<AdProviderReader> {
 	 * @link SessionAgent
 	 */
 	private List<DemandBroker> loadSupplierConnectors() {
-		final List<DemandBroker> brokerList = SupplierCache.instance.getAll();
+		final List<OpenRtbConnector> connectorList = ConnectorCache.instance.getAll();
+		final List<DemandBroker> connectors = new ArrayList<>();
+
 		final BidRequest bidRequest = BidRequestBuilder.build(agent);
-		brokerList.forEach(broker -> {
-			final Impression imp = bidRequest.getImp().get(0);
+		connectorList.stream().filter(b -> b.getSupplier().getActive() == 1).forEach(connector -> {
+
+			final DemandBroker demandBroker = new DemandBroker(connector.getSupplier(), connector, agent);
 			if (agent.getParamValues().getVideoad().getBidfloorPrice() > 0) {
+				final Impression imp = bidRequest.getImp().get(0);
 				// floorprice in EUR -> multiply with rate to get target
 				// currency therfore floorprice currency is always the same
 				// as supplier currency
-				imp.setBidfloor(agent.getParamValues().getVideoad().getBidfloorPrice() * CurrencyCache.instance.get(broker.getSupplier().getCurrency()));
-				imp.setBidfloorcur(broker.getSupplier().getCurrency());
+				imp.setBidfloor(agent.getParamValues().getVideoad().getBidfloorPrice() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
+				imp.setBidfloorcur(connector.getSupplier().getCurrency());
 			}
 
-			broker.setSessionAgent(agent);
-			agent.getBidExchange().setBidRequest(broker.getSupplier(), bidRequest);
+			bidRequest.setTest(connector.getSupplier().getUnderTest());
+			demandBroker.setBidRequest(bidRequest);
+			agent.getBidExchange().setBidRequest(connector.getSupplier(), bidRequest);
+			connectors.add(demandBroker);
 		});
 
-		return brokerList;
+		return connectors;
+
 	}
 
 }
