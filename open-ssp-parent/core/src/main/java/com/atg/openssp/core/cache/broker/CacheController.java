@@ -2,8 +2,7 @@ package com.atg.openssp.core.cache.broker;
 
 import java.util.Observable;
 
-import com.atg.openssp.core.cache.broker.remote.RemoteVideoadDataBroker;
-import com.atg.openssp.core.cache.broker.remote.RemoteWebsiteDataBroker;
+import com.atg.openssp.core.cache.broker.context.SupplierDataBrokerJson;
 
 /**
  * 
@@ -22,15 +21,15 @@ public class CacheController extends Observable {
 	private void initingCacheList() {
 		deleteObservers();
 
-		// TODO: activate after enables RTB and setting up supplier data store...
-		// addObserver(new SupplierDataBroker());
+		// loads supplier data from supplie_db.json into the cache
+		addObserver(new SupplierDataBrokerJson());
 
 		// TODO: activate after setting up currency data store ...
 		// addObserver(new CurrencyDataBroker());
 
 		// TODO: activate after setting up a webservice to provide additional informations to those data or an equivalent
-		addObserver(new RemoteWebsiteDataBroker());
-		addObserver(new RemoteVideoadDataBroker());
+		// addObserver(new RemoteWebsiteDataBroker());
+		// addObserver(new RemoteVideoadDataBroker());
 	}
 
 	/**
