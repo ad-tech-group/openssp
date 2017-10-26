@@ -6,6 +6,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
 import com.atg.openssp.common.core.connector.JsonPostConnector;
+import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.BidProcessingException;
 
 /**
@@ -20,8 +21,11 @@ public class OpenRtbConnector {
 
 	private final String endpoint;
 
-	public OpenRtbConnector(final String endpoint) {
-		this.endpoint = endpoint;
+	private final Supplier supplier;
+
+	public OpenRtbConnector(final Supplier supplier) {
+		this.supplier = supplier;
+		endpoint = supplier.getEndPoint();
 		jsonPostConnector = new JsonPostConnector();
 	}
 
@@ -39,5 +43,9 @@ public class OpenRtbConnector {
 		final HttpPost httpPost = new HttpPost(endpoint);
 		httpPost.setHeaders(header);
 		return jsonPostConnector.connect(new StringEntity(bidrequest, ContentType.APPLICATION_JSON), httpPost);
+	}
+
+	public Supplier getSupplier() {
+		return supplier;
 	}
 }
