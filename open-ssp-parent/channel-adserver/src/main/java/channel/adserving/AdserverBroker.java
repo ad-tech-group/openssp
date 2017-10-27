@@ -24,6 +24,7 @@ public class AdserverBroker extends AbstractBroker {
 
 	private final JsonGetConnector jsonGetConnector;
 
+	// TODO: define endpoint
 	final String scheme = "http";
 	final String host = "doamin.com";
 	final String path = "/path/to/target";
@@ -46,19 +47,12 @@ public class AdserverBroker extends AbstractBroker {
 	public Optional<AdProviderReader> call() throws BidProcessingException {
 		final Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
-			uriBuilder.setParameter("zoneid", String.valueOf(sessionAgent.getParamValues().getZone().getZoneId()));
-
-			// LogFacade.logAdservingRequest("Adserving", sessionAgent.getRequestid(), uriBuilder.toString());
 
 			final String result = jsonGetConnector.connect(uriBuilder);
 			final AdProviderReader adProvider = gson.fromJson(result, AdservingCampaignProvider.class);
 			stopwatch.stop();
-			// LogFacade.logAdservingResponse("Adserving", sessionAgent.getRequestid(), String.valueOf(stopwatch.elapsed(TimeUnit.MILLISECONDS)), " hasResult: "
-			// + (adProvider
-			// .buildResponse() != null));
 			return Optional.ofNullable(adProvider);
 		} catch (final BidProcessingException e) {
-			// LogFacade.logAdservingResponse("Adserving Error", sessionAgent.getRequestid(), e.getMessage());
 			throw e;
 		} finally {
 			if (stopwatch.isRunning()) {

@@ -6,8 +6,6 @@ import java.util.concurrent.Callable;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.provider.AdProviderReader;
 
-import util.math.FloatComparator;
-
 /**
  * @author André Schmer
  *
@@ -42,13 +40,11 @@ public class AdservingService implements Callable<AdProviderReader> {
 			final AdProviderReader provider = adProvider.get();
 
 			// check if the ad response price is greator or equal the floorprice
-			if (FloatComparator.greaterOrEqual(provider.getPriceEur(), agent.getParamValues().getVideoad().getBidfloorPrice())) {
-				return provider;
-			}
+			// if (FloatComparator.greaterOrEqual(provider.getPriceEur(), agent.getParamValues().getVideoad().getBidfloorPrice())) {
+			// return provider;
+			// }
 		}
-		// LogFacade.logException(this.getClass(), ExceptionCode.E002, agent.getRequestid(), "adid: " + adProvider.getAdid() + ", " + adProvider.getPriceEur() +
-		// " < " + agent
-		// .getParamValues().getVideoad().getBidfloorPrice());
+
 		return null;
 	}
 
