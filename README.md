@@ -22,7 +22,7 @@ Those file are:
 ### Elementary SSP functionality:
 1. A tag with a link to this SSP is placed on a website which contains the (Video-)Adplacement. This link contains a set of parameters (depends on your preferences). 
 2. SSP is called from this tag, the parameters are extrahated and validated (depends on your preferences).
-3. The SSP resolves the request data, e.g. the webiste or publisher, which is identified by an id (depends on your preferences) and loads the data to enrich from the cache. (For more information about the cache see section Data Caching)
+3. The SSP resolves the request data, e.g. the website or publisher, which is identified by an id (depends on your preferences) and loads the data to enrich from the cache. (For more information about the cache see section Data Caching)
 4. The SSP starts the ExchangeServer and the ExecutorService to call the demand service like DSP, SSP, Adserver or what ever you want and waits for the respond from the partner to start the auction.
 5. After the auction is finished, the winner is evaluated and a respond to the client can be prepared.
 
