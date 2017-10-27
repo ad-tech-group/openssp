@@ -1,7 +1,7 @@
 {
 	"supplier": [{
 			"shortName": "dsp_1",
-			"endPoint": "http://endpoint.dsp_1.com",
+			"endPoint": "http://localhost:8082/dsp-sim/DemandService",
 			"connectionKeepAlive": true,
 			"openRtbVersion": 2.2,
 			"contentType": "application/json",
