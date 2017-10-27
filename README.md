@@ -17,7 +17,7 @@ The proprties files will be loaded at TC startup and a Watchdog is watching thos
 
 Those file are:
 - `global.runtime.xml`
-- local.runtime.xml
+- `local.runtime.xml`
 
 ### Elementary SSP functionality:
 1. A tag with a link to this SSP is placed on a website which contains the (Video-)Adplacement. This link contains a set of parameters (depends on your preferences). 
@@ -29,8 +29,8 @@ Those file are:
 ### Data Caching:
 
 Update v0.2:
-To increase the user experience and avoid a test implementation for set up an external data service to load the data from, some new example JSON based datastructures and its correspondign DataBroker are available. These structures can be extended to load the data to fill a valid and complete bidrequest. Additionally the payload of SSP request is reduced to only one parameter. 
-Example: a call to OpenSSP with ?site=1 will map to an entry within site_db.json and loads its data from cache.
+To increase the user experience and avoid a test implementation for set up an external data service to load the data from, some new example JSON based datastructures and its corresponding DataBroker are available. These structures can be extended to load the data to fill a valid and complete bidrequest. Additionally the payload of SSP request is reduced to only one parameter. 
+Example: a call to OpenSSP with `?site=1` will map to an entry within `site_db.json` and loads its data from cache.
 
 This Open-SSP uses some predefined data to enrich the incoming requests and building the various bidrequests.
 Those data e.g. for Websites have to be loaded in a asynchronous and continous way.
@@ -40,4 +40,4 @@ You can use it, improve it or whatever you want with it.
 
 Comments, proposals, improvements are welcome.
 For more informations contact André Schmer, schmer@ad-tech-group.com.
-May 2017
+October 2017
