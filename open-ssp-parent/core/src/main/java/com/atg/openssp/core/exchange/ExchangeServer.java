@@ -59,15 +59,12 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 					return winnerFuture.get();
 				} catch (final ExecutionException e) {
 					log.error(e.getMessage());
-					// LogFacade.logException(getClass(), e.getMessage());
 				}
 			} else {
 				log.error("no winner detected");
-				// LogFacade.logException(getClass(), " no winner detected.");
 			}
 		} catch (final InterruptedException e) {
 			log.error(e.getMessage());
-			// LogFacade.logException(getClass(), e.getMessage());
 		}
 		return null;
 	}
@@ -86,7 +83,6 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 			}
 		} catch (final InterruptedException | ExecutionException e) {
 			log.error(e.getMessage());
-			// LogFacade.logException(ExchangeServer.class, e.getMessage());
 		}
 
 		return b;
@@ -104,33 +100,10 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				out.flush();
 			} catch (final IOException e) {
 				log.error(e.getMessage());
-				// LogFacade.logException(getClass(), e.getMessage());
 			}
 			return true;
 		}
 		return false;
 	}
-
-	// private boolean evaluateResponse2(final SessionAgent agent, final AdProviderReader winner) {
-	// String jsonAnswer = null;
-	// if (winner != null && winner.getVendorId() != null) {
-	// winner.perform(agent);
-	// final String vast = LocalContext.getVastResolverBroker().call(winner.buildResponse(), winner.getAdid(),
-	// String.valueOf(agent.getParamValues().getZone().getZoneId()));
-	// ProviderLogProcessor.instance.setLogData(agent, winner);
-	//
-	// final JsonObject obj = new JsonParser().parse(vast).getAsJsonObject();
-	// // add the cpm
-	// obj.addProperty("cpm", winner.getPriceEur());
-	// jsonAnswer = obj.toString();
-	// }
-	//
-	// try {
-	// agent.getHttpResponse().getWriter().append(jsonAnswer).flush();
-	// } catch (final IOException e) {
-	// LogFacade.logException(getClass(), e.getMessage());
-	// }
-	// return jsonAnswer != null;
-	// }
 
 }
