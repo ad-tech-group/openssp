@@ -2,6 +2,8 @@ package com.atg.openssp.core.cache.broker;
 
 import java.util.Observable;
 
+import com.atg.openssp.core.cache.broker.context.PricelayerBrokerJson;
+import com.atg.openssp.core.cache.broker.context.SiteDataBrokerJson;
 import com.atg.openssp.core.cache.broker.context.SupplierDataBrokerJson;
 
 /**
@@ -21,15 +23,14 @@ public class CacheController extends Observable {
 	private void initingCacheList() {
 		deleteObservers();
 
-		// loads supplier data from supplie_db.json into the cache
+		// loads supplier data from supplier_db.json into the cache
 		addObserver(new SupplierDataBrokerJson());
 
-		// TODO: activate after setting up currency data store ...
-		// addObserver(new CurrencyDataBroker());
+		// loads site data from site_db.json into the cache
+		addObserver(new SiteDataBrokerJson());
 
-		// TODO: activate after setting up a webservice to provide additional informations to those data or an equivalent
-		// addObserver(new RemoteWebsiteDataBroker());
-		// addObserver(new RemoteVideoadDataBroker());
+		// loads priceinformation from price_layer.json into the cache
+		addObserver(new PricelayerBrokerJson());
 	}
 
 	/**
