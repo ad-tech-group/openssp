@@ -1,4 +1,4 @@
-## OPEN-SSP by ATG
+## OpenSSP by ATG
 
 ### This is a Open-Source Supply-Side-Platform for general use.
 
