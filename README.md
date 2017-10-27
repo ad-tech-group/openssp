@@ -16,7 +16,7 @@ The Runtime Environment is based on a Tomcat.
 The proprties files will be loaded at TC startup and a Watchdog is watching those files for changes. So the (most) values of this configurations are runtime sensitive.
 
 Those file are:
-- global.runtime.xml
+- `global.runtime.xml`
 - local.runtime.xml
 
 ### Elementary SSP functionality:
