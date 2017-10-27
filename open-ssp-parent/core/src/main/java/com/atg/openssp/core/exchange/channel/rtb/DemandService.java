@@ -3,6 +3,7 @@ package com.atg.openssp.core.exchange.channel.rtb;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -76,8 +77,17 @@ public class DemandService implements Callable<AdProviderReader> {
 					// return;// important!
 					// }
 					agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
-				} catch (final ExecutionException | InterruptedException e) {
+				} catch (final ExecutionException e) {
+					System.out.println(getClass().getSimpleName() + " ExecutionException " + e.getMessage());
 					log.error("{} {}", agent.getRequestid(), e.getMessage());
+				} catch (final InterruptedException e) {
+					System.out.println(getClass().getSimpleName() + " InterruptedException " + e.getMessage());
+					log.error("{} {}", agent.getRequestid(), e.getMessage());
+				} catch (final CancellationException e) {
+					System.out.println(getClass().getSimpleName() + " CancellationException " + e.getMessage());
+					log.error("{} {}", agent.getRequestid(), e.getMessage());
+				} catch (final Exception e) {
+					System.out.println(getClass().getSimpleName() + " FCK: " + e.getMessage());
 				}
 			});
 
@@ -110,12 +120,12 @@ public class DemandService implements Callable<AdProviderReader> {
 		connectorList.stream().filter(b -> b.getSupplier().getActive() == 1).forEach(connector -> {
 
 			final DemandBroker demandBroker = new DemandBroker(connector.getSupplier(), connector, agent);
-			if (agent.getParamValues().getVideoad().getBidfloorPrice() > 0) {
+			if (bidRequest.getImp().get(0).getBidfloor() > 0) {
 				final Impression imp = bidRequest.getImp().get(0);
 				// floorprice in EUR -> multiply with rate to get target
 				// currency therfore floorprice currency is always the same
 				// as supplier currency
-				imp.setBidfloor(agent.getParamValues().getVideoad().getBidfloorPrice() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
+				imp.setBidfloor(bidRequest.getImp().get(0).getBidfloor() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
 				imp.setBidfloorcur(connector.getSupplier().getCurrency());
 			}
 
@@ -126,7 +136,6 @@ public class DemandService implements Callable<AdProviderReader> {
 		});
 
 		return connectors;
-
 	}
 
 }
