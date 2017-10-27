@@ -40,9 +40,6 @@ public class RequestSessionAgent extends SessionAgent {
 
 		bidExchange = new BidExchange();
 
-		// TODO: Messaging entfernen
-		// MessagingAdapter.instance.message(Topic.REQUEST_LOG, "receiving
-		// request " + requestid);
 		RequestLogProcessor.instance.setLogData(this);
 		RequestMonitor.monitorRequests();
 	}
