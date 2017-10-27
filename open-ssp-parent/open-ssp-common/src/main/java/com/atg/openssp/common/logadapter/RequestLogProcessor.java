@@ -51,7 +51,6 @@ public class RequestLogProcessor extends Thread {
 		}
 		final StringBuilder sb = new StringBuilder();
 		sb.append(agent.getRequestid()).append(LogFacade.LOG_DELIMITER);
-		sb.append(agent.getParamValues().getZone().getZoneId()).append(LogFacade.LOG_DELIMITER);
 
 		// referrer
 		sb.append(agent.getRemoteIP());

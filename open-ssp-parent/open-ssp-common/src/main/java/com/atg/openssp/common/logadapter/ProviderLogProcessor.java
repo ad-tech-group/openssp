@@ -57,7 +57,6 @@ public class ProviderLogProcessor extends Thread {
 		sb.append(winner.getPrice()).append(LogFacade.LOG_DELIMITER);
 		sb.append(winner.getCurrrency()).append(LogFacade.LOG_DELIMITER);
 		sb.append(agent.getRequestid()).append(LogFacade.LOG_DELIMITER);
-		sb.append(agent.getParamValues().getZone().getZoneId()).append(LogFacade.LOG_DELIMITER);
 		sb.append(winner.getAdid()).append(LogFacade.LOG_DELIMITER);
 		try {
 			logQueue.put(sb.toString());
