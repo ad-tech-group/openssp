@@ -47,8 +47,8 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		headers = new Header[2];
 		headers[0] = new BasicHeader("x-openrtb-version", supplier.getOpenRtbVersion());
 		headers[1] = new BasicHeader("ContentType", supplier.getContentType());
-		headers[2] = new BasicHeader("Accept-Encoding", supplier.getAcceptEncoding());
-		headers[3] = new BasicHeader("Content-Encoding", supplier.getContentEncoding());
+		// headers[2] = new BasicHeader("Accept-Encoding", supplier.getAcceptEncoding());
+		// headers[3] = new BasicHeader("Content-Encoding", supplier.getContentEncoding());
 
 		gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
 	}
@@ -61,19 +61,19 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 		try {
 			final String jsonBidrequest = gson.toJson(bidrequest, BidRequest.class);
-			log.debug(jsonBidrequest);
+			log.debug("biderquest: " + jsonBidrequest);
 			final String result = connector.connect(jsonBidrequest, headers);
 			if (!StringUtils.isEmpty(result)) {
-				log.debug(result);
+				log.debug("bidresponse: " + result);
 
 				final BidResponse bidResponse = gson.fromJson(result, BidResponse.class);
 
 				return new ResponseContainer(supplier, bidResponse);
 			}
 		} catch (final BidProcessingException e) {
-			log.error(e.getMessage());
+			log.error(getClass().getSimpleName() + " " + e.getMessage());
 		} catch (final Exception e) {
-			log.error(e.getMessage());
+			log.error(getClass().getSimpleName() + " " + e.getMessage());
 		}
 		return null;
 	}
