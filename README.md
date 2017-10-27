@@ -36,7 +36,7 @@ This OpenSSP uses some predefined data to enrich the incoming requests and build
 Those data e.g. for Websites have to be loaded in a asynchronous and continous way.
 The data will be loaded via a restful service normally cause of to call a database in realtime is not performantly possible, therefore this SSP loads in a periodically manner the data from a webservice and stores those data in a memory based key-value store, called the cache.
 
-You can use it, improve it or whatever you want with it.
+You can use it, improve it or do whatever you want with it.
 
 Comments, proposals, improvements are welcome.  
 For more informations contact André Schmer, schmer@ad-tech-group.com.  
