@@ -3,6 +3,8 @@ package com.atg.openssp.core.cache.broker.context;
 import java.io.Serializable;
 import java.util.List;
 
+import openrtb.bidrequest.model.Pricelayer;
+
 /**
  * 
  * @author André Schmer

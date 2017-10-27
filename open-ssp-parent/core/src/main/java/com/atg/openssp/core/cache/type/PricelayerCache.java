@@ -1,7 +1,8 @@
 package com.atg.openssp.core.cache.type;
 
 import com.atg.openssp.common.cache.MapCache;
-import com.atg.openssp.core.cache.broker.context.Pricelayer;
+
+import openrtb.bidrequest.model.Pricelayer;
 
 /**
  * @author André Schmer

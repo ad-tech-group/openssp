@@ -13,6 +13,8 @@ import com.atg.openssp.common.cache.broker.DataBrokerObserver;
 import com.atg.openssp.core.cache.type.PricelayerCache;
 import com.google.gson.Gson;
 
+import openrtb.bidrequest.model.Pricelayer;
+
 /**
  * @author André Schmer
  *

@@ -4,7 +4,7 @@ package openrtb.bidrequest.model;
  * @author André Schmer
  *
  */
-public class PriceLayer {
+public class Pricelayer {
 
 	private String siteid;
 
