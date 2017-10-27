@@ -1,0 +1,18 @@
+{
+	"sites": [{
+		"id": "1",
+		"name": "site_1",
+		"domain": "size_1.com",
+		"cat": ["1"],
+		"page": "www.site_1.com",
+		"publisher": {
+			"id": "pubisher_1",
+			"name": "publisher_1_name",
+			"cat": [],
+			"domain": "www.publisher_1.com",
+			"ext": null
+			},
+		"ext": null
+		}
+	]
+}
