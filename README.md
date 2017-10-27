@@ -39,5 +39,5 @@ The data will be loaded via a restful service normally cause of to call a databa
 You can use it, improve it or whatever you want with it.
 
 Comments, proposals, improvements are welcome.  
-For more informations contact André Schmer, schmer@ad-tech-group.com.
+For more informations contact André Schmer, schmer@ad-tech-group.com.  
 October 2017
