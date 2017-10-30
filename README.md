@@ -28,16 +28,16 @@ Those file are:
 
 ### Data Caching:
 
-Update v0.2:
-to increase the user experience and avoid a test implementation for set up an external data service to load the data from, some new example JSON based datastructures and its corresponding DataBroker are available. These structures can be extended to load the data to fill a valid and complete bidrequest. Additionally the payload of SSP request is reduced to only one parameter. 
-Example: a call to OpenSSP with `?site=1` will map to an entry within `site_db.json` and loads its data from cache.
-
 This OpenSSP uses some predefined data to enrich the incoming requests and building the various bidrequests.
 Those data e.g. for Websites have to be loaded in a asynchronous and continous way.
 The data will be loaded via a restful service normally cause of to call a database in realtime is not performantly possible, therefore this SSP loads in a periodically manner the data from a webservice and stores those data in a memory based key-value store, called the cache.
 
+**Update v0.2:**
+to increase the user experience and avoid a test implementation for set up an external data service to load the data from, some new example JSON based datastructures and its corresponding DataBroker are available. These structures can be extended to load the data to fill a valid and complete bidrequest. Additionally the payload of SSP request is reduced to only one parameter. 
+Example: a call to OpenSSP with `?site=1` will map to an entry within `site_db.json` and loads its data from cache.
+
 You can use it, improve it or do whatever you want with it.
 
-Comments, proposals, improvements are welcome.  
+Comments, proposals and improvements are welcome.  
 For more informations contact André Schmer, schmer@ad-tech-group.com.  
 October 2017
