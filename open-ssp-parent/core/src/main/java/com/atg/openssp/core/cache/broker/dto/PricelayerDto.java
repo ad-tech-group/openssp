@@ -1,4 +1,4 @@
-package com.atg.openssp.core.cache.broker.context;
+package com.atg.openssp.core.cache.broker.dto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,7 +10,7 @@ import openrtb.bidrequest.model.Pricelayer;
  * @author André Schmer
  *
  */
-class PricelayerDto implements Serializable {
+public class PricelayerDto implements Serializable {
 
 	private static final long serialVersionUID = -7348030785810292621L;
 

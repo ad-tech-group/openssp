@@ -1,4 +1,4 @@
-package com.atg.openssp.core.cache.broker.context;
+package com.atg.openssp.core.cache.broker.dto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,7 +10,7 @@ import openrtb.bidrequest.model.Site;
  * @author André Schmer
  *
  */
-class SiteDto implements Serializable {
+public class SiteDto implements Serializable {
 
 	private static final long serialVersionUID = 6743606462533687452L;
 

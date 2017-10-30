@@ -2,9 +2,9 @@ package com.atg.openssp.core.cache.broker;
 
 import java.util.Observable;
 
-import com.atg.openssp.core.cache.broker.context.PricelayerBrokerJson;
-import com.atg.openssp.core.cache.broker.context.SiteDataBrokerJson;
-import com.atg.openssp.core.cache.broker.context.SupplierDataBrokerJson;
+import com.atg.openssp.core.cache.broker.json.PricelayerBrokerJson;
+import com.atg.openssp.core.cache.broker.json.SiteDataBrokerJson;
+import com.atg.openssp.core.cache.broker.json.SupplierDataBrokerJson;
 
 /**
  * 
@@ -23,6 +23,9 @@ public class CacheController extends Observable {
 	private void initingCacheList() {
 		deleteObservers();
 
+		/**
+		 * Use the following types of brokers to load JSON based configured data into cache.
+		 */
 		// loads supplier data from supplier_db.json into the cache
 		addObserver(new SupplierDataBrokerJson());
 
@@ -31,6 +34,21 @@ public class CacheController extends Observable {
 
 		// loads priceinformation from price_layer.json into the cache
 		addObserver(new PricelayerBrokerJson());
+
+		/**
+		 * Use the following types of brokers to load remote e.g. RESTful webservice based configured data into cache.
+		 */
+		// loads currency data from webservice into the cache
+		// addObserver(new RemoteCurrencyDataBroker());
+
+		// loads website data from webservice into the cache
+		// addObserver(new RemoteWebsiteDataBroker());
+
+		// loads videoad data from webservice into the cache
+		// addObserver(new RemoteVideoadDataBroker());
+
+		// loads supplier data from webservice into the cache
+		// addObserver(new RemoteSupplierDataBroker());
 	}
 
 	/**
