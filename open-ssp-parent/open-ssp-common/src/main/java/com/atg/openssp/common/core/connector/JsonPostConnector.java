@@ -47,7 +47,7 @@ public class JsonPostConnector extends DefaultConnector {
 				respEntity = httpResponse.getEntity();
 				if (respEntity != null) {
 					String content = null;
-					if (httpResponse.getFirstHeader("Content-Encoding") != null && httpResponse.getFirstHeader("Content-Encoding").getValue().equalsIgnoreCase("gzip")) {
+					if (httpResponse.containsHeader("Content-Encoding") && httpResponse.getFirstHeader("Content-Encoding").getValue().equalsIgnoreCase("gzip")) {
 						content = readContentFromStream(new GZIPInputStream(respEntity.getContent()));
 					} else {
 						content = readContentFromStream(respEntity.getContent());
