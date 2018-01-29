@@ -21,9 +21,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  */
 public final class ExchangeExecutorServiceFacade {
 
-	public static ExchangeExecutorServiceFacade instance = new ExchangeExecutorServiceFacade();
+	public static final ExchangeExecutorServiceFacade instance = new ExchangeExecutorServiceFacade();
 
-	private static ExecutorService service;
+	private final ExecutorService service;
 
 	private ExchangeExecutorServiceFacade() {
 		final ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("Supply-%d").setDaemon(true).build();

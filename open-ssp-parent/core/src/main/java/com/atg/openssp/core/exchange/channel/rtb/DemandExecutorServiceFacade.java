@@ -19,9 +19,9 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  */
 public final class DemandExecutorServiceFacade {
 
-	public static DemandExecutorServiceFacade instance = new DemandExecutorServiceFacade();
+	public static final DemandExecutorServiceFacade instance = new DemandExecutorServiceFacade();
 
-	private static ExecutorService service;
+	private final ExecutorService service;
 
 	private DemandExecutorServiceFacade() {
 		final ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("DemandConnector-%d").setDaemon(true).build();
