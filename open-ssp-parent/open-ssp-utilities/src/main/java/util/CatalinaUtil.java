@@ -39,6 +39,10 @@ public class CatalinaUtil {
 
 	private static String hostName;
 
+	private CatalinaUtil() {
+		throw new IllegalStateException("Utility class, use in static manner.");
+	}
+
 	public static int port() {
 		if (port == null) {
 			port = detectCatalinaHttpPort();
@@ -114,7 +118,11 @@ public class CatalinaUtil {
 	}
 
 	private static String detectIPAddressSuffix() {
-		return ip().substring(ip().lastIndexOf(".") + 1, ip().length());
+		final String ip = ip();
+		if (ip != null) {
+			return ip.substring(ip.lastIndexOf('.') + 1, ip.length());
+		}
+		return null;
 	}
 
 	private static String detectInstance() {
@@ -123,7 +131,7 @@ public class CatalinaUtil {
 		if (catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
 			instanceName = "localhost";
 		} else {
-			instanceName = catalinaHome.substring(catalinaHome.lastIndexOf("/") + 1, catalinaHome.length());
+			instanceName = catalinaHome.substring(catalinaHome.lastIndexOf('/') + 1, catalinaHome.length());
 		}
 		return instanceName;
 	}
