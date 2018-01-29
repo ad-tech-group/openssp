@@ -1,14 +1,10 @@
 package openrtb.bidrequest.model;
 
-import java.io.Serializable;
-
 /**
  * @author André Schmer
  *
  */
-public class DirectDeal implements Serializable, Cloneable {
-
-	private static final long serialVersionUID = 2527972879694101907L;
+public class DirectDeal implements Cloneable {
 
 	private String id;
 	private float bidfloor = 0f;

@@ -1,6 +1,5 @@
 package openrtb.bidrequest.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +7,7 @@ import java.util.List;
  * @author André Schmer
  *
  */
-public final class Video implements Cloneable, Serializable {
-
-	private static final long serialVersionUID = 3765223184708363144L;
+public final class Video implements Cloneable {
 
 	// required
 	private List<String> mimes;
@@ -40,15 +37,15 @@ public final class Video implements Cloneable, Serializable {
 	private Object ext;
 
 	public Video() {
-		this.mimes = new ArrayList<>();
-		this.protocols = new ArrayList<>();
-		this.battr = new ArrayList<>();
-		this.companionad = new ArrayList<>();
-		this.api = new ArrayList<>();
+		mimes = new ArrayList<>();
+		protocols = new ArrayList<>();
+		battr = new ArrayList<>();
+		companionad = new ArrayList<>();
+		api = new ArrayList<>();
 	}
 
 	public List<String> getMimes() {
-		return this.mimes;
+		return mimes;
 	}
 
 	public void setMimes(final List<String> mimes) {
@@ -56,11 +53,11 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public void addMime(final String mime) {
-		this.mimes.add(mime);
+		mimes.add(mime);
 	}
 
 	public int getMinduration() {
-		return this.minduration;
+		return minduration;
 	}
 
 	public void setMinduration(final int minduration) {
@@ -68,7 +65,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public int getMaxduration() {
-		return this.maxduration;
+		return maxduration;
 	}
 
 	public void setMaxduration(final int maxduration) {
@@ -76,7 +73,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public int getW() {
-		return this.w;
+		return w;
 	}
 
 	public void setW(final int w) {
@@ -84,7 +81,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public int getH() {
-		return this.h;
+		return h;
 	}
 
 	public void setH(final int h) {
@@ -92,7 +89,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public int getStartdelay() {
-		return this.startdelay;
+		return startdelay;
 	}
 
 	public void setStartdelay(final int startdelay) {
@@ -100,7 +97,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public List<Integer> getProtocols() {
-		return this.protocols;
+		return protocols;
 	}
 
 	public void setProtocols(final List<Integer> protocols) {
@@ -108,7 +105,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public void addProtocol(final Integer protocol) {
-		this.protocols.add(protocol);
+		protocols.add(protocol);
 	}
 
 	public void addApi(final Integer api) {
@@ -125,7 +122,7 @@ public final class Video implements Cloneable, Serializable {
 		// }
 		// }
 		// return reqIndex;
-		return this.battr;
+		return battr;
 	}
 
 	public void setBattr(final List<Integer> battr) {
@@ -137,11 +134,11 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public int getLinearity() {
-		return this.linearity;
+		return linearity;
 	}
 
 	public List<Banner> getCompanionad() {
-		return this.companionad;
+		return companionad;
 	}
 
 	public void setCompanionad(final List<Banner> companionad) {
@@ -149,7 +146,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public List<Integer> getApi() {
-		return this.api;
+		return api;
 	}
 
 	public void setApi(final List<Integer> api) {
@@ -157,7 +154,7 @@ public final class Video implements Cloneable, Serializable {
 	}
 
 	public Object getExt() {
-		return this.ext;
+		return ext;
 	}
 
 	public void setExt(final Object ext) {
@@ -183,88 +180,88 @@ public final class Video implements Cloneable, Serializable {
 		private final List<Banner.Builder> listOfCompaonionAdBuilder = new ArrayList<>();
 
 		public Builder() {
-			this.video = new Video();
+			video = new Video();
 		}
 
 		public Builder addMime(final String mime) {
-			this.video.addMime(mime);
+			video.addMime(mime);
 			return this;
 		}
 
 		public Builder setMinduration(final int minduration) {
-			this.video.setMinduration(minduration);
+			video.setMinduration(minduration);
 			return this;
 		}
 
 		public Builder setMaxduration(final int maxduration) {
-			this.video.setMaxduration(maxduration);
+			video.setMaxduration(maxduration);
 			return this;
 		}
 
 		public Builder setW(final int w) {
-			this.video.setW(w);
+			video.setW(w);
 			return this;
 		}
 
 		public Builder setH(final int h) {
-			this.video.setH(h);
+			video.setH(h);
 			return this;
 		}
 
 		public Builder setStartdelay(final int startdelay) {
-			this.video.setStartdelay(startdelay);
+			video.setStartdelay(startdelay);
 			return this;
 		}
 
 		public Builder addProtocol(final int protocol) {
-			this.video.addProtocol(protocol);
+			video.addProtocol(protocol);
 			return this;
 		}
 
 		public Builder addApi(final int api) {
-			this.video.addApi(api);
+			video.addApi(api);
 			return this;
 		}
 
 		public Builder addBattr(final Integer battr) {
-			this.video.addBattr(battr);
+			video.addBattr(battr);
 			return this;
 		}
 
 		public Builder setExtension(final Object ext) {
-			this.video.setExt(ext);
+			video.setExt(ext);
 			return this;
 		}
 
 		public Video build() {
-			return this.video;
+			return video;
 		}
 
 		public Builder setLinearity(final int linearity) {
-			this.video.setLinearity(linearity);
+			video.setLinearity(linearity);
 			return this;
 		}
 
 		public Builder addAllBattr(final List<Integer> battrList) {
-			this.video.setBattr(battrList);
+			video.setBattr(battrList);
 			return this;
 		}
 
 		public Builder addCompanionad(final Banner.Builder companionAd) {
-			this.listOfCompaonionAdBuilder.add(companionAd);
-			this.video.getCompanionad().add(companionAd.build());
+			listOfCompaonionAdBuilder.add(companionAd);
+			video.getCompanionad().add(companionAd.build());
 			return this;
 		}
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Video [mimes=%s, minduration=%s, maxduration=%s, w=%s, h=%s, startdelay=%s, protocols=%s, battr=%s, ext=%s]", this.mimes, this.minduration,
-		        this.maxduration, this.w, this.h, this.startdelay, this.protocols, this.battr, this.ext);
+		return String.format("Video [mimes=%s, minduration=%s, maxduration=%s, w=%s, h=%s, startdelay=%s, protocols=%s, battr=%s, ext=%s]", mimes, minduration, maxduration, w, h,
+		        startdelay, protocols, battr, ext);
 	}
 
 	public void setLinearity(final int value) {
-		this.linearity = value;
+		linearity = value;
 	}
 
 }

@@ -1,6 +1,5 @@
 package openrtb.bidrequest.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +7,7 @@ import java.util.List;
  * @author André Schmer
  *
  */
-public class Publisher implements Cloneable, Serializable {
-
-	private static final long serialVersionUID = 3236080531637881159L;
+public class Publisher implements Cloneable {
 
 	private String id;
 

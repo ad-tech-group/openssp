@@ -1,14 +1,11 @@
 package openrtb.bidrequest.model;
 
-import java.io.Serializable;
-
 /**
  * @author André Schmer
  *
  */
-public final class Geo implements Cloneable, Serializable {
+public final class Geo implements Cloneable {
 
-	private static final long serialVersionUID = -473592441248980434L;
 	private float lat;
 	private float lon;
 
@@ -28,8 +25,7 @@ public final class Geo implements Cloneable, Serializable {
 
 	private Object ext;
 
-	public Geo() {
-	}
+	public Geo() {}
 
 	public float getLat() {
 		return lat;
@@ -175,8 +171,7 @@ public final class Geo implements Cloneable, Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("Geo [lat=%s, lon=%s, country=%s, region=%s, city=%s, zip=%s, metro=%s, ext=%s]", lat, lon,
-				country, region, city, zip, metro, ext);
+		return String.format("Geo [lat=%s, lon=%s, country=%s, region=%s, city=%s, zip=%s, metro=%s, ext=%s]", lat, lon, country, region, city, zip, metro, ext);
 	}
 
 }

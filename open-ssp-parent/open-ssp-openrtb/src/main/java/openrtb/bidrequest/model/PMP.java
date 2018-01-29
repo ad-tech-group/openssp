@@ -1,6 +1,5 @@
 package openrtb.bidrequest.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +8,8 @@ import java.util.List;
  * @author André Schmer
  *
  */
-public class PMP implements Serializable, Cloneable {
+public class PMP implements Cloneable {
 
-	private static final long serialVersionUID = -6631523574344996525L;
 	private int private_auction;
 	private List<DirectDeal> deals;
 	private Object ext;

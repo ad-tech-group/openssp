@@ -1,6 +1,5 @@
 package openrtb.bidrequest.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +10,7 @@ import com.google.gson.annotations.Since;
  * @author André Schmer
  *
  */
-public final class BidRequest implements Cloneable, Serializable {
-
-	private static final long serialVersionUID = -5776508841357482195L;
+public final class BidRequest implements Cloneable {
 
 	// required fields
 	private String id;

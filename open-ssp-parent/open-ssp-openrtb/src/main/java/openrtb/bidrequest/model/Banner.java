@@ -1,6 +1,5 @@
 package openrtb.bidrequest.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
@@ -10,9 +9,7 @@ import com.google.gson.annotations.Since;
  * @see OpenRTB-API-Specification #section Banner Object
  * @version 2.1, 2.2, 2.3
  */
-public final class Banner implements Serializable, Cloneable {
-
-	private static final long serialVersionUID = 8886591352489433545L;
+public final class Banner implements Cloneable {
 
 	// required
 	private int w;
@@ -29,7 +26,6 @@ public final class Banner implements Serializable, Cloneable {
 	private int[] api;
 	private Object ext;
 
-	// 2.2
 	@Since(2.2)
 	private int wmax;
 
@@ -42,8 +38,7 @@ public final class Banner implements Serializable, Cloneable {
 	@Since(2.2)
 	private int hmin;
 
-	public Banner() {
-	}
+	public Banner() {}
 
 	public String getId() {
 		return id;
