@@ -11,8 +11,8 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.LoggerFactory;
 
 /**
  * @author André Schmer
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class Watchdog implements Runnable {
 
-	Logger logger = Logger.getLogger(Watchdog.class.getName());
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(Watchdog.class);
 
 	private String resource;
 	private WatchService watchService = null;
@@ -28,13 +28,10 @@ public class Watchdog implements Runnable {
 	private boolean autostart;
 	private boolean shuttingDown = false;
 
-	public Watchdog() {
-		logger.setLevel(Level.INFO);
-	}
+	public Watchdog() {}
 
 	/**
-	 * Initiates a Watchdog for specific resource. File must be located within
-	 * the resources location of a dev machine or within
+	 * Initiates a Watchdog for specific resource. File must be located within the resources location of a dev machine or within
 	 * {@code {catalina.home}/properties}
 	 * 
 	 */
@@ -51,11 +48,11 @@ public class Watchdog implements Runnable {
 		try {
 			watchService = FileSystems.getDefault().newWatchService();
 			final String path = loader.getResourceLocation();
-			logger.info("Watchdog [" + path + "]");
-			logger.info("INFO: Watchdog [" + path + resource + "]");
+			log.info("Watchdog [{}]", path);
+			log.info("INFO: Watchdog [{} {}]", path, resource);
 			Paths.get(path).register(watchService, ENTRY_MODIFY);
 		} catch (final IOException e) {
-			logger.warning(e.getMessage());
+			log.warn(e.getMessage());
 		}
 	}
 
@@ -64,7 +61,7 @@ public class Watchdog implements Runnable {
 	 */
 	@Override
 	public void run() {
-		logger.info("launching watchdog ... [" + resource + "]");
+		log.info("launching watchdog ... [{}]", resource);
 		if (autostart) {
 			loader.readValues();
 		}
@@ -93,7 +90,7 @@ public class Watchdog implements Runnable {
 							}
 							break;
 						case "ENTRY_DELETE":
-							logger.info("watchdog recognizes delete event for " + resource);
+							log.info("watchdog recognizes delete event for {}", resource);
 							break;
 						case "OVERFLOW":
 							continue;
@@ -108,9 +105,9 @@ public class Watchdog implements Runnable {
 				watchKey.reset();
 				modifyEventFired.set(false);
 			} catch (final InterruptedException e) {
-				logger.warning(e.getMessage());
+				log.warn(e.getMessage());
 			} catch (final ClosedWatchServiceException e) {
-				logger.warning(e.getMessage());
+				log.warn(e.getMessage());
 			}
 		}
 
