@@ -32,8 +32,8 @@ public class RtbResponseLogProcessor extends Thread {
 			}
 		} catch (final InterruptedException e) {
 			log.error(e.getMessage());
-		} finally {
 			loggerTerminated = true;
+			Thread.currentThread().interrupt();
 		}
 	}
 

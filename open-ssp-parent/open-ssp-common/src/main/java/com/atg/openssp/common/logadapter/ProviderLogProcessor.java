@@ -35,8 +35,8 @@ public class ProviderLogProcessor extends Thread {
 			}
 		} catch (final InterruptedException e) {
 			log.error(e.getMessage());
-		} finally {
 			loggerTerminated = true;
+			Thread.currentThread().interrupt();
 		}
 	}
 
