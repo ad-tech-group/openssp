@@ -12,6 +12,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -20,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Watchdog implements Runnable {
 
-	private static final org.slf4j.Logger log = LoggerFactory.getLogger(Watchdog.class);
+	private static final Logger log = LoggerFactory.getLogger(Watchdog.class);
 
 	private String resource;
 	private WatchService watchService = null;
