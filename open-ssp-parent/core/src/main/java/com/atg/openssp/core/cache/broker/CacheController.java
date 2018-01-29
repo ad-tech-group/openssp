@@ -14,7 +14,7 @@ import com.atg.openssp.core.cache.broker.json.SupplierDataBrokerJson;
  */
 public class CacheController extends Observable {
 
-	public static CacheController instance = new CacheController();
+	public static final CacheController instance = new CacheController();
 
 	public CacheController() {
 		initingCacheList();
