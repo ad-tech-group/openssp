@@ -2,6 +2,7 @@ package com.atg.openssp.core.exchange.channel.rtb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -65,7 +66,7 @@ public class DemandService implements Callable<AdProviderReader> {
 			final List<DemandBroker> connectors = loadSupplierConnectors();
 			final List<Future<ResponseContainer>> futures = DemandExecutorServiceFacade.instance.invokeAll(connectors);
 
-			futures.parallelStream().filter(f -> f != null).forEach(future -> {
+			futures.parallelStream().filter(Objects::nonNull).forEach(future -> {
 				try {
 					final ResponseContainer responseContainer = future.get();
 					// final boolean valid = OpenRtbVideoValidator.instance.validate(agent.getBidExchange().getBidRequest(responseContainer.getSupplier()),
