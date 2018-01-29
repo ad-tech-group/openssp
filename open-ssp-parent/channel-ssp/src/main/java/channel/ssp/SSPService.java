@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.provider.AdProviderReader;
@@ -13,6 +16,8 @@ import com.atg.openssp.common.provider.AdProviderReader;
  *
  */
 public class SSPService implements Callable<AdProviderReader> {
+
+	private static final Logger log = LoggerFactory.getLogger(SSPService.class);
 
 	private final SessionAgent agent;
 
@@ -42,7 +47,7 @@ public class SSPService implements Callable<AdProviderReader> {
 				final ResponseContainer resp = broker.call();
 				responseList.add(resp);
 			} catch (final Exception e) {
-				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 		});
 
