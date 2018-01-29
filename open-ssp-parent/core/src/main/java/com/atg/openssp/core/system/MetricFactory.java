@@ -13,7 +13,7 @@ import com.codahale.metrics.Slf4jReporter;
  */
 public class MetricFactory {
 
-	public static MetricFactory instance = new MetricFactory();
+	public static final MetricFactory instance = new MetricFactory();
 
 	private final MetricRegistry registry;
 
