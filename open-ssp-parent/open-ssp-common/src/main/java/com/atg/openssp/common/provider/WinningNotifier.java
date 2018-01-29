@@ -3,6 +3,8 @@ package com.atg.openssp.common.provider;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.exception.NotifyingException;
 
 /**
  * @author André Schmer
@@ -21,13 +24,13 @@ import com.atg.openssp.common.core.entry.SessionAgent;
  */
 public class WinningNotifier implements Runnable {
 
-	private final static Logger log = LoggerFactory.getLogger(WinningNotifier.class);
+	private static final Logger log = LoggerFactory.getLogger(WinningNotifier.class);
 
 	private final String nurl;
 	private final float price;
 	private final SessionAgent agent;
 
-	private final static int ATTEMPTS = 6;
+	private static final int ATTEMPTS = 6;
 
 	public WinningNotifier(final String nurl, final float price, final SessionAgent agent) {
 		this.nurl = nurl;
@@ -48,7 +51,7 @@ public class WinningNotifier implements Runnable {
 						if (i > 1) {
 							log.info("Notifying finally succeed. Tried {} times. {} [...]", i, decoded.substring(0, 80));
 						}
-					} catch (final Exception e) {
+					} catch (final NotifyingException e) {
 						log.error("winning notify fails {} {}", i, e.getMessage());
 						if (i == ATTEMPTS) {
 							log.error("notifying the winner unsuccessful - giving up ...");
@@ -56,7 +59,8 @@ public class WinningNotifier implements Runnable {
 							break;
 						}
 						try {
-							Thread.sleep(100 * i);
+							final CountDownLatch latch = new CountDownLatch(1);
+							latch.await(100 * (long) i, TimeUnit.MILLISECONDS);
 						} catch (final InterruptedException ignore) {}
 						continue;
 					}
@@ -68,12 +72,12 @@ public class WinningNotifier implements Runnable {
 			if (!failed) {
 				final StringBuilder sb = new StringBuilder();
 				sb.append(agent.getRequestid()).append("#").append(price).append("#").append(url);
-				log.info(sb.toString());
+				log.info("{}", sb.toString());
 			}
 		}
 	}
 
-	private void notifyWinner(final String url) throws Exception {
+	private void notifyWinner(final String url) throws NotifyingException {
 		final HttpPost httpPost = new HttpPost(url);
 		final CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 		final RequestConfig config = RequestConfig.custom().setConnectTimeout(2000).setSocketTimeout(2000).setExpectContinueEnabled(false).build();
@@ -85,13 +89,11 @@ public class WinningNotifier implements Runnable {
 			httpResponse = httpclient.execute(httpPost);
 			statusCode = httpResponse.getStatusLine().getStatusCode();
 		} catch (final IOException e) {
-			throw new Exception(url.substring(0, 80) + " [...] ," + e.getMessage() + ", status " + statusCode + ".");
+			throw new NotifyingException(url.substring(0, 80) + " [...] ," + e.getMessage() + ", status " + statusCode + ".");
 		} finally {
 			httpPost.releaseConnection();
 			try {
-				if (httpclient != null) {
-					httpclient.close();
-				}
+				httpclient.close();
 				if (httpResponse != null) {
 					httpResponse.close();
 				}
