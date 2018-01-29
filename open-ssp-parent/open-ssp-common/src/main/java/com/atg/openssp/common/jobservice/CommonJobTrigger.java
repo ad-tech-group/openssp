@@ -1,8 +1,5 @@
 package com.atg.openssp.common.jobservice;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -11,6 +8,8 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a wrapper for the trigger and scheduler.
@@ -20,7 +19,7 @@ import org.quartz.impl.StdSchedulerFactory;
  */
 public class CommonJobTrigger {
 
-	Logger logger = Logger.getLogger(CommonJobTrigger.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(CommonJobTrigger.class);
 
 	private String triggerIdentity;
 
@@ -38,12 +37,9 @@ public class CommonJobTrigger {
 
 	private String group;
 
-	public CommonJobTrigger() {
-		logger.setLevel(Level.INFO);
-	}
+	public CommonJobTrigger() {}
 
-	public void initJob(final Class<? extends org.quartz.Job> jobClazz, final String jobIdentity,
-			final String expression) {
+	public void initJob(final Class<? extends org.quartz.Job> jobClazz, final String jobIdentity, final String expression) {
 		this.jobClazz = jobClazz;
 		triggerIdentity = jobIdentity;
 		group = jobIdentity + "_group";
@@ -53,12 +49,11 @@ public class CommonJobTrigger {
 
 	private void initJob() {
 		jobDetail = JobBuilder.newJob(jobClazz).withIdentity(triggerIdentity, group).build();
-		trigger = TriggerBuilder.newTrigger().withIdentity(triggerIdentity).withSchedule(CronScheduleBuilder
-				.cronSchedule(expression)).build();
+		trigger = TriggerBuilder.newTrigger().withIdentity(triggerIdentity).withSchedule(CronScheduleBuilder.cronSchedule(expression)).build();
 	}
 
 	public void startScheduling() {
-		logger.info("initing trigger for " + triggerIdentity + " job ...");
+		log.info("initing trigger for {} job ...", triggerIdentity);
 		try {
 			scheduler = new StdSchedulerFactory().getScheduler();
 			if (!isStarted) {
@@ -66,10 +61,10 @@ public class CommonJobTrigger {
 				scheduler.start();
 				isStarted = true;
 			} else {
-				logger.info("trigger " + triggerIdentity + " was already started.");
+				log.info("trigger {} was already started.", triggerIdentity);
 			}
 		} catch (final SchedulerException e) {
-			logger.warning(e.getMessage());
+			log.warn(e.getMessage());
 		}
 	}
 
@@ -81,7 +76,7 @@ public class CommonJobTrigger {
 				initJob();
 				scheduler.scheduleJob(jobDetail, trigger);
 			} catch (final SchedulerException e) {
-				e.printStackTrace();
+				log.error("{}", e.getMessage());
 			}
 		}
 	}
@@ -91,7 +86,7 @@ public class CommonJobTrigger {
 			try {
 				scheduler.shutdown(true);
 			} catch (final SchedulerException e) {
-				e.printStackTrace();
+				log.error("{}", e.getMessage());
 			}
 		}
 	}
