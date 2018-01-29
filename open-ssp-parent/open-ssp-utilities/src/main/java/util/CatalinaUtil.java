@@ -15,6 +15,9 @@ import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Utility class to determine some useful catalina environment data.
  * 
@@ -22,6 +25,8 @@ import javax.management.ReflectionException;
  *
  */
 public class CatalinaUtil {
+
+	private static final Logger log = LoggerFactory.getLogger(CatalinaUtil.class);
 
 	private static String ip;
 
@@ -112,7 +117,7 @@ public class CatalinaUtil {
 				ipAddress = InetAddress.getLocalHost().getHostAddress();
 			}
 		} catch (final UnknownHostException e) {
-			e.printStackTrace();
+			log.error("{}", e.getMessage());
 		}
 		return ipAddress;
 	}
@@ -156,7 +161,7 @@ public class CatalinaUtil {
 				is.close();
 				return sb.toString().trim();
 			} catch (final IOException e) {
-				e.printStackTrace();
+				log.error("{}", e.getMessage());
 			}
 		}
 		return "1";
@@ -174,11 +179,11 @@ public class CatalinaUtil {
 						localPort = (Integer) pms.getAttribute(oi.getObjectName(), "localPort");
 					}
 				} catch (final AttributeNotFoundException | InstanceNotFoundException | MBeanException | ReflectionException e) {
-					e.printStackTrace();
+					log.error("{}", e.getMessage());
 				}
 			}
 		} catch (final MalformedObjectNameException e) {
-			e.printStackTrace();
+			log.error("{}", e.getMessage());
 		}
 
 		return localPort;
@@ -196,7 +201,7 @@ public class CatalinaUtil {
 		try {
 			return InetAddress.getLocalHost().getHostName();
 		} catch (final UnknownHostException e) {
-			e.printStackTrace();
+			log.error("{}", e.getMessage());
 		}
 		return null;
 	}
