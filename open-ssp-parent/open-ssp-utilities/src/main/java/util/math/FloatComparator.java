@@ -93,7 +93,7 @@ public class FloatComparator {
 	 */
 	public static boolean greaterOrEqual(final float greater, final float smaller) {
 		final int result = new Float(greater).compareTo(new Float(smaller));
-		return result == 0 || result == 1;
+		return result >= 0;
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class FloatComparator {
 	 * @return true | false
 	 */
 	public static boolean greaterThanBD(final float greater, final float than) {
-		return new BigDecimal(greater).compareTo(new BigDecimal(than)) == 1;
+		return BigDecimal.valueOf(greater).compareTo(BigDecimal.valueOf(than)) == 1;
 	}
 
 	/**
@@ -115,8 +115,8 @@ public class FloatComparator {
 	 * @return true | false
 	 */
 	public static boolean greaterOrEqualBD(final float greater, final float than) {
-		final int result = new BigDecimal(greater).compareTo(new BigDecimal(than));
-		return result == 1 || result == 0;
+		final int result = BigDecimal.valueOf(greater).compareTo(BigDecimal.valueOf(than));
+		return result >= 0;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class FloatComparator {
 	 * @return true | false
 	 */
 	public static boolean smallerThanBD(final float smaller, final float than) {
-		return new BigDecimal(smaller).compareTo(new BigDecimal(than)) == -1;
+		return BigDecimal.valueOf(smaller).compareTo(BigDecimal.valueOf(than)) == -1;
 	}
 
 	/**
@@ -138,8 +138,8 @@ public class FloatComparator {
 	 * @return true | false
 	 */
 	public static boolean smallerOrEqualBD(final float smaller, final float than) {
-		final int result = new BigDecimal(smaller).compareTo(new BigDecimal(than));
-		return result == -1 || result == 0;
+		final int result = BigDecimal.valueOf(smaller).compareTo(BigDecimal.valueOf(than));
+		return result <= 0;
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class FloatComparator {
 	 * @return true | false
 	 */
 	public static boolean equalsBD(final float equal, final float to) {
-		return new BigDecimal(equal).compareTo(new BigDecimal(to)) == 0;
+		return BigDecimal.valueOf(equal).compareTo(BigDecimal.valueOf(to)) == 0;
 	}
 
 	/**
@@ -192,8 +192,8 @@ public class FloatComparator {
 	 * @return true if {@code a} is equal than {@code b}, false otherwise.
 	 */
 	public static boolean isDiffEqual(final float a, final float b) {
-		final BigDecimal bdA = new BigDecimal(a).setScale(2, BigDecimal.ROUND_HALF_UP);
-		final BigDecimal bdB = new BigDecimal(b).setScale(2, BigDecimal.ROUND_HALF_UP);
+		final BigDecimal bdA = BigDecimal.valueOf(a).setScale(2, BigDecimal.ROUND_HALF_UP);
+		final BigDecimal bdB = BigDecimal.valueOf(b).setScale(2, BigDecimal.ROUND_HALF_UP);
 		return bdA.compareTo(bdB) == 0;
 	}
 
@@ -205,8 +205,8 @@ public class FloatComparator {
 	 * @return true if {@code a} is smaller than {@code b}, false otherwise.
 	 */
 	public static boolean isDiffSmaller(final float a, final float b) {
-		final BigDecimal bdA = new BigDecimal(a).setScale(2, BigDecimal.ROUND_HALF_UP);
-		final BigDecimal bdB = new BigDecimal(b).setScale(2, BigDecimal.ROUND_HALF_UP);
+		final BigDecimal bdA = BigDecimal.valueOf(a).setScale(2, BigDecimal.ROUND_HALF_UP);
+		final BigDecimal bdB = BigDecimal.valueOf(b).setScale(2, BigDecimal.ROUND_HALF_UP);
 		return bdA.compareTo(bdB) == -1;
 	}
 
@@ -218,8 +218,8 @@ public class FloatComparator {
 	 * @return true if {@code a} is greater than {@code b}, false otherwise.
 	 */
 	public static boolean isDiffGreater(final float a, final float b) {
-		final BigDecimal bdA = new BigDecimal(a).setScale(2, BigDecimal.ROUND_HALF_UP);
-		final BigDecimal bdB = new BigDecimal(b).setScale(2, BigDecimal.ROUND_HALF_UP);
+		final BigDecimal bdA = BigDecimal.valueOf(a).setScale(2, BigDecimal.ROUND_HALF_UP);
+		final BigDecimal bdB = BigDecimal.valueOf(b).setScale(2, BigDecimal.ROUND_HALF_UP);
 		return bdA.compareTo(bdB) == 1;
 	}
 
