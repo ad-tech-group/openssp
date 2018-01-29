@@ -79,16 +79,11 @@ public class DemandService implements Callable<AdProviderReader> {
 					// }
 					agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
 				} catch (final ExecutionException e) {
-					System.out.println(getClass().getSimpleName() + " ExecutionException " + e.getMessage());
-					log.error("{} {}", agent.getRequestid(), e.getMessage());
+					log.error("ExecutionException {} {}", agent.getRequestid(), e.getMessage());
 				} catch (final InterruptedException e) {
-					System.out.println(getClass().getSimpleName() + " InterruptedException " + e.getMessage());
-					log.error("{} {}", agent.getRequestid(), e.getMessage());
+					log.error("InterruptedException {} {}", agent.getRequestid(), e.getMessage());
 				} catch (final CancellationException e) {
-					System.out.println(getClass().getSimpleName() + " CancellationException " + e.getMessage());
-					log.error("{} {}", agent.getRequestid(), e.getMessage());
-				} catch (final Exception e) {
-					System.out.println(getClass().getSimpleName() + " FCK: " + e.getMessage());
+					log.error("CancellationException {} {}", agent.getRequestid(), e.getMessage());
 				}
 			});
 
