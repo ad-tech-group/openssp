@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class ContextCache {
 
-	public static ContextCache instance = new ContextCache();
+	public static final ContextCache instance = new ContextCache();
 
 	private final Map<ContextProperties, String> cache;
 
@@ -35,8 +35,7 @@ public final class ContextCache {
 	public String remove(final ContextProperties key) {
 		try {
 			return cache.remove(key);
-		} catch (final NullPointerException ignore) {
-		}
+		} catch (final NullPointerException ignore) {}
 		return null;
 	}
 
