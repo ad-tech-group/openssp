@@ -12,7 +12,7 @@ import com.atg.openssp.common.jobservice.CommonJobTrigger;
  */
 public class JobService {
 
-	public static JobService instance = new JobService();
+	public static final JobService instance = new JobService();
 
 	private final Map<String, CommonJobTrigger> triggerList;
 
