@@ -31,8 +31,11 @@ public class AdservingLatencyBuffer extends LongTypedBuffer implements Runnable 
 			latch.await();
 		} catch (final InterruptedException e) {
 			log.error("{} latch interrupted", LocalDate.now(Context.zoneId));
+			// clear state
+			latch = null;
+			// Moved into catch to make more clear interrupting throw after exception ...
+			Thread.currentThread().interrupt();
 		}
-		Thread.currentThread().interrupt();
 	}
 
 }
