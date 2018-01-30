@@ -31,27 +31,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void trace(final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final String format, final Object... arguments) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
@@ -61,27 +61,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void trace(final Marker marker, final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final Marker marker, final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final Marker marker, final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final Marker marker, final String format, final Object... argArray) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void trace(final Marker marker, final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
@@ -91,27 +91,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void debug(final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final String format, final Object... arguments) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
@@ -121,27 +121,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void debug(final Marker marker, final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final Marker marker, final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final Marker marker, final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final Marker marker, final String format, final Object... arguments) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void debug(final Marker marker, final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
@@ -211,27 +211,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void warn(final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final String format, final Object... arguments) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
@@ -241,27 +241,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void warn(final Marker marker, final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final Marker marker, final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final Marker marker, final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final Marker marker, final String format, final Object... arguments) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void warn(final Marker marker, final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
@@ -271,27 +271,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void error(final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final String format, final Object... arguments) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
@@ -301,27 +301,27 @@ class AbstractLogger implements Logger {
 
 	@Override
 	public void error(final Marker marker, final String msg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final Marker marker, final String format, final Object arg) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final Marker marker, final String format, final Object arg1, final Object arg2) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final Marker marker, final String format, final Object... arguments) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 	@Override
 	public void error(final Marker marker, final String msg, final Throwable t) {
-
+		throw new UnsupportedOperationException("not yet implemented.");
 	}
 
 }
