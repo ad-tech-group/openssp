@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.broker.DataBrokerObserver;
-import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.core.cache.broker.dto.SupplierDto;
 import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.channel.rtb.OpenRtbConnector;
@@ -42,12 +40,9 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
 				log.info("sizeof supplier data=" + dto.getSupplier().size());
-				dto.getSupplier().forEach(new Consumer<Supplier>() {
-					@Override
-					public void accept(final Supplier supplier) {
-						final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);
-						ConnectorCache.instance.add(openRtbConnector);
-					}
+				dto.getSupplier().forEach(supplier -> {
+					final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);
+					ConnectorCache.instance.add(openRtbConnector);
 				});
 				return true;
 			}

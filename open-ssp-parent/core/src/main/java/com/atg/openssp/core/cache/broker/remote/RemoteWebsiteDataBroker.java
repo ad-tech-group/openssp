@@ -1,13 +1,11 @@
 package com.atg.openssp.core.cache.broker.remote;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.dto.Website;
-import com.atg.openssp.common.cache.dto.Zone;
 import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.core.cache.type.WebsiteDataCache;
 import com.atg.openssp.core.cache.type.ZoneDataCache;
@@ -45,12 +43,9 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 				log.info(this.getClass().getSimpleName() + " sizeof Website data=" + data.length);
 				Arrays.stream(data).forEach(c -> WebsiteDataCache.instance.put(c.getWebsiteId(), c));
 
-				Arrays.stream(data).forEach(c -> Arrays.stream(c.getZones()).forEach(new Consumer<Zone>() {
-					@Override
-					public void accept(final Zone zone) {
-						zone.setWebsiteId(c.getWebsiteId());
-						ZoneDataCache.instance.put(zone.getZoneId(), zone);
-					}
+				Arrays.stream(data).forEach(c -> Arrays.stream(c.getZones()).forEach(zone -> {
+					zone.setWebsiteId(c.getWebsiteId());
+					ZoneDataCache.instance.put(zone.getZoneId(), zone);
 				}));
 				return true;
 			}

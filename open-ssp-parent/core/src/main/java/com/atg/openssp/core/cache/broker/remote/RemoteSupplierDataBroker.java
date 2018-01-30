@@ -1,12 +1,9 @@
 package com.atg.openssp.core.cache.broker.remote;
 
-import java.util.function.Consumer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
-import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.core.cache.broker.dto.SupplierDto;
 import com.atg.openssp.core.cache.type.ConnectorCache;
@@ -41,12 +38,9 @@ public final class RemoteSupplierDataBroker extends AbstractDataBroker<SupplierD
 			final SupplierDto dto = super.connect(SupplierDto.class);
 			if (dto != null) {
 				log.info("sizeof supplier data=" + dto.getSupplier().size());
-				dto.getSupplier().forEach(new Consumer<Supplier>() {
-					@Override
-					public void accept(final Supplier supplier) {
-						final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);
-						ConnectorCache.instance.add(openRtbConnector);
-					}
+				dto.getSupplier().forEach(supplier -> {
+					final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);
+					ConnectorCache.instance.add(openRtbConnector);
 				});
 				return true;
 			}

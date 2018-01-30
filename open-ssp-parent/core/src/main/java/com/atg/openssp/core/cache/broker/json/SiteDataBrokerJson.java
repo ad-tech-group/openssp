@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,6 @@ import com.atg.openssp.common.cache.broker.DataBrokerObserver;
 import com.atg.openssp.core.cache.broker.dto.SiteDto;
 import com.atg.openssp.core.cache.type.SiteDataCache;
 import com.google.gson.Gson;
-
-import openrtb.bidrequest.model.Site;
 
 /**
  * @author André Schmer
@@ -34,11 +31,8 @@ public class SiteDataBrokerJson extends DataBrokerObserver {
 			final SiteDto dto = gson.fromJson(content, SiteDto.class);
 			if (dto != null) {
 				log.info("sizeof site data=" + dto.getSites().size());
-				dto.getSites().forEach(new Consumer<Site>() {
-					@Override
-					public void accept(final Site site) {
-						SiteDataCache.instance.put(site.getId(), site);
-					}
+				dto.getSites().forEach(site -> {
+					SiteDataCache.instance.put(site.getId(), site);
 				});
 				return true;
 			}
