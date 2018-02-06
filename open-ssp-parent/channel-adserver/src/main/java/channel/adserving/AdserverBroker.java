@@ -24,10 +24,10 @@ public class AdserverBroker extends AbstractBroker {
 
 	private final JsonGetConnector jsonGetConnector;
 
-	// TODO: define endpoint
-	final String scheme = "http";
-	final String host = "doamin.com";
-	final String path = "/path/to/target";
+	// define endpoint
+	private static final String scheme = "http";
+	private static final String host = "doamin.com";
+	private static final String path = "/path/to/target";
 
 	final URIBuilder uriBuilder;
 
@@ -52,8 +52,6 @@ public class AdserverBroker extends AbstractBroker {
 			final AdProviderReader adProvider = gson.fromJson(result, AdservingCampaignProvider.class);
 			stopwatch.stop();
 			return Optional.ofNullable(adProvider);
-		} catch (final BidProcessingException e) {
-			throw e;
 		} finally {
 			if (stopwatch.isRunning()) {
 				stopwatch.stop();
