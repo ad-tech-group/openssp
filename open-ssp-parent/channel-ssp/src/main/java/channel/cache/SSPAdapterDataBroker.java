@@ -1,7 +1,5 @@
 package channel.cache;
 
-import java.util.function.Consumer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,14 +30,11 @@ public final class SSPAdapterDataBroker extends AbstractDataBroker<SSPAdapterDto
 			final SSPAdapterDto dto = super.connect(SSPAdapterDto.class);
 			if (dto != null) {
 				log.debug("sizeof sspadapter data= {}", dto.getData().size());
-
-				dto.getData().forEach(new Consumer<BasicAdapter>() {
-					@Override
-					public void accept(final BasicAdapter adapter) {
-						final SSPBroker broker = new SSPBroker(adapter);
-						SSPAdapterCache.INSTANCE.add(broker);
-					}
+				dto.getData().forEach(adapter -> {
+					final SSPBroker broker = new SSPBroker(adapter);
+					SSPAdapterCache.INSTANCE.add(broker);
 				});
+
 				return true;
 			}
 			log.error("dto is null");
