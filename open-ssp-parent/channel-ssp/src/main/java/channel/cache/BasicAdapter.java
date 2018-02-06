@@ -11,7 +11,7 @@ import channel.adapter.SSPAdapter;
  */
 public class BasicAdapter implements Serializable, SSPAdapter {
 
-	private static final long serialVersionUID = -3016871174370170595L;
+	private static final long serialVersionUID = -5648775770118011066L;
 
 	private String name;
 
@@ -19,7 +19,7 @@ public class BasicAdapter implements Serializable, SSPAdapter {
 
 	private String endpoint;
 
-	private final boolean connectionkeepAlive = true;
+	private static final boolean connectionkeepAlive = true;
 
 	private String contentType;
 
