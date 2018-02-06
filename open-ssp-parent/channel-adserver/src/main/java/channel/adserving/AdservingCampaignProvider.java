@@ -13,15 +13,13 @@ public class AdservingCampaignProvider implements AdProviderReader, AdProviderWr
 
 	private boolean isValid = Boolean.TRUE;
 
-	private final String currency = "EUR";
+	private static final String currency = "EUR";
 
 	private float cpm;
 
 	private int adid;// sent by adserver
 
 	private String vasturl;
-
-	public AdservingCampaignProvider() {}
 
 	@Override
 	public float getPrice() {
@@ -45,7 +43,7 @@ public class AdservingCampaignProvider implements AdProviderReader, AdProviderWr
 
 	@Override
 	public float getPriceEur() {
-		return cpm;
+		return cpm * 1;
 	}
 
 	@Override
@@ -66,12 +64,10 @@ public class AdservingCampaignProvider implements AdProviderReader, AdProviderWr
 	@Override
 	public String getVendorId() {
 		if (adid > 0) {
-			return "Adserving_" + String.valueOf(adid);
+			return "Adserving_" + adid;
 		}
 		return null;
 	}
-
-	public void setVendorId(final String vendorid) {}
 
 	@Override
 	public void setPriceEur(final float priceEur) {
