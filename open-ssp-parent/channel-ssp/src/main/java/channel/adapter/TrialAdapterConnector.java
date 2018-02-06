@@ -14,6 +14,8 @@ import com.atg.openssp.common.exception.BidProcessingException;
  */
 public class TrialAdapterConnector implements AdapterConnector {
 
+	private static final long serialVersionUID = -6978598309872993590L;
+
 	private final JsonPostConnector jsonPostConnector;
 
 	private final SSPAdapter sspAdapter;
