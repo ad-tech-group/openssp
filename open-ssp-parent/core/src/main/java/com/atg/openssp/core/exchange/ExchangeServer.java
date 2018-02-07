@@ -89,8 +89,8 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 	}
 
 	private boolean evaluateResponse(final SessionAgent agent, final AdProviderReader winner) {
-		if (winner != null && winner.isValid()) {
-			try (Writer out = agent.getHttpResponse().getWriter()) {
+		try (Writer out = agent.getHttpResponse().getWriter()) {
+			if (winner != null && winner.isValid()) {
 
 				final String responseData = winner.buildResponse();
 				out.append(responseData);
@@ -98,10 +98,19 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				agent.getHttpResponse().setContentType("application/javascript");
 				winner.perform(agent);
 				out.flush();
-			} catch (final IOException e) {
-				log.error(e.getMessage());
+				return true;
+			} else {
+				// remove this in production environmant
+				if (agent.getParamValues().getIsTest().equals("1")) {
+					agent.getHttpResponse().setContentType("application/json");
+					final String responseData = "{\"result\":\"Success\", \"message\":\"OpenSSP is working.\"}";
+					out.append(responseData);
+					out.flush();
+					return true;
+				}
 			}
-			return true;
+		} catch (final IOException e) {
+			log.error(e.getMessage());
 		}
 		return false;
 	}
