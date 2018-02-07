@@ -66,7 +66,7 @@ public class ApplicationInit extends GenericServlet {
 
 		// initing heartbeat job
 		// every 10seconds on every day
-		JobService.instance.initJob(JobConfig.newBuilder().setJobClass(HeartBeatJob.class).setJobName("HeartBeatJob").setExpression("0/10 * * * * ?").build());
+		JobService.instance.initJob(JobConfig.newBuilder().setJobClass(HeartBeatJob.class).setJobName("HeartBeatJob").setExpression("0/60 * * * * ?").build());
 
 		// initing cachecleaner job
 		// every day at midnight
