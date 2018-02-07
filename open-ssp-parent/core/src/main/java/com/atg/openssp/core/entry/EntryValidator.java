@@ -25,11 +25,12 @@ public class EntryValidator {
 	 */
 	public ParamValue validateEntryParams(final HttpServletRequest request) throws RequestException {
 
+		final ParamValue pm = new ParamValue();
+		pm.setIsTest(request.getParameter("test"));
+
 		// Note:
 		// You may define your individual parameter or payloadto work with.
 		// Neither the "ParamValue" - object nor the list of params may fit to your requirements out of the box.
-
-		final ParamValue pm = new ParamValue();
 
 		// geo data could be solved by a geo lookup service and ipaddress
 

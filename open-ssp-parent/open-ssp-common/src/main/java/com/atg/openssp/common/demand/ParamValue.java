@@ -23,6 +23,7 @@ public class ParamValue {
 	// private String page;
 	// private List<Integer> protocols;
 	// private int startdelay;
+	private String isTest;
 
 	private Publisher publisher;
 
@@ -97,6 +98,14 @@ public class ParamValue {
 
 	public void setPublisher(final Publisher publisher) {
 		this.publisher = publisher;
+	}
+
+	public String getIsTest() {
+		return isTest;
+	}
+
+	public void setIsTest(final String isTest) {
+		this.isTest = isTest;
 	}
 
 	@Override
