@@ -2,7 +2,7 @@
 	"sites": [{
 		"id": "1",
 		"name": "site_1",
-		"domain": "size_1.com",
+		"domain": "site_1.com",
 		"cat": ["1"],
 		"page": "www.site_1.com",
 		"publisher": {
