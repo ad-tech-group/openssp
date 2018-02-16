@@ -9,6 +9,7 @@ package com.atg.openssp.common.cache;
 public final class CurrencyCache extends MapCache<String, Float> {
 
 	public static final CurrencyCache instance = new CurrencyCache();
+	private String currency;
 
 	private CurrencyCache() {
 		super();
@@ -22,4 +23,11 @@ public final class CurrencyCache extends MapCache<String, Float> {
 		return 1.0f;
 	}
 
+	public String getBaseCurrency() {
+		return currency;
+	}
+
+	public void setBaseCurrency(String currency) {
+		this.currency = currency;
+	}
 }

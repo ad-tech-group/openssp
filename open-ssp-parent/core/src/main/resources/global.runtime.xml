@@ -12,13 +12,16 @@
 	<!-- the timeout in ms for execution the executor service -->
 	<!-- default is 500ms --> 
 	<entry key="cdl-timeout">500</entry>
-	
+
 	<!-- url of the data provider where the cache is updated from -->
-	<entry key="data-provider-url"></entry>
-	
+	<entry key="data-provider-scheme">http</entry>
+
+	<!-- url of the data provider where the cache is updated from -->
+	<entry key="data-provider-url">localhost:2112</entry>
+
 	<!-- credential for remote access -->
-	<entry key="master_pw"></entry>
-	
+	<entry key="master_pw">frogs</entry>
+
 	<!-- credential for remote access -->
-	<entry key="master_user"></entry>
+	<entry key="master_user">izod</entry>
 </properties>

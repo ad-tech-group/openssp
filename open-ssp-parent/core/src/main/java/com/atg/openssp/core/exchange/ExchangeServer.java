@@ -1,21 +1,19 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.core.exchange.Exchange;
+import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
+import com.atg.openssp.common.provider.AdProviderReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import util.math.FloatComparator;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.atg.openssp.common.core.entry.SessionAgent;
-import com.atg.openssp.common.core.exchange.Exchange;
-import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
-import com.atg.openssp.common.provider.AdProviderReader;
-
-import util.math.FloatComparator;
 
 /**
  * This is the server which is mainly responsible to start the bidprocess, collect the result and build a reponse for the client.
@@ -99,6 +97,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				winner.perform(agent);
 				out.flush();
 				return true;
+				/*
 			} else {
 				// remove this in production environmant
 				if (agent.getParamValues().getIsTest().equals("1")) {
@@ -108,6 +107,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 					out.flush();
 					return true;
 				}
+				*/
 			}
 		} catch (final IOException e) {
 			log.error(e.getMessage());

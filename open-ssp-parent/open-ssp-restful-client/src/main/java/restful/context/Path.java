@@ -29,7 +29,17 @@ public enum Path {
 	/**
 	 * ?website=1
 	 */
-	WEBSITE("?website=1");
+	WEBSITE("?website=1"),
+
+	/**
+	 * pricelayer
+	 */
+	PRICELAYER("pricelayer"),
+
+	/**
+	 * site
+	 */
+	SITE("site");
 
 	private String value;
 

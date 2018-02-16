@@ -43,6 +43,12 @@ public enum ContextProperties {
 	 * data-privder-url
 	 */
 	@RuntimeMeta(type = Scope.GLOBAL)
+	DATA_PROVIDER_SCHEME("data-provider-scheme"),
+
+	/**
+	 * data-privder-url
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
 	DATA_PROVIDER_URL("data-provider-url"),
 
 	/**

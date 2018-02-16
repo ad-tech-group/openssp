@@ -1,17 +1,16 @@
 package com.atg.openssp.core.cache.broker.json;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atg.openssp.common.cache.broker.DataBrokerObserver;
 import com.atg.openssp.core.cache.broker.dto.PricelayerDto;
 import com.atg.openssp.core.cache.type.PricelayerCache;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * @author André Schmer
@@ -42,12 +41,12 @@ public class PricelayerBrokerJson extends DataBrokerObserver {
 		} catch (final IOException e) {
 			log.error(getClass() + ", " + e.getMessage());
 		}
-
 		return true;
 	}
 
 	@Override
 	protected void finalWork() {
+		// need to switch the intermediate cache to make the data available
 		PricelayerCache.instance.switchCache();
 	}
 

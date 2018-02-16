@@ -3,7 +3,6 @@ package com.atg.openssp.common.cache.broker;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.common.exception.EmptyHostException;
-
 import restful.client.JsonDataProviderConnector;
 import restful.context.PathBuilder;
 import restful.exception.RestException;
@@ -24,6 +23,7 @@ public abstract class AbstractDataBroker<T> extends DataBrokerObserver {
 		final PathBuilder pathBuilder = new PathBuilder();
 		pathBuilder.setMaster_pw(ContextCache.instance.get(ContextProperties.MASTER_PW));
 		pathBuilder.setMaster_user(ContextCache.instance.get(ContextProperties.MASTER_USER));
+		pathBuilder.setScheme(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_SCHEME));
 		pathBuilder.setServer(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_URL));
 		return pathBuilder;
 	}

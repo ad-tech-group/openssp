@@ -1,11 +1,11 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.common.provider.AdProviderWriter;
 import com.atg.openssp.common.provider.WinningNotifier;
-
 import openrtb.bidresponse.model.SeatBid;
 
 /**
@@ -66,7 +66,7 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 		// ad.getGlobalID());
 		// sb.append(content);
 
-		return supplier.getShortName() + " " + priceEur + " EUR";
+		return supplier.getShortName() + " " + priceEur + " "+ CurrencyCache.instance.getBaseCurrency();
 	}
 
 	@Override

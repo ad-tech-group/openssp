@@ -1,9 +1,9 @@
 package com.atg.openssp.core.cache.broker.remote;
 
-import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.exception.EmptyHostException;
-import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
+import com.atg.openssp.core.cache.broker.dto.SiteDto;
+import com.atg.openssp.core.cache.type.SiteDataCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restful.context.Path;
@@ -19,38 +19,40 @@ import restful.exception.RestException;
  * @author André Schmer
  *
  */
-public final class RemoteCurrencyDataBroker extends AbstractDataBroker<CurrencyDto> {
+public final class RemoteSiteDataBroker extends AbstractDataBroker<SiteDto> {
 
-	private static final Logger log = LoggerFactory.getLogger(RemoteCurrencyDataBroker.class);
+	private static final Logger log = LoggerFactory.getLogger(RemoteSiteDataBroker.class);
 
-	public RemoteCurrencyDataBroker() {}
+	public RemoteSiteDataBroker() {}
 
 	@Override
 	public boolean doCaching() {
 		try {
-			final CurrencyDto dto = super.connect(CurrencyDto.class);
+			final SiteDto dto = super.connect(SiteDto.class);
 			if (dto != null) {
-			    CurrencyCache.instance.setBaseCurrency(dto.getCurrency());
-				log.info("sizeof Currency data=" + dto.getData().size());
-				dto.getData().forEach(c -> CurrencyCache.instance.put(c.getCurrency(), c.getRate()));
+				log.info("sizeof Site data=" + dto.getSites().size());
+				dto.getSites().forEach(site -> {
+					SiteDataCache.instance.put(site.getId(), site);
+				});
 				return true;
 			}
-			log.error("no Currency data");
+
+			log.error("no Site data");
 		} catch (final RestException | EmptyHostException e) {
-            log.error(getClass() + ", " + e.getMessage());
+			log.error(getClass() + ", " + e.getMessage());
 		}
 		return false;
 	}
 
 	@Override
 	public PathBuilder getRestfulContext() {
-		return getDefaulPathBuilder().addPath(Path.CORE).addPath(Path.EUR_REF);
+		return getDefaulPathBuilder().addPath(Path.CORE).addPath(Path.SITE);
 	}
 
 	@Override
 	protected void finalWork() {
 		// need to switch the intermediate cache to make the data available
-		CurrencyCache.instance.switchCache();
+		SiteDataCache.instance.switchCache();
 	}
 
 }
