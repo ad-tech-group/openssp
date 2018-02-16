@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import io.freestar.ssp.dspSim.domain.request.BidRequest;
-import io.freestar.ssp.dspSim.domain.response.Bid;
-import io.freestar.ssp.dspSim.domain.response.BidResponse;
-import io.freestar.ssp.dspSim.domain.response.SeatBid;
+import openrtb.bidrequest.model.BidRequest;
+import openrtb.bidresponse.model.Bid;
+import openrtb.bidresponse.model.BidResponse;
+import openrtb.bidresponse.model.SeatBid;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
