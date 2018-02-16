@@ -8,13 +8,14 @@
 	<parent>
 		<groupId>com.atg.openssp</groupId>
 		<artifactId>open-ssp-parent</artifactId>
-		<version>0.2</version>
+		<version>0.2.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>core</artifactId>
 	<name>core</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <my.dev.catalina.home>x</my.dev.catalina.home>
 	</properties>
 
 	<profiles>
@@ -31,7 +32,6 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<encoding>UTF-8</encoding>
 							<systemProperties>
 								<property>
 									<name>catalina.home</name>
@@ -69,6 +69,7 @@
 				<artifactId>properties-maven-plugin</artifactId>
 				<version>1.0.0</version>
 				<configuration>
+					<properties></properties>
 					<outputFile>
 						${project.build.outputDirectory}/app.properties
 					</outputFile>
