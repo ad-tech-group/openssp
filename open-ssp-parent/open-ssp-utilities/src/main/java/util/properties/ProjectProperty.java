@@ -12,6 +12,8 @@ import java.util.Properties;
 
 import javax.xml.bind.PropertyException;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author André Schmer
  * 
@@ -76,7 +78,7 @@ public class ProjectProperty {
 		return properties;
 	}
 
-	private static File readFile(final String file) throws PropertyException {
+	public static File readFile(final String file) throws PropertyException {
 		File propFile = null;
 		try {
 			String propPath = file.replace("\\", "/").replaceAll("/+", "/");
@@ -84,13 +86,9 @@ public class ProjectProperty {
 				propPath = "/" + propPath;
 			}
 			String toDecode = null;
-
 			final String catalinaHome = System.getProperty("catalina.home", System.getProperty("user.dir"));
-			final File f = new File(catalinaHome + "/properties" + propPath);
-			if (!f.exists()) {
+			if (StringUtils.isEmpty(catalinaHome) || catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
 				toDecode = Thread.currentThread().getContextClassLoader().getResource("").getFile() + propPath;
-				// if (StringUtils.isEmpty(catalinaHome) || catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
-
 			} else {
 				toDecode = catalinaHome + "/properties" + propPath;
 			}
