@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.xml.bind.PropertyException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,8 @@ import com.atg.openssp.core.cache.broker.dto.SupplierDto;
 import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.channel.rtb.OpenRtbConnector;
 import com.google.gson.Gson;
+
+import util.properties.ProjectProperty;
 
 /**
  * 
@@ -36,7 +40,8 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 	public boolean doCaching() {
 		final Gson gson = new Gson();
 		try {
-			final String content = new String(Files.readAllBytes(Paths.get("supplier_db.json")), StandardCharsets.UTF_8);
+			final String path = ProjectProperty.readFile("supplier_db.json").getAbsolutePath();
+			final String content = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
 				log.info("sizeof supplier data=" + dto.getSupplier().size());
@@ -49,7 +54,7 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 
 			log.error("no Supplier data");
 			return false;
-		} catch (final IOException e) {
+		} catch (final IOException | PropertyException e) {
 			log.error(getClass() + ", " + e.getMessage());
 		}
 
