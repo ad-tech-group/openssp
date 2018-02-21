@@ -1,5 +1,6 @@
 package com.atg.openssp.common.demand;
 
+import com.atg.openssp.common.cache.dto.VideoAd;
 import openrtb.bidrequest.model.Publisher;
 import openrtb.bidrequest.model.Site;
 
@@ -11,11 +12,11 @@ import openrtb.bidrequest.model.Site;
  * @author André Schmer
  *
  */
-public class ParamValue {
+public abstract class ParamValue {
 
 	// private Zone zone;
 	private Site site;
-	// private VideoAd videoad;
+	 private VideoAd videoad;
 	// private String w;
 	// private String h;
 	// private List<String> mimes;
@@ -23,15 +24,12 @@ public class ParamValue {
 	// private String page;
 	// private List<Integer> protocols;
 	// private int startdelay;
-	private String isTest;
 
-	private Publisher publisher;
-
-	public Site getSite() {
+	public final Site getSite() {
 		return site;
 	}
 
-	public void setSite(final Site site) {
+	public final void setSite(final Site site) {
 		this.site = site;
 	}
 
@@ -92,25 +90,9 @@ public class ParamValue {
 	// return startdelay;
 	// }
 
-	public Publisher getPublisher() {
-		return publisher;
-	}
-
-	public void setPublisher(final Publisher publisher) {
-		this.publisher = publisher;
-	}
-
-	public String getIsTest() {
-		return isTest;
-	}
-
-	public void setIsTest(final String isTest) {
-		this.isTest = isTest;
-	}
-
 	@Override
 	public String toString() {
-		return String.format("ParamValue [site=%s, publisher=%s]", site, publisher);
+		return String.format("ParamValue [site=%s]", site);
 	}
 
 }

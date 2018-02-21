@@ -16,12 +16,26 @@
 	<!-- url of the data provider where the cache is updated from -->
 	<entry key="data-provider-scheme">http</entry>
 
-	<!-- url of the data provider where the cache is updated from -->
-	<entry key="data-provider-url">localhost:2112</entry>
+	<entry key="data-provider-host">localhost</entry>
+
+	<entry key="data-provider-port">2112</entry>
 
 	<!-- credential for remote access -->
 	<entry key="master_pw">frogs</entry>
 
 	<!-- credential for remote access -->
 	<entry key="master_user">izod</entry>
+
+	<!-- url of the adserver provider where the cache is updated from -->
+	<entry key="adserver-provider-scheme">http</entry>
+
+	<entry key="adserver-provider-host">localhost</entry>
+
+	<entry key="adserver-provider-port">8082</entry>
+
+	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
+
+    <entry key="validator-handler-class">io.freestar.ssp.entry.FreestarEntryValidatorHandler</entry>
+
+    <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 </properties>

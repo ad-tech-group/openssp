@@ -3,6 +3,7 @@ package com.atg.openssp.core.exchange;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.atg.openssp.common.demand.ParamValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +35,20 @@ public class RequestSessionAgent extends SessionAgent {
 	 */
 	public RequestSessionAgent(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
 		super(request, response);
-		paramValue = new EntryValidator().validateEntryParams(request);
-
-		log.debug(paramValue.toString());
-
-		bidExchange = new BidExchange();
-
 		RequestLogProcessor.instance.setLogData(this);
 		RequestMonitor.monitorRequests();
+	}
+
+	@Override
+	protected ParamValue createParamValue(HttpServletRequest request) throws RequestException {
+		ParamValue paramValue = new EntryValidator().validateEntryParams(request);
+		log.debug(paramValue.toString());
+		return paramValue;
+	}
+
+	@Override
+	protected BidExchange createBidExchange() {
+		return new BidExchange();
 	}
 
 }

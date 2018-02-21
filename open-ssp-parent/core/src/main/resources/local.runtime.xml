@@ -8,11 +8,12 @@
 	<entry key="ssp">false</entry>
 	
 	<!-- switch to enable/disable adserving support -->
-	<entry key="adserving">false</entry>
+	<entry key="adserving">true</entry>
 	
 	<!-- switch to enable/disable debugging -->	
 	<entry key="debug">false</entry>
 	
 	<!-- switch to enable/disable verbose output -->
 	<entry key="verbose">false</entry>
+
 </properties>

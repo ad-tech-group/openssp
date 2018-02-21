@@ -31,7 +31,7 @@ public class Auction {
 	/**
 	 * Calculates the the winner of the RTB auction considering the behaviour of a private deal.
 	 * 
-	 * @param BidExchange
+	 * @param bidExchange
 	 * @return RtbAdProvider
 	 * @throws InvalidBidException
 	 * 
@@ -153,7 +153,7 @@ public class Auction {
 			winnerPriceEUR = calcPriceForSingleBid(floorEUR, bestBidPriceEUR);
 		}
 
-		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(winnerPriceEUR * bestBidCurrencyRate)).setPriceEur(FloatComparator.rr(winnerPriceEUR))
+		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(winnerPriceEUR * bestBidCurrencyRate)).setNormalizedPrice(FloatComparator.rr(winnerPriceEUR))
 		        .setSupplier(bestBidder.getSupplier()).setWinningSeat(bestBidder.getSeat()).setCurrency(bestBidder.getCurrency()).setDealId(bestBidder.getDealId()).build();
 	}
 

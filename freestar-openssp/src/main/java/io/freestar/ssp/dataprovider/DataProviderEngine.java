@@ -22,6 +22,7 @@ public class DataProviderEngine {
         init(new CurrencyDataProvider(server));
         init(new SupplierDataProvider(server));
         init(new SiteDataProvider(server));
+        init(new AppDataProvider(server));
         init(new PricelayerDataProvider(server));
         init(new LoginService(server));
         for (DataProvider p : providers) {

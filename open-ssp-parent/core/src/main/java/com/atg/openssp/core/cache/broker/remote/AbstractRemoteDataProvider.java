@@ -33,11 +33,11 @@ abstract class AbstractRemoteDataProvider extends DataBrokerObserver {
 		final PathBuilder pathBuilder = new PathBuilder();
 
 		try {
-			final URI remoteEndpintURI = new URI(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_URL));
+			final URI remoteEndpintURI = new URI(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_HOST));
 			if (remoteEndpintURI.getHost() == null) {
 				throw new EmptyHostException("No Host is defined, see data-provider-url in global.runtime.xml");
 			}
-			pathBuilder.setServer(remoteEndpintURI.getHost());
+			pathBuilder.setHost(remoteEndpintURI.getHost());
 			if (remoteEndpintURI.getScheme() == null) {
 				pathBuilder.setScheme("http");
 			} else {

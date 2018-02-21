@@ -9,11 +9,8 @@ import com.atg.openssp.common.provider.AdProviderWriter;
  * @author André Schmer
  *
  */
-public abstract class AdservingCampaignProvider implements AdProviderReader, AdProviderWriter {
+public class TestAdservingCampaignProvider extends AdservingCampaignProvider {
 
-	private boolean isValid = Boolean.TRUE;
-
-	/*
 	private static final String currency = "EUR";
 
 	private float cpm;
@@ -31,21 +28,9 @@ public abstract class AdservingCampaignProvider implements AdProviderReader, AdP
 	public void setPrice(final float bidPrice) {
 		cpm = bidPrice;
 	}
-	*/
 
 	@Override
-	public final void setIsValid(final boolean valid) {
-		isValid = valid;
-	}
-
-	@Override
-	public final boolean isValid() {
-		return isValid;
-	}
-
-	/*
-	@Override
-	public float getPriceEur() {
+	public float getNormalizedPrice() {
 		return cpm * 1;
 	}
 
@@ -73,7 +58,7 @@ public abstract class AdservingCampaignProvider implements AdProviderReader, AdP
 	}
 
 	@Override
-	public void setPriceEur(final float priceEur) {
+	public void setNormalizedPrice(final float priceEur) {
 		cpm = priceEur;
 	}
 
@@ -84,8 +69,7 @@ public abstract class AdservingCampaignProvider implements AdProviderReader, AdP
 
 	@Override
 	public String toString() {
-		return "AdservingCampaignProvider [isValid=" + isValid + ", currency=" + currency + ", cpm=" + cpm + ", adid=" + adid + ", vasturl=" + vasturl + "]";
+		return "AdservingCampaignProvider [isValid=" + isValid() + ", currency=" + currency + ", cpm=" + cpm + ", adid=" + adid + ", vasturl=" + vasturl + "]";
 	}
-	*/
 
 }

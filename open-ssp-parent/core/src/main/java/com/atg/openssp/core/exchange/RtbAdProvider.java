@@ -108,12 +108,12 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 	}
 
 	@Override
-	public void setPriceEur(final float priceEur) {
+	public void setNormalizedPrice(final float priceEur) {
 		this.priceEur = priceEur;
 	}
 
 	@Override
-	public float getPriceEur() {
+	public float getNormalizedPrice() {
 		return priceEur;
 	}
 
@@ -143,8 +143,8 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 			return this;
 		}
 
-		public Builder setPriceEur(final float priceEUR) {
-			rtbAdProvider.setPriceEur(priceEUR);
+		public Builder setNormalizedPrice(final float priceEUR) {
+			rtbAdProvider.setNormalizedPrice(priceEUR);
 			return this;
 		}
 

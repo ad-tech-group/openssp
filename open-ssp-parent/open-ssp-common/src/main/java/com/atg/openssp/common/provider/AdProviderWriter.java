@@ -8,7 +8,7 @@ public interface AdProviderWriter {
 
 	void setPrice(float price);
 
-	void setPriceEur(float priceEur);
+	void setNormalizedPrice(float priceEur);
 
 	void setIsValid(boolean valid);
 

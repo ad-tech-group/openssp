@@ -4,7 +4,9 @@ import java.util.concurrent.CountDownLatch;
 
 import com.atg.openssp.common.configuration.Context;
 import com.atg.openssp.common.configuration.ContextProperties;
+import com.atg.openssp.common.logadapter.LogFacade;
 import com.atg.openssp.core.system.LocalContext;
+import org.apache.logging.log4j.Level;
 
 /**
  * @author André Schmer
@@ -25,9 +27,9 @@ public class LocalContextLoader extends AbstractConfigurationLoader {
 		if (ContextProperties.DEBUG == key) {
 			// TODO: enable if necessary
 			if ("true".equals(value)) {
-				// LogFacade.initLogging(Level.DEBUG);
+				LogFacade.initLogging(Level.DEBUG);
 			} else {
-				// LogFacade.initLogging(Level.INFO);
+				LogFacade.initLogging(Level.INFO);
 			}
 		}
 	}

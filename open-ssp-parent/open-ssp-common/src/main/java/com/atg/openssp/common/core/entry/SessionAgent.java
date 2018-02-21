@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.common.exception.RequestException;
 
 /**
  * Holding meta data.
@@ -23,18 +24,24 @@ public abstract class SessionAgent {
 
 	protected final HttpServletResponse httpResponse;
 
-	protected ParamValue paramValue;
+	private ParamValue paramValue;
 
-	protected BidExchange bidExchange;
+	private BidExchange bidExchange;
 
-	public SessionAgent(final HttpServletRequest request, final HttpServletResponse response) {
+	public SessionAgent(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
 		httpRequest = request;
 		httpResponse = response;
 		final Random r = new Random();
 		requestid = new UUID(r.nextLong(), r.nextLong()).toString();
+		paramValue = createParamValue(request);
+		bidExchange = createBidExchange();
 	}
 
-	public HttpServletRequest getHttpRequest() {
+    protected abstract ParamValue createParamValue(HttpServletRequest request) throws RequestException;
+
+    protected abstract BidExchange createBidExchange();
+
+    public HttpServletRequest getHttpRequest() {
 		return httpRequest;
 	}
 

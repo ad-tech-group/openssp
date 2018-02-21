@@ -39,7 +39,12 @@ public enum Path {
 	/**
 	 * site
 	 */
-	SITE("site");
+	SITE("site"),
+
+	/**
+	 * app
+	 */
+	APP("app");
 
 	private String value;
 

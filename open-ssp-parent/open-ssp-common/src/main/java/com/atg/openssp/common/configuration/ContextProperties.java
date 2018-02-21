@@ -40,16 +40,22 @@ public enum ContextProperties {
 	TRIGGER_EXPESSION("cache-trigger-expression"),
 
 	/**
-	 * data-privder-url
+	 * data-privder-scheme
 	 */
 	@RuntimeMeta(type = Scope.GLOBAL)
 	DATA_PROVIDER_SCHEME("data-provider-scheme"),
 
 	/**
-	 * data-privder-url
+	 * data-privder-host
 	 */
 	@RuntimeMeta(type = Scope.GLOBAL)
-	DATA_PROVIDER_URL("data-provider-url"),
+	DATA_PROVIDER_HOST("data-provider-host"),
+
+	/**
+	 * data-privder-port
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	DATA_PROVIDER_PORT("data-provider-port"),
 
 	/**
 	 * master_pw
@@ -62,6 +68,30 @@ public enum ContextProperties {
 	 */
 	@RuntimeMeta(type = Scope.GLOBAL, printable = false)
 	MASTER_USER("master_user"),
+
+	/**
+	 * data-privder-scheme
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_SCHEME("adserver-provider-scheme"),
+
+	/**
+	 * data-privder-host
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_HOST("adserver-provider-host"),
+
+	/**
+	 * data-privder-port
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_PORT("adserver-provider-port"),
+
+	/**
+	 * data-privder-path
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_PATH("adserver-provider-path"),
 
 	/**
 	 * adserving
@@ -85,7 +115,14 @@ public enum ContextProperties {
 	 * ssp
 	 */
 	@RuntimeMeta(type = Scope.LOCAL)
-	SSPCHANNEL("ssp");
+	SSPCHANNEL("ssp"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	VALIDATOR_HANDLER_CLASS("validator-handler-class"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class");
+
 
 	private String value;
 

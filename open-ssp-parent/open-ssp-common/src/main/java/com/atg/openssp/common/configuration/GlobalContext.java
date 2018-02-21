@@ -8,6 +8,8 @@ public class GlobalContext extends Context {
 
 	private static long executionTimeout;
 	private static float drawModeration;
+	private static String entryValidatorHandlerClass;
+	private static String adserverBrokerHandlerClass;
 
 	public static void refreshContext() {
 		// default value is 500 milliseconds
@@ -17,6 +19,9 @@ public class GlobalContext extends Context {
 		// default value is 0.3
 		drawModeration = Float.parseFloat(ContextCache.instance.get(ContextProperties.DRAW_MODERATION) != null ? ContextCache.instance.get(
 		        ContextProperties.DRAW_MODERATION) : "0.3");
+
+		entryValidatorHandlerClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_CLASS);
+		adserverBrokerHandlerClass = ContextCache.instance.get(ContextProperties.ADSERVER_BROKER_HANDLER_CLASS);
 	}
 
 	/**
@@ -40,5 +45,13 @@ public class GlobalContext extends Context {
 	public static float getDrawModeration() {
 		return drawModeration;
 	}
+
+    public static String getEntryValidatorHandlerClass() {
+        return entryValidatorHandlerClass;
+    }
+
+    public static String getAdserverBrokerHandlerClass() {
+        return adserverBrokerHandlerClass;
+    }
 
 }

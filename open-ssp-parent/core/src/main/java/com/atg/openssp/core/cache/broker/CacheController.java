@@ -1,9 +1,6 @@
 package com.atg.openssp.core.cache.broker;
 
-import com.atg.openssp.core.cache.broker.remote.RemoteCurrencyDataBroker;
-import com.atg.openssp.core.cache.broker.remote.RemotePricelayerBroker;
-import com.atg.openssp.core.cache.broker.remote.RemoteSiteDataBroker;
-import com.atg.openssp.core.cache.broker.remote.RemoteSupplierDataBroker;
+import com.atg.openssp.core.cache.broker.remote.*;
 
 import java.util.Observable;
 
@@ -47,6 +44,9 @@ public class CacheController extends Observable {
 
 		// loads site data from webservice into the cache
 		addObserver(new RemoteSiteDataBroker());
+
+		// loads app data from webservice into the cache
+		addObserver(new RemoteAppDataBroker());
 
 		// loads priceinformation from webservice into the cache
 		addObserver(new RemotePricelayerBroker());

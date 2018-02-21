@@ -24,7 +24,8 @@ public abstract class AbstractDataBroker<T> extends DataBrokerObserver {
 		pathBuilder.setMaster_pw(ContextCache.instance.get(ContextProperties.MASTER_PW));
 		pathBuilder.setMaster_user(ContextCache.instance.get(ContextProperties.MASTER_USER));
 		pathBuilder.setScheme(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_SCHEME));
-		pathBuilder.setServer(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_URL));
+		pathBuilder.setHost(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_HOST));
+		pathBuilder.setPort(ContextCache.instance.get(ContextProperties.DATA_PROVIDER_PORT));
 		return pathBuilder;
 	}
 

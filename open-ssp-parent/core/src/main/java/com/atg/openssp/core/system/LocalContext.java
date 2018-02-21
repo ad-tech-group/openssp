@@ -108,4 +108,5 @@ public class LocalContext extends Context {
 	static String getVersion() {
 		return sspVersion;
 	}
+
 }

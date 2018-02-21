@@ -1,4 +1,4 @@
-package channel.adserving;
+package io.freestar.ssp.dspSim.channel.adserving;
 
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.provider.AdProviderReader;
@@ -9,11 +9,10 @@ import com.atg.openssp.common.provider.AdProviderWriter;
  * @author André Schmer
  *
  */
-public abstract class AdservingCampaignProvider implements AdProviderReader, AdProviderWriter {
+public class AdservingCampaignProvider implements AdProviderReader, AdProviderWriter {
 
 	private boolean isValid = Boolean.TRUE;
 
-	/*
 	private static final String currency = "EUR";
 
 	private float cpm;
@@ -31,19 +30,17 @@ public abstract class AdservingCampaignProvider implements AdProviderReader, AdP
 	public void setPrice(final float bidPrice) {
 		cpm = bidPrice;
 	}
-	*/
 
 	@Override
-	public final void setIsValid(final boolean valid) {
+	public void setIsValid(final boolean valid) {
 		isValid = valid;
 	}
 
 	@Override
-	public final boolean isValid() {
+	public boolean isValid() {
 		return isValid;
 	}
 
-	/*
 	@Override
 	public float getPriceEur() {
 		return cpm * 1;
@@ -86,6 +83,5 @@ public abstract class AdservingCampaignProvider implements AdProviderReader, AdP
 	public String toString() {
 		return "AdservingCampaignProvider [isValid=" + isValid + ", currency=" + currency + ", cpm=" + cpm + ", adid=" + adid + ", vasturl=" + vasturl + "]";
 	}
-	*/
 
 }
