@@ -1,9 +1,9 @@
 package io.freestar.ssp.dataprovider.provider;
 
+import com.atg.openssp.core.cache.broker.dto.SiteDto;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import io.freestar.ssp.dataprovider.provider.dto.SiteDto;
 
 import java.io.IOException;
 import java.io.OutputStream;

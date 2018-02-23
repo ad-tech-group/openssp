@@ -24,7 +24,7 @@ public class AdServerHandler implements HttpHandler {
         AdservingCampaignProvider p = new AdservingCampaignProvider();
         p.setIsValid(true);
         p.setPrice(40f);
-        p.setPriceEur(30f);
+        p.setNormalizedPrice(30f);
         /*
         BidResponse brsp = new BidResponse();
         brsp.setId(UUID.randomUUID().toString());

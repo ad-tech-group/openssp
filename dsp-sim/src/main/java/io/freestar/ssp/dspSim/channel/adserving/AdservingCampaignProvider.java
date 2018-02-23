@@ -42,7 +42,7 @@ public class AdservingCampaignProvider implements AdProviderReader, AdProviderWr
 	}
 
 	@Override
-	public float getPriceEur() {
+	public float getNormalizedPrice() {
 		return cpm * 1;
 	}
 
@@ -70,7 +70,7 @@ public class AdservingCampaignProvider implements AdProviderReader, AdProviderWr
 	}
 
 	@Override
-	public void setPriceEur(final float priceEur) {
+	public void setNormalizedPrice(final float priceEur) {
 		cpm = priceEur;
 	}
 
