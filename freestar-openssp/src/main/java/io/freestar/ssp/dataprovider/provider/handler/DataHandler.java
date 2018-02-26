@@ -40,14 +40,6 @@ public abstract class DataHandler {
         return query;
     }
 
-    protected static Map<String, String> attributesToMap(HttpExchange exchange){
-        Map<String, String> result =  (Map<String, String>) exchange.getAttribute("attributes");
-        if (result == null) {
-            result = new HashMap<String, String>();
-        }
-        return result;
-    }
-
     protected static Map<String, String> attributesToMap(HttpServletRequest request){
         Map<String, String> result =  (Map<String, String>) request.getAttribute("attributes");
         if (result == null) {

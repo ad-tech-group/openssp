@@ -2,8 +2,6 @@ package io.freestar.ssp.dataprovider.provider.handler;
 
 import com.atg.openssp.core.cache.broker.dto.AppDto;
 import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import io.freestar.ssp.dataprovider.provider.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +27,7 @@ public class AppDataHandler extends DataHandler {
             Map<String,String> parms = queryToMap(request.getQueryString());
             String t = parms.get("t");
 
-            if (LoginService.TOKEN.equals(t)) {
+            if (LoginHandler.TOKEN.equals(t)) {
                 String result = new Gson().toJson(data);
 
                 response.setStatus(200);
@@ -42,35 +40,6 @@ public class AppDataHandler extends DataHandler {
             }
         } catch (IOException e) {
             response.setStatus(500);
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    public AppDataHandler(HttpExchange httpExchange) {
-        try {
-            Gson gson = new Gson();
-            String content = new String(Files.readAllBytes(Paths.get("app_db.json")), StandardCharsets.UTF_8);
-            AppDto data = gson.fromJson(content, AppDto.class);
-
-            Map<String,String> parms = queryToMap(httpExchange.getRequestURI().getQuery());
-
-            String t = parms.get("t");
-            if (LoginService.TOKEN.equals(t)) {
-                String result = new Gson().toJson(data);
-                log.debug("sending: "+result);
-                httpExchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF8");
-                httpExchange.sendResponseHeaders(200, result.length());
-                OutputStream os = httpExchange.getResponseBody();
-                os.write(result.getBytes());
-                os.close();
-            } else {
-                httpExchange.sendResponseHeaders(401, 0);
-            }
-        } catch (IOException e) {
-            try {
-                httpExchange.sendResponseHeaders(500, 0);
-            } catch (IOException e1) {
-            }
             log.error(e.getMessage(), e);
         }
     }
