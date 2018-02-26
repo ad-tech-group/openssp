@@ -10,8 +10,9 @@ public class GlobalContext extends Context {
 	private static float drawModeration;
 	private static String entryValidatorHandlerClass;
 	private static String adserverBrokerHandlerClass;
+    private static String bidRequestBuilderHandlerClass;
 
-	public static void refreshContext() {
+    public static void refreshContext() {
 		// default value is 500 milliseconds
 		executionTimeout = Long.parseLong(ContextCache.instance.get(ContextProperties.EXECUTION_TIMEOUT) != null ? ContextCache.instance.get(
 		        ContextProperties.EXECUTION_TIMEOUT) : "500");
@@ -22,6 +23,7 @@ public class GlobalContext extends Context {
 
 		entryValidatorHandlerClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_CLASS);
 		adserverBrokerHandlerClass = ContextCache.instance.get(ContextProperties.ADSERVER_BROKER_HANDLER_CLASS);
+        bidRequestBuilderHandlerClass = ContextCache.instance.get(ContextProperties.BUILD_REQUEST_BUILDER_HANDLER_CLASS);
 	}
 
 	/**
@@ -54,4 +56,7 @@ public class GlobalContext extends Context {
         return adserverBrokerHandlerClass;
     }
 
+    public static String getBidRequestBuilderHandlerClass() {
+        return bidRequestBuilderHandlerClass;
+    }
 }

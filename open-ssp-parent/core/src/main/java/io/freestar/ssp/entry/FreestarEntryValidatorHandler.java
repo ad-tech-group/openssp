@@ -20,9 +20,15 @@ public class FreestarEntryValidatorHandler extends EntryValidatorHandler {
     public ParamValue validateEntryParams(HttpServletRequest request) throws RequestException {
         final FreestarParamValue pm = new FreestarParamValue();
 
+        System.out.println("###################################################################################");
         Cookie[] cList = request.getCookies();
-        for (Cookie c : cList) {
-            System.out.println("cookie: "+c.getName());
+        if (cList != null) {
+            System.out.println(cList.length);
+            for (Cookie c : cList) {
+                System.out.println("cookie: "+c.getName());
+            }
+        } else {
+            System.out.println("no cookies");
         }
         // Note:
         // You may define your individual parameter or payloadto work with.
@@ -30,15 +36,17 @@ public class FreestarEntryValidatorHandler extends EntryValidatorHandler {
 
         // geo data could be solved by a geo lookup service and ipaddress
 
-        byte[] buffer = new byte[request.getContentLength()];
-        try {
-            ServletInputStream is = request.getInputStream();
-            is.read(buffer);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (request.getContentLength() > 0) {
+            byte[] buffer = new byte[request.getContentLength()];
+            try {
+                ServletInputStream is = request.getInputStream();
+                is.read(buffer);
+                String json = new String(buffer);
+                System.out.println("I got json content!!!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        String json = new String(buffer);
-        System.out.println(json);
 
 
         final String siteid = request.getParameter("site");

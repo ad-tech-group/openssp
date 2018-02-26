@@ -1,4 +1,4 @@
 package com.atg.openssp.core.exchange;
 
-public class TestBidRequestBuilderHandler {
+public class TestBidRequestBuilderHandler extends BidRequestBuilderHandler {
 }

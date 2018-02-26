@@ -1,6 +1,8 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.core.system.loader.LocalContextLoader;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.VideoBidResponseProtocol;
 
@@ -9,14 +11,32 @@ import openrtb.tables.VideoBidResponseProtocol;
  *
  * @author André Schmer
  */
-public class BidRequestBuilder {
+public final class BidRequestBuilder {
+    private static BidRequestBuilder instance;
+    private BidRequestBuilderHandler handler;
+
+    private BidRequestBuilder() {
+        String handlerClassName = GlobalContext.getBidRequestBuilderHandlerClass();
+        if (handlerClassName != null && !"".equals(handlerClassName)) {
+            try {
+                Class c = Class.forName(handlerClassName);
+                handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
+            } catch (Exception e) {
+                handler = new TestBidRequestBuilderHandler();
+                e.printStackTrace();
+            }
+        } else {
+            handler = new TestBidRequestBuilderHandler();
+        }
+
+    }
 
     /**
      * Build a request object regarding to the OpenRTB Specification.
      *
      * @return {@see BidRequest}
      */
-    public static BidRequest build(final SessionAgent agent) {
+    public BidRequest build(final SessionAgent agent) {
 
         final BidRequest bidRequest =
                 new BidRequest.Builder()
@@ -59,4 +79,10 @@ public class BidRequestBuilder {
         return bidRequest;
     }
 
+    public synchronized static BidRequestBuilder getInstance() {
+        if (instance == null) {
+            instance = new BidRequestBuilder();
+        }
+        return instance;
+    }
 }

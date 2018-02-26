@@ -35,7 +35,7 @@ public final class LoginService {
 		rf.setConnectTimeout(30000);
 		try {
 			final URI uri = new URIBuilder().setScheme("http").setCharset(StandardCharsets.UTF_8).setHost(config
-					.getServer()).setPath("/ssp-data-provider/login/token").build();
+					.getServer()).setPath("/open-ssp-services/login/token").build();
 			final TokenWrapper result = restTemplate.postForObject(uri, map, TokenWrapper.class);
 			return result.getToken();
 		} catch (final URISyntaxException | RestClientException e) {

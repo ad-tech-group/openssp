@@ -117,11 +117,14 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	SSPCHANNEL("ssp"),
 
-	@RuntimeMeta(type = Scope.LOCAL)
+	@RuntimeMeta(type = Scope.GLOBAL)
 	VALIDATOR_HANDLER_CLASS("validator-handler-class"),
 
-	@RuntimeMeta(type = Scope.LOCAL)
-	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class");
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	BUILD_REQUEST_BUILDER_HANDLER_CLASS("bid-request-builder-handler-class");
 
 
 	private String value;

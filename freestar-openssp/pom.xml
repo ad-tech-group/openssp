@@ -1,73 +1,195 @@
 <?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.freestar.openssp</groupId>
-	<artifactId>freestar-openssp</artifactId>
-	<version>0.1-SNAPSHOT</version>
-    <name>freestar-openssp</name>
-	<url>http://maven.apache.org</url>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<dependencies>
-	
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.atg.openssp</groupId>
+		<artifactId>open-ssp-parent</artifactId>
+		<version>0.2.1-SNAPSHOT</version>
+	</parent>
 
-		<dependency>
-			<groupId>com.atg.openssp</groupId>
-			<artifactId>open-ssp-common</artifactId>
-			<version>0.2.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
+    <groupId>io.freestar.openssp</groupId>
+    <artifactId>freestar-openssp</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>freestar-openssp</name>
+    <url>http://maven.apache.org</url>
+    <packaging>war</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <my.dev.catalina.home>y</my.dev.catalina.home>
+    </properties>
+    <profiles>
+		<profile>
+			<id>mock-catalina-home</id>
+			<activation>
+				<property>
+					<name>!env.catalina.home</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.5.1</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<systemProperties>
+								<property>
+									<name>catalina.home</name>
+									<value>${my.dev.catalina.home}</value>
+								</property>
+							</systemProperties>
+						</configuration>
+					</plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <packaging>jar</packaging>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <groupId>${project.groupId}</groupId>
+                                    <version>${project.version}</version>
+                                    <file>
+                                        ${project.build.directory}/open-ssp-services.jar
+                                    </file>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+			</build>
+		</profile>
+    </profiles>
+
     <build>
+
+		<finalName>open-ssp-services</finalName>
+
         <plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<path>/${project.build.finalName}</path>
+					<uriEncoding>utf-8</uriEncoding>
+					<systemProperties>
+						<JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
+					</systemProperties>
+					<port>9090</port>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<properties></properties>
+					<outputFile>
+						${project.build.outputDirectory}/app.properties
+					</outputFile>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>write-project-properties</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <addDefaultImplementationEntries/>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>io.freestar.ssp.dataprovider.DataProviderEngine</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>lib/</Class-Path>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
+                        <id>make-a-jar</id>
+                        <phase>compile</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>			<plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-                <archive>
-                    <manifest>
-                        <addClasspath>true</addClasspath>
-                        <addDefaultImplementationEntries />
-                        <classpathPrefix>lib/</classpathPrefix>
-                        <mainClass>io.freestar.ssp.dataprovider.DataProviderEngine</mainClass>
-                    </manifest>
-                </archive>
-            </configuration>
-        </plugin>
+            </plugin>
         </plugins>
     </build>
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.8</version>
+		</dependency>
+
+        <dependency>
+            <groupId>com.atg.openssp</groupId>
+            <artifactId>open-ssp-common</artifactId>
+            <version>0.2.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atg.openssp</groupId>
+            <artifactId>core</artifactId>
+            <version>0.2.1-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
 </project>

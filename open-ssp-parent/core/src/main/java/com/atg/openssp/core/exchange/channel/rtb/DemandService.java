@@ -8,6 +8,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import com.atg.openssp.core.exchange.BidRequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,6 @@ import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.Auction;
-import com.atg.openssp.core.exchange.BidRequestBuilder;
 
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Impression;
@@ -112,7 +112,7 @@ public class DemandService implements Callable<AdProviderReader> {
 		final List<OpenRtbConnector> connectorList = ConnectorCache.instance.getAll();
 		final List<DemandBroker> connectors = new ArrayList<>();
 
-		final BidRequest bidRequest = BidRequestBuilder.build(agent);
+		final BidRequest bidRequest = BidRequestBuilder.getInstance().build(agent);
 		connectorList.stream().filter(b -> b.getSupplier().getActive() == 1).forEach(connector -> {
 
 			final DemandBroker demandBroker = new DemandBroker(connector.getSupplier(), connector, agent);
