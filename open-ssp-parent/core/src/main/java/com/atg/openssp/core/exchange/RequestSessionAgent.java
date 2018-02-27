@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.core.entry.SessionAgentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,22 +27,25 @@ import com.atg.openssp.core.entry.EntryValidator;
 public class RequestSessionAgent extends SessionAgent {
 
 	private static final Logger log = LoggerFactory.getLogger(RequestSessionAgent.class);
+	private final SessionAgentType type;
 
 	/**
 	 * 
 	 * @param request
 	 * @param response
+	 * @param type
 	 * @throws RequestException
 	 */
-	public RequestSessionAgent(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
+	public RequestSessionAgent(final HttpServletRequest request, final HttpServletResponse response, SessionAgentType type) throws RequestException {
 		super(request, response);
+		this.type = type;
 		RequestLogProcessor.instance.setLogData(this);
 		RequestMonitor.monitorRequests();
 	}
 
 	@Override
 	protected ParamValue createParamValue(HttpServletRequest request) throws RequestException {
-		ParamValue paramValue = new EntryValidator().validateEntryParams(request);
+		ParamValue paramValue = new EntryValidator(type).validateEntryParams(request);
 		log.debug(paramValue.toString());
 		return paramValue;
 	}

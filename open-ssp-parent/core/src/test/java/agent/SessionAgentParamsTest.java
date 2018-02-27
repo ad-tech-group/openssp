@@ -1,5 +1,6 @@
 package agent;
 
+import com.atg.openssp.core.entry.SessionAgentType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -41,7 +42,7 @@ public class SessionAgentParamsTest {
 
 		RequestSessionAgent agent = null;
 		try {
-			agent = new RequestSessionAgent(request, response);
+			agent = new RequestSessionAgent(request, response, SessionAgentType.BANNER);
 		} catch (final RequestException e) {
 			Assert.fail(e.getMessage());
 		}
@@ -61,7 +62,7 @@ public class SessionAgentParamsTest {
 	//
 	// RequestSessionAgent agent = null;
 	// try {
-	// agent = new RequestSessionAgent(request, response);
+	// agent = new RequestSessionAgent(request, response, SessionAgentType.BANNER);
 	// } catch (final RequestException e) {
 	// Assert.fail(e.getMessage());
 	// }

@@ -35,7 +35,9 @@
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
 
-    <entry key="validator-handler-class">io.freestar.ssp.entry.FreestarEntryValidatorHandler</entry>
+    <entry key="validator-handler-for-video-class">io.freestar.ssp.entry.FreestarEntryValidatorForVideoHandler</entry>
+
+	<entry key="validator-handler-for-banner-class">io.freestar.ssp.entry.FreestarEntryValidatorForBannerHandler</entry>
 
     <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 

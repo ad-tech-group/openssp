@@ -118,7 +118,10 @@ public enum ContextProperties {
 	SSPCHANNEL("ssp"),
 
 	@RuntimeMeta(type = Scope.GLOBAL)
-	VALIDATOR_HANDLER_CLASS("validator-handler-class"),
+	VALIDATOR_HANDLER_FOR_VIDEO_CLASS("validator-handler-for-video-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	VALIDATOR_HANDLER_FOR_BANNER_CLASS("validator-handler-for-banner-class"),
 
 	@RuntimeMeta(type = Scope.GLOBAL)
 	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class"),

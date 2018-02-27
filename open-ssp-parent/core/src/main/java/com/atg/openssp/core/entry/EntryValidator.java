@@ -16,8 +16,13 @@ public class EntryValidator {
 
     private EntryValidatorHandler handler;
 
-    public EntryValidator() {
-	    String handlerClassName = GlobalContext.getEntryValidatorHandlerClass();
+    public EntryValidator(SessionAgentType type) {
+		String handlerClassName = null;
+    	if (type == SessionAgentType.VIDEO) {
+			handlerClassName = GlobalContext.getEntryValidatorHandlerForVideoClass();
+		} else if (type == SessionAgentType.BANNER) {
+			handlerClassName = GlobalContext.getEntryValidatorHandlerForBannerClass();
+		}
 	    if (handlerClassName != null && !"".equals(handlerClassName)) {
             try {
                 Class c = Class.forName(handlerClassName);

@@ -27,17 +27,18 @@ public abstract class SessionAgent {
 	private ParamValue paramValue;
 
 	private BidExchange bidExchange;
+	private boolean paramValueInitialized;
 
 	public SessionAgent(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
 		httpRequest = request;
 		httpResponse = response;
+
 		final Random r = new Random();
 		requestid = new UUID(r.nextLong(), r.nextLong()).toString();
-		paramValue = createParamValue(request);
 		bidExchange = createBidExchange();
 	}
 
-    protected abstract ParamValue createParamValue(HttpServletRequest request) throws RequestException;
+	protected abstract ParamValue createParamValue(HttpServletRequest request) throws RequestException;
 
     protected abstract BidExchange createBidExchange();
 
@@ -56,9 +57,14 @@ public abstract class SessionAgent {
 	public void cleanUp() {
 		bidExchange = null;
 		paramValue = null;
+		paramValueInitialized = false;
 	}
 
-	public ParamValue getParamValues() {
+	public ParamValue getParamValues() throws RequestException {
+    	if (!paramValueInitialized) {
+			paramValue = createParamValue(httpRequest);
+			paramValueInitialized = true;
+		}
 		return paramValue;
 	}
 

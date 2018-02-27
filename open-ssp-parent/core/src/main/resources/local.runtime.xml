@@ -8,7 +8,7 @@
 	<entry key="ssp">false</entry>
 	
 	<!-- switch to enable/disable adserving support -->
-	<entry key="adserving">true</entry>
+	<entry key="adserving">false</entry>
 	
 	<!-- switch to enable/disable debugging -->	
 	<entry key="debug">false</entry>

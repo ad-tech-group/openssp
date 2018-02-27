@@ -18,8 +18,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class FreestarEntryValidatorHandler extends EntryValidatorHandler {
-    private final Logger log = LoggerFactory.getLogger(FreestarEntryValidatorHandler.class);
+public class FreestarEntryValidatorForBannerHandler extends EntryValidatorHandler {
+    private final Logger log = LoggerFactory.getLogger(FreestarEntryValidatorForBannerHandler.class);
+
+    public FreestarEntryValidatorForBannerHandler()
+    {
+
+    }
 
     @Override
     public ParamValue validateEntryParams(HttpServletRequest request) throws RequestException {

@@ -1,15 +1,31 @@
 package com.atg.openssp.core.exchange;
 
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.common.exception.RequestException;
+import io.freestar.ssp.common.demand.FreestarParamValue;
+import io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.VideoBidResponseProtocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestBidRequestBuilderHandler extends BidRequestBuilderHandler {
+    private final Logger log = LoggerFactory.getLogger(TestBidRequestBuilderHandler.class);
+
     @Override
     public BidRequest constructRequest(SessionAgent agent) {
+        ParamValue pValues = null;
+        try {
+            pValues = agent.getParamValues();
+        } catch (RequestException e) {
+            log.warn(e.getMessage(), e);
+            pValues = new FreestarParamValue();
+        }
+
         return new BidRequest.Builder()
                 .setId(agent.getRequestid())
-                .setSite(agent.getParamValues().getSite())
+                .setSite(pValues.getSite())
                 .setDevice(
                         new Device.Builder()
                                 .setGeo(

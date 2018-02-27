@@ -8,7 +8,8 @@ public class GlobalContext extends Context {
 
 	private static long executionTimeout;
 	private static float drawModeration;
-	private static String entryValidatorHandlerClass;
+	private static String entryValidatorHandlerForBannerClass;
+	private static String entryValidatorHandlerForVideoClass;
 	private static String adserverBrokerHandlerClass;
     private static String bidRequestBuilderHandlerClass;
 
@@ -21,7 +22,8 @@ public class GlobalContext extends Context {
 		drawModeration = Float.parseFloat(ContextCache.instance.get(ContextProperties.DRAW_MODERATION) != null ? ContextCache.instance.get(
 		        ContextProperties.DRAW_MODERATION) : "0.3");
 
-		entryValidatorHandlerClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_CLASS);
+		entryValidatorHandlerForBannerClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_FOR_BANNER_CLASS);
+		entryValidatorHandlerForVideoClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_FOR_VIDEO_CLASS);
 		adserverBrokerHandlerClass = ContextCache.instance.get(ContextProperties.ADSERVER_BROKER_HANDLER_CLASS);
         bidRequestBuilderHandlerClass = ContextCache.instance.get(ContextProperties.BUILD_REQUEST_BUILDER_HANDLER_CLASS);
 	}
@@ -48,11 +50,15 @@ public class GlobalContext extends Context {
 		return drawModeration;
 	}
 
-    public static String getEntryValidatorHandlerClass() {
-        return entryValidatorHandlerClass;
+    public static String getEntryValidatorHandlerForVideoClass() {
+        return entryValidatorHandlerForVideoClass;
     }
 
-    public static String getAdserverBrokerHandlerClass() {
+	public static String getEntryValidatorHandlerForBannerClass() {
+		return entryValidatorHandlerForBannerClass;
+	}
+
+	public static String getAdserverBrokerHandlerClass() {
         return adserverBrokerHandlerClass;
     }
 

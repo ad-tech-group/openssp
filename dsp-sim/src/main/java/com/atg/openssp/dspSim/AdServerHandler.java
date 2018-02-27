@@ -6,16 +6,26 @@ import com.sun.net.httpserver.HttpHandler;
 import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
 import openrtb.bidrequest.model.BidRequest;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 
 public class AdServerHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
-        BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
-        System.out.println("AD-->"+new Gson().toJson(brq));
+        StringBuilder input = new StringBuilder();
+        try {
+            BufferedReader is = new BufferedReader(new InputStreamReader(httpExchange.getRequestBody()));
+            String line;
+            while((line = is.readLine()) != null) {
+                input.append(line+"\n");
+            }
+        } catch (Exception ex) {
+
+        }
+        System.out.println("AD-->"+new Gson().toJson(input));
+
+        //BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
+        //System.out.println("AD-->"+new Gson().toJson(brq));
 
         AdservingCampaignProvider p = new AdservingCampaignProvider();
         p.setIsValid(true);
