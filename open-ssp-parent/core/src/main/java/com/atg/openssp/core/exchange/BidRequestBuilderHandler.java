@@ -1,4 +1,8 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.core.entry.SessionAgent;
+import openrtb.bidrequest.model.BidRequest;
+
 public abstract class BidRequestBuilderHandler {
+    public abstract BidRequest constructRequest(SessionAgent agent);
 }

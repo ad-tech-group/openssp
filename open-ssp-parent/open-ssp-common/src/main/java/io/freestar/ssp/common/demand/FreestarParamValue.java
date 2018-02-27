@@ -15,28 +15,91 @@ import openrtb.bidrequest.model.Site;
  */
 public class FreestarParamValue extends ParamValue {
 
-	private Publisher publisher;
+//	private Publisher publisher;
     private App app;
+    private String callback;
+    private String callbackUid;
+    private String psa;
+    private String id;
+    private String size;
+    private String promoSizes;
+    private String referrer;
 
-    public Publisher getPublisher() {
-		return publisher;
-	}
+//    public Publisher getPublisher() {
+//		return publisher;
+//	}
 
-	public void setPublisher(final Publisher publisher) {
-		this.publisher = publisher;
-	}
+//	public void setPublisher(final Publisher publisher) {
+//		this.publisher = publisher;
+//	}
 
     public void setApp(App app) {
         this.app = app;
     }
 
-    public App getApp() {
+    public App getAppX() {
         return app;
     }
 
 	@Override
 	public String toString() {
-		return super.toString()+String.format("[publisher=%sm app=%s]", publisher, app);
+//        return super.toString()+String.format("[publisher=%sm app=%s]", publisher, app);
+		return super.toString()+String.format("[app=%s]", app);
 	}
 
+    public void setCallback(String callback) {
+        this.callback = callback;
+    }
+
+    public String getCallback() {
+        return callback;
+    }
+
+    public void setCallbackUid(String callbackUid) {
+        this.callbackUid = callbackUid;
+    }
+
+    public String getCallbackUid() {
+        return callbackUid;
+    }
+
+    public void setPsa(String psa) {
+        this.psa = psa;
+    }
+
+    public String getPsa() {
+        return psa;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setPromoSizes(String promoSizes) {
+        this.promoSizes = promoSizes;
+    }
+
+    public String getPromoSizes() {
+        return promoSizes;
+    }
+
+    public void setReferrer(String referrer) {
+        this.referrer = referrer;
+    }
+
+    public String getReferrer() {
+        return referrer;
+    }
 }
