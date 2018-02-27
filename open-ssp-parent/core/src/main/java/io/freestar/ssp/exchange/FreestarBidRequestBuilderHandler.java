@@ -2,24 +2,44 @@ package io.freestar.ssp.exchange;
 
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.core.exchange.BidRequestBuilderHandler;
+import io.freestar.ssp.common.demand.FreestarParamValue;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.VideoBidResponseProtocol;
 
 public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
     @Override
     public BidRequest constructRequest(SessionAgent agent) {
+        FreestarParamValue pValues = (FreestarParamValue) agent.getParamValues();
+
+        Banner b = new Banner.Builder().setId(pValues.getId()).build();
+        System.out.println("szie: "+pValues.getSize());
+//        b.setH(pValues.set);
+//        b.setW();
+//        b.setBattr();
+//        b.setApi();
+//        b.setBtype();
+//        b.setExpdir();
+//        b.setHmax();
+//        b.setHmin();
+//        b.setMimes();
+//        b.setPos();
+//        b.setTopframe();
+//        b.setWmax();
+//        b.setWmin();
+//        b.setExt();
+
         return new BidRequest.Builder()
                 .setId(agent.getRequestid())
-                .setSite(agent.getParamValues().getSite())
+                .setSite(pValues.getSite())
                 .setDevice(
                         new Device.Builder()
                                 .setGeo(
                                         new Geo.Builder()
-//                                                        .setCity(agent.getParamValues().getCity())
-//                                                        .setCountry(agent.getParamValues().getCountry())
-//                                                        .setLat(agent.getParamValues().getLat())
-//                                                        .setLon(agent.getParamValues().getLon())
-//                                                        .setZip(agent.getParamValues().getZip())
+//                                                        .setCity(pValues.getCity())
+//                                                        .setCountry(pValues.getCountry())
+//                                                        .setLat(pValues.getLat())
+//                                                        .setLon(pValues.getLon())
+//                                                        .setZip(pValues.getZip())
                                                 .build())
                                 .build()
                 ).addImp(
@@ -34,7 +54,8 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
                                 .addProtocol(VideoBidResponseProtocol.VAST_2_0.getValue())
                                 .setStartdelay(1)
                                 .build()
-                        ).build())
+                        )
+                        .setBanner(b).build())
                 .setUser(
                         new User.Builder()
                                 .setBuyeruid("HHcFrt-76Gh4aPl")
