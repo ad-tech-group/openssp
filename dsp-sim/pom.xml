@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.freestar.openssp</groupId>
-	<artifactId>dsp-sim</artifactId>
+	<groupId>com.atg.openssp</groupId>
+	<artifactId>open-ssp-dsp-sim</artifactId>
 	<version>0.1</version>
-	<name>dsp-sim</name>
+	<name>open-ssp-dsp-sim</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -71,7 +71,7 @@
 							<addClasspath>true</addClasspath>
 							<addDefaultImplementationEntries />
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>io.freestar.ssp.dspSim.DspSim</mainClass>
+							<mainClass>com.atg.openssp.dspSim.DspSim</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
