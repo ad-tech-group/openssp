@@ -1,6 +1,7 @@
 package io.freestar.ssp.dataprovider.provider.handler;
 
 import com.atg.openssp.core.cache.broker.dto.PricelayerDto;
+import com.atg.openssp.core.system.LocalContext;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,28 +20,32 @@ public class PricelayerDataHandler extends DataHandler {
     public static final String CONTEXT = "/lookup/pricelayer";
 
     public PricelayerDataHandler(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Gson gson = new Gson();
-            String content = new String(Files.readAllBytes(Paths.get("price_layer.json")), StandardCharsets.UTF_8);
-            PricelayerDto data = gson.fromJson(content, PricelayerDto.class);
+        if (LocalContext.isPricelayerDataServiceEnabled()) {
+            try {
+                Gson gson = new Gson();
+                String content = new String(Files.readAllBytes(Paths.get("price_layer.json")), StandardCharsets.UTF_8);
+                PricelayerDto data = gson.fromJson(content, PricelayerDto.class);
 
-            Map<String,String> parms = queryToMap(request.getQueryString());
-            String t = parms.get("t");
+                Map<String,String> parms = queryToMap(request.getQueryString());
+                String t = parms.get("t");
 
-            if (LoginHandler.TOKEN.equals(t)) {
-                String result = new Gson().toJson(data);
+                if (LoginHandler.TOKEN.equals(t)) {
+                    String result = new Gson().toJson(data);
 
-                response.setStatus(200);
-                response.setContentType("application/json; charset=UTF8");
-                OutputStream os = response.getOutputStream();
-                os.write(result.getBytes());
-                os.close();
-            } else {
-                response.setStatus(401);
+                    response.setStatus(200);
+                    response.setContentType("application/json; charset=UTF8");
+                    OutputStream os = response.getOutputStream();
+                    os.write(result.getBytes());
+                    os.close();
+                } else {
+                    response.setStatus(401);
+                }
+            } catch (IOException e) {
+                response.setStatus(500);
+                log.error(e.getMessage(), e);
             }
-        } catch (IOException e) {
-            response.setStatus(500);
-            log.error(e.getMessage(), e);
+        } else {
+            response.setStatus(404);
         }
     }
 

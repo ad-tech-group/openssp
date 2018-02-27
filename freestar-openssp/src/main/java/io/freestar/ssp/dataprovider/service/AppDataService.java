@@ -1,10 +1,6 @@
 package io.freestar.ssp.dataprovider.service;
 
-import com.atg.openssp.common.core.entry.CoreSupplyServlet;
-import com.atg.openssp.common.core.exchange.Exchange;
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.exchange.ExchangeServer;
-import com.atg.openssp.core.exchange.RequestSessionAgent;
 import io.freestar.ssp.dataprovider.provider.handler.AppDataHandler;
 import io.freestar.ssp.dataprovider.provider.handler.DataHandler;
 

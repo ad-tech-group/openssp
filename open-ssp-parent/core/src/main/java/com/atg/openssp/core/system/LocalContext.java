@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.atg.openssp.common.configuration.Context;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
+import com.atg.openssp.core.system.properties.MavenProperties;
 
 /**
  * @author André Schmer
@@ -28,9 +29,25 @@ public class LocalContext extends Context {
 
 	private static boolean isMetricsEnabled;
 
-	private static String sspVersion;
+	private static String sspVersion = new MavenProperties().getVersion();
 
-	private static boolean isSspChannelEnabled;
+
+    private static boolean isSspChannelEnabled;
+
+	//#######################################
+    private static boolean isAppDataServiceEnabled = false;
+
+    private static boolean isCurrencyDataServiceEnabled = false;
+
+    private static boolean isLoginServiceEnabled = false;
+
+    private static boolean isPricelayerDataServiceEnabled = false;
+
+    private static boolean isSiteDataServiceEnabled = false;
+
+    private static boolean isSupplierDataServiceEnabled = false;
+    //#######################################
+
 
 	static {
 		initData();
@@ -43,6 +60,13 @@ public class LocalContext extends Context {
 		isSspChannelEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.SSPCHANNEL));
 		isVerboseEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.VERBOSE));
 		isMetricsEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.METRICS));
+
+		isAppDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.APP_DATA_SERVICE_ENABLED));
+		isCurrencyDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.CURRENCY_DATA_SERVICE_ENABLED));
+		isLoginServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.LOGIN_SERVICE_ENABLED));
+		isPricelayerDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.PRICELAYER_DATA_SERVICE_ENABLED));
+		isSiteDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.SITE_DATA_SERVICE_ENABLED));
+		isSupplierDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_SERVICE_ENABLED));
 	}
 
 	private static void initData() {
@@ -107,6 +131,31 @@ public class LocalContext extends Context {
 
 	static String getVersion() {
 		return sspVersion;
+	}
+
+
+	public static boolean isAppDataServiceEnabled() {
+		return isAppDataServiceEnabled;
+	}
+
+	public static boolean isCurrencyDataServiceEnabled() {
+		return isCurrencyDataServiceEnabled;
+	}
+
+	public static boolean isLoginServiceEnabled() {
+		return isLoginServiceEnabled;
+	}
+
+	public static boolean isPricelayerDataServiceEnabled() {
+		return isPricelayerDataServiceEnabled;
+	}
+
+	public static boolean isSiteDataServiceEnabled() {
+		return isSiteDataServiceEnabled;
+	}
+
+	public static boolean isSupplierDataServiceEnabled() {
+		return isSupplierDataServiceEnabled;
 	}
 
 }

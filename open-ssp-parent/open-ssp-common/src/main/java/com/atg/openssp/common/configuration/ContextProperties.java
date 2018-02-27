@@ -124,8 +124,48 @@ public enum ContextProperties {
 	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class"),
 
 	@RuntimeMeta(type = Scope.GLOBAL)
-	BUILD_REQUEST_BUILDER_HANDLER_CLASS("bid-request-builder-handler-class");
+	BUILD_REQUEST_BUILDER_HANDLER_CLASS("bid-request-builder-handler-class"),
 
+
+	//###########################################################
+    /**
+     * app data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    APP_DATA_SERVICE_ENABLED("app-data-service-enabled"),
+
+    /**
+     * currency data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    CURRENCY_DATA_SERVICE_ENABLED("currency-data-service-enabled"),
+
+    /**
+     * login service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    LOGIN_SERVICE_ENABLED("login-service-enabled"),
+
+    /**
+     * pricelayer data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    PRICELAYER_DATA_SERVICE_ENABLED("pricelayer-data-service-enabled"),
+
+    /**
+     * site data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    SITE_DATA_SERVICE_ENABLED("site-data-service-enabled"),
+
+    /**
+     * app data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    SUPPLIER_DATA_SERVICE_ENABLED("supplier-data-service-enabled");
+
+
+    //###########################################################
 
 	private String value;
 
