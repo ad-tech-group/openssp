@@ -1,4 +1,4 @@
-package com.atg.openssp.dspSim.dsp;
+package com.atg.openssp.dspSim.view.dsp;
 
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 

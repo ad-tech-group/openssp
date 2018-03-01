@@ -1,5 +1,6 @@
 package com.atg.openssp.dspSim;
 
+import com.atg.openssp.dspSim.model.ModelException;
 import com.atg.openssp.dspSim.model.ad.AdModel;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.sun.net.httpserver.HttpServer;
@@ -11,7 +12,7 @@ public class DspSim {
     private DspModel dspModel;
     private AdModel adModel;
 
-    public DspSim() {
+    public DspSim() throws ModelException {
         dspModel = new DspModel();
         adModel = new AdModel();
     }
@@ -29,14 +30,18 @@ public class DspSim {
     }
 
     public static void main(String[] args) {
-        DspSim sim = new DspSim();
-        sim.start();
-        while(true) {
-            try {
-                Thread.sleep(100000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            DspSim sim = new DspSim();
+            sim.start();
+            while(true) {
+                try {
+                    Thread.sleep(100000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (ModelException e) {
+            System.err.println(e.getMessage());
         }
     }
 

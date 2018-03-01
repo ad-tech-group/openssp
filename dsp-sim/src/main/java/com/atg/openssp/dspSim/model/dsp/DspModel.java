@@ -1,54 +1,55 @@
 package com.atg.openssp.dspSim.model.dsp;
 
+import com.atg.openssp.dspSim.model.ModelException;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Impression;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DspModel {
+    private static final Logger log = LoggerFactory.getLogger(DspModel.class);
     private static final String FILE_NAME = "DSP_SIM_MODEL.json";
     private final ArrayList<SimBidderListener> simBidderListeners = new ArrayList();
     private final ArrayList<SimBidder> bidders = new ArrayList();
 
-    public DspModel() {
+    public DspModel() throws ModelException {
         loadModel();
     }
 
-    private void loadModel() {
+    private void loadModel() throws ModelException {
         try {
             File f = new File(FILE_NAME);
             if (f.exists()) {
                 FileReader fr = new FileReader(f);
-                ArrayList buffer = new Gson().fromJson(fr, ArrayList.class);
+                List<SimBidder> buffer = new Gson().fromJson(fr, new TypeToken<List<SimBidder>>(){}.getType());
                 fr.close();
-                System.out.println(buffer.get(0));
-//                bidders.addAll(buffer);
+                bidders.addAll(buffer);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn(e.getMessage(), e);
+            throw new ModelException("Could not load model from store.");
         }
-        SimBidder sb = new SimBidder("331a77c4-dcdd-4d8f-8138-5d049163c2ea");
-        sb.setPrice(1f);
-        add(sb);
-        sb = new SimBidder("9a038482-c91e-4369-b85d-6e75d9e09c19");
-        sb.setPrice(0.3f);
-        add(sb);
     }
 
-    public void saveModel() {
+    public void saveModel() throws ModelException {
         try {
             PrintWriter fw = new PrintWriter(new FileWriter(FILE_NAME));
             String json = new Gson().toJson(bidders);
             fw.println(json);
             fw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn(e.getMessage(), e);
+            throw new ModelException("Could not save model from store.");
         }
     }
 

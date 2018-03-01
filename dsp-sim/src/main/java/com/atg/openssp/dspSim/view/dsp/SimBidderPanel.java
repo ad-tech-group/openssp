@@ -1,5 +1,6 @@
-package com.atg.openssp.dspSim.dsp;
+package com.atg.openssp.dspSim.view.dsp;
 
+import com.atg.openssp.dspSim.model.ModelException;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.atg.openssp.dspSim.model.dsp.SimBidder;
 import com.atg.openssp.dspSim.model.dsp.SimBidderListener;
@@ -102,6 +103,9 @@ public class SimBidderPanel extends JPanel implements SimBidderListener, ListSel
                     tfMemo.setText("Bidder saved.");
                     tfMemo.setBackground(Color.WHITE);
                     model.saveModel();
+                } catch (ModelException e) {
+                    tfMemo.setText(e.getMessage());
+                    tfMemo.setBackground(Color.RED);
                 } catch (Exception e) {
                     e.printStackTrace();
                     tfMemo.setText("Could not save Bidder due to invalid price.");
