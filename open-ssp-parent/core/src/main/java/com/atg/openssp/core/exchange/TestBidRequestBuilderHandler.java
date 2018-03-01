@@ -4,7 +4,6 @@ import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.RequestException;
 import io.freestar.ssp.common.demand.FreestarParamValue;
-import io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.VideoBidResponseProtocol;
 import org.slf4j.Logger;
