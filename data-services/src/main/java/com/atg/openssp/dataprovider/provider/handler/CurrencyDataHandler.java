@@ -5,9 +5,11 @@ import com.atg.openssp.core.system.LocalContext;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.properties.ProjectProperty;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.PropertyException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -22,8 +24,15 @@ public class CurrencyDataHandler extends DataHandler {
     public CurrencyDataHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isCurrencyDataServiceEnabled()) {
             try {
+                String location;
+                try {
+                    location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                } catch (PropertyException e) {
+                    log.warn("property file not found.");
+                    location="";
+                }
                 Gson gson = new Gson();
-                String content = new String(Files.readAllBytes(Paths.get("currency_db.json")), StandardCharsets.UTF_8);
+                String content = new String(Files.readAllBytes(Paths.get(location+"currency_db.json")), StandardCharsets.UTF_8);
                 CurrencyDto data = gson.fromJson(content, CurrencyDto.class);
 
                 Map<String,String> parms = queryToMap(request.getQueryString());

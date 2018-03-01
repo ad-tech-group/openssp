@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SupplyVideoService
+ * Servlet implementation class LoginService
  * 
  * @author Brian Sorensen
  */

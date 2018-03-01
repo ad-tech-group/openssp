@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SupplyVideoService
+ * Servlet implementation class SupplyBannerService
  * 
  * @author André Schmer
  */
-@WebServlet(value = "/SupplyBannerService", asyncSupported = false, name = "SupplyBanner-Service")
-public class SupplyBannerService extends CoreSupplyServlet<RequestSessionAgent> {
+@WebServlet(value = "/BidRequestService", asyncSupported = false, name = "BidRequest-Service")
+public class BidRequestService extends CoreSupplyServlet<RequestSessionAgent> {
 
 	private static final long serialVersionUID = 1L;
 

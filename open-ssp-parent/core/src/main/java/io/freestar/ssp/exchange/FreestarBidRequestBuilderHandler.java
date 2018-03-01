@@ -21,6 +21,8 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
             pValues = new FreestarParamValue();
         }
 
+        Site site = pValues.getSite().clone();
+
 
         Device dd = new Device.Builder().build();
         Geo geo = new Geo.Builder().build();
@@ -51,7 +53,7 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
 
         return new BidRequest.Builder()
                 .setId(agent.getRequestid())
-                .setSite(pValues.getSite())
+                .setSite(site)
                 .setDevice(dd)
 
                 .addImp(i)
