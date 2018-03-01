@@ -1,7 +1,6 @@
 package com.atg.openssp.core.cache.broker.dto;
 
 import openrtb.bidrequest.model.App;
-import openrtb.bidrequest.model.Site;
 
 import java.io.Serializable;
 import java.util.List;

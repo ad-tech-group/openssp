@@ -13,6 +13,8 @@ import com.atg.openssp.core.exchange.RequestSessionAgent;
 import junit.framework.Assert;
 import openrtb.bidrequest.model.Site;
 
+import static org.junit.Assert.fail;
+
 /**
  * 
  * @author André Schmer
@@ -47,7 +49,12 @@ public class SessionAgentParamsTest {
 			Assert.fail(e.getMessage());
 		}
 
-		Assert.assertEquals("1", agent.getParamValues().getSite().getId());
+		try {
+			Assert.assertEquals("1", agent.getParamValues().getSite().getId());
+		} catch (RequestException e) {
+			e.printStackTrace();
+			fail("problem");
+		}
 	}
 
 	// @Test

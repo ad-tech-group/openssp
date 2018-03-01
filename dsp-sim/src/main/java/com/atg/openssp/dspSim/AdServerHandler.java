@@ -1,14 +1,23 @@
 package com.atg.openssp.dspSim;
 
+import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
+import com.atg.openssp.dspSim.model.ad.AdModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
-import openrtb.bidrequest.model.BidRequest;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 public class AdServerHandler implements HttpHandler {
+    private final AdModel model;
+
+    public AdServerHandler(AdModel model) {
+        this.model = model;
+    }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
@@ -30,7 +39,7 @@ public class AdServerHandler implements HttpHandler {
         AdservingCampaignProvider p = new AdservingCampaignProvider();
         p.setIsValid(true);
         p.setPrice(40f);
-        p.setNormalizedPrice(30f);
+        p.setPriceEur(30f);
         /*
         BidResponse brsp = new BidResponse();
         brsp.setId(UUID.randomUUID().toString());
