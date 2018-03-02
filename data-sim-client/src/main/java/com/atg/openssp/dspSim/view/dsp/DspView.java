@@ -5,6 +5,9 @@ import com.atg.openssp.dspSim.model.dsp.DspModel;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspView {
     private final DspModel model;
     private final JFrame frame;

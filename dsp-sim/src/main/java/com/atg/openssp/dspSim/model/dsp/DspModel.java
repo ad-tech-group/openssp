@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.*;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
     private static final String FILE_NAME = "DSP_SIM_MODEL.json";

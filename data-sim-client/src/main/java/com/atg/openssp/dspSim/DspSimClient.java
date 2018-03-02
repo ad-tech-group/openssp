@@ -7,6 +7,9 @@ import com.atg.openssp.dspSim.view.dsp.DspView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspSimClient {
     private static final Logger log = LoggerFactory.getLogger(DspSimClient.class);
     private final DspView dspView;

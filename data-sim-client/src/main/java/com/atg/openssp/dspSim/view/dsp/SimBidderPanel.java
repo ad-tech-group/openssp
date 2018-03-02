@@ -14,8 +14,10 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.UUID;
 
+/**
+ * @author Brian Sorensen
+ */
 public class SimBidderPanel extends JPanel implements ListSelectionListener, ActionListener {
     private final DspModel model;
     private final JList<SimBidder> lBidders;

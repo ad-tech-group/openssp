@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspHandler implements HttpHandler {
     private static final Logger log = LoggerFactory.getLogger(DspHandler.class);
     private final DspModel model;

@@ -1,5 +1,8 @@
 package com.atg.openssp.dspSim.model.client;
 
+/**
+ * @author Brian Sorensen
+ */
 public class ClientCommand {
     private ClientCommandType type;
     private String id;

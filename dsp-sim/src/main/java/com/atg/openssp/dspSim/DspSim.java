@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspSim {
     private static final Logger log = LoggerFactory.getLogger(DspSim.class);
     private DspModel dspModel;

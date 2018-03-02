@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
+/**
+ * @author Brian Sorensen
+ */
 public class AdServerHandler implements HttpHandler {
     private static final Logger log = LoggerFactory.getLogger(AdServerHandler.class);
     private final AdModel model;

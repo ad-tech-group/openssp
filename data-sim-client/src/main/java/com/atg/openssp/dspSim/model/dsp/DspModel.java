@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
     private DefaultListModel<SimBidder> mBidders = new DefaultListModel();

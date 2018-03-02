@@ -4,6 +4,9 @@ import com.atg.openssp.dspSim.model.dsp.SimBidder;
 
 import java.util.List;
 
+/**
+ * @author Brian Sorensen
+ */
 public class ServerResponse {
     private ServerResponseStatus status;
     private String reason="";

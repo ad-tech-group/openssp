@@ -14,20 +14,24 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
 
+/**
+ * @author Brian Sorensen
+ */
 public class ServerHandler implements Runnable {
+    private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
     private final Thread t = new Thread(this);
     private final DspModel model;
     private boolean running;
 
-    public ServerHandler(DspModel model) throws ModelException {
+    public ServerHandler(DspModel model) {
         this.model = model;
         t.setName("ServerHandler");
         t.setDaemon(true);
-        sendListCommand();
     }
 
     public void start() {
@@ -38,7 +42,18 @@ public class ServerHandler implements Runnable {
 
     @Override
     public void run() {
+        running = true;
         while(running) {
+            try {
+                sendListCommand();
+            } catch (ModelException e) {
+                log.warn(e.getMessage(), e);
+            }
+            try {
+                Thread.sleep(90000);
+            } catch (InterruptedException e) {
+                running = false;
+            }
             Thread.yield();
         }
     }

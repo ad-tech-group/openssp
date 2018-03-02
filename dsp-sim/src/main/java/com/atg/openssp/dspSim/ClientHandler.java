@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.UUID;
 
+/**
+ * @author Brian Sorensen
+ */
 public class ClientHandler implements HttpHandler {
     private static final Logger log = LoggerFactory.getLogger(ClientHandler.class);
     private final DspModel model;

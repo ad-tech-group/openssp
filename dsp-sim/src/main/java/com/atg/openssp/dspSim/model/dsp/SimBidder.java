@@ -1,5 +1,8 @@
 package com.atg.openssp.dspSim.model.dsp;
 
+/**
+ * @author Brian Sorensen
+ */
 public class SimBidder {
     private final String id;
     private float price;
