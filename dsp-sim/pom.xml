@@ -71,7 +71,7 @@
 							<addClasspath>true</addClasspath>
 							<addDefaultImplementationEntries />
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.atg.openssp.dspSim.DspSimClient</mainClass>
+							<mainClass>com.atg.openssp.dspSim.DspSim</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

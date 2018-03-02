@@ -7,6 +7,8 @@ import com.atg.openssp.dspSim.view.dsp.DspView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -30,7 +32,13 @@ public class DspSimClient {
 
     private void load(Properties p) {
         try {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("DspSimClient.properties");
+            File file = new File("DspSimClient.properties");
+            InputStream is;
+            if (file.exists()) {
+                is = new FileInputStream(file);
+            } else {
+                is = getClass().getClassLoader().getSystemResourceAsStream("DspSimClient.properties");
+            }
             p.load(is);
             is.close();
         } catch (IOException e) {
@@ -47,13 +55,6 @@ public class DspSimClient {
         try {
             DspSimClient sim = new DspSimClient();
             sim.start();
-            while(true) {
-                try {
-                    Thread.sleep(100000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
         } catch (ModelException e) {
             log.error(e.getMessage(), e);
         }
