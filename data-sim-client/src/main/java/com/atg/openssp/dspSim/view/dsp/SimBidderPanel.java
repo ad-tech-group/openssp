@@ -17,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Locale;
 
 /**
  * @author Brian Sorensen
@@ -29,7 +28,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JLabel lbId = new JLabel("");
     private final JTextField tfPrice = new JTextField(8);
     private final JTextField tfAddPrice = new JTextField(8);
-    private final JButton bSave = new JButton("save");
+    private final JButton bUpdate = new JButton("update");
     private final JButton bRemove = new JButton("remove");
     private final JButton bAdd = new JButton("add");
     private final JTextField tfMemo = new JTextField(20);
@@ -54,8 +53,10 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         lBidders.setVisibleRowCount(10);
         addItem(pTop, "Bidders: ", lBidders);
         lBidders.addListSelectionListener(this);
-        bSave.addActionListener(this);
-        addItem(pTop, "", bSave);
+        bUpdate.setEnabled(false);
+        bUpdate.addActionListener(this);
+        addItem(pTop, "", bUpdate);
+        bRemove.setEnabled(false);
         bRemove.addActionListener(this);
         addItem(pTop, "", bRemove);
 
@@ -89,17 +90,42 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     public void valueChanged(ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
             SimBidder sb = lBidders.getSelectedValue();
-            lbId.setText(sb.getId());
-            DecimalFormat formatter = new DecimalFormat("###,###,###.00");
-            tfPrice.setText(formatter.format(sb.getPrice()));
-            tfMemo.setText("Bidder selected.");
+            if (sb != null) {
+                lbId.setText(sb.getId());
+                resetActiveDisplay(sb);
+                bUpdate.setEnabled(true);
+                bRemove.setEnabled(true);
+            } else {
+                if (lBidders.getModel().getSize() == 0) {
+                    resetActiveDisplay(sb);
+                    bUpdate.setEnabled(false);
+                    bRemove.setEnabled(false);
+                } else {
+                    resetActiveDisplay(sb);
+                    lBidders.setSelectedIndex(0);
+                    bUpdate.setEnabled(true);
+                    bRemove.setEnabled(true);
+                }
+
+            }
         }
         model.setMessage("");
     }
 
+    private void resetActiveDisplay(SimBidder sb) {
+        if (sb == null) {
+            tfPrice.setText("");
+            tfMemo.setText("");
+        } else {
+            DecimalFormat formatter = new DecimalFormat("###,###,###.00");
+            tfPrice.setText(formatter.format(sb.getPrice()));
+            tfMemo.setText("Bidder selected.");
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent ev) {
-        if (ev.getSource() == bSave) {
+        if (ev.getSource() == bUpdate) {
             SimBidder sb = lBidders.getSelectedValue();
             if (sb != null) {
                 DecimalFormat formatter = new DecimalFormat("###,###,###.00");
