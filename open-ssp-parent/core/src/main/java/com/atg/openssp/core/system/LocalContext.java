@@ -7,6 +7,8 @@ import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.core.system.properties.MavenProperties;
 
+import java.time.LocalDateTime;
+
 /**
  * @author André Schmer
  *
@@ -46,6 +48,18 @@ public class LocalContext extends Context {
     private static boolean isSiteDataServiceEnabled = false;
 
     private static boolean isSupplierDataServiceEnabled = false;
+
+	private static String appDataHandlerClass;
+
+	private static String currencyDataHandlerClass;
+
+	private static String loginHandlerClass;
+
+	private static String pricelayerDataHandlerClass;
+
+	private static String siteDataHandlerClass;
+
+	private static String supplierDataHandlerClass;
     //#######################################
 
 
@@ -67,6 +81,13 @@ public class LocalContext extends Context {
 		isPricelayerDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.PRICELAYER_DATA_SERVICE_ENABLED));
 		isSiteDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.SITE_DATA_SERVICE_ENABLED));
 		isSupplierDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_SERVICE_ENABLED));
+
+		appDataHandlerClass = ContextCache.instance.get(ContextProperties.APP_DATA_HANDLER_CLASS);
+		currencyDataHandlerClass = ContextCache.instance.get(ContextProperties.CURRENCY_DATA_HANDLER_CLASS);
+		loginHandlerClass = ContextCache.instance.get(ContextProperties.LOGIN_HANDLER_CLASS);
+		pricelayerDataHandlerClass = ContextCache.instance.get(ContextProperties.PRICELAYER_DATA_HANDLER_CLASS);
+		siteDataHandlerClass = ContextCache.instance.get(ContextProperties.SITE_DATA_HANDLER_CLASS);
+		supplierDataHandlerClass = ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_HANDLER_CLASS);
 	}
 
 	private static void initData() {
@@ -156,6 +177,30 @@ public class LocalContext extends Context {
 
 	public static boolean isSupplierDataServiceEnabled() {
 		return isSupplierDataServiceEnabled;
+	}
+
+	public static String getAppDataHandlerClass() {
+		return appDataHandlerClass;
+	}
+
+	public static String getCurrencyDataHandlerClass() {
+		return currencyDataHandlerClass;
+	}
+
+	public static String getLoginHandlerClass() {
+		return loginHandlerClass;
+	}
+
+	public static String getPricelayerDataHandlerClass() {
+		return pricelayerDataHandlerClass;
+	}
+
+	public static String getSiteDataHandlerClass() {
+		return siteDataHandlerClass;
+	}
+
+	public static String getSupplierDataHandlerClass() {
+		return supplierDataHandlerClass;
 	}
 
 }

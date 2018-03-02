@@ -137,11 +137,17 @@ public enum ContextProperties {
     @RuntimeMeta(type = Scope.LOCAL)
     APP_DATA_SERVICE_ENABLED("app-data-service-enabled"),
 
+	@RuntimeMeta(type = Scope.LOCAL)
+	APP_DATA_HANDLER_CLASS("app-data-handler-class"),
+
     /**
      * currency data service
      */
     @RuntimeMeta(type = Scope.LOCAL)
     CURRENCY_DATA_SERVICE_ENABLED("currency-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	CURRENCY_DATA_HANDLER_CLASS("currency-data-handler-class"),
 
     /**
      * login service
@@ -149,11 +155,17 @@ public enum ContextProperties {
     @RuntimeMeta(type = Scope.LOCAL)
     LOGIN_SERVICE_ENABLED("login-service-enabled"),
 
+	@RuntimeMeta(type = Scope.LOCAL)
+	LOGIN_HANDLER_CLASS("login-handler-class"),
+
     /**
      * pricelayer data service
      */
     @RuntimeMeta(type = Scope.LOCAL)
     PRICELAYER_DATA_SERVICE_ENABLED("pricelayer-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	PRICELAYER_DATA_HANDLER_CLASS("pricelayer-data-handler-class"),
 
     /**
      * site data service
@@ -161,11 +173,17 @@ public enum ContextProperties {
     @RuntimeMeta(type = Scope.LOCAL)
     SITE_DATA_SERVICE_ENABLED("site-data-service-enabled"),
 
+	@RuntimeMeta(type = Scope.LOCAL)
+	SITE_DATA_HANDLER_CLASS("site-data-handler-class"),
+
     /**
      * app data service
      */
     @RuntimeMeta(type = Scope.LOCAL)
-    SUPPLIER_DATA_SERVICE_ENABLED("supplier-data-service-enabled");
+    SUPPLIER_DATA_SERVICE_ENABLED("supplier-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	SUPPLIER_DATA_HANDLER_CLASS("supplier-data-handler-class");
 
 
     //###########################################################
