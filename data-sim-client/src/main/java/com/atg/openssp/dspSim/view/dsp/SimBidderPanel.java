@@ -1,8 +1,12 @@
 package com.atg.openssp.dspSim.view.dsp;
 
+import com.atg.openssp.dspSim.model.MessageNotificationListener;
+import com.atg.openssp.dspSim.model.MessageStatus;
 import com.atg.openssp.dspSim.model.ModelException;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.atg.openssp.dspSim.model.dsp.SimBidder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -18,7 +22,8 @@ import java.util.Locale;
 /**
  * @author Brian Sorensen
  */
-public class SimBidderPanel extends JPanel implements ListSelectionListener, ActionListener {
+public class SimBidderPanel extends JPanel implements ListSelectionListener, ActionListener, MessageNotificationListener {
+    private static final Logger log = LoggerFactory.getLogger(SimBidderPanel.class);
     private final DspModel model;
     private final JList<SimBidder> lBidders;
     private final JLabel lbId = new JLabel("");
@@ -28,11 +33,10 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JButton bRemove = new JButton("remove");
     private final JButton bAdd = new JButton("add");
     private final JTextField tfMemo = new JTextField(20);
-    private Locale currencyLocale = Locale.GERMANY;
 
     public SimBidderPanel(DspModel model) {
         this.model = model;
-        lBidders = new JList(model.getBidderModel());
+        lBidders = new JList<>(model.getBidderModel());
 
         setLayout(new BorderLayout());
 
@@ -65,8 +69,9 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         addItem(pRight, "", bAdd);
 
         tfMemo.setEditable(false);
-        tfMemo.setBackground(Color.WHITE);
         pBottom.add(tfMemo);
+        model.addMessageNotificationListener(this);
+        model.setMessage("");
     }
 
     private void addItem(JPanel pMain, String txt, JComponent c) {
@@ -89,7 +94,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             tfPrice.setText(formatter.format(sb.getPrice()));
             tfMemo.setText("Bidder selected.");
         }
-        tfMemo.setBackground(Color.WHITE);
+        model.setMessage("");
     }
 
     @Override
@@ -100,36 +105,31 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
                 DecimalFormat formatter = new DecimalFormat("###,###,###.00");
                 try {
                     float newPrice = formatter.parse(tfPrice.getText()).floatValue();
-                    if (sb.getPrice() != newPrice)
-                    tfMemo.setText("Bidder saved.");
-                    tfMemo.setBackground(Color.WHITE);
-                    model.sendUpdateCommand(sb, newPrice);
+                    if (sb.getPrice() != newPrice) {
+                        model.sendUpdateCommand(sb, newPrice);
+                        model.setMessage("Bidder saved.");
+                    }
                 } catch (ModelException e) {
-                    tfMemo.setText(e.getMessage());
-                    tfMemo.setBackground(Color.RED);
+                    model.setMessageAsFault(e.getMessage());
                 } catch (Exception e) {
+                    log.error(e.getMessage(), e);
                     e.printStackTrace();
-                    tfMemo.setText("Could not save Bidder due to invalid price.");
-                    tfMemo.setBackground(Color.RED);
+                    model.setMessageAsFault("Could not save Bidder due to invalid price.");
                 }
             } else {
-                tfMemo.setText("No Bidder selected.");
-                tfMemo.setBackground(Color.YELLOW);
+                model.setMessageAsWarning("No Bidder selected.");
             }
             repaint();
         } else if (ev.getSource() == bAdd) {
             DecimalFormat formatter = new DecimalFormat("###,###,###.00");
             try {
                 model.sendAddCommand(formatter.parse(tfAddPrice.getText()).floatValue());
-                tfMemo.setText("Bidder added.");
-                tfMemo.setBackground(Color.WHITE);
+                model.setMessage("Bidder added.");
                 tfAddPrice.setText("");
             } catch (ModelException e) {
-                tfMemo.setText(e.getMessage());
-                tfMemo.setBackground(Color.RED);
+                model.setMessageAsFault(e.getMessage());
             } catch (ParseException e) {
-                tfMemo.setText("Could not add Bidder due to invalid price.");
-                tfMemo.setBackground(Color.RED);
+                model.setMessageAsFault("Could not add Bidder due to invalid price.");
             }
             repaint();
         } else if (ev.getSource() == bRemove) {
@@ -138,14 +138,19 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
                 try {
                     model.sendRemoveCommand(sb);
                 } catch (ModelException e) {
-                    tfMemo.setText(e.getMessage());
-                    tfMemo.setBackground(Color.RED);
+                    model.setMessageAsFault(e.getMessage());
                 }
             } else {
-                tfMemo.setText("No Bidder selected.");
-                tfMemo.setBackground(Color.YELLOW);
+                model.setMessageAsWarning("No Bidder selected.");
             }
             repaint();
         }
     }
+
+    @Override
+    public void sendMessage(MessageStatus s, String m) {
+        tfMemo.setText(m);
+        tfMemo.setBackground(s.getColor());
+    }
+
 }

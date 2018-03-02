@@ -1,26 +1,39 @@
 package com.atg.openssp.dspSim.model.dsp;
 
 import com.atg.openssp.dspSim.ServerHandler;
+import com.atg.openssp.dspSim.model.BaseModel;
 import com.atg.openssp.dspSim.model.ModelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Brian Sorensen
  */
-public class DspModel {
+public class DspModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
+    private final Properties props;
     private DefaultListModel<SimBidder> mBidders = new DefaultListModel();
     private final ServerHandler serverHandler;
 
-    public DspModel() throws ModelException {
+    public DspModel(Properties props) throws ModelException {
+        this.props = props;
         serverHandler = new ServerHandler(this);
+    }
+
+    public String lookupProperty(String key) {
+        return props.getProperty(key);
+    }
+
+    public String lookupProperty(String key, String defaultValue) {
+        String v = lookupProperty(key);
+        if (v == null) {
+            return defaultValue;
+        } else {
+            return v;
+        }
     }
 
     private HashMap<String, SimBidder> getBidders() {
@@ -69,4 +82,5 @@ public class DspModel {
     public void sendRemoveCommand(SimBidder sb) throws ModelException {
         serverHandler.sendRemoveCommand(sb);
     }
+
 }

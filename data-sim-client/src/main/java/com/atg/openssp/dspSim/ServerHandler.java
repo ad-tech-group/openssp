@@ -24,6 +24,8 @@ import java.io.IOException;
  */
 public class ServerHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
+    private static final String SERVER_HOST = "server-host";
+    private static final String SERVER_PORT = "server-port";
     private final Thread t = new Thread(this);
     private final DspModel model;
     private boolean running;
@@ -77,7 +79,7 @@ public class ServerHandler implements Runnable {
     private void sendCommand(ServerCommandType type, String bidderId, float price) throws ModelException {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost("http://localhost:8082/dsp-sim/admin");
+            HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SERVER_HOST, "localhost")+":"+model.lookupProperty(SERVER_PORT, "8082")+"/dsp-sim/admin");
             ServerCommand command = new ServerCommand();
             command.setType(type);
             command.setId(bidderId);
@@ -93,13 +95,18 @@ public class ServerHandler implements Runnable {
                 if (sr.getStatus() == ServerResponseStatus.SUCCESS) {
                     model.handleList(sr.getBidders());
                 } else {
-                    throw new ModelException(type+" command failed with error: " + sr.getReason());
+                    String m = type+" command failed with error: " + sr.getReason();
+                    model.setMessageAsFault(m);
+                    throw new ModelException(m);
                 }
             } else {
-                throw new ModelException(type+" call failed with http error: " + response.getStatusLine().getStatusCode());
+                String m = type+" call failed with http error: " + response.getStatusLine().getStatusCode();
+                model.setMessageAsFault(m);
+                throw new ModelException(m);
             }
             client.close();
         } catch (IOException e) {
+            model.setMessageAsFault("Could not access server: "+e.getMessage());
             throw new ModelException(e.getMessage());
         }
     }
