@@ -67,6 +67,18 @@ public class DspModel {
         }
     }
 
+    public synchronized void remove(SimBidder sb) {
+        bList.remove(sb);
+        bMap.remove(sb.getId());
+        notifySimBidderRemoved(sb);
+    }
+
+    private void notifySimBidderRemoved(SimBidder sb) {
+        for (SimBidderListener lis : simBidderListeners) {
+            lis.removed(sb);
+        }
+    }
+
     public BidResponse createBidResponse(BidRequest request) {
         BidResponse response = new BidResponse();
         response.setId(UUID.randomUUID().toString());
@@ -108,4 +120,5 @@ public class DspModel {
     public SimBidder lookupBidder(String id) {
         return bMap.get(id);
     }
+
 }

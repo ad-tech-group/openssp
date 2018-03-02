@@ -55,6 +55,23 @@ public class ClientHandler implements HttpHandler {
                 cr.setReason("SimBidder already exists");
             }
             cr.setBidders(model.getBidders());
+        } else if (cc.getType() == ClientCommandType.REMOVE) {
+            SimBidder sb = model.lookupBidder(cc.getId());
+            if (sb == null) {
+                cr.setStatus(ClientResponseStatus.FAILURE);
+                cr.setReason("SimBidder does not exists");
+            } else {
+                model.remove(sb);
+                try {
+                    model.saveModel();
+                    cr.setStatus(ClientResponseStatus.SUCCESS);
+                } catch (ModelException e) {
+                    log.error(e.getMessage(), e);
+                    cr.setStatus(ClientResponseStatus.FAILURE);
+                    cr.setReason("remove save failed: "+e.getMessage());
+                }
+            }
+            cr.setBidders(model.getBidders());
         } else if (cc.getType() == ClientCommandType.UPDATE) {
             SimBidder sb = model.lookupBidder(cc.getId());
             if (sb == null) {

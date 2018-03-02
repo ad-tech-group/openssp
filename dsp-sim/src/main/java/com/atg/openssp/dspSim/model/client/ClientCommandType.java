@@ -1,5 +1,5 @@
 package com.atg.openssp.dspSim.model.client;
 
 public enum ClientCommandType {
-    LIST, UPDATE, ADD
+    LIST, UPDATE, REMOVE, ADD
 }
