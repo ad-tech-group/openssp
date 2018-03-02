@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atg.openssp</groupId>
     <artifactId>open-ssp-data-services</artifactId>
@@ -49,9 +49,7 @@
     </profiles>
 
     <build>
-
 		<finalName>open-ssp-services</finalName>
-
         <plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
@@ -113,26 +111,31 @@
             <artifactId>gson</artifactId>
             <version>2.6.2</version>
         </dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.6.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>2.8</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.8</version>
+        </dependency>
 
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
-            <version>0.2.1-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>core</artifactId>
-            <version>0.2.1-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atg.openssp</groupId>
+            <artifactId>open-ssp-openrtb</artifactId>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

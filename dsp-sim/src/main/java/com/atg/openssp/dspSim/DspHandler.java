@@ -1,27 +1,27 @@
 package com.atg.openssp.dspSim;
 
 import com.atg.openssp.dspSim.model.dsp.DspModel;
-import com.atg.openssp.dspSim.view.dsp.DspView;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidresponse.model.BidResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspHandler implements HttpHandler {
-    private final boolean headless = false;
+    private static final Logger log = LoggerFactory.getLogger(DspHandler.class);
     private final DspModel model;
-    private final DspView view;
 
     public DspHandler(DspModel model) {
         this.model = model;
-        if (!headless) {
-            view = new DspView(model);
-        }
     }
 
     @Override
@@ -42,13 +42,13 @@ public class DspHandler implements HttpHandler {
         // Content-length: 724
 
         BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
-        System.out.println("-->"+new Gson().toJson(brq));
+        log.info("-->"+new Gson().toJson(brq));
 
         BidResponse brsp = model.createBidResponse(brq);
 
-        if (brsp.getSeatbid().size() > 0) {
+        if (brsp.getSeatbid().size() > 0 || true) {
             String result = new Gson().toJson(brsp);
-            System.out.println("<--"+result);
+            log.info("<--"+result);
             httpExchange.sendResponseHeaders(200, result.length());
             OutputStream os = httpExchange.getResponseBody();
             os.write(result.getBytes());

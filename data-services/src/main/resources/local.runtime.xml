@@ -19,6 +19,24 @@
 	<!-- switch to enable/disable supplier data service support -->
 	<entry key="supplier-data-service-enabled">true</entry>
 
+	<!-- handler class to use service App Data requests -->
+	<entry key="app-data-handler-class">com.atg.openssp.dataprovider.provider.handler.AppDataHandler</entry>
+
+	<!-- handler class to use service Curreny Data requests -->
+	<entry key="currency-data-handler-class">com.atg.openssp.dataprovider.provider.handler.CurrencyDataHandler</entry>
+
+	<!-- handler class to use for service authorization grant requests -->
+	<entry key="login-handler-class">com.atg.openssp.dataprovider.provider.handler.LoginHandler</entry>
+
+	<!-- handler class to use service Pricelayer Data requests -->
+	<entry key="pricelayer-data-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataHandler</entry>
+
+	<!-- handler class to use service Site Data requests -->
+	<entry key="site-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataHandler</entry>
+
+	<!-- handler class to use service Supplier Data requests -->
+	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
+
 	<!-- switch to enable/disable debugging -->
 	<entry key="debug">true</entry>
 	

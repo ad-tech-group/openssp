@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+/**
+ * @author André Schmer
+ */
 public class LoginHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(LoginHandler.class);
     public static final String TOKEN = "liverworst-5";

@@ -17,6 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+/**
+ * @author Brian Sorensen
+ */
 public class AppDataHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(AppDataHandler.class);
     public static final String CONTEXT = "/lookup/app";

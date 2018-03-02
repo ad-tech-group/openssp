@@ -14,6 +14,11 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Servlet implementation class AppDataService
+ *
+ * @author Brian Sorensen
+ */
 public class ServicesInit extends GenericServlet {
 
     private final Logger log = LoggerFactory.getLogger(ServicesInit.class);

@@ -1,7 +1,5 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
-import com.sun.net.httpserver.HttpExchange;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLDecoder;
@@ -10,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author André Schmer
+ */
 public abstract class DataHandler {
     public abstract void cleanUp();
 

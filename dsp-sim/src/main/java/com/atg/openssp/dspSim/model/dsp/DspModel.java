@@ -12,15 +12,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+/**
+ * @author Brian Sorensen
+ */
 public class DspModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
     private static final String FILE_NAME = "DSP_SIM_MODEL.json";
     private final ArrayList<SimBidderListener> simBidderListeners = new ArrayList();
-    private final ArrayList<SimBidder> bidders = new ArrayList();
+    private final ArrayList<SimBidder> bList = new ArrayList();
+    private final HashMap<String, SimBidder> bMap = new LinkedHashMap();
 
     public DspModel() throws ModelException {
         loadModel();
@@ -33,7 +35,10 @@ public class DspModel {
                 FileReader fr = new FileReader(f);
                 List<SimBidder> buffer = new Gson().fromJson(fr, new TypeToken<List<SimBidder>>(){}.getType());
                 fr.close();
-                bidders.addAll(buffer);
+                bList.addAll(buffer);
+                for (SimBidder sb : bList) {
+                    bMap.put(sb.getId(), sb);
+                }
             }
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
@@ -44,7 +49,7 @@ public class DspModel {
     public void saveModel() throws ModelException {
         try {
             PrintWriter fw = new PrintWriter(new FileWriter(FILE_NAME));
-            String json = new Gson().toJson(bidders);
+            String json = new Gson().toJson(bList);
             fw.println(json);
             fw.close();
         } catch (IOException e) {
@@ -54,7 +59,8 @@ public class DspModel {
     }
 
     public synchronized void add(SimBidder sb) {
-        bidders.add(sb);
+        bList.add(sb);
+        bMap.put(sb.getId(), sb);
         notifySimBidderAdded(sb);
     }
 
@@ -64,13 +70,25 @@ public class DspModel {
         }
     }
 
+    public synchronized void remove(SimBidder sb) {
+        bList.remove(sb);
+        bMap.remove(sb.getId());
+        notifySimBidderRemoved(sb);
+    }
+
+    private void notifySimBidderRemoved(SimBidder sb) {
+        for (SimBidderListener lis : simBidderListeners) {
+            lis.removed(sb);
+        }
+    }
+
     public BidResponse createBidResponse(BidRequest request) {
         BidResponse response = new BidResponse();
         response.setId(UUID.randomUUID().toString());
         response.setBidid(request.getId());
 
         for (Impression i : request.getImp()) {
-            for (SimBidder sb : bidders) {
+            for (SimBidder sb : bList) {
                 response.addSeatBid(fabricateSeatBid(sb, i));
             }
         }
@@ -89,13 +107,21 @@ public class DspModel {
 
     public synchronized void addSimBidderListener(SimBidderListener lis) {
         simBidderListeners.add(lis);
-        for (SimBidder sb : bidders) {
+        for (SimBidder sb : bList) {
             lis.added(sb);
         }
     }
 
     public void removeSimBidderListener(SimBidderListener lis) {
         simBidderListeners.remove(lis);
+    }
+
+    public List<SimBidder> getBidders() {
+        return bList;
+    }
+
+    public SimBidder lookupBidder(String id) {
+        return bMap.get(id);
     }
 
 }

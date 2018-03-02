@@ -17,6 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+/**
+ * @author André Schmer
+ */
 public class SiteDataHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(SiteDataHandler.class);
     public static final String CONTEXT = "/lookup/site";

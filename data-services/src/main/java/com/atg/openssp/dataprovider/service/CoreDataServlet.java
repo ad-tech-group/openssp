@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Servlet abstract class CoreDataServlet
  *
- * @author Brian Sorensen
+ * @author André Schmer
  */
 public abstract class CoreDataServlet<T extends DataHandler> extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(CoreDataServlet.class);

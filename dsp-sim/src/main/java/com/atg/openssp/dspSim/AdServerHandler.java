@@ -1,6 +1,5 @@
 package com.atg.openssp.dspSim;
 
-import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
 import com.atg.openssp.dspSim.model.ad.AdModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -11,7 +10,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+
+/**
+ * @author Brian Sorensen
+ */
 public class AdServerHandler implements HttpHandler {
+    private static final Logger log = LoggerFactory.getLogger(AdServerHandler.class);
     private final AdModel model;
 
     public AdServerHandler(AdModel model) {
@@ -29,43 +38,17 @@ public class AdServerHandler implements HttpHandler {
                 input.append(line+"\n");
             }
         } catch (Exception ex) {
-
+            log.error(ex.getMessage(), ex);
         }
-        System.out.println("AD-->"+new Gson().toJson(input));
-
-        //BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
-        //System.out.println("AD-->"+new Gson().toJson(brq));
+        log.info("AD-->"+new Gson().toJson(input));
 
         AdservingCampaignProvider p = new AdservingCampaignProvider();
         p.setIsValid(true);
         p.setPrice(40f);
-        p.setNormalizedPrice(30f);
-        /*
-        BidResponse brsp = new BidResponse();
-        brsp.setId(UUID.randomUUID().toString());
-        brsp.setBidid(brq.getId());
-
-        SeatBid sb1 = new SeatBid();
-        Bid b1 = new Bid();
-        b1.setId(UUID.randomUUID().toString());
-        b1.setImpid(brq.getImp().get(0).getId());
-        b1.setPrice(1.00f);
-        sb1.getBid().add(b1);
-        brsp.addSeatBid(sb1);
-
-        SeatBid sb2 = new SeatBid();
-        Bid b2 = new Bid();
-        b2.setId(UUID.randomUUID().toString());
-        b2.setImpid(brq.getImp().get(0).getId());
-        b2.setPrice(5.00f);
-        sb2.getBid().add(b2);
-        brsp.addSeatBid(sb2);
-
-//        brsp.setNbr(4);
-*/
+        p.setPriceEur(30f);
 
         String result = new Gson().toJson(p);
-        System.out.println("<--"+result);
+        log.info("<--"+result);
         httpExchange.sendResponseHeaders(200, result.length());
         OutputStream os = httpExchange.getResponseBody();
         os.write(result.getBytes());
