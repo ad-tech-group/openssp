@@ -90,7 +90,13 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 		try (Writer out = agent.getHttpResponse().getWriter()) {
 			if (winner != null && winner.isValid()) {
 
-				final String responseData = winner.buildResponse();
+				final String responseData;
+				if (winner instanceof Auction.AuctionResult) {
+					responseData = ((Auction.AuctionResult)winner).buildHeaderBidResponse();
+
+				} else {
+					responseData = winner.buildResponse();
+				}
 				out.append(responseData);
 
 				agent.getHttpResponse().setContentType("application/javascript");

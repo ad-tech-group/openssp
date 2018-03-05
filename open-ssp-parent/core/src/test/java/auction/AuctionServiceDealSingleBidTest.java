@@ -68,7 +68,7 @@ public class AuctionServiceDealSingleBidTest {
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			Assert.assertTrue(winner.isValid());
 		} catch (final InvalidBidException e) {
@@ -111,7 +111,7 @@ public class AuctionServiceDealSingleBidTest {
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			final float currencyRate = CurrencyCache.instance.get(currency);
 			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getNormalizedPrice(), 0);
@@ -137,7 +137,7 @@ public class AuctionServiceDealSingleBidTest {
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			final float currencyRate = CurrencyCache.instance.get(currency);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getNormalizedPrice(), 0);

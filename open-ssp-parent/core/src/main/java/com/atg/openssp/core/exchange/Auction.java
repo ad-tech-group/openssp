@@ -7,10 +7,15 @@ import java.util.Map.Entry;
 
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
+import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
 
+import com.atg.openssp.common.provider.AdProviderReader;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.DirectDeal;
 import openrtb.bidrequest.model.Impression;
@@ -30,14 +35,12 @@ public class Auction {
 
 	/**
 	 * Calculates the the winner of the RTB auction considering the behaviour of a private deal.
-	 * 
+	 *
 	 * @param bidExchange
 	 * @return RtbAdProvider
-	 * @throws InvalidBidException
-	 * 
-	 *             TODO: big issue: eval to extract to more generla context
+	 * @throws InvalidBidException TODO: big issue: eval to extract to more generla context
 	 */
-	public static RtbAdProvider auctioneer(final BidExchange bidExchange) throws InvalidBidException {
+	public static AuctionResult auctioneer(final BidExchange bidExchange) throws InvalidBidException {
 		final List<Bidder> dealBidList = new ArrayList<>();
 		final List<Bidder> nonDealBidList = new ArrayList<>();
 
@@ -102,19 +105,22 @@ public class Auction {
 			}
 		}
 
-		RtbAdProvider dealWinner = null;
+		RtbAdProvider winningProvider = null;
 		// 1. als erstes die bids für die deals evaluieren
 		if (false == dealBidList.isEmpty()) {
 			Collections.sort(dealBidList);
-			dealWinner = evaluateWinner(dealBidList);
+			winningProvider = evaluateWinner(dealBidList);
 		}
 
 		// 2. evaluiere NON-Deals-Bids, falls kein DealBid bereits gewonnen hat
-		if (dealWinner == null && false == nonDealBidList.isEmpty()) {
+		if (winningProvider == null && false == nonDealBidList.isEmpty()) {
 			Collections.sort(nonDealBidList);
-			dealWinner = evaluateWinner(nonDealBidList);
+			winningProvider = evaluateWinner(nonDealBidList);
 		}
 
+		AuctionResult dealWinner = new AuctionResult();
+		dealWinner.setBidRequest(bidExchange.getBidRequest(winningProvider.getSupplier()));
+		dealWinner.setWinningProvider(winningProvider);
 		return dealWinner;
 	}
 
@@ -258,6 +264,81 @@ public class Auction {
 			return -1;
 		}
 
+	}
+
+	public static class AuctionResult implements AdProviderReader {
+		private BidRequest bidRequest;
+		private RtbAdProvider winningProvider;
+
+		public BidRequest getBidRequest() {
+			return bidRequest;
+		}
+
+		public void setBidRequest(BidRequest bidRequest) {
+			this.bidRequest = bidRequest;
+		}
+
+		public void setWinningProvider(RtbAdProvider winningProvider) {
+			this.winningProvider = winningProvider;
+		}
+
+		public RtbAdProvider getWinningProvider() {
+			return winningProvider;
+		}
+
+		@Override
+		public float getPrice() {
+			return winningProvider.getPrice();
+		}
+
+		@Override
+		public float getNormalizedPrice() {
+			return winningProvider.getNormalizedPrice();
+		}
+
+		@Override
+		public String getCurrrency() {
+			return winningProvider.getCurrrency();
+		}
+
+		@Override
+		public void perform(SessionAgent agent) {
+			winningProvider.perform(agent);
+		}
+
+		@Override
+		public String buildResponse() {
+			return winningProvider.buildResponse();
+		}
+
+		@Override
+		public String getVendorId() {
+			return winningProvider.getVendorId();
+		}
+
+		@Override
+		public boolean isValid() {
+			return winningProvider.isValid();
+		}
+
+		@Override
+		public String getAdid() {
+			return winningProvider.getAdid();
+		}
+
+		public Supplier getSupplier() {
+			return winningProvider.getSupplier();
+		}
+
+		public String getDealId() {
+			return winningProvider.getDealId();
+		}
+
+		public String buildHeaderBidResponse() {
+			Gson gson = new GsonBuilder().setVersion(Double.valueOf(getSupplier().getOpenRtbVersion())).create();
+			final String json = gson.toJson(this, AuctionResult.class);
+			return json;
+		}
 	}
 
 }

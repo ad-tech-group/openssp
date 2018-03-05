@@ -88,7 +88,7 @@ public class PrivateAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier2, response2);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(3.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -178,7 +178,7 @@ public class PrivateAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier4, response4);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(winner.getPrice(), 3.15f, 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);

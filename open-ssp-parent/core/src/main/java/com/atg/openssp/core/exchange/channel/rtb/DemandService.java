@@ -51,7 +51,7 @@ public class DemandService implements Callable<AdProviderReader> {
 	 * <ul>
 	 * <li>Loads the connectors as callables from the cache {@link DemandBroker}</li>
 	 * <li>Invoke the callables due to the {@link DemandExecutorServiceFacade}</li>
-	 * <li>For every result in the list of futures, the response will be validated {@link OpenRtbVideoValidator} and stored in a {@link BidExchange} object</li>
+	 * <li>For every result in the list of futures, the response will be validated and stored in a {@link BidExchange} object</li>
 	 * <li>From the set of reponses in the {@link BidExchange} a bidding winner will be calculated in the Auction service {@link Auction}</li>
 	 * </ul>
 	 * <p>

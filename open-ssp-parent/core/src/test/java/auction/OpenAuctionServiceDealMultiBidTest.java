@@ -94,7 +94,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 
 		try {
 			// TODO: eval to extract AuctionService to more general
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(3.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -135,7 +135,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier1, response1);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -182,7 +182,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier2, response3);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.81f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -234,7 +234,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier4, response4);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.81f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -288,7 +288,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier4, response4);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.21f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -314,7 +314,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier1, response);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.61f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -340,7 +340,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 		bidExchange.setBidResponse(supplier1, response);
 
 		try {
-			final RtbAdProvider winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.61f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
