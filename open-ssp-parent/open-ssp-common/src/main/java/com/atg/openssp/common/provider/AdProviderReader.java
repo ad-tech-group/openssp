@@ -11,7 +11,7 @@ public interface AdProviderReader {
 
 	float getPrice();
 
-	float getNormalizedPrice();
+	float getAdjustedCurrencyPrice();
 
 	String getCurrrency();
 

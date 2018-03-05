@@ -22,6 +22,7 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
         }
 
         Site site = pValues.getSite().clone();
+        String requestId = pValues.getRequestId();
 
 
         Device dd = new Device.Builder().build();
@@ -52,7 +53,7 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
         i.setBanner(createBanner(pValues));
 
         return new BidRequest.Builder()
-                .setId(agent.getRequestid())
+                .setId(selectAppropriateId(requestId, agent.getRequestid()))
                 .setSite(site)
                 .setDevice(dd)
 
@@ -66,6 +67,14 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
 //                                        .setGeo()
                                 .build()
                 ).build();
+    }
+
+    private String selectAppropriateId(String requestId, String agentRequestid) {
+        if (requestId !=null) {
+            return requestId;
+        } else {
+            return agentRequestid;
+        }
     }
 
     private Banner createBanner(FreestarParamValue pValues) {

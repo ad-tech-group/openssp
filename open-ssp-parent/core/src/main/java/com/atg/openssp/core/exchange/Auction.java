@@ -159,7 +159,7 @@ public class Auction {
 			winnerPriceEUR = calcPriceForSingleBid(floorEUR, bestBidPriceEUR);
 		}
 
-		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(winnerPriceEUR * bestBidCurrencyRate)).setNormalizedPrice(FloatComparator.rr(winnerPriceEUR))
+		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(winnerPriceEUR * bestBidCurrencyRate)).setAdjustedCurrencyPrice(FloatComparator.rr(winnerPriceEUR))
 		        .setSupplier(bestBidder.getSupplier()).setWinningSeat(bestBidder.getSeat()).setCurrency(bestBidder.getCurrency()).setDealId(bestBidder.getDealId()).build();
 	}
 
@@ -292,8 +292,8 @@ public class Auction {
 		}
 
 		@Override
-		public float getNormalizedPrice() {
-			return winningProvider.getNormalizedPrice();
+		public float getAdjustedCurrencyPrice() {
+			return winningProvider.getAdjustedCurrencyPrice();
 		}
 
 		@Override

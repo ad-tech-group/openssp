@@ -16,6 +16,7 @@ import openrtb.bidrequest.model.Site;
 public class FreestarParamValue extends ParamValue {
 
 //	private Publisher publisher;
+    private String requestId;
     private App app;
     private String callback;
     private String callbackUid;
@@ -36,6 +37,14 @@ public class FreestarParamValue extends ParamValue {
 //	public void setPublisher(final Publisher publisher) {
 //		this.publisher = publisher;
 //	}
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
 
     public void setApp(App app) {
         this.app = app;

@@ -6,6 +6,8 @@ import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.cache.type.AppDataCache;
 import com.atg.openssp.core.cache.type.SiteDataCache;
 import com.atg.openssp.core.entry.EntryValidatorHandler;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.freestar.ssp.common.demand.FreestarParamValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,14 +16,16 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
 public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandler {
     private final Logger log = LoggerFactory.getLogger(FreestarEntryValidatorForHeaderHandler.class);
+    private final Gson gson;
 
     public FreestarEntryValidatorForHeaderHandler()
     {
-
+        gson = new Gson();
     }
 
     @Override
@@ -31,10 +35,10 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
         Cookie[] cList = request.getCookies();
         if (cList != null) {
             for (Cookie c : cList) {
-                log.info("cookie: "+c.getName());
+                //log.info("cookie: "+c.getName());
             }
         } else {
-            log.info("no cookies");
+            //log.info("no cookies");
         }
 
         // Note:
@@ -43,28 +47,109 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
 
         // geo data could be solved by a geo lookup service and ipaddress
 
+        HeaderBiddingRequest r=null;
         if (request.getContentLength() > 0) {
             byte[] buffer = new byte[request.getContentLength()];
             try {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
-                log.info("I got content!!! : "+json);
+//                log.info("I got content!!! : "+json);
+                System.out.println("I got content!!!bks : "+json);
+                StringReader bais = new StringReader(json);
+                r = gson.fromJson(bais, HeaderBiddingRequest.class);
+                bais.close();
+
+                /*
+                      "id": "46109ce8b3ad6d41",
+      "adUnitCode": "freestar-slot-footer-ad",
+      "size": "970x90",
+      "promo_sizes": "970x250,728x90",
+      "placementId": "10433394"
+                 */
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        HashMap<String, String> params = new LinkedHashMap();
-        Enumeration<String> penum = request.getParameterNames();
-        while(penum.hasMoreElements()) {
-            String key = penum.nextElement();
-            List<String> values = Arrays.asList(request.getParameterValues(key));
-            if (values.size() > 0) {
-                params.put(key, values.get(0));
+
+        System.out.println(r);
+        /*
+          "site": "testsite.com",
+  "page": "/the-best-website-and-page-building-tools-you-should-rely-on-in-2018/",
+  "_fshash": "38b2680f7b",
+  "_fsloc": "?i=US&c=TG9zIEFuZ2VsZXM=",
+  "_fsuid": "41624435-5e3e-47c6-b382-a938abb79283",
+  "_fssid": "747aed65-74b4-4706-9962-61bc08fb66cd"
+         */
+
+        if (r != null) {
+
+            try {
+                pm.setSite(SiteDataCache.instance.get(r.getSite()));
+            } catch (final EmptyCacheException e) {
+                e.printStackTrace();
+//                try {
+//                    pm.setApp(AppDataCache.instance.get(r.getApp()));
+//                } catch (final EmptyCacheException e1) {
+//                    throw new RequestException(e1.getMessage());
+//                }
             }
-            log.info("param: "+key+" : "+values);
+
+            pm.setRequestId(r.getId());
+            pm.setCallback(r.getPage());
+//            pm.setCallbackUid("pbjs.handleAnCB");
+            pm.setFsSid(r.getFsSid());
+            pm.setFsLoc(r.getFsLoc());
+            pm.setFsUid(r.getFsUid());
+            pm.setFsHash(r.getFsHash());
+            pm.setPsa("0");
+
+            List<AdUnit> adList = r.getAdUnitsToBidUpon();
+            for (AdUnit a : adList) {
+                pm.setId(a.getId());
+                pm.setSize(a.getSize());
+                pm.setPromoSizes(a.getPromoSizes());
+                pm.setReferrer("http%3A%2F%2Ftestsite.com%2Fthe-best-website-and-page-building-tools-you-should-rely-on-in-2018%2F%2338b2680f7b");
+                break; // TODO:
+            }
+
+        } else {
+            HashMap<String, String> params = new LinkedHashMap();
+            Enumeration<String> penum = request.getParameterNames();
+            while(penum.hasMoreElements()) {
+                String key = penum.nextElement();
+                List<String> values = Arrays.asList(request.getParameterValues(key));
+                if (values.size() > 0) {
+                    params.put(key, values.get(0));
+                }
+                log.info("param: "+key+" : "+values);
+            }
+
+            try {
+                pm.setSite(SiteDataCache.instance.get(params.get("site")));
+            } catch (final EmptyCacheException e) {
+                try {
+                    pm.setApp(AppDataCache.instance.get(params.get("app")));
+                } catch (final EmptyCacheException e1) {
+                    throw new RequestException(e1.getMessage());
+                }
+            }
+            pm.setRequestId(params.get("id"));
+            pm.setCallback(params.get("callback"));
+            pm.setCallbackUid(params.get("callback_uid"));
+            pm.setPsa(params.get("psa"));
+            pm.setId(params.get("id"));
+            pm.setFsHash(params.get("_fshash"));
+            pm.setFsSid(params.get("_fssid"));
+            pm.setFsLoc(params.get("_fsloc"));
+            pm.setFsUid(params.get("_fsuid"));
+            pm.setSize(params.get("size"));
+            pm.setPromoSizes(params.get("promo_sizes"));
+            pm.setReferrer(params.get("referrer"));
         }
+
 
         /*
         {
@@ -81,43 +166,6 @@ INFO: FreestarEntryValidatorForBannerHandler param: promo_sizes : [728x90]
 INFO: FreestarEntryValidatorForBannerHandler param: referrer : [http://testsite.com/the-best-website-and-page-building-tools-you-should-rely-on-in-2018/#38b2680f7b]
 
          */
-        final String siteId = params.get("site");
-        final String appid = params.get("app");
-
-        final String callback = params.get("callback");
-        final String callbackUid = params.get("callback_uid");
-        final String psa = params.get("psa");
-        final String id = params.get("id");
-        System.out.println(id);
-        final String fsHash = params.get("_fshash");
-        final String fssid = params.get("_fssid");
-        final String fsLoc = params.get("_fsloc");
-        final String fsUid = params.get("_fsuid");
-        final String size = params.get("size");
-        final String promoSizes = params.get("promo_sizes");
-        final String referrer = params.get("referrer");
-
-
-        try {
-            pm.setSite(SiteDataCache.instance.get(siteId));
-        } catch (final EmptyCacheException e) {
-            try {
-                pm.setApp(AppDataCache.instance.get(appid));
-            } catch (final EmptyCacheException e1) {
-                throw new RequestException(e1.getMessage());
-            }
-        }
-        pm.setCallback(callback);
-        pm.setCallbackUid(callbackUid);
-        pm.setPsa(psa);
-        pm.setId(id);
-        pm.setFsHash(fsHash);
-        pm.setFsSid(fssid);
-        pm.setFsLoc(fsLoc);
-        pm.setFsUid(fsUid);
-        pm.setSize(size);
-        pm.setPromoSizes(promoSizes);
-        pm.setReferrer(referrer);
 
 //        System.out.println(request.getParameterMap());
 
