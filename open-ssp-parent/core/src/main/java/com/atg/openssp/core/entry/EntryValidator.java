@@ -22,6 +22,8 @@ public class EntryValidator {
 			handlerClassName = GlobalContext.getEntryValidatorHandlerForVideoClass();
 		} else if (type == SessionAgentType.BANNER) {
 			handlerClassName = GlobalContext.getEntryValidatorHandlerForBannerClass();
+		} else if (type == SessionAgentType.HEADER) {
+			handlerClassName = GlobalContext.getEntryValidatorHandlerForHeaderClass();
 		}
 	    if (handlerClassName != null && !"".equals(handlerClassName)) {
             try {

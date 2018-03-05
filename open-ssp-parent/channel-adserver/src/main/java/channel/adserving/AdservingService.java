@@ -39,7 +39,6 @@ public class AdservingService implements Callable<AdProviderReader> {
 
 		if (adProvider.isPresent()) {
 			final AdProviderReader provider = adProvider.get();
-System.out.println("bks provider"+provider);
 			// check if the ad response price is greator or equal the floorprice
 //			if (FloatComparator.greaterOrEqual(provider.getPriceEur(), agent.getParamValues().getVideoad().getBidfloorPrice())) {
 //			 return provider;

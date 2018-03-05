@@ -39,7 +39,9 @@
 
 	<entry key="validator-handler-for-banner-class">io.freestar.ssp.entry.FreestarEntryValidatorForBannerHandler</entry>
 
-    <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+	<entry key="validator-handler-for-header-class">io.freestar.ssp.entry.FreestarEntryValidatorForHeaderHandler</entry>
+
+	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 
 	<entry key="bid-request-builder-handler-class">io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler</entry>
 </properties>

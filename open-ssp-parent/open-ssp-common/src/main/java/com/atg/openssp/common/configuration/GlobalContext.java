@@ -10,6 +10,7 @@ public class GlobalContext extends Context {
 	private static float drawModeration;
 	private static String entryValidatorHandlerForBannerClass;
 	private static String entryValidatorHandlerForVideoClass;
+	private static String entryValidatorHandlerForHeaderClass;
 	private static String adserverBrokerHandlerClass;
     private static String bidRequestBuilderHandlerClass;
 
@@ -24,6 +25,7 @@ public class GlobalContext extends Context {
 
 		entryValidatorHandlerForBannerClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_FOR_BANNER_CLASS);
 		entryValidatorHandlerForVideoClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_FOR_VIDEO_CLASS);
+		entryValidatorHandlerForHeaderClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_FOR_HEADER_CLASS);
 		adserverBrokerHandlerClass = ContextCache.instance.get(ContextProperties.ADSERVER_BROKER_HANDLER_CLASS);
         bidRequestBuilderHandlerClass = ContextCache.instance.get(ContextProperties.BUILD_REQUEST_BUILDER_HANDLER_CLASS);
 	}
@@ -58,6 +60,10 @@ public class GlobalContext extends Context {
 		return entryValidatorHandlerForBannerClass;
 	}
 
+	public static String getEntryValidatorHandlerForHeaderClass() {
+		return entryValidatorHandlerForHeaderClass;
+	}
+
 	public static String getAdserverBrokerHandlerClass() {
         return adserverBrokerHandlerClass;
     }
@@ -65,4 +71,5 @@ public class GlobalContext extends Context {
     public static String getBidRequestBuilderHandlerClass() {
         return bidRequestBuilderHandlerClass;
     }
+
 }
