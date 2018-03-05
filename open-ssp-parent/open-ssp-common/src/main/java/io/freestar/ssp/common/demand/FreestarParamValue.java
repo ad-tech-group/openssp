@@ -21,6 +21,10 @@ public class FreestarParamValue extends ParamValue {
     private String callbackUid;
     private String psa;
     private String id;
+    private String fsHash;
+    private String fsSid;
+    private String fsLoc;
+    private String fsUid;
     private String size;
     private String promoSizes;
     private String referrer;
@@ -37,7 +41,7 @@ public class FreestarParamValue extends ParamValue {
         this.app = app;
     }
 
-    public App getAppX() {
+    public App getApp() {
         return app;
     }
 
@@ -79,6 +83,38 @@ public class FreestarParamValue extends ParamValue {
         return id;
     }
 
+    public void setFsHash(String fsHash) {
+        this.fsHash = fsHash;
+    }
+
+    public String getFsHash() {
+        return fsHash;
+    }
+
+    public void setFsSid(String fsSid) {
+        this.fsSid = fsSid;
+    }
+
+    public String getFsSid() {
+        return fsSid;
+    }
+
+    public void setFsLoc(String fsLoc) {
+        this.fsLoc = fsLoc;
+    }
+
+    public String getFsLoc() {
+        return fsLoc;
+    }
+
+    public void setFsUid(String fsUid) {
+        this.fsUid = fsUid;
+    }
+
+    public String getFsUid() {
+        return fsUid;
+    }
+
     public void setSize(String size) {
         this.size = size;
     }
@@ -102,4 +138,5 @@ public class FreestarParamValue extends ParamValue {
     public String getReferrer() {
         return referrer;
     }
+
 }
