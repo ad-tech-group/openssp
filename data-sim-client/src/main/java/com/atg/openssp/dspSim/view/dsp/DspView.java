@@ -1,5 +1,6 @@
 package com.atg.openssp.dspSim.view.dsp;
 
+import com.atg.openssp.dspSim.ServerHandler;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class DspView {
 
     public DspView(DspModel model) {
         this.model = model;
-        frame = new JFrame("DSP Sim");
+        frame = new JFrame("DSP Sim - "+model.lookupProperty(ServerHandler.SERVER_HOST));
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Bidders", new SimBidderPanel(model));
         frame.setContentPane(tabs);

@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 public class ServerHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(ServerHandler.class);
-    private static final String SERVER_HOST = "server-host";
+    public static final String SERVER_HOST = "server-host";
     private static final String SERVER_PORT = "server-port";
     private final Thread t = new Thread(this);
     private final DspModel model;
