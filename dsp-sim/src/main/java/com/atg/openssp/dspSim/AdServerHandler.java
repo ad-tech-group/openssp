@@ -45,7 +45,7 @@ public class AdServerHandler implements HttpHandler {
         AdservingCampaignProvider p = new AdservingCampaignProvider();
         p.setIsValid(true);
         p.setPrice(40f);
-        p.setNormalizedPrice(30f);
+        p.setAdjustedCurrencyPrice(30f);
 
         String result = new Gson().toJson(p);
         log.info("<--"+result);

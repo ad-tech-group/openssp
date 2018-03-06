@@ -30,7 +30,7 @@ public class TestAdservingCampaignProvider extends AdservingCampaignProvider {
 	}
 
 	@Override
-	public float getNormalizedPrice() {
+	public float getAdjustedCurrencyPrice() {
 		return cpm * 1;
 	}
 
@@ -58,7 +58,7 @@ public class TestAdservingCampaignProvider extends AdservingCampaignProvider {
 	}
 
 	@Override
-	public void setNormalizedPrice(final float priceEur) {
+	public void setAdjustedCurrencyPrice(final float priceEur) {
 		cpm = priceEur;
 	}
 

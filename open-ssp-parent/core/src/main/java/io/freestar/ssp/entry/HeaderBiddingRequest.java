@@ -7,6 +7,7 @@ public class HeaderBiddingRequest {
     private ArrayList<AdUnit> adUnitsToBidUpon = new ArrayList<AdUnit>();
     private String id;
     private String site;
+    private String app;
     private String page;
     private String _fshash;
     private String _fsloc;
@@ -27,6 +28,14 @@ public class HeaderBiddingRequest {
 
     public String getSite() {
         return site;
+    }
+
+    public void setApp(String app) {
+        this.app = app;
+    }
+
+    public String getApp() {
+        return app;
     }
 
     public void setPage(String page) {

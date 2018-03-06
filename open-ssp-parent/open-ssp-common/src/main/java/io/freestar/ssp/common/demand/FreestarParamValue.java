@@ -29,6 +29,7 @@ public class FreestarParamValue extends ParamValue {
     private String size;
     private String promoSizes;
     private String referrer;
+    private String ipAddress;
 
 //    public Publisher getPublisher() {
 //		return publisher;
@@ -148,4 +149,11 @@ public class FreestarParamValue extends ParamValue {
         return referrer;
     }
 
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
 }

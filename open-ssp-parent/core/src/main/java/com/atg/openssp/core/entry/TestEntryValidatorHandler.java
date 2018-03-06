@@ -35,6 +35,8 @@ public class TestEntryValidatorHandler  extends EntryValidatorHandler {
         // pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
         // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
 
+        pm.setIpAddress(request.getRemoteAddr());
+
         return pm;
     }
 }

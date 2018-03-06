@@ -44,4 +44,7 @@
 	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 
 	<entry key="bid-request-builder-handler-class">io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler</entry>
+
+	<entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIp2InfoHandler</entry>
+
 </properties>

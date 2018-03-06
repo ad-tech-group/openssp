@@ -1,5 +1,6 @@
 package openrtb.bidrequest.model;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
@@ -37,8 +38,10 @@ public final class Banner implements Cloneable {
 
 	@Since(2.2)
 	private int hmin;
+	private Object[] format;
 
-	public Banner() {}
+	public Banner() {
+	}
 
 	public String getId() {
 		return id;
@@ -171,6 +174,14 @@ public final class Banner implements Cloneable {
 		return null;
 	}
 
+	public void setFormat(Object[] format) {
+		this.format = format;
+	}
+
+	public Object[] getFormat() {
+		return format;
+	}
+
 	public static class Builder {
 
 		private final Banner banner;
@@ -191,6 +202,47 @@ public final class Banner implements Cloneable {
 
 		public Banner build() {
 			return banner;
+		}
+	}
+
+	public static class BannerSize implements Comparable<BannerSize> {
+		private int w;
+		private int h;
+
+		public BannerSize(String constructString) {
+			int index = constructString.indexOf('x');
+			w = Integer.parseInt(constructString.substring(0, index));
+			h = Integer.parseInt(constructString.substring(index+1));
+
+		}
+
+		public int getW() {
+			return w;
+		}
+
+		public void setW(int w) {
+			this.w = w;
+		}
+
+		public int getH() {
+			return h;
+		}
+
+		public void setH(int h) {
+			this.h = h;
+		}
+
+		@Override
+		public String toString()
+		{
+			return w+"x"+h;
+		}
+
+		@Override
+		public int compareTo(BannerSize o) {
+			return Comparator.comparing(BannerSize::getW)
+					.thenComparing(BannerSize::getH)
+					.compare(this, o);
 		}
 	}
 }

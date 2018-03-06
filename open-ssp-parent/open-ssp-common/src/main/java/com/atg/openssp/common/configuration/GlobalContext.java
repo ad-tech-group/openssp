@@ -13,8 +13,9 @@ public class GlobalContext extends Context {
 	private static String entryValidatorHandlerForHeaderClass;
 	private static String adserverBrokerHandlerClass;
     private static String bidRequestBuilderHandlerClass;
+	private static String geoIpInfoHandlerClass;
 
-    public static void refreshContext() {
+	public static void refreshContext() {
 		// default value is 500 milliseconds
 		executionTimeout = Long.parseLong(ContextCache.instance.get(ContextProperties.EXECUTION_TIMEOUT) != null ? ContextCache.instance.get(
 		        ContextProperties.EXECUTION_TIMEOUT) : "500");
@@ -28,6 +29,7 @@ public class GlobalContext extends Context {
 		entryValidatorHandlerForHeaderClass = ContextCache.instance.get(ContextProperties.VALIDATOR_HANDLER_FOR_HEADER_CLASS);
 		adserverBrokerHandlerClass = ContextCache.instance.get(ContextProperties.ADSERVER_BROKER_HANDLER_CLASS);
         bidRequestBuilderHandlerClass = ContextCache.instance.get(ContextProperties.BUILD_REQUEST_BUILDER_HANDLER_CLASS);
+		geoIpInfoHandlerClass = ContextCache.instance.get(ContextProperties.GEO_IP_INFO_HANDLER_CLASS);
 	}
 
 	/**
@@ -72,4 +74,7 @@ public class GlobalContext extends Context {
         return bidRequestBuilderHandlerClass;
     }
 
+	public static String getGeoIpInfoHandlerClass() {
+		return geoIpInfoHandlerClass;
+	}
 }

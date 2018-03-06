@@ -1,6 +1,7 @@
 package io.freestar.ssp.entry;
 
 import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.cache.type.AppDataCache;
@@ -35,54 +36,28 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
         Cookie[] cList = request.getCookies();
         if (cList != null) {
             for (Cookie c : cList) {
-                //log.info("cookie: "+c.getName());
+                log.debug("cookie: "+c.getName());
             }
         } else {
-            //log.info("no cookies");
+            log.debug("no cookies");
         }
 
-        // Note:
-        // You may define your individual parameter or payloadto work with.
-        // Neither the "ParamValue" - object nor the list of params may fit to your requirements out of the box.
-
-        // geo data could be solved by a geo lookup service and ipaddress
-
         HeaderBiddingRequest r=null;
-        if (request.getContentLength() > 0) {
+        if (request.getMethod().equalsIgnoreCase("post") && request.getContentLength() > 0) {
             byte[] buffer = new byte[request.getContentLength()];
             try {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
-//                log.info("I got content!!! : "+json);
-                System.out.println("I got content!!!bks : "+json);
                 StringReader bais = new StringReader(json);
                 r = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();
 
-                /*
-                      "id": "46109ce8b3ad6d41",
-      "adUnitCode": "freestar-slot-footer-ad",
-      "size": "970x90",
-      "promo_sizes": "970x250,728x90",
-      "placementId": "10433394"
-                 */
-
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warn("returned 906: "+e.getMessage(), e);
+                throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
         }
-
-
-        System.out.println(r);
-        /*
-          "site": "testsite.com",
-  "page": "/the-best-website-and-page-building-tools-you-should-rely-on-in-2018/",
-  "_fshash": "38b2680f7b",
-  "_fsloc": "?i=US&c=TG9zIEFuZ2VsZXM=",
-  "_fsuid": "41624435-5e3e-47c6-b382-a938abb79283",
-  "_fssid": "747aed65-74b4-4706-9962-61bc08fb66cd"
-         */
 
         if (r != null) {
 
@@ -90,16 +65,14 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
                 pm.setSite(SiteDataCache.instance.get(r.getSite()));
             } catch (final EmptyCacheException e) {
                 e.printStackTrace();
-//                try {
-//                    pm.setApp(AppDataCache.instance.get(r.getApp()));
-//                } catch (final EmptyCacheException e1) {
-//                    throw new RequestException(e1.getMessage());
-//                }
+                try {
+                    pm.setApp(AppDataCache.instance.get(r.getApp()));
+                } catch (final EmptyCacheException e1) {
+                    throw new RequestException(ERROR_CODE.E906, "missing site or app");
+                }
             }
 
             pm.setRequestId(r.getId());
-            pm.setCallback(r.getPage());
-//            pm.setCallbackUid("pbjs.handleAnCB");
             pm.setFsSid(r.getFsSid());
             pm.setFsLoc(r.getFsLoc());
             pm.setFsUid(r.getFsUid());
@@ -111,7 +84,7 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
                 pm.setId(a.getId());
                 pm.setSize(a.getSize());
                 pm.setPromoSizes(a.getPromoSizes());
-                pm.setReferrer("http%3A%2F%2Ftestsite.com%2Fthe-best-website-and-page-building-tools-you-should-rely-on-in-2018%2F%2338b2680f7b");
+                pm.setReferrer(r.getSite()+r.getPage());
                 break; // TODO:
             }
 
@@ -124,7 +97,7 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
                 if (values.size() > 0) {
                     params.put(key, values.get(0));
                 }
-                log.info("param: "+key+" : "+values);
+                log.debug("param: "+key+" : "+values);
             }
 
             try {
@@ -133,7 +106,7 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
                 try {
                     pm.setApp(AppDataCache.instance.get(params.get("app")));
                 } catch (final EmptyCacheException e1) {
-                    throw new RequestException(e1.getMessage());
+                    throw new RequestException(ERROR_CODE.E906, "missing site or app");
                 }
             }
             pm.setRequestId(params.get("id"));
@@ -151,24 +124,6 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
         }
 
 
-        /*
-        {
-INFO: FreestarEntryValidatorForBannerHandler param: callback : [pbjs.handleAnCB]
-INFO: FreestarEntryValidatorForBannerHandler param: callback_uid : [61a63db4087493]
-INFO: FreestarEntryValidatorForBannerHandler param: psa : [0]
-INFO: FreestarEntryValidatorForBannerHandler param: id : [10433394]
-INFO: FreestarEntryValidatorForBannerHandler param: _fshash : [38b2680f7b]
-INFO: FreestarEntryValidatorForBannerHandler param: _fssid : [8e289c68-c27f-408d-8fa8-e04577c606ad]
-INFO: FreestarEntryValidatorForBannerHandler param: _fsloc : [?i=US&c=TG9zIEFuZ2VsZXM=]
-INFO: FreestarEntryValidatorForBannerHandler param: _fsuid : [41624435-5e3e-47c6-b382-a938abb79283]
-INFO: FreestarEntryValidatorForBannerHandler param: size : [468x60]
-INFO: FreestarEntryValidatorForBannerHandler param: promo_sizes : [728x90]
-INFO: FreestarEntryValidatorForBannerHandler param: referrer : [http://testsite.com/the-best-website-and-page-building-tools-you-should-rely-on-in-2018/#38b2680f7b]
-
-         */
-
-//        System.out.println(request.getParameterMap());
-
         // pm.setDomain(checkValue(request.getParameter("domain"), ERROR_CODE.E906, "Domain"));
         // pm.setH(checkValue(request.getParameter("h"), ERROR_CODE.E906, "Height"));
         // pm.setW(checkValue(request.getParameter("w"), ERROR_CODE.E906, "Width"));
@@ -176,6 +131,8 @@ INFO: FreestarEntryValidatorForBannerHandler param: referrer : [http://testsite.
         // pm.setPage(checkValue(request.getParameter("page"), pm.getDomain()));
         // pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
         // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
+
+        pm.setIpAddress(request.getRemoteAddr());
 
         return pm;
     }

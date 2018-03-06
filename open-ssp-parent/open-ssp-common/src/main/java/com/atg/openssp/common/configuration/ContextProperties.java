@@ -132,6 +132,8 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.GLOBAL)
 	BUILD_REQUEST_BUILDER_HANDLER_CLASS("bid-request-builder-handler-class"),
 
+	@RuntimeMeta(type = Scope.GLOBAL)
+	GEO_IP_INFO_HANDLER_CLASS("geo-ip-info-handler-class"),
 
 	//###########################################################
     /**

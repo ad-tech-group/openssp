@@ -6,8 +6,11 @@ package openrtb.bidrequest.model;
  */
 public final class Geo implements Cloneable {
 
-	private float lat;
-	private float lon;
+	public static final int TYPE_GPS = 1;
+	public static final int TYPE_IP = 2;
+	public static final int TYPE_USER = 3;
+	private Float lat;
+	private Float lon;
 
 	// ISO-3166-1 Alpha-3
 	private String country;
@@ -21,17 +24,17 @@ public final class Geo implements Cloneable {
 
 	private String metro;
 
-	private int type = 1;// default
+	private int type = TYPE_GPS;// default
 
 	private Object ext;
 
 	public Geo() {}
 
-	public float getLat() {
+	public Float getLat() {
 		return lat;
 	}
 
-	public void setLat(final float lat) {
+	public void setLat(final Float lat) {
 		this.lat = lat;
 	}
 

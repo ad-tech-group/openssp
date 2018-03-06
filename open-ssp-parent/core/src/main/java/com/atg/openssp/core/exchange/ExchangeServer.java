@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -56,7 +57,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				try {
 					return winnerFuture.get();
 				} catch (final ExecutionException e) {
-					log.error(e.getMessage());
+					log.error(e.getMessage(), e);
 				}
 			} else {
 				log.error("no winner detected");
@@ -79,8 +80,12 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 			if (FloatComparator.greaterThanWithPrecision(a.get().getAdjustedCurrencyPrice(), b.get().getAdjustedCurrencyPrice())) {
 				return a;
 			}
-		} catch (final InterruptedException | ExecutionException e) {
+		} catch (final InterruptedException e) {
 			log.error(e.getMessage());
+		} catch (final CancellationException e) {
+			log.error(e.getMessage());
+		} catch (final ExecutionException e) {
+			log.error(e.getMessage(), e);
 		}
 
 		return b;
@@ -116,7 +121,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				*/
 			}
 		} catch (final IOException e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		}
 		return false;
 	}
