@@ -22,6 +22,7 @@ public class HeaderBiddingService extends CoreSupplyServlet<RequestSessionAgent>
 
 	@Override
 	protected RequestSessionAgent getAgent(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		return new RequestSessionAgent(request, response, SessionAgentType.HEADER);
 	}
 
