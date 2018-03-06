@@ -22,7 +22,11 @@ public class SupplyVideoService extends CoreSupplyServlet<RequestSessionAgent> {
 
 	@Override
 	protected RequestSessionAgent getAgent(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
-		return new RequestSessionAgent(request, response, SessionAgentType.VIDEO);
+		BiddingServiceInfo info = new BiddingServiceInfo();
+		info.setType(SessionAgentType.VIDEO);
+		info.setContentType("application/javascript");
+		info.setCharacterEncoding("UTF-8");
+		return new RequestSessionAgent(request, response, info);
 	}
 
 	@Override

@@ -22,7 +22,11 @@ public class BidRequestService extends CoreSupplyServlet<RequestSessionAgent> {
 
 	@Override
 	protected RequestSessionAgent getAgent(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
-		return new RequestSessionAgent(request, response, SessionAgentType.BANNER);
+		BiddingServiceInfo info = new BiddingServiceInfo();
+		info.setType(SessionAgentType.BANNER);
+		info.setContentType("application/javascript");
+		info.setCharacterEncoding("UTF-8");
+		return new RequestSessionAgent(request, response, info);
 	}
 
 	@Override

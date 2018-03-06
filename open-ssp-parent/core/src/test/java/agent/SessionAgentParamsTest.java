@@ -1,5 +1,6 @@
 package agent;
 
+import com.atg.openssp.core.entry.BiddingServiceInfo;
 import com.atg.openssp.core.entry.SessionAgentType;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,7 +45,10 @@ public class SessionAgentParamsTest {
 
 		RequestSessionAgent agent = null;
 		try {
-			agent = new RequestSessionAgent(request, response, SessionAgentType.BANNER);
+			BiddingServiceInfo info = new BiddingServiceInfo();
+			info.setType(SessionAgentType.VIDEO);
+			info.setContentType("application/javascript");
+			agent = new RequestSessionAgent(request, response, info);
 		} catch (final RequestException e) {
 			Assert.fail(e.getMessage());
 		}

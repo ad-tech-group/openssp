@@ -17,7 +17,7 @@ public class GeoIpInfo {
         return latitude;
     }
 
-    public void setLat(Float lat) {
+    public void setLat(float lat) {
         this.latitude = lat;
     }
 

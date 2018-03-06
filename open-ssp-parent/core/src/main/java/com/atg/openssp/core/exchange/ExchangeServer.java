@@ -4,6 +4,7 @@ import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.core.exchange.Exchange;
 import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
 import com.atg.openssp.common.provider.AdProviderReader;
+import com.atg.openssp.core.entry.BiddingServiceInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.math.FloatComparator;
@@ -11,6 +12,7 @@ import util.math.FloatComparator;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -91,7 +93,18 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 		return b;
 	}
 
-	private boolean evaluateResponse(final SessionAgent agent, final AdProviderReader winner) {
+	private boolean evaluateResponse(final RequestSessionAgent agent, final AdProviderReader winner) {
+
+		BiddingServiceInfo info = agent.getBiddingServiceInfo();
+
+		agent.getHttpResponse().setCharacterEncoding(info.getCharacterEncoding());
+		agent.getHttpResponse().setContentType("Content-Type: "+info.getContentType());
+
+		Map<String, String> headers = info.getHeaders();
+		for (Map.Entry<String, String> entry : headers.entrySet()) {
+			agent.getHttpResponse().addHeader(entry.getKey(), entry.getValue());
+		}
+
 		try (Writer out = agent.getHttpResponse().getWriter()) {
 			if (winner != null && winner.isValid()) {
 
@@ -104,9 +117,10 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				}
 				out.append(responseData);
 
-				agent.getHttpResponse().setContentType("application/javascript");
 				winner.perform(agent);
+
 				out.flush();
+
 				return true;
 				/*
 			} else {

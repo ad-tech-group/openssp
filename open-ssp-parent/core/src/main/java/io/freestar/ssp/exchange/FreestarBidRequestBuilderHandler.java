@@ -102,7 +102,6 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
             }
         }
         String ipAddress = pValues.getIpAddress();
-        ipAddress = "bombholtmagic.com";
         if (ipAddress != null && !ipAddress.equalsIgnoreCase("localhost") && !ipAddress.equalsIgnoreCase("0:0:0:0:0:0:0:1") && !ipAddress.equalsIgnoreCase("127.0.0.1")) {
             try {
                 GeoIpInfo geoInfo = geoIpInfoHandler.lookupGeoInfo(ipAddress);
