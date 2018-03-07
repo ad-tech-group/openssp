@@ -40,10 +40,22 @@ public enum ContextProperties {
 	TRIGGER_EXPESSION("cache-trigger-expression"),
 
 	/**
-	 * data-privder-url
+	 * data-privder-scheme
 	 */
 	@RuntimeMeta(type = Scope.GLOBAL)
-	DATA_PROVIDER_URL("data-provider-url"),
+	DATA_PROVIDER_SCHEME("data-provider-scheme"),
+
+	/**
+	 * data-privder-host
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	DATA_PROVIDER_HOST("data-provider-host"),
+
+	/**
+	 * data-privder-port
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	DATA_PROVIDER_PORT("data-provider-port"),
 
 	/**
 	 * master_pw
@@ -56,6 +68,30 @@ public enum ContextProperties {
 	 */
 	@RuntimeMeta(type = Scope.GLOBAL, printable = false)
 	MASTER_USER("master_user"),
+
+	/**
+	 * data-privder-scheme
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_SCHEME("adserver-provider-scheme"),
+
+	/**
+	 * data-privder-host
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_HOST("adserver-provider-host"),
+
+	/**
+	 * data-privder-port
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_PORT("adserver-provider-port"),
+
+	/**
+	 * data-privder-path
+	 */
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_PATH("adserver-provider-path"),
 
 	/**
 	 * adserving
@@ -79,7 +115,78 @@ public enum ContextProperties {
 	 * ssp
 	 */
 	@RuntimeMeta(type = Scope.LOCAL)
-	SSPCHANNEL("ssp");
+	SSPCHANNEL("ssp"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	VALIDATOR_HANDLER_FOR_VIDEO_CLASS("validator-handler-for-video-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	VALIDATOR_HANDLER_FOR_BANNER_CLASS("validator-handler-for-banner-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	BUILD_REQUEST_BUILDER_HANDLER_CLASS("bid-request-builder-handler-class"),
+
+
+	//###########################################################
+    /**
+     * app data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    APP_DATA_SERVICE_ENABLED("app-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	APP_DATA_HANDLER_CLASS("app-data-handler-class"),
+
+	/**
+     * currency data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    CURRENCY_DATA_SERVICE_ENABLED("currency-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	CURRENCY_DATA_HANDLER_CLASS("currency-data-handler-class"),
+
+	/**
+     * login service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    LOGIN_SERVICE_ENABLED("login-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	LOGIN_HANDLER_CLASS("login-handler-class"),
+
+	/**
+     * pricelayer data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    PRICELAYER_DATA_SERVICE_ENABLED("pricelayer-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	PRICELAYER_DATA_HANDLER_CLASS("pricelayer-data-handler-class"),
+
+	/**
+     * site data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    SITE_DATA_SERVICE_ENABLED("site-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	SITE_DATA_HANDLER_CLASS("site-data-handler-class"),
+
+	/**
+     * app data service
+     */
+    @RuntimeMeta(type = Scope.LOCAL)
+    SUPPLIER_DATA_SERVICE_ENABLED("supplier-data-service-enabled"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	SUPPLIER_DATA_HANDLER_CLASS("supplier-data-handler-class");
+
+
+	//###########################################################
 
 	private String value;
 

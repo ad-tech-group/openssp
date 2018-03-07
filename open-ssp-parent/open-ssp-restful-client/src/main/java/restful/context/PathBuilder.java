@@ -27,7 +27,8 @@ public class PathBuilder {
 
 	private final StringBuilder path;
 	private String mediaType;
-	private String server;
+	private String host;
+	private String port;
 	private String master_user;
 	private String master_pw;
 	private String scheme;
@@ -89,8 +90,17 @@ public class PathBuilder {
 	 * 
 	 * @param host
 	 */
-	public void setServer(final String host) {
-		server = host;
+	public void setHost(final String host) {
+		this.host = host;
+	}
+
+	/**
+	 * Sets the value for the Host of this path.
+	 *
+	 * @param port
+	 */
+	public void setPort(final String port) {
+		this.port = port;
 	}
 
 	public void setScheme(final String scheme) {
@@ -101,8 +111,16 @@ public class PathBuilder {
 		return scheme;
 	}
 
+	public String getHost() {
+		return host;
+	}
+
 	public String getServer() {
-		return StringUtils.isEmpty(server) ? "" : server;
+		return (StringUtils.isEmpty(host) ? "" : host) + (StringUtils.isEmpty(port) ? "" : ":"+port);
+	}
+
+	public String getPort() {
+		return port;
 	}
 
 	public String getMaster_user() {
