@@ -181,6 +181,9 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	SITE_DATA_HANDLER_CLASS("site-data-handler-class"),
 
+	@RuntimeMeta(type = Scope.LOCAL)
+	SITE_DATA_MAINTENANCE_HANDLER_CLASS("site-data-maintenance-handler-class"),
+
     /**
      * app data service
      */

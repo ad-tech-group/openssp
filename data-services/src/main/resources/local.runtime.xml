@@ -33,6 +33,7 @@
 
 	<!-- handler class to use service Site Data requests -->
 	<entry key="site-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataHandler</entry>
+	<entry key="site-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataMaintenanceHandler</entry>
 
 	<!-- handler class to use service Supplier Data requests -->
 	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
