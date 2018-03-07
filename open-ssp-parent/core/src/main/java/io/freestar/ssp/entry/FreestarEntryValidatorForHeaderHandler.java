@@ -56,7 +56,7 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
                 bais.close();
 
             } catch (IOException e) {
-                log.warn("returned 906: "+e.getMessage(), e);
+                log.warn("returned 400 "+e.getMessage(), e);
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
         }

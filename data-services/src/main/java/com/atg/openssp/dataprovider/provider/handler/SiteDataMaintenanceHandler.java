@@ -55,7 +55,7 @@ public class SiteDataMaintenanceHandler extends DataHandler {
                     response.setStatus(401);
                 }
             } catch (IOException e) {
-                response.setStatus(500);
+                response.setStatus(400);
                 log.error(e.getMessage(), e);
             }
         } else {
