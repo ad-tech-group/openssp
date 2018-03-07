@@ -2,6 +2,7 @@ package io.freestar.ssp.exchange;
 
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.exchange.BidRequestBuilderHandler;
 import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
@@ -41,11 +42,14 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
     }
 
     @Override
-    public BidRequest constructRequest(SessionAgent agent) {
+    public BidRequest constructRequest(SessionAgent agent) throws RequestException {
         FreestarParamValue pValues = null;
         try {
             pValues = (FreestarParamValue) agent.getParamValues();
         } catch (RequestException e) {
+            if (e.getCode() == ERROR_CODE.E906) {
+                throw e;
+            }
             log.warn(e.getMessage(), e);
             pValues = new FreestarParamValue();
         }

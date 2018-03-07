@@ -2,6 +2,7 @@ package com.atg.openssp.core.exchange;
 
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.system.loader.LocalContextLoader;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.VideoBidResponseProtocol;
@@ -36,7 +37,7 @@ public final class BidRequestBuilder {
      *
      * @return {@see BidRequest}
      */
-    public BidRequest build(final SessionAgent agent) {
+    public BidRequest build(final SessionAgent agent) throws RequestException {
 
         return handler.constructRequest(agent);
     }

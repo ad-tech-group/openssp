@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.atg.openssp.common.exception.ERROR_CODE;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,11 +48,15 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 		} catch (final RequestException e) {
 			log.error(e.getMessage(), e);
 			response.reset();
-			response.sendError(204, e.getMessage());
+			if (e.getCode() == ERROR_CODE.E906) {
+				response.sendError(202, e.getMessage());
+			} else {
+				response.sendError(500, e.getMessage());
+			}
 		} catch (final CancellationException e) {
 			log.error(e.getMessage());
 			response.reset();
-			response.sendError(204, "exchange timeout");
+			response.sendError(205, "exchange timeout");
 		} catch (final Exception e) {
 			log.error(e.getMessage(), e);
 			response.reset();

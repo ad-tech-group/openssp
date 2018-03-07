@@ -8,6 +8,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.exchange.BidRequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +109,7 @@ public class DemandService implements Callable<AdProviderReader> {
 	 * 
 	 * @link SessionAgent
 	 */
-	private List<DemandBroker> loadSupplierConnectors() {
+	private List<DemandBroker> loadSupplierConnectors() throws RequestException {
 		final List<OpenRtbConnector> connectorList = ConnectorCache.instance.getAll();
 		final List<DemandBroker> connectors = new ArrayList<>();
 

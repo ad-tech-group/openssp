@@ -2,6 +2,7 @@ package com.atg.openssp.core.entry;
 
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.demand.TestParamValue;
+import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.cache.type.SiteDataCache;
@@ -21,6 +22,9 @@ public class TestEntryValidatorHandler  extends EntryValidatorHandler {
         // geo data could be solved by a geo lookup service and ipaddress
 
         final String siteid = request.getParameter("site");
+        if (siteid == null) {
+            throw new RequestException(ERROR_CODE.E906, "missing site");
+        }
         try {
             pm.setSite(SiteDataCache.instance.get(siteid));
         } catch (final EmptyCacheException e) {

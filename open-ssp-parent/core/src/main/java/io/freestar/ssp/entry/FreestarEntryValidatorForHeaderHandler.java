@@ -8,6 +8,7 @@ import com.atg.openssp.core.cache.type.AppDataCache;
 import com.atg.openssp.core.cache.type.SiteDataCache;
 import com.atg.openssp.core.entry.EntryValidatorHandler;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import io.freestar.ssp.common.demand.FreestarParamValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,14 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
                 bais.close();
 
             } catch (IOException e) {
-                log.warn("returned 400 "+e.getMessage(), e);
+                // ?? 400
+                log.warn("returned E906 "+e.getMessage(), e);
+                throw new RequestException(ERROR_CODE.E906, "could not read json input");
+            } catch (JsonSyntaxException e) {
+                log.warn("returned E906 "+e.getMessage());
+                throw new RequestException(ERROR_CODE.E906, "could not read json input");
+            } catch (Exception e) {
+                log.warn("returned E906 "+e.getMessage(), e);
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
         }

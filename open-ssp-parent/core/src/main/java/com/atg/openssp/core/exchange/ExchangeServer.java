@@ -45,22 +45,18 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 	 * @return true if a provider, {@link AdProviderReader}, exists and building a response is successful, false otherwise
 	 */
 	@Override
-	public boolean processExchange(final RequestSessionAgent agent) {
+	public boolean processExchange(final RequestSessionAgent agent) throws ExecutionException {
 		final AdProviderReader winner = execute(agent);
 		return evaluateResponse(agent, winner);
 	}
 
-	private AdProviderReader execute(final SessionAgent agent) {
+	private AdProviderReader execute(final SessionAgent agent) throws ExecutionException {
 		try {
 			final List<Callable<AdProviderReader>> callables = ChannelFactory.createListOfChannels(agent);
 			final List<Future<AdProviderReader>> futures = ExchangeExecutorServiceFacade.instance.invokeAll(callables);
 			final Future<AdProviderReader> winnerFuture = futures.stream().reduce(ExchangeServer::validate).orElse(null);
 			if (winnerFuture != null) {
-				try {
-					return winnerFuture.get();
-				} catch (final ExecutionException e) {
-					log.error(e.getMessage(), e);
-				}
+				return winnerFuture.get();
 			} else {
 				log.error("no winner detected");
 			}
@@ -100,6 +96,12 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 		agent.getHttpResponse().setCharacterEncoding(info.getCharacterEncoding());
 		agent.getHttpResponse().setContentType("Content-Type: "+info.getContentType());
 
+		if (info.isAccessAllowOriginActivated() && winner instanceof Auction.AuctionResult) {
+			agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", "http://"+((Auction.AuctionResult)winner).getBidRequest().getSite().getDomain());
+			agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
+			agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
+			agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
+		}
 		Map<String, String> headers = info.getHeaders();
 		for (Map.Entry<String, String> entry : headers.entrySet()) {
 			agent.getHttpResponse().addHeader(entry.getKey(), entry.getValue());

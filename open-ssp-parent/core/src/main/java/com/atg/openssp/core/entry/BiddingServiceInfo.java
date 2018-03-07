@@ -8,6 +8,7 @@ public class BiddingServiceInfo {
     private SessionAgentType type;
     private String contentType;
     private String characterEncoding;
+    private boolean activateAccessAllowOrigin;
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -44,5 +45,13 @@ public class BiddingServiceInfo {
 
     public void setCharacterEncoding(String characterEncoding) {
         this.characterEncoding = characterEncoding;
+    }
+
+    public void activateAccessAllowOrigin() {
+        activateAccessAllowOrigin = true;
+    }
+
+    public boolean isAccessAllowOriginActivated() {
+        return activateAccessAllowOrigin;
     }
 }
