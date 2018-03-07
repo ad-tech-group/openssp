@@ -8,7 +8,6 @@ import com.atg.openssp.core.cache.type.AppDataCache;
 import com.atg.openssp.core.cache.type.SiteDataCache;
 import com.atg.openssp.core.entry.EntryValidatorHandler;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.freestar.ssp.common.demand.FreestarParamValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +19,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
 
+/**
+ * @author bsorensen
+ */
 public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandler {
     private final Logger log = LoggerFactory.getLogger(FreestarEntryValidatorForHeaderHandler.class);
     private final Gson gson;
@@ -42,7 +44,7 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
             log.debug("no cookies");
         }
 
-        HeaderBiddingRequest r=null;
+        HeaderBiddingRequest biddingRequest=null;
         if (request.getMethod().equalsIgnoreCase("post") && request.getContentLength() > 0) {
             byte[] buffer = new byte[request.getContentLength()];
             try {
@@ -50,7 +52,7 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
                 is.read(buffer);
                 String json = new String(buffer);
                 StringReader bais = new StringReader(json);
-                r = gson.fromJson(bais, HeaderBiddingRequest.class);
+                biddingRequest = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();
 
             } catch (IOException e) {
@@ -59,32 +61,32 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
             }
         }
 
-        if (r != null) {
+        if (biddingRequest != null) {
 
             try {
-                pm.setSite(SiteDataCache.instance.get(r.getSite()));
+                pm.setSite(SiteDataCache.instance.get(biddingRequest.getSite()));
             } catch (final EmptyCacheException e) {
                 e.printStackTrace();
                 try {
-                    pm.setApp(AppDataCache.instance.get(r.getApp()));
+                    pm.setApp(AppDataCache.instance.get(biddingRequest.getApp()));
                 } catch (final EmptyCacheException e1) {
                     throw new RequestException(ERROR_CODE.E906, "missing site or app");
                 }
             }
 
-            pm.setRequestId(r.getId());
-            pm.setFsSid(r.getFsSid());
-            pm.setFsLoc(r.getFsLoc());
-            pm.setFsUid(r.getFsUid());
-            pm.setFsHash(r.getFsHash());
+            pm.setRequestId(biddingRequest.getId());
+            pm.setFsSid(biddingRequest.getFsSid());
+            pm.setFsLoc(biddingRequest.getFsLoc());
+            pm.setFsUid(biddingRequest.getFsUid());
+            pm.setFsHash(biddingRequest.getFsHash());
             pm.setPsa("0");
 
-            List<AdUnit> adList = r.getAdUnitsToBidUpon();
+            List<AdUnit> adList = biddingRequest.getAdUnitsToBidUpon();
             for (AdUnit a : adList) {
                 pm.setId(a.getId());
                 pm.setSize(a.getSize());
                 pm.setPromoSizes(a.getPromoSizes());
-                pm.setReferrer(r.getSite()+r.getPage());
+                pm.setReferrer(biddingRequest.getSite()+biddingRequest.getPage());
                 break; // TODO:
             }
 
