@@ -53,6 +53,8 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JList<String> lCat = new JList<String>(mCat);
     private DefaultListModel<String> mAddCat = new DefaultListModel<String>();
     private final JList<String> lAddCat = new JList<String>(mAddCat);
+
+
     private final JTextField tfAddNewADomain = new JTextField(25);
     private final JTextField tfAddNewCat = new JTextField(25);
     private final JButton bAddADomain = new JButton("add");
@@ -196,7 +198,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             tfAdm.setText(sb.getAdm());
             mAdomain.clear();
             for (String s : sb.getAdomain()) {
-                mAddAdomain.addElement(s);
+                mAdomain.addElement(s);
             }
             tfIUrl.setText(sb.getIUrl());
             tfCId.setText(sb.getCId());
