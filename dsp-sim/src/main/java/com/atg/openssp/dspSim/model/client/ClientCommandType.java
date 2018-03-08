@@ -1,4 +1,4 @@
-package com.atg.openssp.dspSimUi.model.client;
+package com.atg.openssp.dspSim.model.client;
 
 /**
  * @author Brian Sorensen

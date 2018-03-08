@@ -1,8 +1,8 @@
-package com.atg.openssp.dspSimUi;
+package com.atg.openssp.dspSim;
 
-import com.atg.openssp.dspSimUi.model.ModelException;
-import com.atg.openssp.dspSimUi.model.ad.AdModel;
-import com.atg.openssp.dspSimUi.model.dsp.DspModel;
+import com.atg.openssp.dspSim.model.ModelException;
+import com.atg.openssp.dspSim.model.ad.AdModel;
+import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.sun.net.httpserver.HttpServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

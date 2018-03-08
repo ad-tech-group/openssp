@@ -1,12 +1,12 @@
-package com.atg.openssp.dspSimUi;
+package com.atg.openssp.dspSim;
 
-import com.atg.openssp.dspSimUi.model.ModelException;
-import com.atg.openssp.dspSimUi.model.client.ClientCommand;
-import com.atg.openssp.dspSimUi.model.client.ClientCommandType;
-import com.atg.openssp.dspSimUi.model.client.ClientResponse;
-import com.atg.openssp.dspSimUi.model.client.ClientResponseStatus;
-import com.atg.openssp.dspSimUi.model.dsp.DspModel;
-import com.atg.openssp.dspSimUi.model.dsp.SimBidder;
+import com.atg.openssp.dspSim.model.ModelException;
+import com.atg.openssp.dspSim.model.client.ClientCommand;
+import com.atg.openssp.dspSim.model.client.ClientCommandType;
+import com.atg.openssp.dspSim.model.client.ClientResponse;
+import com.atg.openssp.dspSim.model.client.ClientResponseStatus;
+import com.atg.openssp.dspSim.model.dsp.DspModel;
+import com.atg.openssp.dspSim.model.dsp.SimBidder;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

@@ -47,6 +47,7 @@ public final class Bid implements Comparable<Bid> {
 
 	public Bid() {
 		adomain = new ArrayList<>();
+		cat = new ArrayList<>();
 		attr = new ArrayList<>();
 	}
 
@@ -139,7 +140,8 @@ public final class Bid implements Comparable<Bid> {
 	}
 
 	public void setAttr(final List<Integer> attr) {
-		this.attr = attr;
+		this.attr.clear();
+		this.attr.addAll(attr);
 	}
 
 	public void addAttr(final Integer attr) {
@@ -174,9 +176,8 @@ public final class Bid implements Comparable<Bid> {
 		return cat;
 	}
 
-	public void setCat(final List<String> list) {
-		cat.clear();
-		cat.addAll(list);
+	public void setCat(final List<String> cat) {
+		this.cat = cat;
 	}
 
 	public void addCat(final String cat) {
@@ -292,8 +293,13 @@ public final class Bid implements Comparable<Bid> {
 			return this;
 		}
 
-		public Builder setCats(final List<String> list) {
-			bid.setCat(list);
+		public Builder addAllCat(final List<String> allCat) {
+			bid.setCat(allCat);
+			return this;
+		}
+
+		public Builder addCat(final String cat) {
+			bid.addCat(cat);
 			return this;
 		}
 
@@ -317,6 +323,10 @@ public final class Bid implements Comparable<Bid> {
 
 		public List<String> getAdomainList() {
 			return bid.getAdomainList();
+		}
+
+		public List<String> getCatList() {
+			return bid.getCatList();
 		}
 
 		public List<Integer> getAttrList() {

@@ -1,4 +1,4 @@
-package com.atg.openssp.dspSimUi.model.dsp;
+package com.atg.openssp.dspSim.model.dsp;
 
 import java.util.ArrayList;
 import java.util.List;

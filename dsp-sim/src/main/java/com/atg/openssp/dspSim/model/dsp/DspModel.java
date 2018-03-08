@@ -1,6 +1,6 @@
-package com.atg.openssp.dspSimUi.model.dsp;
+package com.atg.openssp.dspSim.model.dsp;
 
-import com.atg.openssp.dspSimUi.model.ModelException;
+import com.atg.openssp.dspSim.model.ModelException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import openrtb.bidrequest.model.BidRequest;

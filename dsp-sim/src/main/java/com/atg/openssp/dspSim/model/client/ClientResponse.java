@@ -1,6 +1,6 @@
-package com.atg.openssp.dspSimUi.model.client;
+package com.atg.openssp.dspSim.model.client;
 
-import com.atg.openssp.dspSimUi.model.dsp.SimBidder;
+import com.atg.openssp.dspSim.model.dsp.SimBidder;
 
 import java.util.List;
 

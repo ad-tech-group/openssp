@@ -1,6 +1,6 @@
-package com.atg.openssp.dspSimUi;
+package com.atg.openssp.dspSim;
 
-import com.atg.openssp.dspSimUi.model.ad.AdModel;
+import com.atg.openssp.dspSim.model.ad.AdModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-import com.atg.openssp.dspSimUi.channel.adserving.AdservingCampaignProvider;
+import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
