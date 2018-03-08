@@ -3,6 +3,7 @@ package com.atg.openssp.core.exchange;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.core.exchange.Exchange;
 import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
+import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.core.entry.BiddingServiceInfo;
 import org.slf4j.Logger;
@@ -45,18 +46,27 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 	 * @return true if a provider, {@link AdProviderReader}, exists and building a response is successful, false otherwise
 	 */
 	@Override
-	public boolean processExchange(final RequestSessionAgent agent) throws ExecutionException {
+	public boolean processExchange(final RequestSessionAgent agent) throws ExecutionException, RequestException {
 		final AdProviderReader winner = execute(agent);
 		return evaluateResponse(agent, winner);
 	}
 
-	private AdProviderReader execute(final SessionAgent agent) throws ExecutionException {
+	private AdProviderReader execute(final SessionAgent agent) throws ExecutionException, RequestException {
 		try {
 			final List<Callable<AdProviderReader>> callables = ChannelFactory.createListOfChannels(agent);
 			final List<Future<AdProviderReader>> futures = ExchangeExecutorServiceFacade.instance.invokeAll(callables);
 			final Future<AdProviderReader> winnerFuture = futures.stream().reduce(ExchangeServer::validate).orElse(null);
 			if (winnerFuture != null) {
-				return winnerFuture.get();
+				try {
+					return winnerFuture.get();
+				} catch (final ExecutionException e) {
+					if (e.getCause() instanceof RequestException) {
+						throw (RequestException) e.getCause();
+					} else {
+						log.error(e.getMessage());
+					}
+					throw e;
+				}
 			} else {
 				log.error("no winner detected");
 			}

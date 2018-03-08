@@ -32,9 +32,7 @@ public class Supplier implements Serializable {
 
 	private int active;
 
-	public Supplier() {
-		System.out.println();
-	}
+	public Supplier() {}
 
 	public String getShortName() {
 		return shortName;
