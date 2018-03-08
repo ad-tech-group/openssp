@@ -97,10 +97,12 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 		agent.getHttpResponse().setContentType("Content-Type: "+info.getContentType());
 
 		if (info.isAccessAllowOriginActivated() && winner instanceof Auction.AuctionResult) {
-			agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", "http://"+((Auction.AuctionResult)winner).getBidRequest().getSite().getDomain());
-			agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
-			agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
-			agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
+			if (((Auction.AuctionResult)winner).getBidRequest() != null) {
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", "http://" + ((Auction.AuctionResult) winner).getBidRequest().getSite().getDomain());
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
+			}
 		}
 		Map<String, String> headers = info.getHeaders();
 		for (Map.Entry<String, String> entry : headers.entrySet()) {
@@ -112,8 +114,11 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 
 				final String responseData;
 				if (winner instanceof Auction.AuctionResult) {
-					responseData = ((Auction.AuctionResult)winner).buildHeaderBidResponse();
-
+					if (((Auction.AuctionResult)winner).getBidRequest() != null) {
+						responseData = ((Auction.AuctionResult) winner).buildHeaderBidResponse();
+					} else {
+						responseData = "";
+					}
 				} else {
 					responseData = winner.buildResponse();
 				}

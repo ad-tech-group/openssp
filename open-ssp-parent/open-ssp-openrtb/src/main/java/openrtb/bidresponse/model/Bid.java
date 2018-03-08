@@ -7,7 +7,7 @@ import com.google.gson.annotations.Since;
 
 /**
  * @author André Schmer
- * @see OpenRTB-API-Specification #section Bid Object
+ * @see //OpenRTB-API-Specification #section Bid Object
  * @version 2.1, 2.2, 2.3, 2.4
  * 
  */
@@ -40,7 +40,8 @@ public final class Bid implements Comparable<Bid> {
 
 	@Since(2.3)
 	// private String bundle;
-	private List<String> cat;
+	private List<String> cat = new ArrayList<>();
+
 
 	private Object ext;
 
@@ -174,7 +175,12 @@ public final class Bid implements Comparable<Bid> {
 	}
 
 	public void setCat(final List<String> list) {
-		cat = list;
+		cat.clear();
+		cat.addAll(list);
+	}
+
+	public void addCat(final String cat) {
+		this.cat.add(cat);
 	}
 
 	public int getApi() {
@@ -203,6 +209,10 @@ public final class Bid implements Comparable<Bid> {
 
 	public List<String> getAdomainList() {
 		return adomain;
+	}
+
+	public List<String> getCatList() {
+		return cat;
 	}
 
 	public List<Integer> getAttrList() {

@@ -119,8 +119,10 @@ public class Auction {
 		}
 
 		AuctionResult dealWinner = new AuctionResult();
-		dealWinner.setBidRequest(bidExchange.getBidRequest(winningProvider.getSupplier()));
-		dealWinner.setWinningProvider(winningProvider);
+		if (winningProvider != null) {
+			dealWinner.setBidRequest(bidExchange.getBidRequest(winningProvider.getSupplier()));
+			dealWinner.setWinningProvider(winningProvider);
+		}
 		return dealWinner;
 	}
 
@@ -318,7 +320,11 @@ public class Auction {
 
 		@Override
 		public boolean isValid() {
-			return winningProvider.isValid();
+			if (winningProvider != null) {
+				return winningProvider.isValid();
+			} else {
+				return false;
+			}
 		}
 
 		@Override
