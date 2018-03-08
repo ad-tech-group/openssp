@@ -104,7 +104,7 @@ public class DspModel {
         b.setPrice(simBidder.getPrice());
         b.setAdid(simBidder.getAdId());
         b.setNurl(simBidder.getNUrl());
-        b.setAdm(simBidder.getNUrl());
+        b.setAdm(simBidder.getAdm());
         b.setAdomain(simBidder.getAdomain());
         b.setIurl(simBidder.getIUrl());
         b.setCid(simBidder.getCId());

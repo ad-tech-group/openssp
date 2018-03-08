@@ -86,7 +86,7 @@ public class DspModel extends BaseModel {
         serverHandler.sendUpdateCommand(sb);
     }
 
-    public void sendRemoveCommandXX(String id) throws ModelException {
+    public void sendRemoveCommand(String id) throws ModelException {
         serverHandler.sendRemoveCommand(id);
     }
 

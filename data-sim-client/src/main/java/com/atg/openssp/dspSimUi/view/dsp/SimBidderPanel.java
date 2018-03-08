@@ -282,7 +282,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             SimBidder sb = lBidders.getSelectedValue();
             if (sb != null) {
                 try {
-                    model.sendRemoveCommandXX(sb.getId());
+                    model.sendRemoveCommand(sb.getId());
                 } catch (ModelException e) {
                     model.setMessageAsFault(e.getMessage());
                 }
