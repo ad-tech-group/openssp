@@ -6,6 +6,8 @@ import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.RequestException;
 
+import java.util.List;
+
 /**
  * The kind and diversity of request parameters my be vary and depends on the different conditions. See also at {@link ParamValue} for the kind aof params.
  * 
@@ -46,7 +48,7 @@ public class EntryValidator {
 	 *             if params are mandatory and empty and cannot be replaced by an alternative value.
 	 * @return {@link ParamValue}
 	 */
-	public ParamValue validateEntryParams(final HttpServletRequest request) throws RequestException {
+	public List<ParamValue> validateEntryParams(final HttpServletRequest request) throws RequestException {
 	    return handler.validateEntryParams(request);
 	}
 

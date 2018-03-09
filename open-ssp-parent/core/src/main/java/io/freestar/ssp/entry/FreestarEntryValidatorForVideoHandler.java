@@ -25,7 +25,8 @@ public class FreestarEntryValidatorForVideoHandler extends EntryValidatorHandler
     }
 
     @Override
-    public ParamValue validateEntryParams(HttpServletRequest request) throws RequestException {
+    public List<ParamValue> validateEntryParams(HttpServletRequest request) throws RequestException {
+        final ArrayList<ParamValue> pmList = new ArrayList<ParamValue>();
         final FreestarParamValue pm = new FreestarParamValue();
 
         Cookie[] cList = request.getCookies();
@@ -115,6 +116,7 @@ public class FreestarEntryValidatorForVideoHandler extends EntryValidatorHandler
         // pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
         // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
 
-        return pm;
+        pmList.add(pm);
+        return pmList;
     }
 }

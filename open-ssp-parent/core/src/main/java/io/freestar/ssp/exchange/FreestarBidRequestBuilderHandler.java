@@ -2,6 +2,7 @@ package io.freestar.ssp.exchange;
 
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.exchange.BidRequestBuilderHandler;
@@ -43,25 +44,44 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
 
     @Override
     public BidRequest constructRequest(SessionAgent agent) throws RequestException {
-        FreestarParamValue pValues = null;
+        List<ParamValue> pValueList;
         try {
-            pValues = (FreestarParamValue) agent.getParamValues();
+            pValueList = agent.getParamValues();
         } catch (RequestException e) {
             if (e.getCode() == ERROR_CODE.E906) {
                 throw e;
             }
             log.warn(e.getMessage(), e);
-            pValues = new FreestarParamValue();
+            pValueList = new ArrayList();
+            pValueList.add(new FreestarParamValue());
         }
+        FreestarParamValue masterValues = (FreestarParamValue) pValueList.get(0);
 
-        Site site = pValues.getSite().clone();
-        String requestId = pValues.getRequestId();
+        Site site = masterValues.getSite().clone();
+        String requestId = masterValues.getRequestId();
 
         Device dd = new Device.Builder().build();
-        dd.setGeo(createSiteGeo(pValues));
+        dd.setGeo(createSiteGeo(masterValues));
 
-        Impression i = new Impression.Builder().build();
-        i.setId(pValues.getId());
+        BidRequest bidRequest =  new BidRequest.Builder()
+                .setId(selectAppropriateId(requestId, agent.getRequestid()))
+                .setSite(site)
+                .setDevice(dd)
+                .setUser(
+                        new User.Builder()
+                                //.setBuyeruid()
+                                //.setGender(Gender.MALE)
+                                .setId(masterValues.getFsUid())
+                                //.setYob(1981)
+                                //.setGeo()
+                                .build()
+                ).build();
+
+        for (ParamValue pOrigin : pValueList) {
+            FreestarParamValue pValues = (FreestarParamValue) pOrigin;
+
+            Impression i = new Impression.Builder().build();
+            i.setId(pValues.getId());
                 /*
                 i..setVideo(new Video.Builder()
                         .addMime("application/x-shockwave-flash")
@@ -75,23 +95,15 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
                 )
                 */
 
-        i.setBanner(createBanner(pValues));
+            i.setBanner(createBanner(pValues));
+            bidRequest.addImp(i);
 
-        return new BidRequest.Builder()
-                .setId(selectAppropriateId(requestId, agent.getRequestid()))
-                .setSite(site)
-                .setDevice(dd)
+        }
 
-                .addImp(i)
-                .setUser(
-                        new User.Builder()
-                                //.setBuyeruid()
-                                //.setGender(Gender.MALE)
-                                .setId(pValues.getFsUid())
-                                //.setYob(1981)
-                                //.setGeo()
-                                .build()
-                ).build();
+
+
+
+        return bidRequest;
     }
 
     private Geo createSiteGeo(FreestarParamValue pValues) {

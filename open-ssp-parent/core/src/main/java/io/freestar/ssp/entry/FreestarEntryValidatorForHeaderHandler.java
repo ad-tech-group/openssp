@@ -33,8 +33,8 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
     }
 
     @Override
-    public ParamValue validateEntryParams(HttpServletRequest request) throws RequestException {
-        final FreestarParamValue pm = new FreestarParamValue();
+    public List<ParamValue> validateEntryParams(HttpServletRequest request) throws RequestException {
+        final ArrayList<ParamValue> pmList = new ArrayList<ParamValue>();
 
         Cookie[] cList = request.getCookies();
         if (cList != null) {
@@ -71,34 +71,40 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
 
         if (biddingRequest != null) {
 
-            try {
-                pm.setSite(SiteDataCache.instance.get(biddingRequest.getSite()));
-            } catch (final EmptyCacheException e) {
-                e.printStackTrace();
-                try {
-                    pm.setApp(AppDataCache.instance.get(biddingRequest.getApp()));
-                } catch (final EmptyCacheException e1) {
-                    throw new RequestException(ERROR_CODE.E906, "missing site or app");
-                }
-            }
-
-            pm.setRequestId(biddingRequest.getId());
-            pm.setFsSid(biddingRequest.getFsSid());
-            pm.setFsLoc(biddingRequest.getFsLoc());
-            pm.setFsUid(biddingRequest.getFsUid());
-            pm.setFsHash(biddingRequest.getFsHash());
-            pm.setPsa("0");
-
             List<AdUnit> adList = biddingRequest.getAdUnitsToBidUpon();
             for (AdUnit a : adList) {
+                final FreestarParamValue pm = new FreestarParamValue();
+
+                try {
+                    pm.setSite(SiteDataCache.instance.get(biddingRequest.getSite()));
+                } catch (final EmptyCacheException e) {
+                    e.printStackTrace();
+                    try {
+                        pm.setApp(AppDataCache.instance.get(biddingRequest.getApp()));
+                    } catch (final EmptyCacheException e1) {
+                        throw new RequestException(ERROR_CODE.E906, "missing site or app");
+                    }
+                }
+
+                pm.setRequestId(biddingRequest.getId());
+                pm.setFsSid(biddingRequest.getFsSid());
+                pm.setFsLoc(biddingRequest.getFsLoc());
+                pm.setFsUid(biddingRequest.getFsUid());
+                pm.setFsHash(biddingRequest.getFsHash());
+                pm.setPsa("0");
+
                 pm.setId(a.getId());
                 pm.setSize(a.getSize());
                 pm.setPromoSizes(a.getPromoSizes());
                 pm.setReferrer(biddingRequest.getSite()+biddingRequest.getPage());
-                break; // TODO:
+
+                pm.setIpAddress(request.getRemoteAddr());
+                pmList.add(pm);
             }
 
+
         } else {
+            final FreestarParamValue pm = new FreestarParamValue();
             HashMap<String, String> params = new LinkedHashMap();
             Enumeration<String> penum = request.getParameterNames();
             while(penum.hasMoreElements()) {
@@ -131,6 +137,8 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
             pm.setSize(params.get("size"));
             pm.setPromoSizes(params.get("promo_sizes"));
             pm.setReferrer(params.get("referrer"));
+            pm.setIpAddress(request.getRemoteAddr());
+            pmList.add(pm);
         }
 
 
@@ -142,8 +150,7 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
         // pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
         // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
 
-        pm.setIpAddress(request.getRemoteAddr());
 
-        return pm;
+        return pmList;
     }
 }

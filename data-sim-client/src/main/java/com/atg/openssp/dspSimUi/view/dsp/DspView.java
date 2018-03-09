@@ -15,7 +15,7 @@ public class DspView {
 
     public DspView(DspModel model) {
         this.model = model;
-        frame = new JFrame("DSP Sim - "+model.lookupProperty(ServerHandler.SERVER_HOST));
+        frame = new JFrame("DSP Sim - "+model.lookupProperty(ServerHandler.SERVER_HOST)+":"+model.lookupProperty(ServerHandler.SERVER_PORT));
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Bidders", new SimBidderPanel(model));
         frame.setContentPane(tabs);

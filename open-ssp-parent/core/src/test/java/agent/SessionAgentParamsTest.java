@@ -54,7 +54,7 @@ public class SessionAgentParamsTest {
 		}
 
 		try {
-			Assert.assertEquals("1", agent.getParamValues().getSite().getId());
+			Assert.assertEquals("1", agent.getParamValues().get(0).getSite().getId());
 		} catch (RequestException e) {
 			e.printStackTrace();
 			fail("problem");

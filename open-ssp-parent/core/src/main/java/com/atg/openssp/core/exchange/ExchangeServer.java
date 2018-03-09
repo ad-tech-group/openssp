@@ -63,7 +63,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 					if (e.getCause() instanceof RequestException) {
 						throw (RequestException) e.getCause();
 					} else {
-						log.error(e.getMessage());
+						log.error(e.getMessage(), e);
 					}
 					throw e;
 				}

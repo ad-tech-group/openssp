@@ -8,10 +8,13 @@ import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.cache.type.SiteDataCache;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestEntryValidatorHandler  extends EntryValidatorHandler {
     @Override
-    public ParamValue validateEntryParams(HttpServletRequest request) throws RequestException {
+    public List<ParamValue> validateEntryParams(HttpServletRequest request) throws RequestException {
+        final ArrayList<ParamValue> pmList = new ArrayList<ParamValue>();
         final TestParamValue pm = new TestParamValue();
         pm.setIsTest(request.getParameter("test"));
 
@@ -41,6 +44,7 @@ public class TestEntryValidatorHandler  extends EntryValidatorHandler {
 
         pm.setIpAddress(request.getRemoteAddr());
 
-        return pm;
+        pmList.add(pm);
+        return pmList;
     }
 }

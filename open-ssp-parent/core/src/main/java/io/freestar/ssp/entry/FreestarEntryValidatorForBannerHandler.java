@@ -27,7 +27,8 @@ public class FreestarEntryValidatorForBannerHandler extends EntryValidatorHandle
     }
 
     @Override
-    public ParamValue validateEntryParams(HttpServletRequest request) throws RequestException {
+    public List<ParamValue> validateEntryParams(HttpServletRequest request) throws RequestException {
+        final ArrayList<ParamValue> pmList = new ArrayList<ParamValue>();
         final FreestarParamValue pm = new FreestarParamValue();
 
         Cookie[] cList = request.getCookies();
@@ -130,6 +131,7 @@ INFO: FreestarEntryValidatorForBannerHandler param: referrer : [http://testsite.
         // pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
         // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
 
-        return pm;
+        pmList.add(pm);
+        return pmList;
     }
 }

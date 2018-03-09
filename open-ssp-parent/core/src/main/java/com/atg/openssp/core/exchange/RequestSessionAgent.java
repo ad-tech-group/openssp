@@ -15,6 +15,8 @@ import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.common.logadapter.RequestLogProcessor;
 import com.atg.openssp.core.entry.EntryValidator;
 
+import java.util.List;
+
 /**
  * Handling class for single request handling. Holding all those data which are relevant to a video request and performing demand requests.
  * 
@@ -44,10 +46,12 @@ public class RequestSessionAgent extends SessionAgent {
 	}
 
 	@Override
-	protected ParamValue createParamValue(HttpServletRequest request) throws RequestException {
-		ParamValue paramValue = new EntryValidator(info.getType()).validateEntryParams(request);
-		log.debug(paramValue.toString());
-		return paramValue;
+	protected List<ParamValue> createParamValue(HttpServletRequest request) throws RequestException {
+		List<ParamValue> pList = new EntryValidator(info.getType()).validateEntryParams(request);
+		for (ParamValue paramValue : pList) {
+			log.debug(paramValue.toString());
+		}
+		return pList;
 	}
 
 	@Override

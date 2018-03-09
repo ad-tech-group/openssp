@@ -1,5 +1,6 @@
 package com.atg.openssp.common.core.entry;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public abstract class SessionAgent {
 
 	protected final HttpServletResponse httpResponse;
 
-	private ParamValue paramValue;
+	private List<ParamValue> paramValueList;
 
 	private BidExchange bidExchange;
 	private boolean paramValueInitialized;
@@ -38,7 +39,7 @@ public abstract class SessionAgent {
 		bidExchange = createBidExchange();
 	}
 
-	protected abstract ParamValue createParamValue(HttpServletRequest request) throws RequestException;
+	protected abstract List<ParamValue> createParamValue(HttpServletRequest request) throws RequestException;
 
     protected abstract BidExchange createBidExchange();
 
@@ -56,16 +57,16 @@ public abstract class SessionAgent {
 
 	public void cleanUp() {
 		bidExchange = null;
-		paramValue = null;
+		paramValueList = null;
 		paramValueInitialized = false;
 	}
 
-	public ParamValue getParamValues() throws RequestException {
+	public List<ParamValue> getParamValues() throws RequestException {
     	if (!paramValueInitialized) {
-			paramValue = createParamValue(httpRequest);
+			paramValueList = createParamValue(httpRequest);
 			paramValueInitialized = true;
 		}
-		return paramValue;
+		return paramValueList;
 	}
 
 	public BidExchange getBidExchange() {
