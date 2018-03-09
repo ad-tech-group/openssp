@@ -25,7 +25,8 @@ public class DspSim {
 
     public void start() {
         try {
-            HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
+            int port = Integer.parseInt(dspModel.getProperty("server-port", "8082"));
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
             server.createContext("/dsp-sim/admin", new ClientHandler(dspModel));
             server.createContext("/dsp-sim/DemandService", new DspHandler(dspModel));
             server.createContext("/dsp-sim/myAds", new AdServerHandler(adModel));

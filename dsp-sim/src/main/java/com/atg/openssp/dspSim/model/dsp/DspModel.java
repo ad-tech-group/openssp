@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -23,9 +24,26 @@ public class DspModel {
     private final ArrayList<SimBidderListener> simBidderListeners = new ArrayList<SimBidderListener>();
     private final ArrayList<SimBidder> bList = new ArrayList<SimBidder>();
     private final HashMap<String, SimBidder> bMap = new LinkedHashMap<String, SimBidder>();
+    private final Properties properties = new Properties();
+    private static BigDecimal priceOffset = new BigDecimal(0);
 
     public DspModel() throws ModelException {
+        loadProperties();
         loadModel();
+    }
+
+    private void loadProperties() {
+        File file = new File("dsp-sim-dsp.properties");
+        if (file.exists()) {
+            try {
+                FileInputStream is = new FileInputStream("dsp-sim-dsp.properties");
+                properties.load(is);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void loadModel() throws ModelException {
@@ -101,7 +119,10 @@ public class DspModel {
         sb.getBid().add(b);
         b.setId(simBidder.getId());
         b.setImpid(i.getId());
-        b.setPrice(simBidder.getPrice());
+        priceOffset = priceOffset.add(new BigDecimal(.01));
+        BigDecimal d = new BigDecimal(simBidder.getPrice());
+        d = d.add(priceOffset);
+        b.setPrice(priceOffset.floatValue());
         b.setAdid(simBidder.getAdId());
         b.setNurl(simBidder.getNUrl());
         b.setAdm(simBidder.getAdm());
@@ -179,6 +200,19 @@ public class DspModel {
 
     public SimBidder lookupBidder(String id) {
         return bMap.get(id);
+    }
+
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+
+    public String getProperty(String key, String defaultValue) {
+        String v = getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        } else {
+            return v;
+        }
     }
 
 }
