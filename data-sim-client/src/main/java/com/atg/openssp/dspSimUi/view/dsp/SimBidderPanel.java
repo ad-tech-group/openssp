@@ -39,9 +39,9 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JTextField tfAddNUrl = new JTextField(20);
     private final JTextField tfAdm = new JTextField(25);
     private final JTextField tfAddAdm = new JTextField(25);
-    private DefaultListModel<String> mAdomain = new DefaultListModel<String>();
+    private final DefaultListModel<String> mAdomain = new DefaultListModel<String>();
     private final JList<String> lAdomain = new JList<String>(mAdomain);
-    private DefaultListModel<String> mAddAdomain = new DefaultListModel<String>();
+    private final DefaultListModel<String> mAddAdomain = new DefaultListModel<String>();
     private final JList<String> lAddAdomain = new JList<String>(mAddAdomain);
     private final JTextField tfIUrl = new JTextField(25);
     private final JTextField tfAddIUrl = new JTextField(25);
@@ -49,9 +49,9 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JTextField tfAddCId = new JTextField(25);
     private final JTextField tfCrId = new JTextField(25);
     private final JTextField tfAddCrId = new JTextField(25);
-    private DefaultListModel<String> mCat = new DefaultListModel<String>();
+    private final DefaultListModel<String> mCat = new DefaultListModel<String>();
     private final JList<String> lCat = new JList<String>(mCat);
-    private DefaultListModel<String> mAddCat = new DefaultListModel<String>();
+    private final DefaultListModel<String> mAddCat = new DefaultListModel<String>();
     private final JList<String> lAddCat = new JList<String>(mAddCat);
 
 
@@ -64,6 +64,8 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JButton bRemove = new JButton("remove");
     private final JButton bAdd = new JButton("add");
     private final JTextField tfMemo = new JTextField(20);
+    private final JButton bRestart = new JButton("Restart SIM");
+    private final JButton bShutdown = new JButton("Shutdown SIM");
 
     public SimBidderPanel(DspModel model) {
         this.model = model;
@@ -81,6 +83,11 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         JPanel pRight = new JPanel();
         pRight.setLayout(new BoxLayout(pRight, BoxLayout.Y_AXIS));
         add(pRight, BorderLayout.EAST);
+
+        bShutdown.addActionListener(this);
+        addItem(pTop, "", bShutdown);
+        bRestart.addActionListener(this);
+        addItem(pTop, "", bRestart);
 
         lBidders.setVisibleRowCount(10);
         addItem(pTop, "Bidders: ", lBidders);
@@ -301,6 +308,18 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             if (!"".equals(value.trim())) {
                 mAddCat.addElement(value);
                 tfAddNewCat.setText("");
+            }
+        } else if (ev.getSource() == bShutdown) {
+            try {
+                model.sendShutdownCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+        } else if (ev.getSource() == bRestart) {
+            try {
+                model.sendRestartCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
             }
         }
     }

@@ -119,4 +119,11 @@ public class ServerHandler implements Runnable {
         }
     }
 
+    public void sendShutdownCommand() throws ModelException {
+        sendCommand(ServerCommandType.SHUTDOWN);
+    }
+
+    public void sendRestartCommand() throws ModelException {
+        sendCommand(ServerCommandType.RESTART);
+    }
 }

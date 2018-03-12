@@ -35,8 +35,8 @@ public final class Bid implements Comparable<Bid> {
 
 	@Since(2.2)
 	private String dealid;
-	private int h;
 	private int w;
+	private int h;
 
 	@Since(2.3)
 	// private String bundle;

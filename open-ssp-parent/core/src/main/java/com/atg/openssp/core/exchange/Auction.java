@@ -1,8 +1,6 @@
 package com.atg.openssp.core.exchange;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 import com.atg.openssp.common.cache.CurrencyCache;
@@ -13,7 +11,6 @@ import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
 
 import com.atg.openssp.common.provider.AdProviderReader;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.BidRequest;
@@ -41,8 +38,6 @@ public class Auction {
 	 * @throws InvalidBidException TODO: big issue: eval to extract to more generla context
 	 */
 	public static AuctionResult auctioneer(final BidExchange bidExchange) throws InvalidBidException {
-		final List<Bidder> dealBidList = new ArrayList<>();
-		final List<Bidder> nonDealBidList = new ArrayList<>();
 
 		// bidExchange.getAllBidResponses().entrySet().forEach(new Consumer<Entry<Supplier, BidResponse.Builder>>() {
 		// @Override
@@ -76,6 +71,9 @@ public class Auction {
 		// }
 		// });
 
+
+		LinkedHashMap<Integer, List<Bidder>> workingDealBidLists = new LinkedHashMap<Integer, List<Bidder>>();
+		LinkedHashMap<Integer, List<Bidder>>workingNonDealBidLists = new LinkedHashMap<Integer, List<Bidder>>();
 		for (final Entry<Supplier, BidResponse> bidResponses : bidExchange.getAllBidResponses().entrySet()) {
 			final BidResponse bidResponse = bidResponses.getValue();
 			if (bidResponse == null) {
@@ -83,30 +81,64 @@ public class Auction {
 			}
 			final BidRequest request = bidExchange.getBidRequest(bidResponses.getKey());
 			// considering that only ONE impression containing the bidrequest
-			final Impression imp = request.getImp().get(0);
-			for (final SeatBid seatBid : bidResponse.getSeatbid()) {
-				for (final Bid bid : seatBid.getBid()) {
-					final Bidder bidder = new Bidder(bidResponses.getKey());
-					bidder.setSeat(seatBid);
-					bidder.setPrice(bid.getPrice());
-					bidder.setCurrency(bidResponse.getCur());
-					final DirectDeal matchingDeal = checkForDealMatch(imp.getPmp(), bid);
-					if (matchingDeal != null) {
-						bidder.setDealId(matchingDeal.getId());
-						bidder.setBidFloorcurrency(matchingDeal.getBidFloorcurrrency());
-						bidder.setBidFloorprice(matchingDeal.getBidFloorprice());
-						dealBidList.add(bidder);
-					} else {
-						bidder.setBidFloorcurrency(imp.getBidfloorcur());
-						bidder.setBidFloorprice(imp.getBidfloor());
-						nonDealBidList.add(bidder);
+
+			if (request.getImp().size() > 1) {
+				CompoundAuctionResult compoundWinner = new CompoundAuctionResult();
+				for (int i=0; i<request.getImp().size(); i++) {
+					Impression imp = request.getImp().get(i);
+					AuctionResult myWinner = new AuctionResult();
+					compoundWinner.add(myWinner);
+					List<Bidder> dealBidList = workingDealBidLists.get(i);
+					if (dealBidList == null) {
+						dealBidList = new ArrayList<>();
+						workingDealBidLists.put(i, dealBidList);
 					}
+					List<Bidder> nonDealBidList = workingNonDealBidLists.get(i);
+					if (nonDealBidList == null) {
+						nonDealBidList = new ArrayList<>();
+						workingNonDealBidLists.put(i, nonDealBidList);
+					}
+					populateLists(dealBidList, nonDealBidList, bidResponses.getKey(), bidResponse, imp);
 				}
+			} else {
+				final Impression imp = request.getImp().get(0);
+				List<Bidder> dealBidList = workingDealBidLists.get(0);
+				if (dealBidList == null) {
+					dealBidList = new ArrayList<>();
+					workingDealBidLists.put(0, dealBidList);
+				}
+				List<Bidder> nonDealBidList = workingNonDealBidLists.get(0);
+				if (nonDealBidList == null) {
+					nonDealBidList = new ArrayList<>();
+					workingNonDealBidLists.put(0, nonDealBidList);
+				}
+				populateLists(dealBidList, nonDealBidList, bidResponses.getKey(), bidResponse, imp);
+				// do stuff
 			}
 		}
 
-		RtbAdProvider winningProvider = null;
+		AuctionResult dealWinner;
+		if (workingDealBidLists.size() > 1) {
+			dealWinner = new CompoundAuctionResult();
+			for (int i=0; i<workingDealBidLists.size(); i++) {
+				AuctionResult workingWinner = new AuctionResult();
+				((CompoundAuctionResult)dealWinner).add(workingWinner);
+				createDealWinner(bidExchange, workingDealBidLists.get(i), workingNonDealBidLists.get(i), workingWinner);
+			}
+		} else {
+			dealWinner = new AuctionResult();
+			createDealWinner(bidExchange, workingDealBidLists.get(0), workingNonDealBidLists.get(0), dealWinner);
+		}
+
+
+//		dealWinner = compoundWinner;
+//		dealWinner = new AuctionResult();
+		return dealWinner;
+	}
+
+	private static void createDealWinner(BidExchange bidExchange, List<Bidder> dealBidList, List<Bidder> nonDealBidList, AuctionResult dealWinner) throws InvalidBidException {
 		// 1. als erstes die bids für die deals evaluieren
+		RtbAdProvider winningProvider = null;
 		if (false == dealBidList.isEmpty()) {
 			Collections.sort(dealBidList);
 			winningProvider = evaluateWinner(dealBidList);
@@ -118,13 +150,35 @@ public class Auction {
 			winningProvider = evaluateWinner(nonDealBidList);
 		}
 
-		AuctionResult dealWinner = new AuctionResult();
 		if (winningProvider != null) {
 			dealWinner.setBidRequest(bidExchange.getBidRequest(winningProvider.getSupplier()));
 			dealWinner.setWinningProvider(winningProvider);
 		}
-		return dealWinner;
 	}
+
+	private static void populateLists(List<Bidder> dealBidList, List<Bidder> nonDealBidList, Supplier bidResponsesKey,
+									  BidResponse bidResponse, Impression imp) {
+		for (final SeatBid seatBid : bidResponse.getSeatbid()) {
+			for (final Bid bid : seatBid.getBid()) {
+				final Bidder bidder = new Bidder(bidResponsesKey);
+				bidder.setSeat(seatBid);
+				bidder.setPrice(bid.getPrice());
+				bidder.setCurrency(bidResponse.getCur());
+				final DirectDeal matchingDeal = checkForDealMatch(imp.getPmp(), bid);
+				if (matchingDeal != null) {
+					bidder.setDealId(matchingDeal.getId());
+					bidder.setBidFloorcurrency(matchingDeal.getBidFloorcurrrency());
+					bidder.setBidFloorprice(matchingDeal.getBidFloorprice());
+					dealBidList.add(bidder);
+				} else {
+					bidder.setBidFloorcurrency(imp.getBidfloorcur());
+					bidder.setBidFloorprice(imp.getBidfloor());
+					nonDealBidList.add(bidder);
+				}
+			}
+		}
+	}
+
 
 	// bidList must be sorted
 	private static RtbAdProvider evaluateWinner(final List<Bidder> bidList) throws InvalidBidException {
@@ -345,6 +399,148 @@ public class Auction {
 			final String json = gson.toJson(this, AuctionResult.class);
 			return json;
 		}
+	}
+
+	public static class CompoundAuctionResult extends AuctionResult {
+		private ArrayList<AuctionResult> list = new ArrayList<AuctionResult>();
+
+		@Override
+		public BidRequest getBidRequest() {
+			return getBidRequest(0);
+		}
+
+		public BidRequest getBidRequest(int index) {
+			return list.get(index).getBidRequest();
+		}
+
+		@Override
+		public void setBidRequest(BidRequest bidRequest) {
+			setBidRequest(0, bidRequest);
+		}
+
+		public void setBidRequest(int index, BidRequest bidRequest) {
+			list.get(index).setBidRequest(bidRequest);
+		}
+
+		@Override
+		public void setWinningProvider(RtbAdProvider winningProvider) {
+			setWinningProvider(0, winningProvider);
+		}
+
+		public void setWinningProvider(int index, RtbAdProvider winningProvider) {
+			list.get(index).setWinningProvider(winningProvider);
+		}
+
+		@Override
+		public RtbAdProvider getWinningProvider() {
+			return getWinningProvider(0);
+		}
+
+		public RtbAdProvider getWinningProvider(int index) {
+			return list.get(index).getWinningProvider();
+		}
+
+		@Override
+		public float getPrice() {
+			return getPrice(0);
+		}
+
+		public float getPrice(int index) {
+			return list.get(index).getPrice();
+		}
+
+		@Override
+		public float getAdjustedCurrencyPrice() {
+			return getAdjustedCurrencyPrice(0);
+		}
+
+		public float getAdjustedCurrencyPrice(int index) {
+			return list.get(index).getAdjustedCurrencyPrice();
+		}
+
+		@Override
+		public String getCurrrency() {
+			return getCurrrency(0);
+		}
+
+		public String getCurrrency(int index) {
+			return list.get(index).getCurrrency();
+		}
+
+		@Override
+		public void perform(SessionAgent agent) {
+			perform(0, agent);
+		}
+
+		public void perform(int index, SessionAgent agent) {
+			list.get(index).perform(agent);
+		}
+
+		@Override
+		public String buildResponse() {
+			return buildResponse(0);
+		}
+
+		public String buildResponse(int index) {
+			return list.get(index).buildResponse();
+		}
+
+		@Override
+		public String getVendorId() {
+			return getVendorId(0);
+		}
+
+		public String getVendorId(int index) {
+			return list.get(index).getVendorId();
+		}
+
+		@Override
+		public boolean isValid() {
+			return isValid(0);
+		}
+
+		public boolean isValid(int index) {
+			return list.get(index).isValid();
+		}
+
+		@Override
+		public String getAdid() {
+			return getAdid(0);
+		}
+
+		public String getAdid(int index) {
+			return list.get(index).getAdid();
+		}
+
+		@Override
+		public Supplier getSupplier() {
+			return getSupplier(0);
+		}
+
+		public Supplier getSupplier(int index) {
+			return list.get(index).getSupplier();
+		}
+
+		@Override
+		public String getDealId() {
+			return getDealId(0);
+		}
+
+		public String getDealId(int index) {
+			return list.get(index).getDealId();
+		}
+
+		@Override
+		public String buildHeaderBidResponse() {
+			Gson gson = new GsonBuilder().setVersion(Double.valueOf(getSupplier().getOpenRtbVersion())).create();
+			final String json = gson.toJson(this, CompoundAuctionResult.class);
+			return json;
+		}
+
+		public void add(AuctionResult dealWinner) {
+			list.add(dealWinner);
+		}
+
 	}
 
 }

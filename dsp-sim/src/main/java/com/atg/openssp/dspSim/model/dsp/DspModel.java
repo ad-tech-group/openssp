@@ -3,6 +3,7 @@ package com.atg.openssp.dspSim.model.dsp;
 import com.atg.openssp.dspSim.model.ModelException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import openrtb.bidrequest.model.Banner;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Impression;
 import openrtb.bidresponse.model.Bid;
@@ -107,13 +108,13 @@ public class DspModel {
 
         for (Impression i : request.getImp()) {
             for (SimBidder sb : bList) {
-                response.addSeatBid(fabricateSeatBid(request.getId(), sb, i));
+                response.addSeatBid(fabricateSeatBid(request, sb, i));
             }
         }
         return response;
     }
 
-    private SeatBid fabricateSeatBid(String requestId, SimBidder simBidder, Impression i) {
+    private SeatBid fabricateSeatBid(BidRequest request, SimBidder simBidder, Impression i) {
         SeatBid sb = new SeatBid();
         Bid b = new Bid();
         sb.getBid().add(b);
@@ -131,6 +132,13 @@ public class DspModel {
         b.setCid(simBidder.getCId());
         b.setCrid(simBidder.getCrId());
         b.setCat(simBidder.getCat());
+
+        if (i.hasVideo()) {
+        } else if (i.hasBanner()) {
+            Banner banner = i.getBanner();
+            b.setH(banner.getH());
+            b.setW(banner.getW());
+        }
         return sb;
     }
         /*

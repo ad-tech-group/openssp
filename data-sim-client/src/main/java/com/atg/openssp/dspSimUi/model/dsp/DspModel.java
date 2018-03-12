@@ -90,4 +90,11 @@ public class DspModel extends BaseModel {
         serverHandler.sendRemoveCommand(id);
     }
 
+    public void sendShutdownCommand() throws ModelException {
+        serverHandler.sendShutdownCommand();
+    }
+
+    public void sendRestartCommand() throws ModelException {
+        serverHandler.sendRestartCommand();
+    }
 }

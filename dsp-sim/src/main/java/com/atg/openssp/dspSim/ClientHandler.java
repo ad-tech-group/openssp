@@ -14,13 +14,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author Brian Sorensen
  */
-public class ClientHandler implements HttpHandler {
+public class ClientHandler extends TimerTask implements HttpHandler {
     private static final Logger log = LoggerFactory.getLogger(ClientHandler.class);
     private final DspModel model;
+    private int exitCode;
 
     public ClientHandler(DspModel model) {
         this.model = model;
@@ -91,6 +94,17 @@ public class ClientHandler implements HttpHandler {
                 }
             }
             cr.setBidders(model.getBidders());
+        } else if (cc.getType() == ClientCommandType.RESTART) {
+            cr.setStatus(ClientResponseStatus.SUCCESS);
+            exitCode = 5;
+            Timer t = new Timer();
+            t.schedule(this, 2000);
+            cr.setStatus(ClientResponseStatus.SUCCESS);
+        } else if (cc.getType() == ClientCommandType.SHUTDOWN) {
+            exitCode = 0;
+            Timer t = new Timer();
+            t.schedule(this, 2000);
+            cr.setStatus(ClientResponseStatus.SUCCESS);
         }
         String result = new Gson().toJson(cr);
         log.info("CR<--"+result);
@@ -99,5 +113,10 @@ public class ClientHandler implements HttpHandler {
         os.write(result.getBytes());
         os.close();
 
+    }
+
+    @Override
+    public void run() {
+        System.exit(exitCode);
     }
 }
