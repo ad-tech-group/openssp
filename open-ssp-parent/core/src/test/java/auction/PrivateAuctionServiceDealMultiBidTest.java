@@ -1,5 +1,6 @@
 package auction;
 
+import openrtb.bidrequest.model.Impression;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -93,6 +94,53 @@ public class PrivateAuctionServiceDealMultiBidTest {
 			Assert.assertEquals(3.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
 			Assert.assertEquals(FloatComparator.rr(3.51f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(supplier2.getShortName(), winner.getSupplier().getShortName());
+			Assert.assertEquals("998866", winner.getDealId());
+		} catch (final InvalidBidException e) {
+			Assert.fail("Exception thrown: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public final void testMultiBidMultiImpressionDealWins() {
+		final BidExchange bidExchange = new BidExchange();
+		final float impFloor = 0.88f;
+		final float dealFloor1a = 3.f;
+		final float dealFloor1b = 3.1f;
+		final float dealFloor1c = 3.6f;
+		final float dealFloor2a = 2.8f;
+		final float dealFloor2b = 2.9f;
+		final float dealFloor2c = 1.8f;
+		final String currency = "USD";
+
+		final String deal_id_1 = "998877";
+		final String deal_id_2 = "998866";
+
+		// bidrequest1
+		final BidRequest bidRequest1 = RequestResponseHelper.createRequest(impFloor, new float[]{dealFloor1a, dealFloor1b, dealFloor1c}, currency, deal_id_1, 1).build();
+
+		// bidrequest1
+		final BidRequest bidRequest2 = RequestResponseHelper.createRequest(impFloor, new float[]{dealFloor2a, dealFloor2b, dealFloor2c}, currency, deal_id_2, 1).build();
+
+		// bidresponse, price in USD
+		final float bidPrice1 = 3.5f;
+		final BidResponse response = RequestResponseHelper.createResponse(bidPrice1, currency, deal_id_1);
+		bidExchange.setBidRequest(supplier1, bidRequest1);
+		bidExchange.setBidResponse(supplier1, response);
+
+		// bidresponse2, price in USD
+		final float bidPrice2 = 4.10f;
+		final BidResponse response2 = RequestResponseHelper.createResponse(bidPrice2, currency, deal_id_2);
+		bidExchange.setBidRequest(supplier2, bidRequest2);
+		bidExchange.setBidResponse(supplier2, response2);
+
+		try {
+			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
+			Assert.assertTrue(winner.isValid());
+			Assert.assertEquals(4.10f, winner.getPrice(), 0);
+			final float currencyRateEUR = CurrencyCache.instance.get(currency);
+			System.out.println(winner.getAdjustedCurrencyPrice()*currencyRateEUR);
+			Assert.assertEquals(FloatComparator.rr(4.10f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier2.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals("998866", winner.getDealId());
 		} catch (final InvalidBidException e) {
