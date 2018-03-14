@@ -3,6 +3,8 @@ package com.atg.openssp.core.exchange;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.entry.BiddingServiceInfo;
+import com.atg.openssp.core.entry.SessionAgentType;
 import com.atg.openssp.core.system.loader.LocalContextLoader;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.VideoBidResponseProtocol;
@@ -15,21 +17,9 @@ import openrtb.tables.VideoBidResponseProtocol;
 public final class BidRequestBuilder {
     private static BidRequestBuilder instance;
     private BidRequestBuilderHandler handler;
+    private boolean initialized;
 
     private BidRequestBuilder() {
-        String handlerClassName = GlobalContext.getBidRequestBuilderHandlerClass();
-        if (handlerClassName != null && !"".equals(handlerClassName)) {
-            try {
-                Class c = Class.forName(handlerClassName);
-                handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
-            } catch (Exception e) {
-                handler = new TestBidRequestBuilderHandler();
-                e.printStackTrace();
-            }
-        } else {
-            handler = new TestBidRequestBuilderHandler();
-        }
-
     }
 
     /**
@@ -37,7 +27,41 @@ public final class BidRequestBuilder {
      *
      * @return {@see BidRequest}
      */
-    public BidRequest build(final SessionAgent agent) throws RequestException {
+    public BidRequest build(final RequestSessionAgent agent) throws RequestException {
+        if (!initialized) {
+            initialized = true;
+
+            BiddingServiceInfo info = agent.getBiddingServiceInfo();
+            SessionAgentType type = info.getType();
+
+            if (type == SessionAgentType.VIDEO) {
+                try {
+                    String handlerClassName = GlobalContext.getBidRequestBuilderHandlerForVideoObjectsClass();
+                    Class c = Class.forName(handlerClassName);
+                    handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
+                } catch (Exception e) {
+                    handler = new TestBidRequestBuilderHandler();
+                }
+            } else if (type == SessionAgentType.BANNER) {
+                try {
+                    String handlerClassName = GlobalContext.getBidRequestBuilderHandlerForBannerObjectsClass();
+                    Class c = Class.forName(handlerClassName);
+                    handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
+                } catch (Exception e) {
+                    handler = new TestBidRequestBuilderHandler();
+                }
+            } else if (type == SessionAgentType.HEADER) {
+                try {
+                    String handlerClassName = GlobalContext.getBidRequestBuilderHandlerForHeaderBiddingClass();
+                    Class c = Class.forName(handlerClassName);
+                    handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
+                } catch (Exception e) {
+                    handler = new TestBidRequestBuilderHandler();
+                }
+            } else {
+                handler = new TestBidRequestBuilderHandler();
+            }
+        }
 
         return handler.constructRequest(agent);
     }

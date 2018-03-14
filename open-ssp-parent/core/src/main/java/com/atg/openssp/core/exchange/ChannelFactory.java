@@ -31,7 +31,7 @@ class ChannelFactory {
 	 * @see AdservingService
 	 * @see AdProviderReader
 	 */
-	static List<Callable<AdProviderReader>> createListOfChannels(final SessionAgent agent) {
+	static List<Callable<AdProviderReader>> createListOfChannels(final RequestSessionAgent agent) {
 		final List<Callable<AdProviderReader>> callables = new ArrayList<>();
 
 		/*

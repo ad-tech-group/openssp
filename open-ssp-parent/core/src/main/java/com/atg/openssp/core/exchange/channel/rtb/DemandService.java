@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.exchange.BidRequestBuilder;
+import com.atg.openssp.core.exchange.RequestSessionAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,14 +34,14 @@ public class DemandService implements Callable<AdProviderReader> {
 
 	private static final Logger log = LoggerFactory.getLogger(DemandService.class);
 
-	private final SessionAgent agent;
+	private final RequestSessionAgent agent;
 
 	/**
 	 * 
 	 * @param {@link
 	 *            SessionAgent}
 	 */
-	public DemandService(final SessionAgent agent) {
+	public DemandService(final RequestSessionAgent agent) {
 		this.agent = agent;
 	}
 

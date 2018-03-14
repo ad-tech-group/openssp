@@ -130,7 +130,13 @@ public enum ContextProperties {
 	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class"),
 
 	@RuntimeMeta(type = Scope.GLOBAL)
-	BUILD_REQUEST_BUILDER_HANDLER_CLASS("bid-request-builder-handler-class"),
+	BUILD_REQUEST_BUILDER_HANDLER_FOR_VIDEO_CLASS("bid-request-builder-handler-for-video-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	BUILD_REQUEST_BUILDER_HANDLER_FOR_BANNER_CLASS("bid-request-builder-handler-for-banner-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	BUILD_REQUEST_BUILDER_HANDLER_FOR_HEADER_CLASS("bid-request-builder-handler-for-header-class"),
 
 	@RuntimeMeta(type = Scope.GLOBAL)
 	GEO_IP_INFO_HANDLER_CLASS("geo-ip-info-handler-class"),

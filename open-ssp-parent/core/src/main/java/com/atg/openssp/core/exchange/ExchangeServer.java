@@ -51,7 +51,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 		return evaluateResponse(agent, winner);
 	}
 
-	private AdProviderReader execute(final SessionAgent agent) throws ExecutionException, RequestException {
+	private AdProviderReader execute(final RequestSessionAgent agent) throws ExecutionException, RequestException {
 		try {
 			final List<Callable<AdProviderReader>> callables = ChannelFactory.createListOfChannels(agent);
 			final List<Future<AdProviderReader>> futures = ExchangeExecutorServiceFacade.instance.invokeAll(callables);

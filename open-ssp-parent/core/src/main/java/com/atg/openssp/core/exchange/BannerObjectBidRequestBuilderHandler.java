@@ -1,4 +1,4 @@
-package io.freestar.ssp.exchange;
+package com.atg.openssp.core.exchange;
 
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
@@ -6,11 +6,9 @@ import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.exchange.BidRequestBuilderHandler;
 import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
-import openrtb.bidrequest.model.GeoIpInfo;
 import openrtb.bidrequest.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +17,13 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
-    private final Logger log = LoggerFactory.getLogger(FreestarBidRequestBuilderHandler.class);
+public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandler {
+    private final Logger log = LoggerFactory.getLogger(BannerObjectBidRequestBuilderHandler.class);
     private final Base64.Decoder decoder;
     private GeoIpInfoHandler geoIpInfoHandler;
 
 
-    public FreestarBidRequestBuilderHandler() {
+    public BannerObjectBidRequestBuilderHandler() {
         decoder = Base64.getDecoder();
         String handlerClassName = GlobalContext.getGeoIpInfoHandlerClass();
         if (handlerClassName == null) {

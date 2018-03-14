@@ -41,9 +41,13 @@
 
 	<entry key="validator-handler-for-header-class">com.atg.openssp.core.entry.header.HeaderBiddingEntryValidatorHandler</entry>
 
-	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+	<entry key="bid-request-builder-handler-for-video-class">com.atg.openssp.core.exchange.VideoObjectBidRequestBuilderHandler</entry>
 
-	<entry key="bid-request-builder-handler-class">io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler</entry>
+	<entry key="bid-request-builder-handler-for-banner-class">com.atg.openssp.core.exchange.BannerObjectBidRequestBuilderHandler</entry>
+
+	<entry key="bid-request-builder-handler-for-header-class">com.atg.openssp.core.exchange.HeaderBiddingBidRequestBuilderHandler</entry>
+
+	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 
 	<!--  <entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIp2InfoHandler</entry> -->
 
