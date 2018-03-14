@@ -90,7 +90,7 @@ public class DemandService implements Callable<AdProviderReader> {
 			});
 
 			try {
-				adProvider = Auction.auctioneer(agent.getBidExchange());
+				adProvider = Auction.auctioneer(agent.getBiddingServiceInfo(), agent.getBidExchange());
 			} catch (final InvalidBidException e) {
 				log.error("{} {}", agent.getRequestid(), e.getMessage());
 			}

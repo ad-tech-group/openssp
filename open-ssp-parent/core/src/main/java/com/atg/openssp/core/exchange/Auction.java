@@ -11,6 +11,7 @@ import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
 
 import com.atg.openssp.common.provider.AdProviderReader;
+import com.atg.openssp.core.entry.BiddingServiceInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.BidRequest;
@@ -30,16 +31,16 @@ import util.math.FloatComparator;
  */
 public class Auction {
 
-	private static boolean useSecondBest = true;
-
 	/**
 	 * Calculates the the winner of the RTB auction considering the behaviour of a private deal.
 	 *
+	 *
+	 * @param info
 	 * @param bidExchange
 	 * @return RtbAdProvider
 	 * @throws InvalidBidException TODO: big issue: eval to extract to more generla context
 	 */
-	public static AuctionResult auctioneer(final BidExchange bidExchange) throws InvalidBidException {
+	public static AuctionResult auctioneer(BiddingServiceInfo info, final BidExchange bidExchange) throws InvalidBidException {
 		HashMap<String, List<Bidder>> dealBidListMap = new HashMap<String, List<Bidder>>();
 		HashMap<String, List<Bidder>> nonDealBidListMap = new HashMap<String, List<Bidder>>();
 
@@ -124,7 +125,7 @@ public class Auction {
 			// 1. als erstes die bids für die deals evaluieren
 			if (false == dealBidList.isEmpty()) {
 				Collections.sort(dealBidList);
-				winningProviderMap.put(e.getKey(), evaluateWinner(dealBidList));
+				winningProviderMap.put(e.getKey(), evaluateWinner(info, dealBidList));
 			}
 		}
 
@@ -134,7 +135,7 @@ public class Auction {
 			// 2. evaluiere NON-Deals-Bids, falls kein DealBid bereits gewonnen hat
 			if (winningProvider == null && false == nonDealBidList.isEmpty()) {
 				Collections.sort(nonDealBidList);
-				winningProviderMap.put(e.getKey(), evaluateWinner(nonDealBidList));
+				winningProviderMap.put(e.getKey(), evaluateWinner(info, nonDealBidList));
 			}
 		}
 
@@ -164,7 +165,7 @@ public class Auction {
 	}
 
 	// bidList must be sorted
-	private static RtbAdProvider evaluateWinner(final List<Bidder> bidList) throws InvalidBidException {
+	private static RtbAdProvider evaluateWinner(BiddingServiceInfo info, final List<Bidder> bidList) throws InvalidBidException {
 		final Bidder bestBidder = bidList.get(0);
 		// returns 1 if bidder is already in EUR
 		final float bestBidCurrencyRate = CurrencyCache.instance.get(bestBidder.getCurrency());
@@ -182,7 +183,7 @@ public class Auction {
 
 		float winnerPriceEUR;
 		if (bidList.size() > 1) {
-			if (useSecondBest) {
+			if (info.useSecondBest()) {
 				AuctionMethodHandler methodHandler = new SecondBestBidderHandler();
 				winnerPriceEUR = methodHandler.generateWinningPrice(bidList, floorEUR, bestBidPriceEUR);
 			} else {

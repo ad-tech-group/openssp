@@ -9,6 +9,7 @@ public class BiddingServiceInfo {
     private String contentType;
     private String characterEncoding;
     private boolean activateAccessAllowOrigin;
+    private boolean useSecondBest = true;
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -53,5 +54,13 @@ public class BiddingServiceInfo {
 
     public boolean isAccessAllowOriginActivated() {
         return activateAccessAllowOrigin;
+    }
+
+    public boolean useSecondBest() {
+        return useSecondBest;
+    }
+
+    public void disableSecondBest() {
+        useSecondBest = false;
     }
 }

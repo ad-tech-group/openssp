@@ -29,6 +29,7 @@ public class HeaderBiddingService extends CoreSupplyServlet<RequestSessionAgent>
 		info.setContentType("application/json");
 		info.setCharacterEncoding("UTF-8");
 		info.activateAccessAllowOrigin();
+		info.disableSecondBest();
 		return new RequestSessionAgent(request, response, info);
 	}
 

@@ -3,6 +3,7 @@ package auction;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.atg.openssp.core.entry.BiddingServiceInfo;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.core.exchange.Auction;
-import com.atg.openssp.core.exchange.RtbAdProvider;
 
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.DirectDeal;
@@ -67,8 +67,9 @@ public class AuctionServiceDealSingleBidTest {
 
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
+		BiddingServiceInfo info = new BiddingServiceInfo();
 		try {
-			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			Assert.assertTrue(winner.isValid());
 		} catch (final InvalidBidException e) {
@@ -91,7 +92,8 @@ public class AuctionServiceDealSingleBidTest {
 		final BidResponse response = createResponse(bidPrice, currency, "998877");
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
-		Auction.auctioneer(bidExchange);
+		BiddingServiceInfo info = new BiddingServiceInfo();
+		Auction.auctioneer(info, bidExchange);
 	}
 
 	@Test
@@ -110,8 +112,9 @@ public class AuctionServiceDealSingleBidTest {
 
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
+		BiddingServiceInfo info = new BiddingServiceInfo();
 		try {
-			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			final float currencyRate = CurrencyCache.instance.get(currency);
 			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getAdjustedCurrencyPrice(), 0);
@@ -136,8 +139,9 @@ public class AuctionServiceDealSingleBidTest {
 		final BidResponse response = createResponse(bidPrice, currency, "998877");
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
+		BiddingServiceInfo info = new BiddingServiceInfo();
 		try {
-			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			final float currencyRate = CurrencyCache.instance.get(currency);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getAdjustedCurrencyPrice(), 0);
@@ -162,7 +166,8 @@ public class AuctionServiceDealSingleBidTest {
 		final BidResponse response = createResponse(bidPrice, currency, "998877");
 		bidExchange.setBidRequest(supplier, bidRequest);
 		bidExchange.setBidResponse(supplier, response);
-		Auction.auctioneer(bidExchange);
+		BiddingServiceInfo info = new BiddingServiceInfo();
+		Auction.auctioneer(info, bidExchange);
 	}
 
 	private static Bid createBid(final float price, final String dealID) {

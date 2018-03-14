@@ -1,6 +1,6 @@
 package auction;
 
-import openrtb.bidrequest.model.Impression;
+import com.atg.openssp.core.entry.BiddingServiceInfo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,7 +11,6 @@ import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.core.exchange.Auction;
-import com.atg.openssp.core.exchange.RtbAdProvider;
 
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidresponse.model.BidResponse;
@@ -88,8 +87,9 @@ public class PrivateAuctionServiceDealMultiBidTest {
 		bidExchange.setBidRequest(supplier2, bidRequest2);
 		bidExchange.setBidResponse(supplier2, response2);
 
+		BiddingServiceInfo info = new BiddingServiceInfo();
 		try {
-			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(3.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -134,8 +134,9 @@ public class PrivateAuctionServiceDealMultiBidTest {
 		bidExchange.setBidRequest(supplier2, bidRequest2);
 		bidExchange.setBidResponse(supplier2, response2);
 
+		BiddingServiceInfo info = new BiddingServiceInfo();
 		try {
-			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(4.10f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
@@ -182,7 +183,8 @@ public class PrivateAuctionServiceDealMultiBidTest {
 		bidExchange.setBidRequest(supplier2, bidRequest1);
 		bidExchange.setBidResponse(supplier2, response3);
 
-		Auction.auctioneer(bidExchange);
+		BiddingServiceInfo info = new BiddingServiceInfo();
+		Auction.auctioneer(info, bidExchange);
 		Assert.fail();
 	}
 
@@ -225,8 +227,9 @@ public class PrivateAuctionServiceDealMultiBidTest {
 		bidExchange.setBidRequest(supplier4, bidRequest1);
 		bidExchange.setBidResponse(supplier4, response4);
 
+		BiddingServiceInfo info = new BiddingServiceInfo();
 		try {
-			final Auction.AuctionResult winner = Auction.auctioneer(bidExchange);
+			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(winner.getPrice(), 3.15f, 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);

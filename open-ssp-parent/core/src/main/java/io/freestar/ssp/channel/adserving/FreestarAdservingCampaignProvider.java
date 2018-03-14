@@ -7,7 +7,7 @@ import com.atg.openssp.common.provider.AdProviderWriter;
 
 /**
  *
- * @author André Schmer
+ * @author Brian Sorensen
  *
  */
 public class FreestarAdservingCampaignProvider extends AdservingCampaignProvider {
