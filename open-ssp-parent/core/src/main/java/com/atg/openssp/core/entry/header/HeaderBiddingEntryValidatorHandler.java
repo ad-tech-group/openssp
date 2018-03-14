@@ -1,5 +1,6 @@
-package io.freestar.ssp.entry;
+package com.atg.openssp.core.entry.header;
 
+import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
@@ -9,7 +10,6 @@ import com.atg.openssp.core.cache.type.SiteDataCache;
 import com.atg.openssp.core.entry.EntryValidatorHandler;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import io.freestar.ssp.common.demand.FreestarParamValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +23,11 @@ import java.util.*;
 /**
  * @author bsorensen
  */
-public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandler {
-    private final Logger log = LoggerFactory.getLogger(FreestarEntryValidatorForHeaderHandler.class);
+public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
+    private final Logger log = LoggerFactory.getLogger(HeaderBiddingEntryValidatorHandler.class);
     private final Gson gson;
 
-    public FreestarEntryValidatorForHeaderHandler()
+    public HeaderBiddingEntryValidatorHandler()
     {
         gson = new Gson();
     }
@@ -39,10 +39,10 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
         Cookie[] cList = request.getCookies();
         if (cList != null) {
             for (Cookie c : cList) {
-                log.debug("cookie: "+c.getName());
+                log.info("cookie: "+c.getName());
             }
         } else {
-            log.debug("no cookies");
+            log.info("no cookies");
         }
 
         HeaderBiddingRequest biddingRequest=null;
@@ -73,18 +73,18 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
 
             List<AdUnit> adList = biddingRequest.getAdUnitsToBidUpon();
             for (AdUnit a : adList) {
-                final FreestarParamValue pm = new FreestarParamValue();
+                final HeaderBiddingParamValue pm = new HeaderBiddingParamValue();
 
                 try {
                     pm.setSite(SiteDataCache.instance.get(biddingRequest.getSite()));
                 } catch (final EmptyCacheException e) {
-                    e.printStackTrace();
+                e.printStackTrace();
                     try {
                         pm.setApp(AppDataCache.instance.get(biddingRequest.getApp()));
                     } catch (final EmptyCacheException e1) {
                         throw new RequestException(ERROR_CODE.E906, "missing site or app");
-                    }
-                }
+            }
+        }
 
                 pm.setRequestId(biddingRequest.getId());
                 pm.setFsSid(biddingRequest.getFsSid());
@@ -104,27 +104,27 @@ public class FreestarEntryValidatorForHeaderHandler extends EntryValidatorHandle
 
 
         } else {
-            final FreestarParamValue pm = new FreestarParamValue();
+            final HeaderBiddingParamValue pm = new HeaderBiddingParamValue();
             HashMap<String, String> params = new LinkedHashMap();
-            Enumeration<String> penum = request.getParameterNames();
-            while(penum.hasMoreElements()) {
-                String key = penum.nextElement();
-                List<String> values = Arrays.asList(request.getParameterValues(key));
+        Enumeration<String> penum = request.getParameterNames();
+        while(penum.hasMoreElements()) {
+            String key = penum.nextElement();
+            List<String> values = Arrays.asList(request.getParameterValues(key));
                 if (values.size() > 0) {
                     params.put(key, values.get(0));
-                }
+        }
                 log.debug("param: "+key+" : "+values);
             }
 
-            try {
+        try {
                 pm.setSite(SiteDataCache.instance.get(params.get("site")));
-            } catch (final EmptyCacheException e) {
-                try {
+        } catch (final EmptyCacheException e) {
+            try {
                     pm.setApp(AppDataCache.instance.get(params.get("app")));
-                } catch (final EmptyCacheException e1) {
+            } catch (final EmptyCacheException e1) {
                     throw new RequestException(ERROR_CODE.E906, "missing site or app");
-                }
             }
+        }
             pm.setRequestId(params.get("id"));
             pm.setCallback(params.get("callback"));
             pm.setCallbackUid(params.get("callback_uid"));

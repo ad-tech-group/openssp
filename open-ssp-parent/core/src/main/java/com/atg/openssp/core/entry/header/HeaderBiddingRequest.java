@@ -1,4 +1,4 @@
-package io.freestar.ssp.entry;
+package com.atg.openssp.core.entry.header;
 
 import java.util.ArrayList;
 import java.util.List;

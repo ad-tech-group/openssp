@@ -2,6 +2,7 @@ package io.freestar.ssp.exchange;
 
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.RequestException;
@@ -10,7 +11,6 @@ import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
 import openrtb.bidrequest.model.GeoIpInfo;
-import io.freestar.ssp.common.demand.FreestarParamValue;
 import openrtb.bidrequest.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,9 +53,9 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
             }
             log.warn(e.getMessage(), e);
             pValueList = new ArrayList();
-            pValueList.add(new FreestarParamValue());
+            pValueList.add(new HeaderBiddingParamValue());
         }
-        FreestarParamValue masterValues = (FreestarParamValue) pValueList.get(0);
+        HeaderBiddingParamValue masterValues = (HeaderBiddingParamValue) pValueList.get(0);
 
         Site site = masterValues.getSite().clone();
         String requestId = masterValues.getRequestId();
@@ -78,7 +78,7 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
                 ).build();
 
         for (ParamValue pOrigin : pValueList) {
-            FreestarParamValue pValues = (FreestarParamValue) pOrigin;
+            HeaderBiddingParamValue pValues = (HeaderBiddingParamValue) pOrigin;
 
             Impression i = new Impression.Builder().build();
             i.setId(pValues.getId());
@@ -106,7 +106,7 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
         return bidRequest;
     }
 
-    private Geo createSiteGeo(FreestarParamValue pValues) {
+    private Geo createSiteGeo(HeaderBiddingParamValue pValues) {
         Geo geo = new Geo.Builder().build();
         StringTokenizer st = new StringTokenizer(pValues.getFsLoc(), "?&");
         while(st.hasMoreTokens()) {
@@ -138,7 +138,7 @@ public class FreestarBidRequestBuilderHandler extends BidRequestBuilderHandler {
         return geo;
     }
 
-    private Banner createBanner(FreestarParamValue pValues) {
+    private Banner createBanner(HeaderBiddingParamValue pValues) {
         Banner b = new Banner.Builder().setId(pValues.getId()).build();
         ArrayList<Banner.BannerSize> sizes = new ArrayList();
         Banner.BannerSize size = new Banner.BannerSize(pValues.getSize().toLowerCase());

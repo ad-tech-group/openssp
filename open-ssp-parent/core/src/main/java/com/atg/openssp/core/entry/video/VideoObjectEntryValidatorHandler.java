@@ -1,12 +1,12 @@
-package io.freestar.ssp.entry;
+package com.atg.openssp.core.entry.video;
 
 import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.common.demand.VideoObjectParamValue;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.cache.type.AppDataCache;
 import com.atg.openssp.core.cache.type.SiteDataCache;
 import com.atg.openssp.core.entry.EntryValidatorHandler;
-import io.freestar.ssp.common.demand.FreestarParamValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 
-public class FreestarEntryValidatorForVideoHandler extends EntryValidatorHandler {
-    private final Logger log = LoggerFactory.getLogger(FreestarEntryValidatorForVideoHandler.class);
+public class VideoObjectEntryValidatorHandler extends EntryValidatorHandler {
+    private final Logger log = LoggerFactory.getLogger(VideoObjectEntryValidatorHandler.class);
 
-    public FreestarEntryValidatorForVideoHandler()
+    public VideoObjectEntryValidatorHandler()
     {
 
     }
@@ -27,7 +27,7 @@ public class FreestarEntryValidatorForVideoHandler extends EntryValidatorHandler
     @Override
     public List<ParamValue> validateEntryParams(HttpServletRequest request) throws RequestException {
         final ArrayList<ParamValue> pmList = new ArrayList<ParamValue>();
-        final FreestarParamValue pm = new FreestarParamValue();
+        final VideoObjectParamValue pm = new VideoObjectParamValue();
 
         Cookie[] cList = request.getCookies();
         if (cList != null) {

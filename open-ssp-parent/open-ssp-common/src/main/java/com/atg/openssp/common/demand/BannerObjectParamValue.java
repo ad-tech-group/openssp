@@ -1,9 +1,6 @@
-package io.freestar.ssp.common.demand;
+package com.atg.openssp.common.demand;
 
-import com.atg.openssp.common.demand.ParamValue;
 import openrtb.bidrequest.model.App;
-import openrtb.bidrequest.model.Publisher;
-import openrtb.bidrequest.model.Site;
 
 /**
  * Optimized for handling VideoAd impressions with the behaviour of very individual requirements of the tag handler which binds to the SSP.
@@ -13,7 +10,7 @@ import openrtb.bidrequest.model.Site;
  * @author André Schmer
  *
  */
-public class FreestarParamValue extends ParamValue {
+public class BannerObjectParamValue extends ParamValue {
 
 //	private Publisher publisher;
     private String requestId;

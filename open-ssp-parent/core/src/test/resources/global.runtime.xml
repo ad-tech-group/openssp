@@ -35,7 +35,16 @@
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
 
-    <entry key="validator-handler-class">io.freestar.ssp.entry.FreestarEntryValidatorHandler</entry>
+	<entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
+
+	<entry key="validator-handler-for-banner-class">com.atg.openssp.core.entry.banner.BannerObjectEntryValidatorHandler</entry>
+
+	<entry key="validator-handler-for-header-class">com.atg.openssp.core.entry.header.HeaderBiddingEntryValidatorHandler</entry>
 
     <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+
+	<entry key="bid-request-builder-handler-class">io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler</entry>
+
+	<!--  <entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIp2InfoHandler</entry> -->
+
 </properties>

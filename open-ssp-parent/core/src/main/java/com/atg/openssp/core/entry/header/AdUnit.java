@@ -1,4 +1,4 @@
-package io.freestar.ssp.entry;
+package com.atg.openssp.core.entry.header;
 
 public class AdUnit {
     private String id;
