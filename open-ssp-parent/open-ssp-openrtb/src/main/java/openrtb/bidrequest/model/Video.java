@@ -1,5 +1,9 @@
 package openrtb.bidrequest.model;
 
+import openrtb.tables.VideoApiFramework;
+import openrtb.tables.VideoBidResponseProtocol;
+import openrtb.tables.VideoLinearity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +26,7 @@ public final class Video implements Cloneable {
 	// required
 	private int startdelay = 0;
 	// required
-	private List<Integer> protocols;
+	private List<Integer> protocols = new ArrayList<>();
 
 	private List<Integer> battr;
 
@@ -38,7 +42,6 @@ public final class Video implements Cloneable {
 
 	public Video() {
 		mimes = new ArrayList<>();
-		protocols = new ArrayList<>();
 		battr = new ArrayList<>();
 		companionad = new ArrayList<>();
 		api = new ArrayList<>();
@@ -96,20 +99,20 @@ public final class Video implements Cloneable {
 		this.startdelay = startdelay;
 	}
 
-	public List<Integer> getProtocols() {
-		return protocols;
+//	public List<Integer> getProtocols() {
+//		return protocols;
+//	}
+
+//	public void setProtocols(final List<VideoBidResponseProtocol> protocols) {
+//		this.protocolsX = protocols;
+//	}
+
+	public void addProtocol(final VideoBidResponseProtocol protocol) {
+		protocols.add(protocol.getValue());
 	}
 
-	public void setProtocols(final List<Integer> protocols) {
-		this.protocols = protocols;
-	}
-
-	public void addProtocol(final Integer protocol) {
-		protocols.add(protocol);
-	}
-
-	public void addApi(final Integer api) {
-		this.api.add(api);
+	public void addApi(final VideoApiFramework api) {
+		this.api.add(api.getValue());
 	}
 
 	public List<Integer> getBattr() {
@@ -133,8 +136,12 @@ public final class Video implements Cloneable {
 		this.battr.add(battr);
 	}
 
-	public int getLinearity() {
-		return linearity;
+	public void setLinearity(final VideoLinearity linearity) {
+		this.linearity = linearity.getValue();
+	}
+
+	public VideoLinearity getLinearity() {
+		return VideoLinearity.convertValue(linearity);
 	}
 
 	public List<Banner> getCompanionad() {
@@ -145,13 +152,13 @@ public final class Video implements Cloneable {
 		this.companionad = companionad;
 	}
 
-	public List<Integer> getApi() {
-		return api;
-	}
+//	public List<Integer> getApiX() {
+//		return apiX;
+//	}
 
-	public void setApi(final List<Integer> api) {
-		this.api = api;
-	}
+//	public void setApiX(final List<Integer> api) {
+//		this.apiX = api;
+//	}
 
 	public Object getExt() {
 		return ext;
@@ -213,12 +220,12 @@ public final class Video implements Cloneable {
 			return this;
 		}
 
-		public Builder addProtocol(final int protocol) {
+		public Builder addProtocol(final VideoBidResponseProtocol protocol) {
 			video.addProtocol(protocol);
 			return this;
 		}
 
-		public Builder addApi(final int api) {
+		public Builder addApi(final VideoApiFramework api) {
 			video.addApi(api);
 			return this;
 		}
@@ -237,7 +244,7 @@ public final class Video implements Cloneable {
 			return video;
 		}
 
-		public Builder setLinearity(final int linearity) {
+		public Builder setLinearity(final VideoLinearity linearity) {
 			video.setLinearity(linearity);
 			return this;
 		}
@@ -258,10 +265,6 @@ public final class Video implements Cloneable {
 	public String toString() {
 		return String.format("Video [mimes=%s, minduration=%s, maxduration=%s, w=%s, h=%s, startdelay=%s, protocols=%s, battr=%s, ext=%s]", mimes, minduration, maxduration, w, h,
 		        startdelay, protocols, battr, ext);
-	}
-
-	public void setLinearity(final int value) {
-		linearity = value;
 	}
 
 }

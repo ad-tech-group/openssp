@@ -35,7 +35,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	private final Header[] headers;
 
-	private final Gson gson;
+	private Gson gson;
 
 	private BidRequest bidrequest;
 
@@ -50,7 +50,11 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		// headers[2] = new BasicHeader("Accept-Encoding", supplier.getAcceptEncoding());
 		// headers[3] = new BasicHeader("Content-Encoding", supplier.getContentEncoding());
 
-		gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
+		try {
+			gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
+		} catch (Throwable t) {
+			System.out.println(t);
+		}
 	}
 
 	@Override
@@ -61,10 +65,10 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 		try {
 			final String jsonBidrequest = gson.toJson(bidrequest, BidRequest.class);
-			log.debug("biderquest: " + jsonBidrequest);
+			log.info("biderquest: " + jsonBidrequest);
 			final String result = connector.connect(jsonBidrequest, headers);
 			if (!StringUtils.isEmpty(result)) {
-				log.debug("bidresponse: " + result);
+				log.info("bidresponse: " + result);
 
 				final BidResponse bidResponse = gson.fromJson(result, BidResponse.class);
 
@@ -72,8 +76,10 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			}
 		} catch (final BidProcessingException e) {
 			log.error(getClass().getSimpleName() + " " + e.getMessage());
+			throw e;
 		} catch (final Exception e) {
 			log.error(getClass().getSimpleName() + " " + e.getMessage());
+			throw e;
 		}
 		return null;
 	}

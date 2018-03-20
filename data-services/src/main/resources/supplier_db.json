@@ -7,6 +7,7 @@
 			"contentType": "application/json",
 			"supplierId": "1",
 			"currency": "USD",
+		    "tmax": 300,
 			"underTest": 1,
 			"active": 1
 		}

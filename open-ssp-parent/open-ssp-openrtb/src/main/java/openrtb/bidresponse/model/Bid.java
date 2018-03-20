@@ -28,6 +28,7 @@ public final class Bid implements Comparable<Bid> {
 	private String iurl;
 	private String cid;
 	private String crid;
+
 	private List<Integer> attr;
 
 	private int api;

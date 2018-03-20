@@ -7,6 +7,7 @@ import com.atg.openssp.core.entry.BiddingServiceInfo;
 import com.atg.openssp.core.entry.SessionAgentType;
 import com.atg.openssp.core.exchange.ExchangeServer;
 import com.atg.openssp.core.exchange.RequestSessionAgent;
+import openrtb.tables.AuctionType;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class HeaderBiddingService extends CoreSupplyServlet<RequestSessionAgent>
 		info.setContentType("application/json");
 		info.setCharacterEncoding("UTF-8");
 		info.activateAccessAllowOrigin();
-		info.disableSecondBest();
+		info.setAuctionType(AuctionType.FIRST_PRICE);
 		return new RequestSessionAgent(request, response, info);
 	}
 

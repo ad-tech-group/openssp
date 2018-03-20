@@ -5,5 +5,5 @@ import com.atg.openssp.common.exception.RequestException;
 import openrtb.bidrequest.model.BidRequest;
 
 public abstract class BidRequestBuilderHandler {
-    public abstract BidRequest constructRequest(SessionAgent agent) throws RequestException;
+    public abstract BidRequest constructRequest(RequestSessionAgent agent) throws RequestException;
 }

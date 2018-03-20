@@ -52,6 +52,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
+                System.out.println("-->"+json);
                 StringReader bais = new StringReader(json);
                 biddingRequest = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();
@@ -67,6 +68,9 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 log.warn("returned E906 "+e.getMessage(), e);
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
+        } else {
+            //TODO: BKS
+            System.out.println(request.getHeader("User-Agent"));
         }
 
         if (biddingRequest != null) {
@@ -99,6 +103,9 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 pm.setReferrer(biddingRequest.getSite()+biddingRequest.getPage());
 
                 pm.setIpAddress(request.getRemoteAddr());
+                //TODO: BKS
+                pm.setIpAddress("bombholtmagic.com");
+                pm.setBrowserUserAgentString(request.getHeader("user-agent"));
                 pmList.add(pm);
             }
 
@@ -138,6 +145,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
             pm.setPromoSizes(params.get("promo_sizes"));
             pm.setReferrer(params.get("referrer"));
             pm.setIpAddress(request.getRemoteAddr());
+            pm.setBrowserUserAgentString(request.getHeader("User-Agent"));
             pmList.add(pm);
         }
 

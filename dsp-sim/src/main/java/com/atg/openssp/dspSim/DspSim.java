@@ -30,6 +30,7 @@ public class DspSim {
             server.createContext("/dsp-sim/admin", new ClientHandler(dspModel));
             server.createContext("/dsp-sim/DemandService", new DspHandler(dspModel));
             server.createContext("/dsp-sim/myAds", new AdServerHandler(adModel));
+            server.createContext("/win", new DspWinHandler(dspModel));
             server.setExecutor(null); // creates a default executor
             server.start();
         } catch (IOException e) {

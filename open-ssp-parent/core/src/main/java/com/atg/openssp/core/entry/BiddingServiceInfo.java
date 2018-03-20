@@ -1,5 +1,7 @@
 package com.atg.openssp.core.entry;
 
+import openrtb.tables.AuctionType;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +11,7 @@ public class BiddingServiceInfo {
     private String contentType;
     private String characterEncoding;
     private boolean activateAccessAllowOrigin;
-    private boolean useSecondBest = true;
+    private AuctionType auctionType = AuctionType.SECOND_PRICE;
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -56,11 +58,11 @@ public class BiddingServiceInfo {
         return activateAccessAllowOrigin;
     }
 
-    public boolean useSecondBest() {
-        return useSecondBest;
+    public AuctionType getAuctionType() {
+        return auctionType;
     }
 
-    public void disableSecondBest() {
-        useSecondBest = false;
+    public void setAuctionType(AuctionType auctionType) {
+        this.auctionType = auctionType;
     }
 }

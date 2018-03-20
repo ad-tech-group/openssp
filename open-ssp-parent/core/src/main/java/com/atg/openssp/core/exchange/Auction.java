@@ -21,6 +21,7 @@ import openrtb.bidrequest.model.PMP;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
+import openrtb.tables.AuctionType;
 import util.math.FloatComparator;
 
 /**
@@ -183,7 +184,7 @@ public class Auction {
 
 		float winnerPriceEUR;
 		if (bidList.size() > 1) {
-			if (info.useSecondBest()) {
+			if (info.getAuctionType() == AuctionType.SECOND_PRICE) {
 				AuctionMethodHandler methodHandler = new SecondBestBidderHandler();
 				winnerPriceEUR = methodHandler.generateWinningPrice(bidList, floorEUR, bestBidPriceEUR);
 			} else {

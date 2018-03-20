@@ -1,7 +1,9 @@
 package openrtb.bidrequest.model;
 
+import openrtb.tables.IpServiceType;
+
 public class GeoIpInfo {
-    private Float latitude;
+    private float latitude;
     private float longitude;
     private String zip_code;
     private String city;
@@ -12,8 +14,9 @@ public class GeoIpInfo {
     private String region_name;
     private String time_zone;
     private String metro_code;
+    private IpServiceType ipServiceType;
 
-    public Float getLat() {
+    public float getLat() {
         return latitude;
     }
 
@@ -99,5 +102,13 @@ public class GeoIpInfo {
 
     public String getMetroCode() {
         return metro_code;
+    }
+
+    public void setIpServiceType(IpServiceType ipServiceType) {
+        this.ipServiceType = ipServiceType;
+    }
+
+    public IpServiceType getIpServiceType() {
+        return ipServiceType;
     }
 }

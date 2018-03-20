@@ -115,8 +115,12 @@ public class DemandService implements Callable<AdProviderReader> {
 		final List<DemandBroker> connectors = new ArrayList<>();
 
 		final BidRequest bidRequest = BidRequestBuilder.getInstance().build(agent);
+
 		connectorList.stream().filter(b -> b.getSupplier().getActive() == 1).forEach(connector -> {
 
+			if (connector.getSupplier().getTmax() != null) {
+				bidRequest.setTmax(connector.getSupplier().getTmax());
+			}
 			final DemandBroker demandBroker = new DemandBroker(connector.getSupplier(), connector, agent);
 			if (bidRequest.getImp().get(0).getBidfloor() > 0) {
 				final Impression imp = bidRequest.getImp().get(0);

@@ -13,7 +13,7 @@ public class FreeGeoIpInfoHandler extends GeoIpInfoHandler {
     private final String USER_AGENT = "Mozilla/5.0";
 
     @Override
-    public GeoIpInfo lookupGeoInfo(String ipAddress) throws IOException, UnavailableHandlerException {
+    public GeoIpInfo lookupGeoInfo(String ipAddress) throws IOException, AddressNotFoundException, UnavailableHandlerException {
         URL url = new URL("http://freegeoip.net/json/"+ipAddress);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");

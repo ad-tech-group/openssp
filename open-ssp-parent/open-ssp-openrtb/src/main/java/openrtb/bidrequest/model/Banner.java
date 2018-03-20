@@ -1,9 +1,14 @@
 package openrtb.bidrequest.model;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import com.google.gson.annotations.Since;
+import openrtb.tables.AddPosition;
+import openrtb.tables.BannerAdType;
+import openrtb.tables.CreativeAttribute;
 
 /**
  * @author André Schmer
@@ -11,14 +16,13 @@ import com.google.gson.annotations.Since;
  * @version 2.1, 2.2, 2.3
  */
 public final class Banner implements Cloneable {
-
 	// required
 	private int w;
 	private int h;
 
 	private String id;
 	// optional
-	private int pos;
+	private Integer pos;
 	private List<Integer> btype;// blocked creative types
 	private List<Integer> battr;
 	private String[] mimes;// commaseparated list
@@ -41,6 +45,8 @@ public final class Banner implements Cloneable {
 	private Object[] format;
 
 	public Banner() {
+		btype = new ArrayList<Integer>();
+		battr = new ArrayList<Integer>();
 	}
 
 	public String getId() {
@@ -83,31 +89,55 @@ public final class Banner implements Cloneable {
 		this.expdir = expdir;
 	}
 
-	public int getPos() {
-		return pos;
+	public AddPosition getPos() {
+		return AddPosition.convertValue(pos);
 	}
 
-	public void setPos(final int pos) {
-		this.pos = pos;
+	public void setPos(final AddPosition pos) {
+		this.pos = pos.getValue();
 	}
 
-	public List<Integer> getBtype() {
-		return btype;
+//	public List<Integer> getBtypeX() {
+//		return btypeX;
+//	}
+
+	public void setAllBtype(final BannerAdType[] btype) {
+        this.btype.clear();
+        if (btype != null) {
+            for (BannerAdType t : btype) {
+                this.btype.add(t.getValue());
+            }
+        }
 	}
 
-	public void setBtype(final List<Integer> btype) {
-		this.btype = btype;
+    public void setAllBtype(final List<BannerAdType> btype) {
+        this.btype.clear();
+        if (btype != null) {
+            for (BannerAdType t : btype) {
+                this.btype.add(t.getValue());
+            }
+        }
+    }
+
+    public void setAllBattr(final CreativeAttribute[] battr) {
+	    this.battr.clear();
+	    if (battr != null) {
+            for (CreativeAttribute a : battr) {
+                this.battr.add(a.getValue());
+            }
+        }
 	}
 
-	public List<Integer> getBattr() {
-		return battr;
-	}
+    public void setAllBattr(final List<CreativeAttribute> battr) {
+        this.battr.clear();
+        if (battr != null) {
+            for (CreativeAttribute a : battr) {
+                this.battr.add(a.getValue());
+            }
+        }
+    }
 
-	public void setBattr(final List<Integer> battr) {
-		this.battr = battr;
-	}
-
-	public int getTopframe() {
+    public int getTopframe() {
 		return topframe;
 	}
 
@@ -195,12 +225,37 @@ public final class Banner implements Cloneable {
 			return this;
 		}
 
-		public Builder addAllBattr(final List<Integer> allBattr) {
-			banner.setBattr(allBattr);
+		public Builder setAllBtype(final BannerAdType[] allBtype) {
+			banner.setAllBtype(allBtype);
 			return this;
 		}
 
-		public Banner build() {
+        public Builder setAllBtype(final List<BannerAdType> allBtype) {
+            banner.setAllBtype(allBtype);
+            return this;
+        }
+
+        public Builder setAllBattr(final CreativeAttribute[] allBattr) {
+            banner.setAllBattr(allBattr);
+            return this;
+        }
+
+        public Builder setAllBattr(final List<CreativeAttribute> allBattr) {
+            banner.setAllBattr(allBattr);
+            return this;
+        }
+
+        public Builder setPos(final AddPosition pos) {
+            banner.setPos(pos);
+            return this;
+        }
+
+        public Builder setMimes(final String[] mimes) {
+            banner.setMimes(mimes);
+            return this;
+        }
+
+        public Banner build() {
 			return banner;
 		}
 	}

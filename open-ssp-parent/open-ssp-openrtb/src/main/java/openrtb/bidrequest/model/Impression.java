@@ -1,5 +1,7 @@
 package openrtb.bidrequest.model;
 
+import openrtb.tables.ImpressionSecurity;
+
 /**
  * @author André Schmer
  *
@@ -8,11 +10,13 @@ public final class Impression implements Cloneable {
 
 	private String id;
 
-	private Banner banner;// normally not used in that ssp context
+	private Banner banner;
+
+//	private Native native;
 
 	private Video video;
 
-	private Integer secure;
+	private int secure = ImpressionSecurity.NON_SECURE.getValue();
 
 	private float bidfloor;
 
@@ -50,12 +54,20 @@ public final class Impression implements Cloneable {
 		this.banner = banner;
 	}
 
-	public int getSecure() {
-		return secure;
+//	public Native getNative() {
+//		return native;
+//	}
+
+//	public void setNative(final Native native) {
+//		this.native = native;
+//	}
+
+	public ImpressionSecurity getSecure() {
+		return ImpressionSecurity.convertValue(secure);
 	}
 
-	public void setSecure(final Integer secure) {
-		this.secure = secure;
+	public void setSecure(final ImpressionSecurity secure) {
+		this.secure = secure.getValue();
 	}
 
 	public float getBidfloor() {
@@ -98,6 +110,10 @@ public final class Impression implements Cloneable {
 		return banner != null;
 	}
 
+//	public boolean hasNative() {
+//		return native != null;
+//	}
+
 	@Override
 	public Impression clone() {
 		try {
@@ -105,6 +121,12 @@ public final class Impression implements Cloneable {
 			if (video != null) {
 				clone.setVideo(video.clone());
 			}
+			if (banner != null) {
+				clone.setBanner(banner.clone());
+			}
+//			if (native != null) {
+//				clone.setNative(native.clone());
+//			}
 			return clone;
 		} catch (final CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -114,7 +136,25 @@ public final class Impression implements Cloneable {
 
 	@Override
 	public String toString() {
-		return String.format("Impression [id=%s, video=%s, secure=%s, ext=%s]", id, video, secure, ext);
+		String bannerString;
+		if (banner!=null) {
+			bannerString = String.format(", banner=%s", banner);
+		} else {
+			bannerString = "";
+		}
+		String videoString;
+		if (video!=null) {
+			videoString = String.format(", video=%s", video);
+		} else {
+			videoString = "";
+		}
+		String nativeString;
+//		if (native!=null) {
+//			nativeString = String.format(", native=%s", native);
+//		} else {
+			nativeString = "";
+//		}
+		return String.format("Impression [id=%s"+bannerString+videoString+nativeString+", secure=%s, ext=%s]", id, secure, ext);
 	}
 
 	public static class Builder {
@@ -134,12 +174,7 @@ public final class Impression implements Cloneable {
 			return this;
 		}
 
-		public Builder setVideo(final Video video) {
-			impression.setVideo(video);
-			return this;
-		}
-
-		public Builder setSecure(final int secure) {
+		public Builder setSecure(final ImpressionSecurity secure) {
 			impression.setSecure(secure);
 			return this;
 		}
@@ -149,22 +184,35 @@ public final class Impression implements Cloneable {
 			return this;
 		}
 
+		public Builder setVideo(final Video video) {
+			impression.setVideo(video);
+			return this;
+		}
+
 		public Builder setBanner(final Banner banner) {
 			impression.setBanner(banner);
 			return this;
 		}
 
+//		public Builder setNative(final Native native) {
+//			impression.setNative(native);
+//			return this;
+//		}
+
+		public Builder setVideo(final Video.Builder videoBuilder) {
+			impression.setVideo(videoBuilder.build());
+			return this;
+		}
+
 		public Builder setBanner(final Banner.Builder bannerBuilder) {
-			// listOfBannerBuilder.add(bannerBuilder);
 			impression.setBanner(bannerBuilder.build());
 			return this;
 		}
 
-		public Builder setVideo(final Video.Builder videoBuilder) {
-			// listOfVideoBuilder.add(videoBuilder);
-			impression.setVideo(videoBuilder.build());
-			return this;
-		}
+//		public Builder setNative(final Native.Builder nativeBuilder) {
+//			impression.setNative(nativeBuilder.build());
+//			return this;
+//		}
 
 		public Builder setBidfloor(final float floor) {
 			impression.setBidfloor(floor);

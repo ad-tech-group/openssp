@@ -1,15 +1,18 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
-import com.atg.openssp.common.core.entry.SessionAgent;
-import com.atg.openssp.common.demand.HeaderBiddingParamValue;
+import com.atg.openssp.common.demand.BannerObjectParamValue;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
 import openrtb.bidrequest.model.*;
+import openrtb.tables.AuctionType;
+import openrtb.tables.GeoType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +44,7 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
     }
 
     @Override
-    public BidRequest constructRequest(SessionAgent agent) throws RequestException {
+    public BidRequest constructRequest(RequestSessionAgent agent) throws RequestException {
         List<ParamValue> pValueList;
         try {
             pValueList = agent.getParamValues();
@@ -51,70 +54,54 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
             }
             log.warn(e.getMessage(), e);
             pValueList = new ArrayList();
-            pValueList.add(new HeaderBiddingParamValue());
+            pValueList.add(new BannerObjectParamValue());
         }
-        HeaderBiddingParamValue masterValues = (HeaderBiddingParamValue) pValueList.get(0);
+        BannerObjectParamValue masterValues = (BannerObjectParamValue) pValueList.get(0);
 
         Site site = masterValues.getSite().clone();
         String requestId = masterValues.getRequestId();
 
         Device dd = new Device.Builder().build();
         dd.setGeo(createSiteGeo(masterValues));
+        dd.setUa(masterValues.getBrowserUserAgentString());
 
         BidRequest bidRequest =  new BidRequest.Builder()
                 .setId(selectAppropriateId(requestId, agent.getRequestid()))
+                .setAt(agent.getBiddingServiceInfo().getAuctionType())
                 .setSite(site)
                 .setDevice(dd)
-                .setUser(
-                        new User.Builder()
-                                //.setBuyeruid()
-                                //.setGender(Gender.MALE)
-                                .setId(masterValues.getFsUid())
-                                //.setYob(1981)
-                                //.setGeo()
-                                .build()
-                ).build();
+                .setUser(createUser(masterValues))
+                .setCur(CurrencyCache.instance.getBaseCurrency())
+                .setTmax((int)GlobalContext.getExecutionTimeout())
+                .build();
 
+        int idCount = 1;
         for (ParamValue pOrigin : pValueList) {
-            HeaderBiddingParamValue pValues = (HeaderBiddingParamValue) pOrigin;
+            BannerObjectParamValue pValues = (BannerObjectParamValue) pOrigin;
 
             Impression i = new Impression.Builder().build();
-            i.setId(pValues.getId());
-                /*
-                i..setVideo(new Video.Builder()
-                        .addMime("application/x-shockwave-flash")
-                        .setH(400)
-                        .setW(600)
-                        .setMaxduration(100)
-                        .setMinduration(30)
-                        .addProtocol(VideoBidResponseProtocol.VAST_2_0.getValue())
-                        .setStartdelay(1)
-                        .build()
-                )
-                */
-
+            i.setId(Integer.toString(idCount++));
             i.setBanner(createBanner(pValues));
             bidRequest.addImp(i);
 
         }
-
-
-
-
         return bidRequest;
     }
 
-    private Geo createSiteGeo(HeaderBiddingParamValue pValues) {
+    private User createUser(BannerObjectParamValue pValues) {
+        return new User.Builder()
+                //.setBuyeruid()
+                //.setGender(pValues.getGender())
+                .setId(pValues.getFsUid())
+                //.setYob(pValues.getYearOfBirth())
+                //.setGeo(createUserGeo(pValues))
+                .build();
+
+    }
+
+
+    private Geo createSiteGeo(ParamValue pValues) {
         Geo geo = new Geo.Builder().build();
-        StringTokenizer st = new StringTokenizer(pValues.getFsLoc(), "?&");
-        while(st.hasMoreTokens()) {
-            String t = st.nextToken();
-            if (t.startsWith("i=")) {
-                geo.setCountry(t.substring(2));
-            } else if (t.startsWith("c=")) {
-                geo.setCity(new String(decoder.decode(t.substring(2).getBytes())));
-            }
-        }
         String ipAddress = pValues.getIpAddress();
         if (ipAddress != null && !ipAddress.equalsIgnoreCase("localhost") && !ipAddress.equalsIgnoreCase("0:0:0:0:0:0:0:1") && !ipAddress.equalsIgnoreCase("127.0.0.1")) {
             try {
@@ -126,17 +113,25 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
                 geo.setCountry(geoInfo.getCountryCode());
                 geo.setMetro(geoInfo.getMetroCode());
                 geo.setRegion(geoInfo.getRegionCode());
-                geo.setType(Geo.TYPE_IP);
+                geo.setType(GeoType.IP);
+                //geo.setUtcOffset(?);
+                geo.setIpServiceType(geoInfo.getIpServiceType());
+                //geo.setExt(?)
             } catch (IOException e) {
                 log.warn("could not obtain geo code: "+e.getMessage(), e);
+                return null;
             } catch (UnavailableHandlerException e) {
                 log.warn("could not obtain geo code: "+e.getMessage());
+                return null;
+            } catch (AddressNotFoundException e) {
+                log.warn("could not find ip address");
+                return null;
             }
         }
         return geo;
     }
 
-    private Banner createBanner(HeaderBiddingParamValue pValues) {
+    private Banner createBanner(BannerObjectParamValue pValues) {
         Banner b = new Banner.Builder().setId(pValues.getId()).build();
         ArrayList<Banner.BannerSize> sizes = new ArrayList();
         Banner.BannerSize size = new Banner.BannerSize(pValues.getSize().toLowerCase());

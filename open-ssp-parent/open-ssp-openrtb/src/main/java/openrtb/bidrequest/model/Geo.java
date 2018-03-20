@@ -1,31 +1,62 @@
 package openrtb.bidrequest.model;
 
+import com.google.gson.annotations.Since;
+import openrtb.tables.GeoType;
+import openrtb.tables.IpServiceType;
+
 /**
  * @author André Schmer
  *
  */
 public final class Geo implements Cloneable {
 
-	public static final int TYPE_GPS = 1;
-	public static final int TYPE_IP = 2;
-	public static final int TYPE_USER = 3;
+	@Since(2.0)
 	private Float lat;
+
+	@Since(2.0)
 	private Float lon;
 
+	@Since(2.0)
+	private int type = GeoType.GPS.getValue(); // default
+
+	// Estimated locaton accuracy in meters; dericed from a device's location service (i.e type-1)
+	@Since(2.4)
+	private int accuracy;
+
+	// number of seconds since this geolocation fix was established
+	@Since(2.4)
+	private int lastfix;
+
+	// for type 2 - list 5.21
+	@Since(2.4)
+	private Integer ipservice;
+
 	// ISO-3166-1 Alpha-3
+	@Since(2.0)
 	private String country;
 
 	// ISO 3166-2
+	@Since(2.0)
 	private String region;
 
-	private String city;
+	// FIPS 10-4 notaion (OpenRTB supported but withdrawn from NIST in 2008)
+	@Since(2.0)
+	private String regionfips104;
 
-	private String zip;
-
+	@Since(2.0)
 	private String metro;
 
-	private int type = TYPE_GPS;// default
+	@Since(2.0)
+	private String city;
 
+	@Since(2.0)
+	private String zip;
+
+	// local time as the number +/- minutes from UTC
+	@Since(2.3)
+	private int utcoffset;
+
+	@Since(2.1)
 	private Object ext;
 
 	public Geo() {}
@@ -86,12 +117,20 @@ public final class Geo implements Cloneable {
 		this.metro = metro;
 	}
 
-	public int getType() {
-		return type;
+	public GeoType getType() {
+		return GeoType.convertValue(type);
 	}
 
-	public void setType(final int type) {
-		this.type = type;
+	public void setType(final GeoType type) {
+		this.type = type.getValue();
+	}
+
+	public int getUtcOffset() {
+		return utcoffset;
+	}
+
+	public void setUtcOffset(final int utcoffset) {
+		this.utcoffset = utcoffset;
 	}
 
 	public Object getExt() {
@@ -111,6 +150,18 @@ public final class Geo implements Cloneable {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public IpServiceType getIpServiceType() {
+		return IpServiceType.convertValue(ipservice);
+	}
+
+	public void setIpServiceType(final IpServiceType ipservice) {
+		if (ipservice != null) {
+			this.ipservice = ipservice.getValue();
+		} else {
+			this.ipservice = null;
+		}
 	}
 
 	public static class Builder {
@@ -161,8 +212,18 @@ public final class Geo implements Cloneable {
 			return this;
 		}
 
-		public Builder setType(final int type) {
+		public Builder setType(final GeoType type) {
 			geo.setType(type);
+			return this;
+		}
+
+		public Builder setIpServiceType(final IpServiceType ipservice) {
+			geo.setIpServiceType(ipservice);
+			return this;
+		}
+
+		public Builder setUtcOffset(final int utcoffset) {
+			geo.setUtcOffset(utcoffset);
 			return this;
 		}
 

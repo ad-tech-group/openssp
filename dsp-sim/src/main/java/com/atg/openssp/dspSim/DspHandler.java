@@ -26,28 +26,16 @@ public class DspHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        // method: post
-        // writeFinished: false
-        // uri: /dsp-sim/DemandService
-        // reqContentLen: 724
-
-        // _REQ_HEADERS_
-        // Accept-encoding: gzip,deflate
-        // Connection: Keep-Alive
-        // Host: localhost:8082
-        // User-agent: Apache-HttpClient/4.5.2 (Java/1.8.0_161)
-        // Content-type: application/json; charset=UTF-8
-        // Contenttype: application/json
-        // X-openrtb-version: 2.2
-        // Content-length: 724
-
         BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
         log.info("-->"+new Gson().toJson(brq));
-
-        BidResponse brsp = model.createBidResponse(brq);
+        System.out.println("-->"+new Gson().toJson(brq));
+        BidResponse brsp = model.createBidResponse(httpExchange.getLocalAddress().getHostName(), httpExchange.getLocalAddress().getPort(), brq);
 
         if (brsp.getSeatbid().size() > 0 || true) {
-            String result = new Gson().toJson(brsp);
+
+
+            String result = model.filterResult(brsp);
+            System.out.println("<--"+result);
             log.info("<--"+result);
             httpExchange.sendResponseHeaders(200, result.length());
             OutputStream os = httpExchange.getResponseBody();

@@ -12,18 +12,25 @@ public final class Site implements Cloneable {
 	private String id;
 
 	private String name;
+
 	private String domain;
+
+	private String page;
 
 	// see product taxonomy -> "http://www.google.com/basepages/producttype/taxonomy.en-US.txt"
 	private List<String> cat;
 
-	private String page;
+	private List<String> pagecat;
+
+	private List<String> sectioncat;
 
 	private Publisher publisher;
 	private Object ext;
 
 	public Site() {
 		cat = new ArrayList<>();
+		pagecat = new ArrayList<>();
+		sectioncat = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -56,6 +63,30 @@ public final class Site implements Cloneable {
 
 	public void addCat(final String cat) {
 		this.cat.add(cat);
+	}
+
+	public List<String> getPageCat() {
+		return pagecat;
+	}
+
+	public void setPageCat(final List<String> pagecat) {
+		this.pagecat = pagecat;
+	}
+
+	public void addPageCat(final String pagecat) {
+		this.pagecat.add(pagecat);
+	}
+
+	public List<String> getSectionCat() {
+		return sectioncat;
+	}
+
+	public void setSectionCat(final List<String> cat) {
+		this.sectioncat = sectioncat;
+	}
+
+	public void addSectionCat(final String sectioncat) {
+		this.sectioncat.add(sectioncat);
 	}
 
 	public String getPage() {
@@ -120,6 +151,16 @@ public final class Site implements Cloneable {
 			return this;
 		}
 
+		public Builder addPageCat(final String pagecat) {
+			site.addPageCat(pagecat);
+			return this;
+		}
+
+		public Builder addSectionCat(final String sectioncat) {
+			site.addSectionCat(sectioncat);
+			return this;
+		}
+
 		public Builder setPage(final String page) {
 			site.setPage(page);
 			return this;
@@ -142,6 +183,16 @@ public final class Site implements Cloneable {
 
 		public Builder addCats(final List<Integer> cats) {
 			cats.forEach(c -> site.addCat(String.valueOf(c)));
+			return this;
+		}
+
+		public Builder addPageCat(final List<Integer> pagecats) {
+			pagecats.forEach(c -> site.addPageCat(String.valueOf(c)));
+			return this;
+		}
+
+		public Builder addSectionCat(final List<Integer> sectioncats) {
+			sectioncats.forEach(c -> site.addSectionCat(String.valueOf(c)));
 			return this;
 		}
 

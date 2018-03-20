@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
+import openrtb.tables.AuctionType;
 
 /**
  * 
@@ -11,11 +12,12 @@ import com.google.gson.annotations.Since;
  *
  */
 public final class BidRequest implements Cloneable {
-
 	// required fields
 	private String id;
 
 	private Site site;
+
+	private App app;
 
 	private List<Impression> imp;
 
@@ -23,14 +25,16 @@ public final class BidRequest implements Cloneable {
 
 	private User user;
 
+	private String cur;
+
 	private List<String> badv;
 
 	private List<String> bcat;
 
-	@Since(2.3)
+	@Since(2.6)
 	private int test = 0;// default
 
-	private int at = 2;// default
+	private int at = AuctionType.SECOND_PRICE.getValue(); // default
 
 	private Integer tmax;
 
@@ -58,11 +62,19 @@ public final class BidRequest implements Cloneable {
 		this.site = site;
 	}
 
+	public App getApp() {
+		return app;
+	}
+
+	public void setApp(final App app) {
+		this.app = app;
+	}
+
 	public List<Impression> getImp() {
 		return imp;
 	}
 
-	public void setImp(final List<Impression> imp) {
+	public void setImpX(final List<Impression> imp) {
 		this.imp = imp;
 	}
 
@@ -84,6 +96,14 @@ public final class BidRequest implements Cloneable {
 
 	public void setUser(final User user) {
 		this.user = user;
+	}
+
+	public String getCur() {
+		return cur;
+	}
+
+	public void setCur(final String cur) {
+		this.cur = cur;
 	}
 
 	public void setBadv(final List<String> badv) {
@@ -119,12 +139,12 @@ public final class BidRequest implements Cloneable {
 		this.test = test;
 	}
 
-	public int getAt() {
-		return at;
+	public AuctionType getAt() {
+		return AuctionType.convertValue(at);
 	}
 
-	public void setAt(final int at) {
-		this.at = at;
+	public void setAt(final AuctionType at) {
+		this.at = at.getValue();
 	}
 
 	public int getTmax() {
@@ -153,11 +173,14 @@ public final class BidRequest implements Cloneable {
 			final BidRequest clone = (BidRequest) super.clone();
 			if (imp != null) {
 				final List<Impression> cloneImpList = new ArrayList<>(imp);
-				clone.setImp(cloneImpList);
+				clone.setImpX(cloneImpList);
 			}
 
-			if (site != null) {
+			if (site!= null) {
 				clone.setSite(site.clone());
+			}
+			if (app != null) {
+				clone.setApp(app.clone());
 			}
 			if (device != null) {
 				clone.setDevice(device.clone());
@@ -178,7 +201,19 @@ public final class BidRequest implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "BidRequest [id=" + id + ", site=" + site + ", imp=" + imp + ", device=" + device + ", user=" + user + ", badv=" + badv + ", bcat=" + bcat + ", test=" + test
+		String siteString;
+		if (site != null) {
+			siteString = ", site="+site;
+		} else {
+			siteString = "";
+		}
+		String appString;
+		if (app != null) {
+			appString = ", app="+app;
+		} else {
+			appString = "";
+		}
+		return "BidRequest [id=" + id + siteString + appString + ", imp=" + imp + ", device=" + device + ", user=" + user + ", cur=" + cur + ", badv=" + badv + ", bcat=" + bcat + ", test=" + test
 		        + ", at=" + at + ", tmax=" + tmax + ", ext=" + ext + "]";
 	}
 
@@ -201,6 +236,11 @@ public final class BidRequest implements Cloneable {
 
 		public Builder setSite(final Site site) {
 			bidRequest.setSite(site);
+			return this;
+		}
+
+		public Builder setApp(final App app) {
+			bidRequest.setApp(app);
 			return this;
 		}
 
@@ -234,12 +274,17 @@ public final class BidRequest implements Cloneable {
 			return this;
 		}
 
+		public Builder setCur(final String cur) {
+			bidRequest.setCur(cur);
+			return this;
+		}
+
 		public Builder setTmax(final int tmax) {
 			bidRequest.setTmax(tmax);
 			return this;
 		}
 
-		public Builder setAt(final int at) {
+		public Builder setAt(final AuctionType at) {
 			bidRequest.setAt(at);
 			return this;
 		}

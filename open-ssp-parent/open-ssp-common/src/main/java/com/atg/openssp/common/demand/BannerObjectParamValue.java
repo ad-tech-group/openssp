@@ -14,7 +14,6 @@ public class BannerObjectParamValue extends ParamValue {
 
 //	private Publisher publisher;
     private String requestId;
-    private App app;
     private String callback;
     private String callbackUid;
     private String psa;
@@ -26,7 +25,6 @@ public class BannerObjectParamValue extends ParamValue {
     private String size;
     private String promoSizes;
     private String referrer;
-    private String ipAddress;
 
 //    public Publisher getPublisher() {
 //		return publisher;
@@ -44,18 +42,9 @@ public class BannerObjectParamValue extends ParamValue {
         return requestId;
     }
 
-    public void setApp(App app) {
-        this.app = app;
-    }
-
-    public App getApp() {
-        return app;
-    }
-
 	@Override
 	public String toString() {
-//        return super.toString()+String.format("[publisher=%sm app=%s]", publisher, app);
-		return super.toString()+String.format("[app=%s]", app);
+        return super.toString()+String.format("[requestId=%s id=%s]", requestId, id);
 	}
 
     public void setCallback(String callback) {
@@ -146,11 +135,4 @@ public class BannerObjectParamValue extends ParamValue {
         return referrer;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
 }

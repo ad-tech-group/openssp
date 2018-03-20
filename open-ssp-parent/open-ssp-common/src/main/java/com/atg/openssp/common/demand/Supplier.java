@@ -32,6 +32,8 @@ public class Supplier implements Serializable {
 
 	private int active;
 
+	private Integer tmax;
+
 	public Supplier() {}
 
 	public String getShortName() {
@@ -116,6 +118,14 @@ public class Supplier implements Serializable {
 
 	public void setActive(final int active) {
 		this.active = active;
+	}
+
+	public void setTmax(Integer tmax) {
+		this.tmax = tmax;
+	}
+
+	public Integer getTmax() {
+		return tmax;
 	}
 
 	@Override

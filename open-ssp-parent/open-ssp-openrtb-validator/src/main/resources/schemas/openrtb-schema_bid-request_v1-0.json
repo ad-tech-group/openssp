@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "openrtb-v2_0-schema-bid_request",
+	"title": "openrtb-v1_0-schema-bid_request",
 	"description": "json schema for an openrtb v1.0 bid request (http://openrtb.googlecode.com/files/OpenRTB%20Mobile%20RTB%20API%20-%201.0.pdf)",
 	"type": "object",
 	"required": [ "id", "imp" ],

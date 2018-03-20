@@ -14,7 +14,6 @@ import openrtb.bidrequest.model.Site;
 public class TestParamValue extends ParamValue {
 
 	private String isTest;
-	private String ipAddress;
 
 	public String getIsTest() {
 		return isTest;
@@ -22,14 +21,6 @@ public class TestParamValue extends ParamValue {
 
 	public void setIsTest(final String isTest) {
 		this.isTest = isTest;
-	}
-
-	public String getIpAddress() {
-		return ipAddress;
-	}
-
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
 	}
 
 	@Override

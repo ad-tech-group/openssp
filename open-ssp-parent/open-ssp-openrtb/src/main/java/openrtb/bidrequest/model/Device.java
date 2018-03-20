@@ -1,5 +1,8 @@
 package openrtb.bidrequest.model;
 
+import com.google.gson.annotations.Since;
+import openrtb.tables.DeviceType;
+
 /**
  * @author André Schmer
  *
@@ -9,20 +12,94 @@ public final class Device implements Cloneable {
 	// normally recommended, but not available?
 	// private String ua;
 
+	@Since(2.0)
 	private Geo geo;
 
+	@Since(2.0)
 	private int dnt = 1;// default, don't track
 
+	@Since(2.0)
+	private String ua;
+
+	@Since(2.3)
 	private int lmt = 1;// default, don't track
 
+	@Since(2.0)
 	private String ip;
 
+	@Since(2.0)
 	private String ipv6;
 
-	private int devicetype = 6; // out-of-home (suggestion)
+	@Since(2.0)
+	private int devicetype = DeviceType.CONNECTED_DEVICE.getValue();
 
+	@Since(2.0)
 	private String language;
 
+	@Since(2.0)
+	private String didsha1;
+
+	@Since(2.0)
+	private String didmd5;
+
+	@Since(2.0)
+	private String dpidsha1;
+
+	@Since(2.0)
+	private String dpidmd5;
+
+	@Since(2.3)
+	private String macsha1;
+
+	@Since(2.3)
+	private String macmd5;
+
+	@Since(2.0)
+	private String carrier;
+
+	@Since(2.0)
+	private String make;
+
+	@Since(2.0)
+	private String model;
+
+	@Since(2.0)
+	private String os;
+
+	@Since(2.0)
+	private String osv;
+
+	@Since(2.3)
+	private String hwv;
+
+	@Since(2.3)
+	private int h;
+
+	@Since(2.3)
+	private int w;
+
+	@Since(2.3)
+	private int ppi;
+
+	@Since(2.3)
+	private float pxratio;
+
+	@Since(2.0)
+	private String js;
+
+	@Since(2.4)
+	private int geofetch;
+
+	@Since(2.0)
+	private String connectiontype;
+
+	@Since(2.0)
+	private String flashver;
+
+	@Since(2.2)
+	private String ifa;
+
+	@Since(2.1)
 	private Object ext;
 
 	public Device() {}
@@ -43,20 +120,28 @@ public final class Device implements Cloneable {
 		this.dnt = dnt;
 	}
 
+	public String getUa() {
+		return ua;
+	}
+
+	public void setUa(final String ua) {
+		this.ua = ua;
+	}
+
 	public int getLmt() {
 		return lmt;
 	}
 
-	public void setLmt(final int lmt) {
+	public void setLmtY(final int lmt) {
 		this.lmt = lmt;
 	}
 
-	public int getDevicetype() {
-		return devicetype;
+	public DeviceType getDevicetype() {
+		return DeviceType.convertValue(devicetype);
 	}
 
-	public void setDevicetype(final int devicetype) {
-		this.devicetype = devicetype;
+	public void setDevicetype(final DeviceType devicetype) {
+		this.devicetype = devicetype.getValue();
 	}
 
 	public String getIp() {
@@ -123,8 +208,12 @@ public final class Device implements Cloneable {
 			return this;
 		}
 
+		public Builder setUa(final String ua) {
+			device.setUa(ua);
+			return this;
+		}
+
 		public Builder setIp(final String ip) {
-			System.out.println("ip: " + ip);
 			if (ip != null) {
 				if (ip.contains(":")) {
 					device.setIpv6(ip);
@@ -140,8 +229,8 @@ public final class Device implements Cloneable {
 			return this;
 		}
 
-		public Builder setLmt(final int lmt) {
-			device.setLmt(lmt);
+		public Builder setLmty(final int lmt) {
+			device.setLmtY(lmt);
 			return this;
 		}
 
@@ -155,7 +244,7 @@ public final class Device implements Cloneable {
 			return this;
 		}
 
-		public Builder setDeviceType(final int deviceType) {
+		public Builder setDeviceType(final DeviceType deviceType) {
 			device.setDevicetype(deviceType);
 			return this;
 		}

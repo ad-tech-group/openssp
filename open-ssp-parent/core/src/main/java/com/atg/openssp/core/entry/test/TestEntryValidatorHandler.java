@@ -44,6 +44,9 @@ public class TestEntryValidatorHandler  extends EntryValidatorHandler {
         // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
 
         pm.setIpAddress(request.getRemoteAddr());
+        //TODO: BKS
+        pm.setIpAddress("bombholtmagic.com");
+        pm.setBrowserUserAgentString(request.getHeader("User-Agent"));
 
         pmList.add(pm);
         return pmList;

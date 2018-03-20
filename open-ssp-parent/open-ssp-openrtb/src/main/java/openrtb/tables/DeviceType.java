@@ -1,25 +1,36 @@
 package openrtb.tables;
 
 /**
- * @author André Schmer
+ * @author Brian Sorensen
  *
  */
-public abstract class DeviceType {
+public enum DeviceType {
+	MOBILE_OR_TABLET(1),
+	PERSONAL_COMPUTER(2),
+	CONNECTED_TV(3),
+	PHONE(4),
+	TABLET(5),
+	CONNECTED_DEVICE(6),
+	SET_TOP_BOX(7),
+	OUT_OF_HOME(8);
 
-	public static final int MOBILE_OR_TABLET = 1;
+	private int value;
 
-	public static final int PERSONAL_COMPUTER = 2;
+	DeviceType(int value) {
+		this.value = value;
+	}
 
-	public static final int CONNECTED_TV = 3;
+	public int getValue()
+	{
+		return value;
+	}
 
-	public static final int PHONE = 4;
-
-	public static final int TABLET = 5;
-
-	public static final int CONNECTED_DEVICE = 6;
-
-	public static final int SET_TOP_BOX = 7;
-
-	public static final int OUT_OF_HOME = 8;
-
+	public static DeviceType convertValue(final int value) {
+		for (final DeviceType v : values()) {
+			if (v.getValue() == value) {
+				return v;
+			}
+		}
+		return null;
+	}
 }

@@ -41,6 +41,7 @@ public class AuctionServiceDealSingleBidTest {
 		supplier = new Supplier();
 		supplier.setShortName("dsp1");
 		supplier.setSupplierId(1l);
+		supplier.setTmax(300);
 	}
 
 	@Before

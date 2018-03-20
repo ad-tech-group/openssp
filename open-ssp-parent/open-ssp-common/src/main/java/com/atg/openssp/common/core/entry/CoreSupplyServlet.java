@@ -49,6 +49,7 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 		} catch (final RequestException e) {
 			response.sendError(401, e.getMessage());
 		} catch (final CancellationException e) {
+
 			response.sendError(200, "exchange timeout");
 		} catch (final Exception e) {
 			log.error(e.getMessage());

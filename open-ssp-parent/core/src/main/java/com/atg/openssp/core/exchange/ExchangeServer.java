@@ -108,6 +108,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 
 		if (info.isAccessAllowOriginActivated() && winner instanceof Auction.AuctionResult) {
 			if (((Auction.AuctionResult)winner).getBidRequest() != null) {
+				//TODO:  BKS need app
 				agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", "http://" + ((Auction.AuctionResult) winner).getBidRequest().getSite().getDomain());
 				agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
 				agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");

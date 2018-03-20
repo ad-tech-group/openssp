@@ -10,14 +10,13 @@ public class SimBidder {
     private final String id;
     private float price;
     private String adId;
-    private String impId;
-    private String nUrl;
+//    private String nUrl;
     private String adm;
     private List<String> adomain = new ArrayList<String>();
     private String iUrl;
     private String cId;
     private String crId;
-    private List<String> cat = new ArrayList<String>();
+//    private List<String> cat = new ArrayList<String>();
 
     public SimBidder(String id) {
         this.id = id;
@@ -25,14 +24,6 @@ public class SimBidder {
 
     public String getId() {
         return id;
-    }
-
-    public void setImpId(String impId) {
-        this.impId = impId;
-    }
-
-    public String getImpId() {
-        return impId;
     }
 
     public void setPrice(float price) {
@@ -51,13 +42,13 @@ public class SimBidder {
         return adId;
     }
 
-    public void setNUrl(String nUrl) {
-        this.nUrl = nUrl;
-    }
+//    public void setNUrl(String nUrl) {
+//        this.nUrl = nUrl;
+//    }
 
-    public String getNUrl() {
-        return nUrl;
-    }
+//    public String getNUrl() {
+//        return nUrl;
+//    }
 
     public void setAdm(String adm) {
         this.adm = adm;
@@ -82,7 +73,7 @@ public class SimBidder {
 
     @Override
     public String toString() {
-        return id + ":"+impId+":"+adId+" - ("+price+")";
+        return id + ":"+adId+" - ("+price+")";
     }
 
     public void setIUrl(String iUrl) {
@@ -109,31 +100,30 @@ public class SimBidder {
         return crId;
     }
 
-    public void setCat(List<String> cat) {
-        this.cat.clear();
-        this.cat.addAll(cat);
-    }
+//    public void setCat(List<String> cat) {
+//        this.cat.clear();
+//        this.cat.addAll(cat);
+//    }
 
-    public List<String> getCat() {
-        return cat;
-    }
+//    public List<String> getCat() {
+//        return cat;
+//    }
 
-    public void addCat(String cat) {
-        this.cat.add(cat);
-    }
+//    public void addCat(String cat) {
+//        this.cat.add(cat);
+//    }
 
     public void populate(SimBidder simBidder) {
-        impId = simBidder.impId;
         price = simBidder.price;
         adId = simBidder.adId;
-        nUrl = simBidder.nUrl;
+//        nUrl = simBidder.nUrl;
         adm = simBidder.adm;
         adomain.clear();
         adomain.addAll(simBidder.adomain);
         iUrl = simBidder.iUrl;
         cId = simBidder.cId;
         crId = simBidder.crId;
-        cat.clear();
-        cat.addAll(simBidder.cat);
+//        cat.clear();
+//        cat.addAll(simBidder.cat);
     }
 }

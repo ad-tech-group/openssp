@@ -38,18 +38,22 @@ public class PrivateAuctionServiceDealMultiBidTest {
 		supplier1 = new Supplier();
 		supplier1.setShortName("dsp1");
 		supplier1.setSupplierId(1l);
+		supplier1.setTmax(300);
 
 		supplier2 = new Supplier();
 		supplier2.setShortName("dsp2");
 		supplier2.setSupplierId(2l);
+		supplier2.setTmax(300);
 
 		supplier3 = new Supplier();
 		supplier3.setShortName("dsp3");
 		supplier3.setSupplierId(3l);
+		supplier3.setTmax(300);
 
 		supplier4 = new Supplier();
 		supplier4.setShortName("dsp4");
 		supplier4.setSupplierId(4l);
+		supplier4.setTmax(300);
 	}
 
 	@Before

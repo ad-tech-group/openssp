@@ -1,15 +1,18 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
 import openrtb.bidrequest.model.*;
+import openrtb.tables.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +44,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     @Override
-    public BidRequest constructRequest(SessionAgent agent) throws RequestException {
+    public BidRequest constructRequest(RequestSessionAgent agent) throws RequestException {
         List<ParamValue> pValueList;
         try {
             pValueList = agent.getParamValues();
@@ -55,53 +58,84 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         }
         HeaderBiddingParamValue masterValues = (HeaderBiddingParamValue) pValueList.get(0);
 
-        Site site = masterValues.getSite().clone();
+        Site site;
+        if (masterValues.getSite() != null) {
+            site = masterValues.getSite().clone();
+        } else {
+            site = null;
+        }
+        App app;
+        if (masterValues.getApp() != null) {
+            app = masterValues.getApp().clone();
+        } else {
+            app = null;
+        }
         String requestId = masterValues.getRequestId();
 
         Device dd = new Device.Builder().build();
         dd.setGeo(createSiteGeo(masterValues));
+        dd.setUa(masterValues.getBrowserUserAgentString());
+        dd.setIp(masterValues.getIpAddress());
 
         BidRequest bidRequest =  new BidRequest.Builder()
                 .setId(selectAppropriateId(requestId, agent.getRequestid()))
+                .setAt(agent.getBiddingServiceInfo().getAuctionType())
                 .setSite(site)
+                .setApp(app)
                 .setDevice(dd)
-                .setUser(
-                        new User.Builder()
-                                //.setBuyeruid()
-                                //.setGender(Gender.MALE)
-                                .setId(masterValues.getFsUid())
-                                //.setYob(1981)
-                                //.setGeo()
-                                .build()
-                ).build();
+                .setUser(createUser(masterValues))
+                .setCur(CurrencyCache.instance.getBaseCurrency())
+                .build();
 
+        int idCount = 1;
         for (ParamValue pOrigin : pValueList) {
             HeaderBiddingParamValue pValues = (HeaderBiddingParamValue) pOrigin;
 
             Impression i = new Impression.Builder().build();
-            i.setId(pValues.getId());
-                /*
-                i..setVideo(new Video.Builder()
-                        .addMime("application/x-shockwave-flash")
-                        .setH(400)
-                        .setW(600)
-                        .setMaxduration(100)
-                        .setMinduration(30)
-                        .addProtocol(VideoBidResponseProtocol.VAST_2_0.getValue())
-                        .setStartdelay(1)
-                        .build()
-                )
-                */
-
+            i.setId(Integer.toString(idCount++));
+            i.setVideo(createVideo(pValues));
             i.setBanner(createBanner(pValues));
+            //i.setNative(createNative(pValues));
+            //TODO: BKS
+            i.setBidfloor(0f);
+            i.setSecure(ImpressionSecurity.NON_SECURE);
             bidRequest.addImp(i);
 
         }
 
-
-
-
         return bidRequest;
+    }
+
+    private User createUser(HeaderBiddingParamValue pValues) {
+        return new User.Builder()
+                //.setBuyeruid()
+                //.setGender(pValues.getGender())
+                .setId(pValues.getFsUid())
+                //.setYob(pValues.getYearOfBirth())
+                //.setGeo(createUserGeo(pValues))
+                .build();
+
+    }
+
+    private Native createNative(HeaderBiddingParamValue pValues) {
+        return null;
+        // Native not implemeneted yet.  We need a way to specify type
+    }
+
+    private Video createVideo(HeaderBiddingParamValue pValues) {
+        return null;
+        // Video not implemeneted yet.  We need a way to specify type
+        /*
+        return new Video.Builder()
+                .addMimeX("application/x-shockwave-flash")
+                .setHX(400)
+                .setWX(600)
+                .setMaxdurationX(100)
+                .setMindurationX(30)
+                .addProtocolX(VideoBidResponseProtocol.VAST_2_0)
+                .setStartdelayX(1)
+                .build();
+                */
     }
 
     private Geo createSiteGeo(HeaderBiddingParamValue pValues) {
@@ -126,11 +160,21 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                 geo.setCountry(geoInfo.getCountryCode());
                 geo.setMetro(geoInfo.getMetroCode());
                 geo.setRegion(geoInfo.getRegionCode());
-                geo.setType(Geo.TYPE_IP);
+                geo.setType(GeoType.IP);
+                //geo.setUtcOffset(?);
+                geo.setIpServiceType(geoInfo.getIpServiceType());
+                //geo.setExt(?)
             } catch (IOException e) {
                 log.warn("could not obtain geo code: "+e.getMessage(), e);
+                // no new address offerings to help
+                // keep what we have and move on
             } catch (UnavailableHandlerException e) {
                 log.warn("could not obtain geo code: "+e.getMessage());
+                // no new address offerings to help
+                // keep what we have and move on
+            } catch (AddressNotFoundException e) {
+                // no new address offerings to help
+                // keep what we have and move on
             }
         }
         return geo;
@@ -157,12 +201,13 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         b.setHmax(sizes.get(sizes.size()-1).getH());
         b.setFormat(sizes.toArray());
 
-//        b.setBattr();
+        //TODO: BKS
+        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
 //        b.setApi();
-//        b.setBtype();
+        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
 //        b.setExpdir();
-//        b.setMimes();
-//        b.setPos();
+        b.setMimes(new String[]{});
+        b.setPos(AddPosition.FOOTER);
 //        b.setTopframe();
 //        b.setExt();
         return b;
