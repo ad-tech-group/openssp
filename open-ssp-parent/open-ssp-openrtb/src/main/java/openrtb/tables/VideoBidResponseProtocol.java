@@ -66,13 +66,24 @@ public enum VideoBidResponseProtocol {
 		return value;
 	}
 
-	public static int convertFromString(final String value) {
+	public static VideoBidResponseProtocol convert(final int value) {
 		for (final VideoBidResponseProtocol protocolValue : values()) {
-			if (protocolValue.value == Integer.valueOf(value).intValue()) {
-				return protocolValue.value;
+			if (protocolValue.value == value) {
+				return protocolValue;
 			}
 		}
 
-		return VAST_3_0.value;
+		return VAST_3_0;
 	}
+
+	public static VideoBidResponseProtocol convertFromString(final String value) {
+		for (final VideoBidResponseProtocol protocolValue : values()) {
+			if (protocolValue.value == Integer.valueOf(value).intValue()) {
+				return protocolValue;
+			}
+		}
+
+		return VAST_3_0;
+	}
+
 }

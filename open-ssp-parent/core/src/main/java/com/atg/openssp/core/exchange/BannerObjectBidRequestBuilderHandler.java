@@ -71,7 +71,7 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
                 .setSite(site)
                 .setDevice(dd)
                 .setUser(createUser(masterValues))
-                .setCur(CurrencyCache.instance.getBaseCurrency())
+                .addCur(CurrencyCache.instance.getBaseCurrency())
                 .setTmax((int)GlobalContext.getExecutionTimeout())
                 .build();
 

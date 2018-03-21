@@ -11,6 +11,7 @@ import openrtb.bidrequest.model.*;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
+import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,15 +168,15 @@ public class DspModel {
         b.setIurl(simBidder.getIUrl());
         b.setCid(simBidder.getCId());
         b.setCrid(simBidder.getCrId());
-        List<String> c1  = site.getCat();
-        List<String> c2  = site.getPageCat();
-        List<String> c3  = site.getSectionCat();
-        List<String> c4  = site.getPublisher().getCat();
-        for (String c : c1) {
-            b.addCat(c);
-        }
-        for (String c : c4) {
-            b.addCat(c);
+        b.addAllCat(site.getCat());
+        List<ContentCategory> c2  = site.getPagecat();
+        List<ContentCategory> c3  = site.getSectioncat();
+        if (site.getPublisher() != null) {
+            for (ContentCategory c : site.getPublisher().getCat()) {
+                if (!b.getCat().contains(c)) {
+                    b.addCat(c);
+                }
+            }
         }
 
         if (i.hasVideo()) {

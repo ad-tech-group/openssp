@@ -21,11 +21,11 @@ public final class Geo implements Cloneable {
 
 	// Estimated locaton accuracy in meters; dericed from a device's location service (i.e type-1)
 	@Since(2.4)
-	private int accuracy;
+	private Integer accuracy;
 
 	// number of seconds since this geolocation fix was established
 	@Since(2.4)
-	private int lastfix;
+	private Integer lastfix;
 
 	// for type 2 - list 5.21
 	@Since(2.4)
@@ -54,7 +54,7 @@ public final class Geo implements Cloneable {
 
 	// local time as the number +/- minutes from UTC
 	@Since(2.3)
-	private int utcoffset;
+	private Integer utcoffset;
 
 	@Since(2.1)
 	private Object ext;

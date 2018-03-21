@@ -71,7 +71,7 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
                 .setSite(site)
                 .setDevice(dd)
                 .setUser(createUser(masterValues))
-                .setCur(CurrencyCache.instance.getBaseCurrency())
+                .addCur(CurrencyCache.instance.getBaseCurrency())
                 .setTmax((int)GlobalContext.getExecutionTimeout())
                 .build();
 
@@ -138,7 +138,7 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
                 .setW(600)
                 .setMaxduration(100)
                 .setMinduration(30)
-                .addProtocol(VideoBidResponseProtocol.VAST_2_0)
+                .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
                 .setStartdelay(1)
                 .build();
     }

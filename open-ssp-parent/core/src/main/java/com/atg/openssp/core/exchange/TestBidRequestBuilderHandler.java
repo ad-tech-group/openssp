@@ -74,7 +74,7 @@ public class TestBidRequestBuilderHandler extends BidRequestBuilderHandler {
                                         .setW(600)
                                         .setMaxduration(100)
                                         .setMinduration(30)
-                                        .addProtocol(VideoBidResponseProtocol.VAST_2_0)
+                                        .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
                                         .setStartdelay(1)
                                         .build()
                                 ).build())

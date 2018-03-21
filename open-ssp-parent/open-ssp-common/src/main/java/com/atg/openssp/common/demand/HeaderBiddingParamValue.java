@@ -24,7 +24,6 @@ public class HeaderBiddingParamValue extends ParamValue {
     private String fsUid;
     private String size;
     private String promoSizes;
-    private String referrer;
 
 //    public Publisher getPublisher() {
 //		return publisher;
@@ -125,14 +124,6 @@ public class HeaderBiddingParamValue extends ParamValue {
 
     public String getPromoSizes() {
         return promoSizes;
-    }
-
-    public void setReferrer(String referrer) {
-        this.referrer = referrer;
-    }
-
-    public String getReferrer() {
-        return referrer;
     }
 
 }

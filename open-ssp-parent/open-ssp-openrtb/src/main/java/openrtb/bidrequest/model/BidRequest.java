@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Since;
 import openrtb.tables.AuctionType;
+import openrtb.tables.ContentCategory;
 
 /**
  * 
@@ -25,7 +26,7 @@ public final class BidRequest implements Cloneable {
 
 	private User user;
 
-	private String cur;
+	private List<String> cur;
 
 	private List<String> badv;
 
@@ -41,6 +42,7 @@ public final class BidRequest implements Cloneable {
 	private Object ext;
 
 	public BidRequest() {
+        cur = new ArrayList<>();
 		imp = new ArrayList<>();
 		badv = new ArrayList<>();
 		bcat = new ArrayList<>();
@@ -74,8 +76,11 @@ public final class BidRequest implements Cloneable {
 		return imp;
 	}
 
-	public void setImpX(final List<Impression> imp) {
-		this.imp = imp;
+	public void setImp(final List<Impression> imp) {
+	    this.imp.clear();
+	    if (imp != null) {
+            imp.forEach(i -> this.imp.add(i));
+        }
 	}
 
 	public void addImp(final Impression impression) {
@@ -98,37 +103,50 @@ public final class BidRequest implements Cloneable {
 		this.user = user;
 	}
 
-	public String getCur() {
+	public List<String> getCur() {
 		return cur;
 	}
 
-	public void setCur(final String cur) {
-		this.cur = cur;
+	public void setCur(final List<String> cur) {
+	    this.cur.clear();
+	    if (cur != null) {
+	        cur.forEach(c -> this.cur.add(c));
+        }
 	}
 
-	public void setBadv(final List<String> badv) {
-		this.badv = badv;
+    public void addCur(final String cur) {
+        this.cur.add(cur);
+    }
+
+    public void setBadv(final List<String> badv) {
+	    this.badv.clear();
+	    if (badv != null) {
+	        badv.forEach(b -> this.badv.add(b));
+        }
 	}
 
-	public void addBadv(final String bad) {
+    public List<String> getBadv() {
+        return badv;
+    }
+
+    public void addBadv(final String bad) {
 		badv.add(bad);
 	}
 
-	public void setBcat(final List<String> bcat) {
-		this.bcat = bcat;
+	public void setBcat(final List<ContentCategory> bcat) {
+		this.bcat.clear();
+		bcat.forEach(c -> this.bcat.add(c.getValue()));
 	}
 
-	public void addBcat(final String bcat) {
-		this.bcat.add(bcat);
-	}
-
-	public List<String> getBadv() {
-		return badv;
+	public void addBcat(final ContentCategory bcat) {
+		this.bcat.add(bcat.getValue());
 	}
 
 	// see product taxonomy -> "http://www.google.com/basepages/producttype/taxonomy.en-US.txt"
-	public List<String> getBcat() {
-		return bcat;
+	public List<ContentCategory> getBcat() {
+		ArrayList<ContentCategory> list = new ArrayList();
+		bcat.forEach(c -> list.add(ContentCategory.convertValue(c)));
+		return list;
 	}
 
 	public int getTest() {
@@ -173,8 +191,19 @@ public final class BidRequest implements Cloneable {
 			final BidRequest clone = (BidRequest) super.clone();
 			if (imp != null) {
 				final List<Impression> cloneImpList = new ArrayList<>(imp);
-				clone.setImpX(cloneImpList);
+				clone.setImp(cloneImpList);
 			}
+            if (cur != null) {
+                final List<String> cloneCurList = new ArrayList<>(cur);
+                clone.setCur(cloneCurList);
+            }
+            if (badv != null) {
+                final List<String> cloneBadvList = new ArrayList<>(badv);
+                clone.setBadv(cloneBadvList);
+            }
+            if (bcat != null) {
+                clone.bcat = new ArrayList<>(bcat);
+            }
 
 			if (site!= null) {
 				clone.setSite(site.clone());
@@ -274,8 +303,8 @@ public final class BidRequest implements Cloneable {
 			return this;
 		}
 
-		public Builder setCur(final String cur) {
-			bidRequest.setCur(cur);
+		public Builder addCur(final String cur) {
+			bidRequest.addCur(cur);
 			return this;
 		}
 
@@ -294,12 +323,12 @@ public final class BidRequest implements Cloneable {
 			return this;
 		}
 
-		public Builder addAllBcat(final List<String> allBcat) {
+		public Builder addAllBcat(final List<ContentCategory> allBcat) {
 			bidRequest.setBcat(allBcat);
 			return this;
 		}
 
-		public Builder addBcat(final String bcat) {
+		public Builder addBcat(final ContentCategory bcat) {
 			bidRequest.addBcat(bcat);
 			return this;
 		}

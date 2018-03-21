@@ -10,6 +10,7 @@ import com.atg.openssp.core.cache.type.SiteDataCache;
 import com.atg.openssp.core.entry.EntryValidatorHandler;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import openrtb.bidrequest.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +28,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
     private final Logger log = LoggerFactory.getLogger(HeaderBiddingEntryValidatorHandler.class);
     private final Gson gson;
 
-    public HeaderBiddingEntryValidatorHandler()
-    {
+    public HeaderBiddingEntryValidatorHandler() {
         gson = new Gson();
     }
 
@@ -39,33 +39,33 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
         Cookie[] cList = request.getCookies();
         if (cList != null) {
             for (Cookie c : cList) {
-                log.info("cookie: "+c.getName());
+                log.info("cookie: " + c.getName());
             }
         } else {
             log.info("no cookies");
         }
 
-        HeaderBiddingRequest biddingRequest=null;
+        HeaderBiddingRequest biddingRequest = null;
         if (request.getMethod().equalsIgnoreCase("post") && request.getContentLength() > 0) {
             byte[] buffer = new byte[request.getContentLength()];
             try {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
-                System.out.println("-->"+json);
+                System.out.println("-->" + json);
                 StringReader bais = new StringReader(json);
                 biddingRequest = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();
 
             } catch (IOException e) {
                 // ?? 400
-                log.warn("returned E906 "+e.getMessage(), e);
+                log.warn("returned E906 " + e.getMessage(), e);
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             } catch (JsonSyntaxException e) {
-                log.warn("returned E906 "+e.getMessage());
+                log.warn("returned E906 " + e.getMessage());
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             } catch (Exception e) {
-                log.warn("returned E906 "+e.getMessage(), e);
+                log.warn("returned E906 " + e.getMessage(), e);
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
         } else {
@@ -80,15 +80,19 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 final HeaderBiddingParamValue pm = new HeaderBiddingParamValue();
 
                 try {
-                    pm.setSite(SiteDataCache.instance.get(biddingRequest.getSite()));
+                    Site site = SiteDataCache.instance.get(biddingRequest.getSite());
+                    site.setDomain(biddingRequest.getSite());
+                    site.setPage(site.getDomain() + biddingRequest.getPage());
+                    site.setRef(request.getHeader("referer"));
+                    pm.setSite(site);
                 } catch (final EmptyCacheException e) {
-                e.printStackTrace();
+                    e.printStackTrace();
                     try {
                         pm.setApp(AppDataCache.instance.get(biddingRequest.getApp()));
                     } catch (final EmptyCacheException e1) {
                         throw new RequestException(ERROR_CODE.E906, "missing site or app");
-            }
-        }
+                    }
+                }
 
                 pm.setRequestId(biddingRequest.getId());
                 pm.setFsSid(biddingRequest.getFsSid());
@@ -100,7 +104,6 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 pm.setId(a.getId());
                 pm.setSize(a.getSize());
                 pm.setPromoSizes(a.getPromoSizes());
-                pm.setReferrer(biddingRequest.getSite()+biddingRequest.getPage());
 
                 pm.setIpAddress(request.getRemoteAddr());
                 //TODO: BKS
@@ -113,25 +116,29 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
         } else {
             final HeaderBiddingParamValue pm = new HeaderBiddingParamValue();
             HashMap<String, String> params = new LinkedHashMap();
-        Enumeration<String> penum = request.getParameterNames();
-        while(penum.hasMoreElements()) {
-            String key = penum.nextElement();
-            List<String> values = Arrays.asList(request.getParameterValues(key));
+            Enumeration<String> penum = request.getParameterNames();
+            while (penum.hasMoreElements()) {
+                String key = penum.nextElement();
+                List<String> values = Arrays.asList(request.getParameterValues(key));
                 if (values.size() > 0) {
                     params.put(key, values.get(0));
-        }
-                log.debug("param: "+key+" : "+values);
+                }
+                log.debug("param: " + key + " : " + values);
             }
 
-        try {
-                pm.setSite(SiteDataCache.instance.get(params.get("site")));
-        } catch (final EmptyCacheException e) {
             try {
+                Site site = SiteDataCache.instance.get(params.get("site"));
+                site.setDomain(params.get("site"));
+                site.setPage(site.getDomain() + params.get("page"));
+                site.setRef(request.getHeader("referer"));
+                pm.setSite(site);
+            } catch (final EmptyCacheException e) {
+                try {
                     pm.setApp(AppDataCache.instance.get(params.get("app")));
-            } catch (final EmptyCacheException e1) {
+                } catch (final EmptyCacheException e1) {
                     throw new RequestException(ERROR_CODE.E906, "missing site or app");
+                }
             }
-        }
             pm.setRequestId(params.get("id"));
             pm.setCallback(params.get("callback"));
             pm.setCallbackUid(params.get("callback_uid"));
@@ -143,7 +150,6 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
             pm.setFsUid(params.get("_fsuid"));
             pm.setSize(params.get("size"));
             pm.setPromoSizes(params.get("promo_sizes"));
-            pm.setReferrer(params.get("referrer"));
             pm.setIpAddress(request.getRemoteAddr());
             pm.setBrowserUserAgentString(request.getHeader("User-Agent"));
             pmList.add(pm);

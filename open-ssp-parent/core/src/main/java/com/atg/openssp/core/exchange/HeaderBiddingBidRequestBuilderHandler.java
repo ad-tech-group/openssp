@@ -84,7 +84,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                 .setApp(app)
                 .setDevice(dd)
                 .setUser(createUser(masterValues))
-                .setCur(CurrencyCache.instance.getBaseCurrency())
+                .addCur(CurrencyCache.instance.getBaseCurrency())
                 .build();
 
         int idCount = 1;

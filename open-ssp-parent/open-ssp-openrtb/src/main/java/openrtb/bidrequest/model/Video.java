@@ -1,8 +1,8 @@
 package openrtb.bidrequest.model;
 
-import openrtb.tables.VideoApiFramework;
-import openrtb.tables.VideoBidResponseProtocol;
-import openrtb.tables.VideoLinearity;
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
+import openrtb.tables.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,13 @@ public final class Video implements Cloneable {
 	private int h;
 	// required
 	private int startdelay = 0;
+
 	// required
-	private List<Integer> protocols = new ArrayList<>();
+    @Until(2.2)
+	private int protocol;
+
+	@Since(2.2)
+	private List<Integer> protocols;
 
 	private List<Integer> battr;
 
@@ -45,6 +50,7 @@ public final class Video implements Cloneable {
 		battr = new ArrayList<>();
 		companionad = new ArrayList<>();
 		api = new ArrayList<>();
+        protocols = new ArrayList<>();
 	}
 
 	public List<String> getMimes() {
@@ -52,11 +58,14 @@ public final class Video implements Cloneable {
 	}
 
 	public void setMimes(final List<String> mimes) {
-		this.mimes = mimes;
+	    this.mimes.clear();
+	    if (mimes != null) {
+            this.mimes.addAll(mimes);
+        }
 	}
 
 	public void addMime(final String mime) {
-		mimes.add(mime);
+		this.mimes.add(mime);
 	}
 
 	public int getMinduration() {
@@ -99,44 +108,59 @@ public final class Video implements Cloneable {
 		this.startdelay = startdelay;
 	}
 
-//	public List<Integer> getProtocols() {
-//		return protocols;
-//	}
-
-//	public void setProtocols(final List<VideoBidResponseProtocol> protocols) {
-//		this.protocolsX = protocols;
-//	}
-
-	public void addProtocol(final VideoBidResponseProtocol protocol) {
-		protocols.add(protocol.getValue());
+    @Deprecated
+	public void setProtocol(final VideoBidResponseProtocol protocol) {
+		this.protocol = protocol.getValue();
 	}
 
-	public void addApi(final VideoApiFramework api) {
-		this.api.add(api.getValue());
-	}
+    public List<VideoBidResponseProtocol> getProtocols() {
+        ArrayList<VideoBidResponseProtocol> list = new ArrayList();
+        this.protocols.forEach(a -> list.add(VideoBidResponseProtocol.convert(a)));
+        return list;
+    }
 
-	public List<Integer> getBattr() {
-		// final List<Integer> reqIndex = new ArrayList<>(battr);
-		// if (companionad != null) {
-		// for (final Banner banner : companionad) {
-		// if (!banner.getBattr().isEmpty()) {
-		// reqIndex.addAll(banner.getBattr());
-		// }
-		// }
-		// }
-		// return reqIndex;
-		return battr;
-	}
+    public void setProtocols(final List<VideoBidResponseProtocol> protocols) {
+        this.protocols.clear();
+        if (protocols != null) {
+            protocols.forEach(a -> this.protocols.add(a.getValue()));
+        }
+    }
 
-	public void setBattr(final List<Integer> battr) {
-		this.battr = battr;
-	}
+    public void addToProtocols(final VideoBidResponseProtocol protocol) {
+        this.protocols.add(protocol.getValue());
+    }
 
-	public void addBattr(final Integer battr) {
-		this.battr.add(battr);
-	}
+    public List<VideoApiFramework> getApis() {
+	    ArrayList<VideoApiFramework> list = new ArrayList();
+	    this.api.forEach(a -> list.add(VideoApiFramework.convertValue(a)));
+        return list;
+    }
 
-	public void setLinearity(final VideoLinearity linearity) {
+    public void setApi(final List<VideoApiFramework> apis) {
+        this.api.clear();
+        if (apis != null) {
+            apis.forEach(a -> this.api.add(a.getValue()));
+        }
+    }
+
+    public void addApi(final VideoApiFramework api) {
+        this.api.add(api.getValue());
+    }
+
+    public void setBattr(final List<CreativeAttribute> battr) {
+        this.battr.clear();
+        if (battr != null) {
+            for (CreativeAttribute a : battr) {
+                this.battr.add(a.getValue());
+            }
+        }
+    }
+
+    public void addBattr(final CreativeAttribute battr) {
+        this.battr.add(battr.getValue());
+    }
+
+    public void setLinearity(final VideoLinearity linearity) {
 		this.linearity = linearity.getValue();
 	}
 
@@ -144,21 +168,20 @@ public final class Video implements Cloneable {
 		return VideoLinearity.convertValue(linearity);
 	}
 
-	public List<Banner> getCompanionad() {
-		return companionad;
-	}
+    public List<Banner> getCompanionad() {
+        return companionad;
+    }
 
-	public void setCompanionad(final List<Banner> companionad) {
-		this.companionad = companionad;
-	}
+    public void setCompanionad(final List<Banner> companionad) {
+        this.companionad.clear();
+        if (companionad != null) {
+            this.companionad.addAll(companionad);
+        }
+    }
 
-//	public List<Integer> getApiX() {
-//		return apiX;
-//	}
-
-//	public void setApiX(final List<Integer> api) {
-//		this.apiX = api;
-//	}
+    public void addCompanionad(final Banner companionad) {
+        this.companionad.add(companionad);
+    }
 
 	public Object getExt() {
 		return ext;
@@ -180,7 +203,7 @@ public final class Video implements Cloneable {
 
 	}
 
-	public static class Builder {
+    public static class Builder {
 
 		private final Video video;
 
@@ -220,8 +243,14 @@ public final class Video implements Cloneable {
 			return this;
 		}
 
-		public Builder addProtocol(final VideoBidResponseProtocol protocol) {
-			video.addProtocol(protocol);
+		@Deprecated
+        public Builder setProtocol(VideoBidResponseProtocol protocol) {
+            video.setProtocol(protocol);
+            return this;
+        }
+
+		public Builder addToProtocols(final VideoBidResponseProtocol protocol) {
+			video.addToProtocols(protocol);
 			return this;
 		}
 
@@ -230,7 +259,7 @@ public final class Video implements Cloneable {
 			return this;
 		}
 
-		public Builder addBattr(final Integer battr) {
+		public Builder addBattr(final CreativeAttribute battr) {
 			video.addBattr(battr);
 			return this;
 		}
@@ -240,16 +269,12 @@ public final class Video implements Cloneable {
 			return this;
 		}
 
-		public Video build() {
-			return video;
-		}
-
 		public Builder setLinearity(final VideoLinearity linearity) {
 			video.setLinearity(linearity);
 			return this;
 		}
 
-		public Builder addAllBattr(final List<Integer> battrList) {
+		public Builder addAllBattr(final List<CreativeAttribute> battrList) {
 			video.setBattr(battrList);
 			return this;
 		}
@@ -259,7 +284,12 @@ public final class Video implements Cloneable {
 			video.getCompanionad().add(companionAd.build());
 			return this;
 		}
-	}
+
+        public Video build() {
+            return video;
+        }
+
+    }
 
 	@Override
 	public String toString() {

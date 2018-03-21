@@ -10,7 +10,7 @@ public final class User implements Cloneable {
 
 	private String buyeruid;
 
-	private int yob;
+	private Integer yob;
 
 	private String gender;
 

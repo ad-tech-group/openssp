@@ -97,18 +97,20 @@ public final class Banner implements Cloneable {
 		this.pos = pos.getValue();
 	}
 
-//	public List<Integer> getBtypeX() {
-//		return btypeX;
-//	}
+	public void addBtype(final BannerAdType btype) {
+        if (btype != null) {
+            this.btype.add(btype.getValue());
+        }
+	}
 
-	public void setAllBtype(final BannerAdType[] btype) {
+    public void setAllBtype(final BannerAdType[] btype) {
         this.btype.clear();
         if (btype != null) {
             for (BannerAdType t : btype) {
                 this.btype.add(t.getValue());
             }
         }
-	}
+    }
 
     public void setAllBtype(final List<BannerAdType> btype) {
         this.btype.clear();
@@ -119,14 +121,20 @@ public final class Banner implements Cloneable {
         }
     }
 
-    public void setAllBattr(final CreativeAttribute[] battr) {
-	    this.battr.clear();
+    public void addBattr(final CreativeAttribute battr) {
 	    if (battr != null) {
+	        this.battr.add(battr.getValue());
+        }
+	}
+
+    public void setAllBattr(final CreativeAttribute[] battr) {
+        this.battr.clear();
+        if (battr != null) {
             for (CreativeAttribute a : battr) {
                 this.battr.add(a.getValue());
             }
         }
-	}
+    }
 
     public void setAllBattr(final List<CreativeAttribute> battr) {
         this.battr.clear();
@@ -212,7 +220,7 @@ public final class Banner implements Cloneable {
 		return format;
 	}
 
-	public static class Builder {
+    public static class Builder {
 
 		private final Banner banner;
 
@@ -225,23 +233,23 @@ public final class Banner implements Cloneable {
 			return this;
 		}
 
-		public Builder setAllBtype(final BannerAdType[] allBtype) {
-			banner.setAllBtype(allBtype);
+		public Builder setW(int w) {
+			banner.setW(w);
 			return this;
 		}
 
-        public Builder setAllBtype(final List<BannerAdType> allBtype) {
-            banner.setAllBtype(allBtype);
+		public Builder setH(int h) {
+			banner.setH(h);
+			return this;
+		}
+
+        public Builder addBtype(final BannerAdType btype) {
+            banner.addBtype(btype);
             return this;
         }
 
-        public Builder setAllBattr(final CreativeAttribute[] allBattr) {
-            banner.setAllBattr(allBattr);
-            return this;
-        }
-
-        public Builder setAllBattr(final List<CreativeAttribute> allBattr) {
-            banner.setAllBattr(allBattr);
+        public Builder addBattr(final CreativeAttribute battr) {
+            banner.addBattr(battr);
             return this;
         }
 
@@ -258,7 +266,8 @@ public final class Banner implements Cloneable {
         public Banner build() {
 			return banner;
 		}
-	}
+
+    }
 
 	public static class BannerSize implements Comparable<BannerSize> {
 		private int w;

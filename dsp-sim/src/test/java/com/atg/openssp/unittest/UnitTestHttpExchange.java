@@ -78,7 +78,7 @@ public class UnitTestHttpExchange extends HttpExchange{
 
     @Override
     public InetSocketAddress getLocalAddress() {
-        throw new RuntimeException("not implemented yet");
+        return new InetSocketAddress("friendly.com", 20);
     }
 
     @Override

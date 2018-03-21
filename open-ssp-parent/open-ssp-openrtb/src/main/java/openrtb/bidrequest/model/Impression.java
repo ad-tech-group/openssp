@@ -1,5 +1,7 @@
 package openrtb.bidrequest.model;
 
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
 import openrtb.tables.ImpressionSecurity;
 
 /**
@@ -8,6 +10,10 @@ import openrtb.tables.ImpressionSecurity;
  */
 public final class Impression implements Cloneable {
 
+	@Until(2.0)
+	private String impid;
+
+	@Since(2.0)
 	private String id;
 
 	private Banner banner;
@@ -16,18 +22,30 @@ public final class Impression implements Cloneable {
 
 	private Video video;
 
+	@Since(2.2)
 	private int secure = ImpressionSecurity.NON_SECURE.getValue();
 
 	private float bidfloor;
 
 	private String bidfloorcur = "USD";// default
 
+	@Since(2.2)
 	private PMP pmp;
 
 	private Object ext;
 
 	public Impression() {
 		pmp = new PMP();
+	}
+
+	//@Deprecated
+	public String getImpid() {
+		return impid;
+	}
+
+	//@Deprecated
+	public void setImpid(final String impid) {
+		this.impid = impid;
 	}
 
 	public String getId() {
@@ -167,6 +185,12 @@ public final class Impression implements Cloneable {
 
 		public Builder() {
 			impression = new Impression();
+		}
+
+		@Deprecated
+		public Builder setImpid(final String impid) {
+			impression.setImpid(impid);
+			return this;
 		}
 
 		public Builder setId(final String id) {

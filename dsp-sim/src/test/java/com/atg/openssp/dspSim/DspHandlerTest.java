@@ -55,7 +55,7 @@ public class DspHandlerTest {
             rBid.addProperty("impid", "1");
             rBid.addProperty("price", 0.01);
             rBid.addProperty("adid", "823011");
-            rBid.addProperty("nurl", "http://rtb.adkernel.com/win?i=QRh2T-YNIFk_0&price=${AUCTION_PRICE}");
+            rBid.addProperty("nurl", "http://friendly.com:20/win?i=QRh2T-YNIFk_0&price=${AUCTION_PRICE}");
             rBid.addProperty("adm", "<a href=\'http://rtb.adkernel.com/click?i=QRh2T-YNIFk_0\' target=\'_blank\'><img src=\'http://rtb.adkernel.com/n1/ad/300x250_EUNqbCsW.png\' width=\'300\' height=\'250\' border=\'0\' ></a><img src='http://rtb.adkernel.com/pixel?i=QRh2T-YNIFk_0' alt=' ' style='display:none'>");
 
             JsonArray rAddDomain = new JsonArray();
@@ -70,7 +70,7 @@ public class DspHandlerTest {
 
             JsonArray rCat = new JsonArray();
             rBid.add("cat", rCat);
-            rCat.add("IAB3-1");
+            //rCat.add("IAB3-1");
 
 
             JsonArray rSeatBidList = new JsonArray();
@@ -83,6 +83,7 @@ public class DspHandlerTest {
             result.addProperty("id", "4487159888663217854");
             result.add("seatbid", rSeatBidList);
             result.addProperty("cur", "USD");
+
 
             UnitTestHttpExchange e = new UnitTestHttpExchange(body.toString());
             h.handle(e);
