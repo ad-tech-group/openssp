@@ -15,7 +15,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <my.dev.catalina.home>x</my.dev.catalina.home>
+        <my.dev.catalina.home>target/tomcat</my.dev.catalina.home>
 	</properties>
 
 	<profiles>

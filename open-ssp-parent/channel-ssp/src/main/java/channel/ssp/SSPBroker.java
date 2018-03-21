@@ -39,8 +39,7 @@ public final class SSPBroker extends AbstractBroker implements Callable<Response
 		final String result = sspAdapter.getConnector().connect(sessionAgent);
 		final BidResponse.Builder bidResponse = ResponseParser.parse(result, sspAdapter);
 
-		// debugging purposes
-		System.out.println(bidResponse);
+		log.debug(bidResponse.toString());
 		return null;
 	}
 

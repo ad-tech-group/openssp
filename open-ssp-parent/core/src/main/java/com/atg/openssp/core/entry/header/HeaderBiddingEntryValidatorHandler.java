@@ -52,7 +52,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
-                System.out.println("-->" + json);
+                log.debug("-->"+json);
                 StringReader bais = new StringReader(json);
                 biddingRequest = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();

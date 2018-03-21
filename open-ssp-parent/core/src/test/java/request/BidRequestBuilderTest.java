@@ -205,8 +205,8 @@ public class BidRequestBuilderTest {
                 .addBadv("ford.com")
                 .build();
 
-        System.out.println(new Gson().toJson(bidRequestBanner));
-        System.out.println(new Gson().toJson(bidRequestVideo));
+        //System.out.println(new Gson().toJson(bidRequestBanner));
+        //System.out.println(new Gson().toJson(bidRequestVideo));
 
     }
 
@@ -265,7 +265,6 @@ public class BidRequestBuilderTest {
 		final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V1_0);
 		final ValidationResult result = validator.validate(jsonBidrequest);
 		log.info(result.getResult());
-        System.out.println(result.getResult());
 		Assert.assertTrue(validator.isValid(jsonBidrequest));
 	}
 
@@ -275,7 +274,6 @@ public class BidRequestBuilderTest {
 		final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_0);
 		final ValidationResult result = validator.validate(jsonBidrequest);
 		log.info(result.getResult());
-        System.out.println(result.getResult());
 		Assert.assertTrue(validator.isValid(jsonBidrequest));
 	}
 
@@ -285,7 +283,6 @@ public class BidRequestBuilderTest {
 		final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_1);
 		final ValidationResult result = validator.validate(jsonBidrequest);
 		log.info(result.getResult());
-        System.out.println(result.getResult());
 		Assert.assertTrue(validator.isValid(jsonBidrequest));
 	}
 
@@ -295,7 +292,6 @@ public class BidRequestBuilderTest {
 		final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_2);
 		final ValidationResult result = validator.validate(jsonBidrequest);
 		log.info(result.getResult());
-        System.out.println(result.getResult());
 		Assert.assertTrue(validator.isValid(jsonBidrequest));
 	}
 
@@ -305,7 +301,6 @@ public class BidRequestBuilderTest {
 		final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_3);
 		final ValidationResult result = validator.validate(jsonBidrequest);
 		log.info(result.getResult());
-		System.out.println(result.getResult());
 		Assert.assertTrue(validator.isValid(jsonBidrequest));
 	}
 
@@ -315,7 +310,6 @@ public class BidRequestBuilderTest {
 		final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_4);
 		final ValidationResult result = validator.validate(jsonBidrequest);
 		log.info(result.getResult());
-        System.out.println(result.getResult());
 		Assert.assertTrue(validator.isValid(jsonBidrequest));
 	}
 
@@ -325,7 +319,6 @@ public class BidRequestBuilderTest {
         final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V1_0);
         final ValidationResult result = validator.validate(jsonBidrequest);
         log.info(result.getResult());
-        System.out.println(result.getResult());
         Assert.assertTrue(validator.isValid(jsonBidrequest));
     }
 
@@ -335,7 +328,6 @@ public class BidRequestBuilderTest {
         final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_0);
         final ValidationResult result = validator.validate(jsonBidrequest);
         log.info(result.getResult());
-        System.out.println(result.getResult());
         Assert.assertTrue(validator.isValid(jsonBidrequest));
     }
 
@@ -345,7 +337,6 @@ public class BidRequestBuilderTest {
         final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_1);
         final ValidationResult result = validator.validate(jsonBidrequest);
         log.info(result.getResult());
-        System.out.println(result.getResult());
         Assert.assertTrue(validator.isValid(jsonBidrequest));
     }
 
@@ -355,7 +346,6 @@ public class BidRequestBuilderTest {
         final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_2);
         final ValidationResult result = validator.validate(jsonBidrequest);
         log.info(result.getResult());
-        System.out.println(result.getResult());
         Assert.assertTrue(validator.isValid(jsonBidrequest));
     }
 
@@ -365,7 +355,6 @@ public class BidRequestBuilderTest {
         final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_3);
         final ValidationResult result = validator.validate(jsonBidrequest);
         log.info(result.getResult());
-        System.out.println(result.getResult());
         Assert.assertTrue(validator.isValid(jsonBidrequest));
     }
 
@@ -375,7 +364,6 @@ public class BidRequestBuilderTest {
         final OpenRtbValidator validator = OpenRtbValidatorFactory.getValidator(OpenRtbInputType.BID_REQUEST, OpenRtbVersion.V2_4);
         final ValidationResult result = validator.validate(jsonBidrequest);
         log.info(result.getResult());
-        System.out.println(result.getResult());
         Assert.assertTrue(validator.isValid(jsonBidrequest));
     }
 

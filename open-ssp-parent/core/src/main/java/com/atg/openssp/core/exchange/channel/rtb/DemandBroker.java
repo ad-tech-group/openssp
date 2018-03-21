@@ -2,6 +2,8 @@ package com.atg.openssp.core.exchange.channel.rtb;
 
 import java.util.concurrent.Callable;
 
+import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
+import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
@@ -53,7 +55,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		try {
 			gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
 		} catch (Throwable t) {
-			System.out.println(t);
+			log.error(t.getMessage(), t);
 		}
 	}
 
@@ -66,9 +68,13 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		try {
 			final String jsonBidrequest = gson.toJson(bidrequest, BidRequest.class);
 			log.info("biderquest: " + jsonBidrequest);
+			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
+
 			final String result = connector.connect(jsonBidrequest, headers);
 			if (!StringUtils.isEmpty(result)) {
 				log.info("bidresponse: " + result);
+				RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
+
 
 				final BidResponse bidResponse = gson.fromJson(result, BidResponse.class);
 

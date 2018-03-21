@@ -39,11 +39,7 @@ public class LogFacade {
 	private static Level loglevel = Level.INFO;
 
 	static {
-		systemRequestLogger = LogManager.getLogger(REQUEST_INFO);
 		// pidLogger = LogManager.getLogger(PID);
-		rtbResponseLogger = LogManager.getLogger(BID_RESPONSE);
-		rtbRequestLogger = LogManager.getLogger(BID_REQUEST);
-		providerLogger = LogManager.getLogger(PROVIDER);
 		// adservingRequestLogger = LogManager.getLogger(ADSERVING_REQUEST);
 		// adservingResponseLogger = LogManager.getLogger(ADSERVING_RESPONSE);
 	}
@@ -66,11 +62,21 @@ public class LogFacade {
 	// }
 
 	public static void logRtbResponse(final String msg, final String... params) {
-		rtbResponseLogger.info("{} {}", params, msg);
+	    if (rtbResponseLogger == null) {
+	        synchronized (LogFacade.class) {
+                rtbResponseLogger = LogManager.getLogger(BID_RESPONSE);
+            }
+        }
+        rtbResponseLogger.info("{} {}", params, msg);
 	}
 
 	public static void logRtbRequest(final String msg, final String... params) {
-		rtbRequestLogger.info("{} {}", params, msg);
+        if (rtbRequestLogger == null) {
+            synchronized (LogFacade.class) {
+                rtbRequestLogger = LogManager.getLogger(BID_REQUEST);
+            }
+        }
+        rtbRequestLogger.info("{} {}", params, msg);
 	}
 
 	// public static void logAdservingRequest(final String msg, final String... params) {
@@ -82,11 +88,21 @@ public class LogFacade {
 	// }
 
 	public static void logRequestAsync(final String msg) {
-		systemRequestLogger.info(msg);
+        if (systemRequestLogger == null) {
+            synchronized (LogFacade.class) {
+                systemRequestLogger = LogManager.getLogger(REQUEST_INFO);
+            }
+        }
+        systemRequestLogger.info(msg);
 	}
 
 	public static void logProviderAsync(final String msg) {
-		providerLogger.info(msg);
+        if (providerLogger == null) {
+            synchronized (LogFacade.class) {
+                providerLogger = LogManager.getLogger(PROVIDER);
+            }
+        }
+        providerLogger.info(msg);
 	}
 
 	public static String getLogLevel() {

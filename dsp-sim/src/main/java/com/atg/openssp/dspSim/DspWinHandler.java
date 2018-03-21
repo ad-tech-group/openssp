@@ -30,7 +30,6 @@ public class DspWinHandler implements HttpHandler {
         String price = parms.get("price");
 
         log.info("ad win notification: ID: " + i + " :: PRICE: " + price);
-        System.out.println("ad win notification: ID: " + i + " :: PRICE: " + price);
 
         String result = "";
         httpExchange.sendResponseHeaders(200, result.length());

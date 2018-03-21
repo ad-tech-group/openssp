@@ -106,16 +106,6 @@ public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
         pm.setPromoSizes(promoSizes);
         pm.setReferrer(referrer);
 
-//        System.out.println(request.getParameterMap());
-
-        // pm.setDomain(checkValue(request.getParameter("domain"), ERROR_CODE.E906, "Domain"));
-        // pm.setH(checkValue(request.getParameter("h"), ERROR_CODE.E906, "Height"));
-        // pm.setW(checkValue(request.getParameter("w"), ERROR_CODE.E906, "Width"));
-        // pm.setMimes(convertMimes(request.getParameter("mimes")));
-        // pm.setPage(checkValue(request.getParameter("page"), pm.getDomain()));
-        // pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
-        // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
-
         pmList.add(pm);
         return pmList;
     }

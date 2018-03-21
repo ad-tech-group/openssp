@@ -1,5 +1,7 @@
 package com.atg.openssp.dspSim;
 
+import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
+import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -27,16 +29,14 @@ public class DspHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
-        log.info("-->"+new Gson().toJson(brq));
-        System.out.println("-->"+new Gson().toJson(brq));
+        RtbRequestLogProcessor.instance.setLogData(new Gson().toJson(brq), "bidrequest", httpExchange.getRemoteAddress().getHostName());
         BidResponse brsp = model.createBidResponse(httpExchange.getLocalAddress().getHostName(), httpExchange.getLocalAddress().getPort(), brq);
 
         if (brsp.getSeatbid().size() > 0 || true) {
 
 
             String result = model.filterResult(brsp);
-            System.out.println("<--"+result);
-            log.info("<--"+result);
+            RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", httpExchange.getRemoteAddress().getHostName());
             httpExchange.sendResponseHeaders(200, result.length());
             OutputStream os = httpExchange.getResponseBody();
             os.write(result.getBytes());
