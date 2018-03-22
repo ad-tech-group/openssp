@@ -4,6 +4,9 @@ import java.util.concurrent.Callable;
 
 import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
+import com.atg.openssp.core.entry.BiddingServiceInfo;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
@@ -31,6 +34,8 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	private static final Logger log = LoggerFactory.getLogger(DemandBroker.class);
 
+	private final BiddingServiceInfo info;
+
 	private final Supplier supplier;
 
 	private final OpenRtbConnector connector;
@@ -41,8 +46,9 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	private BidRequest bidrequest;
 
-	public DemandBroker(final Supplier supplier, final OpenRtbConnector connector, final SessionAgent agent) {
-		sessionAgent = agent;
+	public DemandBroker(BiddingServiceInfo info, final Supplier supplier, final OpenRtbConnector connector, final SessionAgent agent) {
+		super(agent);
+		this.info = info;
 		this.supplier = supplier;
 		this.connector = connector;
 
@@ -66,18 +72,17 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		}
 
 		try {
-			final String jsonBidrequest = gson.toJson(bidrequest, BidRequest.class);
+			final String jsonBidrequest = info.getDemandBrokerFilter().filterRequest(gson, bidrequest);
+
 			log.info("biderquest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
+			log.info("bidresponse: " + result);
+			RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
+
 			if (!StringUtils.isEmpty(result)) {
-				log.info("bidresponse: " + result);
-				RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
-
-
-				final BidResponse bidResponse = gson.fromJson(result, BidResponse.class);
-
+				final BidResponse bidResponse = info.getDemandBrokerFilter().filterResponse(gson, result);
 				return new ResponseContainer(supplier, bidResponse);
 			}
 		} catch (final BidProcessingException e) {

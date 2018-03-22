@@ -2,24 +2,12 @@
   "sites": [
     {
       "id": "testmango.com",
-      "name": "testmango",
-      "cat": [
-        "IAB21"
-      ],
-      "pagecat": [
-        "IAB22"
-      ],
-      "sectioncat": [
-        "IAB23"
-      ],
-      "publisher": {
-        "id": "pubisher_2",
-        "name": "publisher_2_name",
-        "cat": ["IAB10-1", "IAB10-2"],
-        "domain": "www.publisher_2.com",
-        "ext": null
-      },
-      "ext": null
+      "name": "testmango"
+    },
+
+    {
+      "id": "coindesk.com",
+      "name": "coindesk.com"
     },
     {
       "id": "testsite.com",

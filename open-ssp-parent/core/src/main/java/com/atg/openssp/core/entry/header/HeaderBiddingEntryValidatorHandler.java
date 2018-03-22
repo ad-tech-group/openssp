@@ -106,8 +106,6 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 pm.setPromoSizes(a.getPromoSizes());
 
                 pm.setIpAddress(request.getRemoteAddr());
-                //TODO: BKS
-                pm.setIpAddress("bombholtmagic.com");
                 pm.setBrowserUserAgentString(request.getHeader("user-agent"));
                 pmList.add(pm);
             }

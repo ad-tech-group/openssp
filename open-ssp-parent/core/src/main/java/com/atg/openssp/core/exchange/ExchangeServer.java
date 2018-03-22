@@ -59,6 +59,8 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 			if (winnerFuture != null) {
 				try {
 					return winnerFuture.get();
+				} catch (ArrayIndexOutOfBoundsException ex) {
+					log.error("no winner detected (winnerFuture is empty)");
 				} catch (final ExecutionException e) {
 					if (e.getCause() instanceof RequestException) {
 						throw (RequestException) e.getCause();

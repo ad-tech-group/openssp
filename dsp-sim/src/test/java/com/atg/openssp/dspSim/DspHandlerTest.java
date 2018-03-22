@@ -54,12 +54,12 @@ public class DspHandlerTest {
             rBid.addProperty("id", "QRh2T-YNIFk_0");
             rBid.addProperty("impid", "1");
             rBid.addProperty("price", 0.01);
-            rBid.addProperty("adid", "823011");
-            rBid.addProperty("nurl", "http://friendly.com:20/win?i=QRh2T-YNIFk_0&price=${AUCTION_PRICE}");
-            rBid.addProperty("adm", "<a href=\'http://rtb.adkernel.com/click?i=QRh2T-YNIFk_0\' target=\'_blank\'><img src=\'http://rtb.adkernel.com/n1/ad/300x250_EUNqbCsW.png\' width=\'300\' height=\'250\' border=\'0\' ></a><img src='http://rtb.adkernel.com/pixel?i=QRh2T-YNIFk_0' alt=' ' style='display:none'>");
+//            rBid.addProperty("adid", "823011");
+//            rBid.addProperty("nurl", "http://friendly.com:20/win?i=QRh2T-YNIFk_0&price=${AUCTION_PRICE}");
+//            rBid.addProperty("adm", "<a href=\'http://rtb.adkernel.com/click?i=QRh2T-YNIFk_0\' target=\'_blank\'><img src=\'http://rtb.adkernel.com/n1/ad/300x250_EUNqbCsW.png\' width=\'300\' height=\'250\' border=\'0\' ></a><img src='http://rtb.adkernel.com/pixel?i=QRh2T-YNIFk_0' alt=' ' style='display:none'>");
 
             JsonArray rAddDomain = new JsonArray();
-            rBid.add("adomain", rAddDomain);
+//            rBid.add("adomain", rAddDomain);
             rAddDomain.add("adkernel.com");
 
             rBid.addProperty("iurl", "http://xs.wowconversions.com/n1/ad/300x250_EUNqbCsW.png");

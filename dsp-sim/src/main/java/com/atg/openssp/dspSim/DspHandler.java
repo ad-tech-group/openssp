@@ -11,9 +11,7 @@ import openrtb.bidresponse.model.BidResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * @author Brian Sorensen
@@ -28,22 +26,35 @@ public class DspHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
-        RtbRequestLogProcessor.instance.setLogData(new Gson().toJson(brq), "bidrequest", httpExchange.getRemoteAddress().getHostName());
-        BidResponse brsp = model.createBidResponse(httpExchange.getLocalAddress().getHostName(), httpExchange.getLocalAddress().getPort(), brq);
+        BufferedReader br = new BufferedReader(new InputStreamReader(httpExchange.getRequestBody()));
+        String line;
+        StringBuilder rawRequest = new StringBuilder();
+        while((line = br.readLine()) != null) {
+            rawRequest.append(line+"\n");
+        }
+        RtbRequestLogProcessor.instance.setLogData(rawRequest.toString(), "bidrequest", httpExchange.getRemoteAddress().getHostName());
+        System.out.println("-->"+rawRequest);
+        try {
+            BidRequest brq = new Gson().fromJson(rawRequest.toString(), BidRequest.class);
+            BidResponse brsp = model.createBidResponse(httpExchange.getLocalAddress().getHostName(), httpExchange.getLocalAddress().getPort(), brq);
+            if (brsp.getSeatbid().size() > 0 || true) {
 
-        if (brsp.getSeatbid().size() > 0 || true) {
 
-
-            String result = model.filterResult(brsp);
-            RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", httpExchange.getRemoteAddress().getHostName());
-            httpExchange.sendResponseHeaders(200, result.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(result.getBytes());
-            os.close();
-        } else {
+                String result = model.filterResult(brsp);
+                RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", httpExchange.getRemoteAddress().getHostName());
+                System.out.println("<--"+result);
+                httpExchange.sendResponseHeaders(200, result.length());
+                OutputStream os = httpExchange.getResponseBody();
+                os.write(result.getBytes());
+                os.close();
+            } else {
+                httpExchange.sendResponseHeaders(201, 0);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
             httpExchange.sendResponseHeaders(201, 0);
         }
+
 
 
     }

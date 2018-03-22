@@ -180,8 +180,8 @@ public final class Bid implements Comparable<Bid> {
 		return list;
 	}
 
-	public void addAllCat(List<ContentCategory> cat) {
-		cat.forEach(c -> this.cat.add(c.getValue()));
+	public void addAllCats(List<ContentCategory> cat) {
+		cat.forEach(c -> addCat(c));
 	}
 
 	public void setCat(final List<ContentCategory> cat) {

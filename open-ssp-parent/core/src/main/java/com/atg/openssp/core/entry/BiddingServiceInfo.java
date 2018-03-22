@@ -1,5 +1,9 @@
 package com.atg.openssp.core.entry;
 
+import com.atg.openssp.core.exchange.channel.rtb.DemandBrokerFilter;
+import com.atg.openssp.core.exchange.channel.rtb.PassthroughFilter;
+import io.freestar.ssp.channel.rtb.MangoMediaFilter;
+import openrtb.bidrequest.model.BidRequest;
 import openrtb.tables.AuctionType;
 
 import java.util.HashMap;
@@ -12,6 +16,8 @@ public class BiddingServiceInfo {
     private String characterEncoding;
     private boolean activateAccessAllowOrigin;
     private AuctionType auctionType = AuctionType.SECOND_PRICE;
+//    private DemandBrokerFilter brokerFilter = new PassthroughFilter();
+    private DemandBrokerFilter brokerFilter = new MangoMediaFilter();
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -64,5 +70,9 @@ public class BiddingServiceInfo {
 
     public void setAuctionType(AuctionType auctionType) {
         this.auctionType = auctionType;
+    }
+
+    public DemandBrokerFilter getDemandBrokerFilter() {
+        return brokerFilter;
     }
 }

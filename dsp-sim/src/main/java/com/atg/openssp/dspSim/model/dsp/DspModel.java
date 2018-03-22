@@ -66,8 +66,8 @@ public class DspModel {
     }
 
     private void loadModel() throws ModelException {
+        File f = new File(FILE_NAME);
         try {
-            File f = new File(FILE_NAME);
             if (f.exists()) {
                 FileReader fr = new FileReader(f);
                 List<SimBidder> buffer = new Gson().fromJson(fr, new TypeToken<List<SimBidder>>(){}.getType());
@@ -79,19 +79,21 @@ public class DspModel {
             }
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
-            throw new ModelException("Could not load model from store.");
+            System.out.println(e.getMessage());
+            throw new ModelException("Could not load model from store: "+f.getAbsolutePath());
         }
     }
 
     public void saveModel() throws ModelException {
+        File f = new File(FILE_NAME);
         try {
-            PrintWriter fw = new PrintWriter(new FileWriter(FILE_NAME));
+            PrintWriter fw = new PrintWriter(new FileWriter(f));
             String json = new Gson().toJson(bList);
             fw.println(json);
             fw.close();
         } catch (IOException e) {
             log.warn(e.getMessage(), e);
-            throw new ModelException("Could not save model from store.");
+            throw new ModelException("Could not save model to store: "+f);
         }
     }
 
@@ -159,16 +161,16 @@ public class DspModel {
         BigDecimal d = new BigDecimal(simBidder.getPrice());
         d = d.add(priceOffset);
         b.setPrice(priceOffset.floatValue());
-        b.setAdid(simBidder.getAdId());
+        b.setAdid(simBidder.getAdid());
         String nUrl = "http://"+server+":"+port+"/win?i="+simBidder.getId()+"&price=${AUCTION_PRICE}";
         b.setNurl(nUrl);
 //        b.setNurl(simBidder.getNUrl());
         b.setAdm(simBidder.getAdm());
         b.setAdomain(simBidder.getAdomain());
-        b.setIurl(simBidder.getIUrl());
-        b.setCid(simBidder.getCId());
-        b.setCrid(simBidder.getCrId());
-        b.addAllCat(site.getCat());
+        b.setIurl(simBidder.getIurl());
+        b.setCid(simBidder.getCid());
+        b.setCrid(simBidder.getCrid());
+        b.addAllCats(site.getCat());
         List<ContentCategory> c2  = site.getPagecat();
         List<ContentCategory> c3  = site.getSectioncat();
         if (site.getPublisher() != null) {
@@ -177,6 +179,9 @@ public class DspModel {
                     b.addCat(c);
                 }
             }
+        }
+        if (site.getPublisher() != null) {
+            List<ContentCategory> c4 = site.getPublisher().getCat();
         }
 
         if (i.hasVideo()) {

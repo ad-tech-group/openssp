@@ -1,5 +1,7 @@
 package com.atg.openssp.dspSimUi.model.dsp;
 
+import openrtb.tables.ContentCategory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +12,8 @@ public class SimBidder {
     private final String id;
     private float price;
     private String adId;
-    private String impId;
-    private String nUrl;
+//    private String impId;
+//    private String nUrl;
     private String adm;
     private List<String> adomain = new ArrayList<String>();
     private String iUrl;
@@ -27,13 +29,13 @@ public class SimBidder {
         return id;
     }
 
-    public void setImpId(String impId) {
-        this.impId = impId;
-    }
+//    public void setImpId(String impId) {
+//        this.impId = impId;
+//    }
 
-    public String getImpId() {
-        return impId;
-    }
+//    public String getImpId() {
+//        return impId;
+//    }
 
     public void setPrice(float price) {
         this.price = price;
@@ -51,13 +53,13 @@ public class SimBidder {
         return adId;
     }
 
-    public void setNUrl(String nUrl) {
-        this.nUrl = nUrl;
-    }
+//    public void setNUrl(String nUrl) {
+//        this.nUrl = nUrl;
+//    }
 
-    public String getNUrl() {
-        return nUrl;
-    }
+//    public String getNUrl() {
+//        return nUrl;
+//    }
 
     public void setAdm(String adm) {
         this.adm = adm;
@@ -82,7 +84,8 @@ public class SimBidder {
 
     @Override
     public String toString() {
-        return id + ":"+impId+":"+adId+" - ("+price+")";
+//        return id + ":"+impId+":"+adId+" - ("+price+")";
+        return id + ":"+adId+" - ("+price+")";
     }
 
     public void setIUrl(String iUrl) {
@@ -109,24 +112,28 @@ public class SimBidder {
         return crId;
     }
 
-    public void setCat(List<String> cat) {
+    public void setCats(List<ContentCategory> cat) {
         this.cat.clear();
-        this.cat.addAll(cat);
+        if (cat != null) {
+            cat.forEach(c -> this.cat.add(c.getValue()));
+        }
     }
 
-    public List<String> getCat() {
-        return cat;
+    public List<ContentCategory> getCats() {
+        ArrayList<ContentCategory> list = new ArrayList();
+        cat.forEach(c->list.add(ContentCategory.convertValue(c)));
+        return list;
     }
 
-    public void addCat(String cat) {
-        this.cat.add(cat);
+    public void addCat(ContentCategory cat) {
+        this.cat.add(cat.getValue());
     }
 
     public void populate(SimBidder simBidder) {
-        impId = simBidder.impId;
+//        impId = simBidder.impId;
         price = simBidder.price;
         adId = simBidder.adId;
-        nUrl = simBidder.nUrl;
+//        nUrl = simBidder.nUrl;
         adm = simBidder.adm;
         adomain.clear();
         adomain.addAll(simBidder.adomain);

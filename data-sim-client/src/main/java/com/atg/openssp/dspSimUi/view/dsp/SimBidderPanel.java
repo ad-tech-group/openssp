@@ -5,6 +5,7 @@ import com.atg.openssp.dspSimUi.model.MessageStatus;
 import com.atg.openssp.dspSimUi.model.ModelException;
 import com.atg.openssp.dspSimUi.model.dsp.DspModel;
 import com.atg.openssp.dspSimUi.model.dsp.SimBidder;
+import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,13 +30,13 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final DspModel model;
     private final JList<SimBidder> lBidders;
     private final JLabel lbId = new JLabel("");
-    private final JTextField tfImpId = new JTextField(12);
+//    private final JTextField tfImpId = new JTextField(12);
     private final JTextField tfAddImpId = new JTextField(12);
     private final JTextField tfPrice = new JTextField(8);
     private final JTextField tfAddPrice = new JTextField(8);
     private final JTextField tfAdId = new JTextField(12);
     private final JTextField tfAddAdId = new JTextField(12);
-    private final JTextField tfNUrl = new JTextField(20);
+//    private final JTextField tfNUrl = new JTextField(20);
     private final JTextField tfAddNUrl = new JTextField(20);
     private final JTextField tfAdm = new JTextField(25);
     private final JTextField tfAddAdm = new JTextField(25);
@@ -49,8 +50,8 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JTextField tfAddCId = new JTextField(25);
     private final JTextField tfCrId = new JTextField(25);
     private final JTextField tfAddCrId = new JTextField(25);
-    private final DefaultListModel<String> mCat = new DefaultListModel<String>();
-    private final JList<String> lCat = new JList<String>(mCat);
+    private final DefaultListModel<ContentCategory> mCat = new DefaultListModel<ContentCategory>();
+    private final JList<ContentCategory> lCat = new JList<ContentCategory>(mCat);
     private final DefaultListModel<String> mAddCat = new DefaultListModel<String>();
     private final JList<String> lAddCat = new JList<String>(mAddCat);
 
@@ -101,10 +102,10 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
 
         pMiddle.setBorder(new TitledBorder("Active Bidder"));
         addItem(pMiddle, "ID:", lbId);
-        addItem(pMiddle, "IMP ID:", tfImpId);
+//        addItem(pMiddle, "IMP ID:", tfImpId);
         addItem(pMiddle, "Price:", tfPrice);
         addItem(pMiddle, "AD ID:", tfAdId);
-        addItem(pMiddle, "N Url:", tfNUrl);
+//        addItem(pMiddle, "N Url:", tfNUrl);
         addItem(pMiddle, "ADM:", tfAdm);
         addItem(pMiddle, "A DOMAIN:", lAdomain);
         addItem(pMiddle, "I URL:", tfIUrl);
@@ -186,10 +187,10 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
 
     private void resetActiveDisplay(SimBidder sb) {
         if (sb == null) {
-            tfImpId.setText("");
+//            tfImpId.setText("");
             tfPrice.setText("");
             tfAdId.setText("");
-            tfNUrl.setText("");
+//            tfNUrl.setText("");
             tfAdm.setText("");
             mAdomain.clear();
             tfCId.setText("");
@@ -197,11 +198,11 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             mCat.clear();
             tfMemo.setText("");
         } else {
-            tfImpId.setText(sb.getImpId());
+//            tfImpId.setText(sb.getImpId());
             DecimalFormat formatter = new DecimalFormat("###,###,###.00");
             tfPrice.setText(formatter.format(sb.getPrice()));
             tfAdId.setText(sb.getAdId());
-            tfNUrl.setText(sb.getNUrl());
+//            tfNUrl.setText(sb.getNUrl());
             tfAdm.setText(sb.getAdm());
             mAdomain.clear();
             for (String s : sb.getAdomain()) {
@@ -211,7 +212,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             tfCId.setText(sb.getCId());
             tfCrId.setText(sb.getCrId());
             mCat.clear();
-            for (String s : sb.getCat()) {
+            for (ContentCategory s : sb.getCats()) {
                 mCat.addElement(s);
             }
             tfMemo.setText("Bidder selected.");
@@ -228,16 +229,16 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
                     float newPrice = formatter.parse(tfPrice.getText()).floatValue();
 
                     SimBidder sbN = new SimBidder(sb.getId());
-                    sbN.setImpId(tfImpId.getText());
+//                    sbN.setImpId(tfImpId.getText());
                     sbN.setPrice(newPrice);
                     sbN.setAdId(tfAdId.getText());
-                    sbN.setNUrl(tfNUrl.getText());
+//                    sbN.setNUrl(tfNUrl.getText());
                     sbN.setAdm(tfAdm.getText());
                     sbN.setAdomain(Collections.list(mAdomain.elements()));
                     sbN.setIUrl(tfIUrl.getText());
                     sbN.setCId(tfCId.getText());
                     sbN.setCrId(tfCrId.getText());
-                    sbN.setCat(Collections.list(mCat.elements()));
+                    sbN.setCats(Collections.list(mCat.elements()));
                     model.sendUpdateCommand(sbN);
                     model.setMessage("Bidder saved.");
                 } catch (ModelException e) {
@@ -256,16 +257,16 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             try {
                 float newPrice = formatter.parse(tfAddPrice.getText()).floatValue();
                 SimBidder sbN = new SimBidder(UUID.randomUUID().toString());
-                sbN.setImpId(tfAddImpId.getText());
+//                sbN.setImpId(tfAddImpId.getText());
                 sbN.setPrice(newPrice);
                 sbN.setAdId(tfAddAdId.getText());
-                sbN.setNUrl(tfAddNUrl.getText());
+//                sbN.setNUrl(tfAddNUrl.getText());
                 sbN.setAdm(tfAddAdm.getText());
                 sbN.setAdomain(Collections.list(mAddAdomain.elements()));
                 sbN.setIUrl(tfAddIUrl.getText());
                 sbN.setCId(tfAddCId.getText());
                 sbN.setCrId(tfAddCrId.getText());
-                sbN.setCat(Collections.list(mCat.elements()));
+                sbN.setCats(Collections.list(mCat.elements()));
 
                 model.sendAddCommand(sbN);
                 model.setMessage("Bidder added.");

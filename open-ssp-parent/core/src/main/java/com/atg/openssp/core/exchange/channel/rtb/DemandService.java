@@ -71,6 +71,7 @@ public class DemandService implements Callable<AdProviderReader> {
 			futures.parallelStream().filter(Objects::nonNull).forEach(future -> {
 				try {
 					final ResponseContainer responseContainer = future.get();
+
 					// final boolean valid = OpenRtbVideoValidator.instance.validate(agent.getBidExchange().getBidRequest(responseContainer.getSupplier()),
 					// responseContainer
 					// .getBidResponse());
@@ -79,7 +80,12 @@ public class DemandService implements Callable<AdProviderReader> {
 					// LogFacade.logException(this.getClass(), ExceptionCode.E003, agent.getRequestid(), responseContainer.getBidResponse().toString());
 					// return;// important!
 					// }
-					agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
+					if (responseContainer != null) {
+						agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
+					} else {
+						System.err.println("################# no response container");
+						log.error("ExecutionException {} {}", agent.getRequestid(), "################# no response container");
+					}
 				} catch (final ExecutionException e) {
 					log.error("ExecutionException {} {}", agent.getRequestid(), e.getMessage());
 				} catch (final InterruptedException e) {
@@ -91,6 +97,8 @@ public class DemandService implements Callable<AdProviderReader> {
 
 			try {
 				adProvider = Auction.auctioneer(agent.getBiddingServiceInfo(), agent.getBidExchange());
+			} catch (final ArrayIndexOutOfBoundsException e) {
+				log.error("No DSP points available.", agent.getRequestid(), e.getMessage());
 			} catch (final InvalidBidException e) {
 				log.error("{} {}", agent.getRequestid(), e.getMessage());
 			}
@@ -121,7 +129,7 @@ public class DemandService implements Callable<AdProviderReader> {
 			if (connector.getSupplier().getTmax() != null) {
 				bidRequest.setTmax(connector.getSupplier().getTmax());
 			}
-			final DemandBroker demandBroker = new DemandBroker(connector.getSupplier(), connector, agent);
+			final DemandBroker demandBroker = new DemandBroker(agent.getBiddingServiceInfo(), connector.getSupplier(), connector, agent);
 			if (bidRequest.getImp().get(0).getBidfloor() > 0) {
 				final Impression imp = bidRequest.getImp().get(0);
 				// floorprice in EUR -> multiply with rate to get target
