@@ -1,8 +1,9 @@
 {
-	"currency": "EUR",
-	"data": [{
-		"currency": "USD",
-		"rate": 1.25
-		}
-	]
+  "currency": "EUR",
+  "data": [
+    {
+      "currency": "USD",
+      "rate": 1.25
+    }
+  ]
 }

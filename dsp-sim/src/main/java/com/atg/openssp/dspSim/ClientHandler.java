@@ -105,6 +105,18 @@ public class ClientHandler extends TimerTask implements HttpHandler {
             Timer t = new Timer();
             t.schedule(this, 2000);
             cr.setStatus(ClientResponseStatus.SUCCESS);
+        } else if (cc.getType() == ClientCommandType.RETURN_NORMAL) {
+            model.setMode(cc.getType());
+            cr.setStatus(ClientResponseStatus.SUCCESS);
+        } else if (cc.getType() == ClientCommandType.RETURN_NONE) {
+            model.setMode(cc.getType());
+            cr.setStatus(ClientResponseStatus.SUCCESS);
+        } else if (cc.getType() == ClientCommandType.ONLY_400) {
+            model.setMode(cc.getType());
+            cr.setStatus(ClientResponseStatus.SUCCESS);
+        } else if (cc.getType() == ClientCommandType.ONLY_500) {
+            model.setMode(cc.getType());
+            cr.setStatus(ClientResponseStatus.SUCCESS);
         }
         String result = new Gson().toJson(cr);
         log.info("CR<--"+result);

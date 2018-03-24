@@ -24,7 +24,7 @@ public class DspHandlerTest {
     @org.junit.Test
     public void handle() {
         try {
-            DspModel m = new DspModel();
+            DspModel m = new DspModel(0);
             DspHandler h = new DspHandler(m);
             StringBuilder body = new StringBuilder();
             body.append("{\n" +

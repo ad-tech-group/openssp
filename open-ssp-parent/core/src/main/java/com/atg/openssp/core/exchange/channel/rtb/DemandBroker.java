@@ -5,8 +5,6 @@ import java.util.concurrent.Callable;
 import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
 import com.atg.openssp.core.entry.BiddingServiceInfo;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
@@ -48,6 +46,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	public DemandBroker(BiddingServiceInfo info, final Supplier supplier, final OpenRtbConnector connector, final SessionAgent agent) {
 		super(agent);
+		System.out.println("BKSBKSBKS: DemandBroker "+supplier.getShortName()+":"+supplier.getSupplierId());
 		this.info = info;
 		this.supplier = supplier;
 		this.connector = connector;
@@ -72,7 +71,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		}
 
 		try {
-			final String jsonBidrequest = info.getDemandBrokerFilter().filterRequest(gson, bidrequest);
+			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
 
 			log.info("biderquest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
@@ -82,7 +81,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
 
 			if (!StringUtils.isEmpty(result)) {
-				final BidResponse bidResponse = info.getDemandBrokerFilter().filterResponse(gson, result);
+				final BidResponse bidResponse = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterResponse(gson, result);
 				return new ResponseContainer(supplier, bidResponse);
 			}
 		} catch (final BidProcessingException e) {
@@ -90,7 +89,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			throw e;
 		} catch (final Exception e) {
 			log.error(getClass().getSimpleName() + " " + e.getMessage());
-			throw e;
+			//throw e;
 		}
 		return null;
 	}

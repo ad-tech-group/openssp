@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Since;
 import openrtb.tables.AuctionType;
+import openrtb.tables.BooleanInt;
 import openrtb.tables.ContentCategory;
 
 /**
@@ -32,8 +33,8 @@ public final class BidRequest implements Cloneable {
 
 	private List<String> bcat;
 
-	@Since(2.6)
-	private int test = 0;// default
+	@Since(2.3)
+	private int test = BooleanInt.FALSE.getValue(); // default
 
 	private int at = AuctionType.SECOND_PRICE.getValue(); // default
 
@@ -149,12 +150,12 @@ public final class BidRequest implements Cloneable {
 		return list;
 	}
 
-	public int getTest() {
-		return test;
+	public BooleanInt getTest() {
+		return BooleanInt.convertValue(test);
 	}
 
-	public void setTest(final int test) {
-		this.test = test;
+	public void setTest(final BooleanInt test) {
+		this.test = test.getValue();
 	}
 
 	public AuctionType getAt() {
@@ -298,7 +299,7 @@ public final class BidRequest implements Cloneable {
 			return this;
 		}
 
-		public Builder setTest(final int test) {
+		public Builder setTest(final BooleanInt test) {
 			bidRequest.setTest(test);
 			return this;
 		}

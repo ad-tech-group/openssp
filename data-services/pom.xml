@@ -10,6 +10,7 @@
     <packaging>war</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
         <my.dev.catalina.home>y</my.dev.catalina.home>
     </properties>
     <profiles>
@@ -34,6 +35,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
+    					<version>${maven.surefire.plugin.version}</version>
 						<configuration>
 							<systemProperties>
 								<property>

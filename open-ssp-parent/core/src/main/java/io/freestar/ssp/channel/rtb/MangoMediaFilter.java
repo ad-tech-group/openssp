@@ -62,7 +62,7 @@ public class MangoMediaFilter extends DemandBrokerFilter {
         JsonArray cur = (JsonArray) req.get("cur");
 
         req.remove("cur");
-        req.addProperty("test", 1);
+        req.addProperty("test", true);
 
         return req.toString();
     }

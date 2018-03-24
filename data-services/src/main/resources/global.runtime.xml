@@ -11,6 +11,6 @@
 	
 	<!-- the timeout in ms for execution the executor service -->
 	<!-- default is 500ms --> 
-	<entry key="cdl-timeout">500</entry>
+	<entry key="cdl-timeout">1000</entry>
 
 </properties>

@@ -9,9 +9,9 @@
       "supplierId": "1",
       "currency": "USD",
       "tmax": 300,
-      "demandBrokerFilterClassName": "",
-      "underTest": 0,
-      "active": 0
+      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
+      "underTest": 1,
+      "active": 1
     }
   ]
 }

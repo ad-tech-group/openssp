@@ -2,6 +2,7 @@ package com.atg.openssp.dspSim;
 
 import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
+import com.atg.openssp.dspSim.model.client.ClientCommandType;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -34,6 +35,13 @@ public class DspHandler implements HttpHandler {
         }
         RtbRequestLogProcessor.instance.setLogData(rawRequest.toString(), "bidrequest", httpExchange.getRemoteAddress().getHostName());
         System.out.println("-->"+rawRequest);
+        if (model.getMode() == ClientCommandType.RETURN_NONE) {
+            httpExchange.sendResponseHeaders(200, 0);
+        } else if (model.getMode() == ClientCommandType.ONLY_400) {
+            httpExchange.sendResponseHeaders(400, 0);
+        } else if (model.getMode() == ClientCommandType.ONLY_500) {
+            httpExchange.sendResponseHeaders(500, 0);
+        }
         try {
             BidRequest brq = new Gson().fromJson(rawRequest.toString(), BidRequest.class);
             BidResponse brsp = model.createBidResponse(httpExchange.getLocalAddress().getHostName(), httpExchange.getLocalAddress().getPort(), brq);

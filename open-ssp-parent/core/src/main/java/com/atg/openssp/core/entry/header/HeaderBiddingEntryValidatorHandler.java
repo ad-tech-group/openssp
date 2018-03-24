@@ -82,7 +82,13 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 try {
                     Site site = SiteDataCache.instance.get(biddingRequest.getSite());
                     site.setDomain(biddingRequest.getSite());
-                    site.setPage(site.getDomain() + biddingRequest.getPage());
+                    String protocol;
+                    if (request.getProtocol().toLowerCase().startsWith("https")) {
+                        protocol = "https://";
+                    } else {
+                        protocol = "http://";
+                    }
+                    site.setPage(protocol+site.getDomain() + biddingRequest.getPage());
                     site.setRef(request.getHeader("referer"));
                     pm.setSite(site);
                 } catch (final EmptyCacheException e) {

@@ -30,4 +30,5 @@ public abstract class BaseModel {
     public void removeMessageNotificationListener(MessageNotificationListener lis) {
         messageListeners.remove(lis);
     }
+
 }

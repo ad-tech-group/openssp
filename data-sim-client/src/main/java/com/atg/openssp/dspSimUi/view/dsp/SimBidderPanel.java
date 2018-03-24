@@ -67,6 +67,10 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JTextField tfMemo = new JTextField(20);
     private final JButton bRestart = new JButton("Restart SIM");
     private final JButton bShutdown = new JButton("Shutdown SIM");
+    private final JButton bSendNormal = new JButton("Send As Normal");
+    private final JButton bReturnNone = new JButton("Return None");
+    private final JButton bSend400 = new JButton("Send 400");
+    private final JButton bSend500 = new JButton("Send 500");
 
     public SimBidderPanel(DspModel model) {
         this.model = model;
@@ -89,6 +93,14 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         addItem(pTop, "", bShutdown);
         bRestart.addActionListener(this);
         addItem(pTop, "", bRestart);
+        bSendNormal.addActionListener(this);
+        addItem(pTop, "", bSendNormal);
+        bReturnNone.addActionListener(this);
+        addItem(pTop, "", bReturnNone);
+        bSend400.addActionListener(this);
+        addItem(pTop, "", bSend400);
+        bSend500.addActionListener(this);
+        addItem(pTop, "", bSend500);
 
         lBidders.setVisibleRowCount(10);
         addItem(pTop, "Bidders: ", lBidders);
@@ -322,7 +334,32 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             } catch (ModelException e) {
                 model.setMessageAsFault(e.getMessage());
             }
+        } else if (ev.getSource() == bSendNormal) {
+            try {
+                model.sendNormalCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+        } else if (ev.getSource() == bReturnNone) {
+            try {
+                model.sendReturnNoneCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+        } else if (ev.getSource() == bSend400) {
+            try {
+                model.send400Command();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+        } else if (ev.getSource() == bSend500) {
+            try {
+                model.send500Command();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
         }
+
     }
 
     @Override

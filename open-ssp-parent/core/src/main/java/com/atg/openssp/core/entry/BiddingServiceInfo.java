@@ -1,23 +1,30 @@
 package com.atg.openssp.core.entry;
 
+import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.core.exchange.channel.rtb.DemandBrokerFilter;
 import com.atg.openssp.core.exchange.channel.rtb.PassthroughFilter;
-import io.freestar.ssp.channel.rtb.MangoMediaFilter;
+import com.google.gson.Gson;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.tables.AuctionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BiddingServiceInfo {
+    private final Logger log = LoggerFactory.getLogger(BiddingServiceInfo.class);
     private HashMap<String, String> headers = new HashMap();
+    private HashMap<String, DemandBrokerFilter> demandBrokerFilterMap = new HashMap();
     private SessionAgentType type;
     private String contentType;
     private String characterEncoding;
     private boolean activateAccessAllowOrigin;
     private AuctionType auctionType = AuctionType.SECOND_PRICE;
 //    private DemandBrokerFilter brokerFilter = new PassthroughFilter();
-    private DemandBrokerFilter brokerFilter = new MangoMediaFilter();
+//    private DemandBrokerFilter brokerFilter = new MangoMediaFilter();
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -72,7 +79,32 @@ public class BiddingServiceInfo {
         this.auctionType = auctionType;
     }
 
-    public DemandBrokerFilter getDemandBrokerFilter() {
-        return brokerFilter;
+    public DemandBrokerFilter getDemandBrokerFilter(Supplier supplier, Gson gson, BidRequest bidrequest) {
+        DemandBrokerFilter filter = demandBrokerFilterMap.get(supplier.getShortName());
+        if (filter == null) {
+            String demandBrokerFilterClassName = supplier.getDemandBrokerFilterClassName();
+            if (demandBrokerFilterClassName == null || "".equals(demandBrokerFilterClassName)) {
+                filter = new PassthroughFilter();
+                demandBrokerFilterMap.put(supplier.getShortName(), filter);
+            } else {
+                try {
+                    Class<? extends DemandBrokerFilter> c = (Class<? extends DemandBrokerFilter>) Class.forName(demandBrokerFilterClassName);
+                    Constructor<? extends DemandBrokerFilter> cc = c.getConstructor(new Class[]{});
+                    filter = cc.newInstance(new Object[]{});
+                    demandBrokerFilterMap.put(supplier.getShortName(), filter);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return filter;
     }
 }

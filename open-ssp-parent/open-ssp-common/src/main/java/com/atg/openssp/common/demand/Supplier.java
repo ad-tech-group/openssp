@@ -1,5 +1,7 @@
 package com.atg.openssp.common.demand;
 
+import openrtb.tables.BooleanInt;
+
 import java.io.Serializable;
 
 /**
@@ -33,6 +35,8 @@ public class Supplier implements Serializable {
 	private int active;
 
 	private Integer tmax;
+
+	private String demandBrokerFilterClassName;
 
 	public Supplier() {}
 
@@ -104,20 +108,20 @@ public class Supplier implements Serializable {
 		this.currency = currency;
 	}
 
-	public int getUnderTest() {
-		return underTest;
+	public BooleanInt getUnderTest() {
+		return BooleanInt.convertValue(underTest);
 	}
 
-	public void setUnderTest(final int underTest) {
-		this.underTest = underTest;
+	public void setUnderTest(final BooleanInt underTest) {
+		this.underTest = underTest.getValue();
 	}
 
-	public int getActive() {
-		return active;
+	public BooleanInt getActive() {
+		return BooleanInt.convertValue(active);
 	}
 
-	public void setActive(final int active) {
-		this.active = active;
+	public void setActive(final BooleanInt active) {
+		this.active = active.getValue();
 	}
 
 	public void setTmax(Integer tmax) {
@@ -204,4 +208,11 @@ public class Supplier implements Serializable {
 		return String.format("Supplier [shortName=%s, endPoint=%s, openRtbVersion=%s]", shortName, endPoint, openRtbVersion);
 	}
 
+	public String getDemandBrokerFilterClassName() {
+		return demandBrokerFilterClassName;
+	}
+
+	public void setDemandBrokerFilterClassName(String demandBrokerFilterClassName) {
+		this.demandBrokerFilterClassName = demandBrokerFilterClassName;
+	}
 }

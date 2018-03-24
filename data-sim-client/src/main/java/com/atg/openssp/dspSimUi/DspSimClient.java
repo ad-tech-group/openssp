@@ -18,32 +18,14 @@ import java.util.Properties;
  */
 public class DspSimClient {
     private static final Logger log = LoggerFactory.getLogger(DspSimClient.class);
-    private final Properties props = new Properties();
     private final DspView dspView;
     private DspModel dspModel;
     private AdModel adModel;
 
-    public DspSimClient() throws ModelException {
-        load(props);
-        dspModel = new DspModel(props);
+    public DspSimClient(int index) throws ModelException {
+        dspModel = new DspModel(index);
         dspView = new DspView(dspModel);
-        adModel = new AdModel(props);
-    }
-
-    private void load(Properties p) {
-        try {
-            File file = new File("DspSimClient.properties");
-            InputStream is;
-            if (file.exists()) {
-                is = new FileInputStream(file);
-            } else {
-                is = getClass().getClassLoader().getSystemResourceAsStream("DspSimClient.properties");
-            }
-            p.load(is);
-            is.close();
-        } catch (IOException e) {
-            log.warn("Could not load properties file.", e);
-        }
+        adModel = new AdModel(dspModel.getProperties());
     }
 
     public void start() {
@@ -52,11 +34,13 @@ public class DspSimClient {
     }
 
     public static void main(String[] args) {
-        try {
-            DspSimClient sim = new DspSimClient();
-            sim.start();
-        } catch (ModelException e) {
-            log.error(e.getMessage(), e);
+        for (int i=0; i<2; i++) {
+            try {
+                DspSimClient sim = new DspSimClient(i);
+                sim.start();
+            } catch (ModelException e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 

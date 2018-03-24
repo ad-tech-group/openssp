@@ -126,4 +126,21 @@ public class ServerHandler implements Runnable {
     public void sendRestartCommand() throws ModelException {
         sendCommand(ServerCommandType.RESTART);
     }
+
+    public void sendNormalCommand() throws ModelException {
+        sendCommand(ServerCommandType.RETURN_NORMAL);
+    }
+
+    public void sendReturnNoneCommand() throws ModelException {
+        sendCommand(ServerCommandType.RETURN_NONE);
+    }
+
+    public void send400Command() throws ModelException {
+        sendCommand(ServerCommandType.ONLY_400);
+    }
+
+    public void send500Command() throws ModelException {
+        sendCommand(ServerCommandType.ONLY_500);
+    }
+
 }

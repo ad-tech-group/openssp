@@ -9,6 +9,7 @@ public class ExampleFilter extends DspReturnFilter {
     @Override
     public String filterResult(BidResponse brsp) {
         JsonObject filter = new Gson().toJsonTree(brsp).getAsJsonObject();
+        /*
         JsonArray sbList = filter.getAsJsonArray("seatbid");
         for (int i=0; i<sbList.size(); i++) {
             JsonObject sb = (JsonObject) sbList.get(i);
@@ -24,6 +25,7 @@ public class ExampleFilter extends DspReturnFilter {
         }
         filter.remove("bidid");
         filter.remove("nbr");
+        */
         return new Gson().toJson(filter);
     }
 }

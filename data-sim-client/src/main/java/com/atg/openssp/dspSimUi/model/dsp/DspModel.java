@@ -7,6 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -14,13 +18,36 @@ import java.util.*;
  */
 public class DspModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
-    private final Properties props;
+    private final Properties props = new Properties();
+    private final int index;
     private DefaultListModel<SimBidder> mBidders = new DefaultListModel<SimBidder>();
     private final ServerHandler serverHandler;
 
-    public DspModel(Properties props) throws ModelException {
-        this.props = props;
+    public DspModel(int index) throws ModelException {
+        this.index = index;
+        loadProperties();
         serverHandler = new ServerHandler(this);
+    }
+
+    private void loadProperties() {
+        try {
+            File file = new File("DspSimClient_"+index+".properties");
+            InputStream is;
+            if (file.exists()) {
+                is = new FileInputStream(file);
+            } else {
+                is = getClass().getClassLoader().getSystemResourceAsStream(file.getName());
+            }
+            props.load(is);
+            is.close();
+        } catch (IOException e) {
+            log.warn("Could not load properties file.", e);
+        }
+    }
+
+    public Properties getProperties()
+    {
+        return props;
     }
 
     public String lookupProperty(String key) {
@@ -96,5 +123,21 @@ public class DspModel extends BaseModel {
 
     public void sendRestartCommand() throws ModelException {
         serverHandler.sendRestartCommand();
+    }
+
+    public void sendNormalCommand() throws ModelException {
+        serverHandler.sendNormalCommand();
+    }
+
+    public void sendReturnNoneCommand() throws ModelException {
+        serverHandler.sendReturnNoneCommand();
+    }
+
+    public void send400Command() throws ModelException {
+        serverHandler.send400Command();
+    }
+
+    public void send500Command() throws ModelException {
+        serverHandler.send500Command();
     }
 }

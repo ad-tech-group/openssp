@@ -11,7 +11,7 @@
 	
 	<!-- the timeout in ms for execution the executor service -->
 	<!-- default is 500ms --> 
-	<entry key="cdl-timeout">500</entry>
+	<entry key="cdl-timeout">5000</entry>
 
 	<!-- url of the data provider where the cache is updated from -->
 	<entry key="data-provider-scheme">http</entry>

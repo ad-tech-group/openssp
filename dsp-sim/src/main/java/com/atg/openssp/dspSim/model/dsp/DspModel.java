@@ -1,6 +1,7 @@
 package com.atg.openssp.dspSim.model.dsp;
 
 import com.atg.openssp.dspSim.model.ModelException;
+import com.atg.openssp.dspSim.model.client.ClientCommandType;
 import com.atg.openssp.dspSim.model.dsp.filter.DspReturnFilter;
 import com.atg.openssp.dspSim.model.dsp.filter.PassthroughFilter;
 import com.google.gson.Gson;
@@ -26,25 +27,29 @@ import java.util.*;
  */
 public class DspModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
-    private static final String FILE_NAME = "DSP_SIM_MODEL.json";
     private final ArrayList<SimBidderListener> simBidderListeners = new ArrayList<SimBidderListener>();
     private final ArrayList<SimBidder> bList = new ArrayList<SimBidder>();
     private final HashMap<String, SimBidder> bMap = new LinkedHashMap<String, SimBidder>();
     private final Properties properties = new Properties();
-    private static BigDecimal priceOffset = new BigDecimal(0);
+    private final int index;
+    private final File modelFile;
     private DspReturnFilter filter;
+    private ClientCommandType mode = ClientCommandType.RETURN_NORMAL;
 
-    public DspModel() throws ModelException {
+    public DspModel(int index) throws ModelException {
+        this.index = index;
+        modelFile = new File("DSP_SIM_MODEL_"+index+".json");
+
         loadProperties();
         loadModel();
         loadFilter();
     }
 
     private void loadProperties() {
-        File file = new File("dsp-sim-dsp.properties");
+        File file = new File("dsp-sim-dsp_"+index+".properties");
         if (file.exists()) {
             try {
-                FileInputStream is = new FileInputStream("dsp-sim-dsp.properties");
+                FileInputStream is = new FileInputStream(file);
                 properties.load(is);
                 is.close();
             } catch (FileNotFoundException e) {
@@ -54,7 +59,7 @@ public class DspModel {
             }
         } else {
             try {
-                InputStream is = getClass().getClassLoader().getResourceAsStream("dsp-sim-dsp.properties");
+                InputStream is = getClass().getClassLoader().getResourceAsStream(file.getName());
                 if (is != null) {
                     properties.load(is);
                     is.close();
@@ -66,10 +71,9 @@ public class DspModel {
     }
 
     private void loadModel() throws ModelException {
-        File f = new File(FILE_NAME);
         try {
-            if (f.exists()) {
-                FileReader fr = new FileReader(f);
+            if (modelFile.exists()) {
+                FileReader fr = new FileReader(modelFile);
                 List<SimBidder> buffer = new Gson().fromJson(fr, new TypeToken<List<SimBidder>>(){}.getType());
                 fr.close();
                 bList.addAll(buffer);
@@ -80,20 +84,19 @@ public class DspModel {
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
             System.out.println(e.getMessage());
-            throw new ModelException("Could not load model from store: "+f.getAbsolutePath());
+            throw new ModelException("Could not load model from store: "+modelFile.getAbsolutePath());
         }
     }
 
     public void saveModel() throws ModelException {
-        File f = new File(FILE_NAME);
         try {
-            PrintWriter fw = new PrintWriter(new FileWriter(f));
+            PrintWriter fw = new PrintWriter(new FileWriter(modelFile));
             String json = new Gson().toJson(bList);
             fw.println(json);
             fw.close();
         } catch (IOException e) {
             log.warn(e.getMessage(), e);
-            throw new ModelException("Could not save model to store: "+f);
+            throw new ModelException("Could not save model to store: "+modelFile);
         }
     }
 
@@ -157,10 +160,7 @@ public class DspModel {
         sb.getBid().add(b);
         b.setId(simBidder.getId());
         b.setImpid(i.getId());
-        priceOffset = priceOffset.add(new BigDecimal(.01));
-        BigDecimal d = new BigDecimal(simBidder.getPrice());
-        d = d.add(priceOffset);
-        b.setPrice(priceOffset.floatValue());
+        b.setPrice(simBidder.getPrice());
         b.setAdid(simBidder.getAdid());
         String nUrl = "http://"+server+":"+port+"/win?i="+simBidder.getId()+"&price=${AUCTION_PRICE}";
         b.setNurl(nUrl);
@@ -281,4 +281,15 @@ public class DspModel {
         return filter.filterResult(brsp);
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setMode(ClientCommandType mode) {
+        this.mode = mode;
+    }
+
+    public ClientCommandType getMode() {
+        return mode;
+    }
 }
