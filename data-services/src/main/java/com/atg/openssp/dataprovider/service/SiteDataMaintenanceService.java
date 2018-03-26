@@ -12,7 +12,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Servlet implementation class SiteVideoService
+ * Servlet implementation class SiteDataMaintenanceHandler
  *
  * @author Brian Sorensen
  */

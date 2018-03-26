@@ -256,4 +256,9 @@ public final class Site implements Cloneable {
 		return String.format("Site [id=%s, name=%s, domain=%s, cat=%s, pagecat=%s, sectioncat=%s, page=%s, ext=%s]", id, name, domain, cat, pagecat, sectioncat, page, ext);
 	}
 
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
 }

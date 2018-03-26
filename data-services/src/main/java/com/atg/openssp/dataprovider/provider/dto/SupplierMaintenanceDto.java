@@ -1,10 +1,10 @@
 package com.atg.openssp.dataprovider.provider.dto;
 
-import openrtb.bidrequest.model.Site;
+import com.atg.openssp.common.demand.Supplier;
 
-public class SiteMaintenanceDto {
+public class SupplierMaintenanceDto {
     private MaintenanceCommand command;
-    private Site site;
+    private Supplier supplier;
 
     public MaintenanceCommand getCommand() {
         return command;
@@ -14,12 +14,12 @@ public class SiteMaintenanceDto {
         this.command = command;
     }
 
-    public Site getSite() {
-        return site;
+    public Supplier getSupplier() {
+        return supplier;
     }
 
-    public void setSite(Site site) {
-        this.site = site;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
 }

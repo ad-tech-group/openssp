@@ -14,21 +14,24 @@ public class SupplierDto implements Serializable {
 
 	private static final long serialVersionUID = 2494786819460515865L;
 
-	private List<Supplier> supplier;
+	private List<Supplier> suppliers;
 
 	public SupplierDto() {}
 
-	public List<Supplier> getSupplier() {
-		return supplier;
+	public List<Supplier> getSuppliers() {
+		return suppliers;
 	}
 
-	public void setSupplier(final List<Supplier> supplier) {
-		this.supplier = supplier;
+	public void setSuppliers(final List<Supplier> suppliers) {
+		suppliers.clear();
+		if (suppliers != null) {
+			this.suppliers.addAll(suppliers);
+		}
 	}
 
 	@Override
 	public String toString() {
-		return String.format("SupplierDto [supplier=%s]", supplier);
+		return String.format("SupplierDto [supplier=%s]", suppliers);
 	}
 
 }
