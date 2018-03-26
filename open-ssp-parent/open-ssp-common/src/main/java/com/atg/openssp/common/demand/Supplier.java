@@ -1,8 +1,13 @@
 package com.atg.openssp.common.demand;
 
+import com.google.gson.*;
 import openrtb.tables.BooleanInt;
+import openrtb.tables.ContentCategory;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author André Schmer
@@ -30,13 +35,17 @@ public class Supplier implements Serializable {
 
 	private String currency;
 
-	private int underTest;
+    private Integer tmax;
+
+    private List<SupplierAdFormat> allowedAdFormats = new ArrayList();
+
+    private List<SupplierAdPlatform> allowedPlatforms = new ArrayList();
+
+    private String demandBrokerFilterClassName;
+
+    private int underTest;
 
 	private int active;
-
-	private Integer tmax;
-
-	private String demandBrokerFilterClassName;
 
 	public Supplier() {}
 
@@ -132,7 +141,40 @@ public class Supplier implements Serializable {
 		return tmax;
 	}
 
-	@Override
+    public void addAllowedMediaType(final SupplierAdFormat allowedMediaType) {
+        if (allowedMediaType != null) {
+            this.allowedAdFormats.add(allowedMediaType);
+        }
+    }
+
+    public List<SupplierAdFormat> getAllowedAdFormats() {
+        return allowedAdFormats;
+    }
+
+    public void setAllowedAdFormats(final List<SupplierAdFormat> allowedAdFormats) {
+        if (allowedAdFormats != null) {
+            this.allowedAdFormats.addAll(allowedAdFormats);
+        }
+    }
+
+    public void addAllowedPlatforms(final SupplierAdPlatform allowedPlatform) {
+        if (allowedPlatform != null) {
+            this.allowedPlatforms.add(allowedPlatform);
+        }
+    }
+
+    public List<SupplierAdPlatform> getAllowedPlatforms() {
+        return allowedPlatforms;
+    }
+
+    public void setAllowedPlatforms(final List<SupplierAdPlatform> allowedPlatforms) {
+        if (allowedPlatforms != null) {
+            this.allowedPlatforms.addAll(allowedPlatforms);
+        }
+    }
+
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -215,4 +257,9 @@ public class Supplier implements Serializable {
 	public void setDemandBrokerFilterClassName(String demandBrokerFilterClassName) {
 		this.demandBrokerFilterClassName = demandBrokerFilterClassName;
 	}
+
+    public static void populateTypeAdapters(GsonBuilder builder) {
+        builder.registerTypeAdapter(SupplierAdFormat.class, (JsonDeserializer<SupplierAdFormat>) (json, typeOfT, context) -> SupplierAdFormat.valueOf(json.getAsString()));
+        builder.registerTypeAdapter(SupplierAdPlatform.class, (JsonDeserializer<SupplierAdPlatform>) (json, typeOfT, context) -> SupplierAdPlatform.valueOf(json.getAsString()));
+    }
 }

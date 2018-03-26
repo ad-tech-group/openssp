@@ -37,6 +37,7 @@
 
 	<!-- handler class to use service Supplier Data requests -->
 	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
+	<entry key="supplier-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataMaintenanceHandler</entry>
 
 	<!-- switch to enable/disable debugging -->
 	<entry key="debug">true</entry>

@@ -1,6 +1,7 @@
 package com.atg.openssp.core.cache.broker.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.atg.openssp.common.demand.Supplier;
@@ -14,7 +15,7 @@ public class SupplierDto implements Serializable {
 
 	private static final long serialVersionUID = 2494786819460515865L;
 
-	private List<Supplier> suppliers;
+	private List<Supplier> suppliers = new ArrayList();
 
 	public SupplierDto() {}
 

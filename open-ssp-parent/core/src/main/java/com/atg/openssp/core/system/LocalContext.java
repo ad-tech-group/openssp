@@ -59,9 +59,11 @@ public class LocalContext extends Context {
 
 	private static String siteDataHandlerClass;
 
+	private static String siteDataMaintenanceHandlerClass;
+
 	private static String supplierDataHandlerClass;
 
-	private static String siteDataMaintenanceHandlerClass;
+	private static String supplierDataMaintenanceHandlerClass;
     //#######################################
 
 
@@ -92,6 +94,7 @@ public class LocalContext extends Context {
 		supplierDataHandlerClass = ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_HANDLER_CLASS);
 
 		siteDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.SITE_DATA_MAINTENANCE_HANDLER_CLASS);
+		supplierDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_MAINTENANCE_HANDLER_CLASS);
 	}
 
 	private static void initData() {
@@ -209,5 +212,9 @@ public class LocalContext extends Context {
 
 	public static String getSiteDataMaintenanceHandlerClass() {
 		return siteDataMaintenanceHandlerClass;
+	}
+
+	public static String getSupplierDataMaintenanceHandlerClass() {
+		return supplierDataMaintenanceHandlerClass;
 	}
 }

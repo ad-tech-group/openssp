@@ -1,6 +1,7 @@
 package openrtb.bidrequest.model;
 
-import com.google.gson.annotations.Since;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import openrtb.tables.ContentCategory;
 
 import java.util.ArrayList;
@@ -176,6 +177,11 @@ public final class Site implements Cloneable {
 		}
 		return null;
 	}
+
+    public static void populateTypeAdapters(GsonBuilder builder) {
+//        builder.registerTypeAdapter(ContentCategory.class, (JsonDeserializer<ContentCategory>) (json, typeOfT, context) -> ContentCategory.valueOf(json.getAsString()));
+//TODO: BKS
+    }
 
     public static class Builder {
 

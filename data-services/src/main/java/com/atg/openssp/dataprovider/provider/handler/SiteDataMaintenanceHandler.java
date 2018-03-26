@@ -1,5 +1,6 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
+import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.core.cache.broker.dto.SiteDto;
 import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -45,11 +47,10 @@ public class SiteDataMaintenanceHandler extends DataHandler {
 
                     GsonBuilder builder = new GsonBuilder();
 
-                    builder.registerTypeAdapter(MaintenanceCommand.class, new JsonDeserializer<MaintenanceCommand>() {
-                        public MaintenanceCommand deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                            return MaintenanceCommand.fromValue(json.getAsJsonPrimitive().getAsInt());
-                        }
-                    });
+                    builder.registerTypeAdapter(MaintenanceCommand.class, (JsonDeserializer<MaintenanceCommand>) (json, typeOfT, context)
+                            -> MaintenanceCommand.valueOf(json.getAsString()));
+
+                    Site.populateTypeAdapters(builder);
 
                     Gson gson = builder.create();
 
@@ -58,6 +59,7 @@ public class SiteDataMaintenanceHandler extends DataHandler {
                     dto.getCommand();
 
                     Path path = Paths.get(location+"site_db.json");
+                    System.out.println(path);
                     String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
                     SiteDto data = gson.fromJson(content, SiteDto.class);
 
@@ -99,7 +101,9 @@ public class SiteDataMaintenanceHandler extends DataHandler {
     }
 
     private void remove(SiteDto data, Site s) {
-        for (Site ss : data.getSites()) {
+        ArrayList<Site> working = new ArrayList();
+        working.addAll(data.getSites());
+        for (Site ss : working) {
             if (ss.getId().equals(s.getId())) {
                 data.getSites().remove(ss);
             }

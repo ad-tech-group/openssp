@@ -1,6 +1,8 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
 import com.atg.openssp.common.demand.Supplier;
+import com.atg.openssp.common.demand.SupplierAdFormat;
+import com.atg.openssp.common.demand.SupplierAdPlatform;
 import com.atg.openssp.core.cache.broker.dto.SupplierDto;
 import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
@@ -23,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -49,14 +52,10 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
 
                     GsonBuilder builder = new GsonBuilder();
 
-                    builder.registerTypeAdapter(MaintenanceCommand.class, new JsonDeserializer<MaintenanceCommand>() {
-                        public MaintenanceCommand deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                            return MaintenanceCommand.fromValue(json.getAsJsonPrimitive().getAsInt());
-                        }
-                    });
+                    builder.registerTypeAdapter(MaintenanceCommand.class, (JsonDeserializer<MaintenanceCommand>) (json, typeOfT, context) -> MaintenanceCommand.valueOf(json.getAsString()));
 
+                    Supplier.populateTypeAdapters(builder);
                     Gson gson = builder.create();
-
 
                     SupplierMaintenanceDto dto = gson.fromJson(request.getReader(), SupplierMaintenanceDto.class);
                     dto.getCommand();
@@ -103,7 +102,9 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
     }
 
     private void remove(SupplierDto data, Supplier s) {
-        for (Supplier ss : data.getSuppliers()) {
+        ArrayList<Supplier> working = new ArrayList();
+        working.addAll(data.getSuppliers());
+        for (Supplier ss : working) {
             if (ss.getSupplierId() == s.getSupplierId()) {
                 data.getSuppliers().remove(ss);
             }

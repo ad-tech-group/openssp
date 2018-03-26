@@ -1,5 +1,5 @@
 {
-  "supplier": [
+  "suppliers": [
     {
       "shortName": "dsp_1",
       "endPoint": "http://localhost:8081/dsp-sim/DemandService",
@@ -9,6 +9,13 @@
       "supplierId": "1",
       "currency": "USD",
       "tmax": 300,
+      "allowedAdFormats": [
+        "BANNER",
+        "VIDEO"
+      ],
+      "allowedPlatforms": [
+        "DESKTOP"
+      ],
       "underTest": 1,
       "active": 1
     },
@@ -21,6 +28,13 @@
       "supplierId": "2",
       "currency": "USD",
       "tmax": 300,
+      "allowedAdFormats": [
+        "BANNER",
+        "VIDEO"
+      ],
+      "allowedPlatforms": [
+        "MOBILE"
+      ],
       "underTest": 1,
       "active": 1
     }

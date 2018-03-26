@@ -197,10 +197,13 @@ public enum ContextProperties {
     SUPPLIER_DATA_SERVICE_ENABLED("supplier-data-service-enabled"),
 
 	@RuntimeMeta(type = Scope.LOCAL)
-	SUPPLIER_DATA_HANDLER_CLASS("supplier-data-handler-class");
+	SUPPLIER_DATA_HANDLER_CLASS("supplier-data-handler-class"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	SUPPLIER_DATA_MAINTENANCE_HANDLER_CLASS("supplier-data-maintenance-handler-class");
 
 
-    //###########################################################
+	//###########################################################
 
 	private String value;
 
