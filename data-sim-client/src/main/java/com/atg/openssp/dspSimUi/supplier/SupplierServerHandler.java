@@ -1,4 +1,4 @@
-package com.atg.openssp.dspSimUi;
+package com.atg.openssp.dspSimUi.supplier;
 
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.dspSimUi.model.ModelException;
@@ -58,36 +58,33 @@ public class SupplierServerHandler implements Runnable {
     }
 
     private void sendListCommand() throws ModelException {
-        sendCommand(ServerCommandType.LIST);
+        sendCommand(SupplierCommandType.LIST);
     }
 
     public void sendAddCommand(Supplier sb) throws ModelException {
-        sendCommand(ServerCommandType.ADD, sb.getSupplierId(), sb);
-    }
-
-    public void sendRemoveCommand(Long id) throws ModelException {
-        sendCommand(ServerCommandType.REMOVE, id);
+        sendCommand(SupplierCommandType.ADD, sb);
     }
 
     public void sendUpdateCommand(Supplier sb) throws ModelException {
-        sendCommand(ServerCommandType.UPDATE, sb.getSupplierId(), sb);
+        sendCommand(SupplierCommandType.UPDATE, sb);
     }
 
-    private void sendCommand(ServerCommandType type) throws ModelException {
-        sendCommand(type, null, null);
+    public void sendRemoveCommand(Long id) throws ModelException {
+        Supplier s = new Supplier();
+        s.setSupplierId(id);
+        sendCommand(SupplierCommandType.REMOVE, s);
     }
 
-    private void sendCommand(ServerCommandType type, Long id) throws ModelException {
-        sendCommand(type, id, null);
+    private void sendCommand(SupplierCommandType type) throws ModelException {
+        sendCommand(type, null);
     }
 
-    private void sendCommand(ServerCommandType type, Long id, Supplier sb) throws ModelException {
+    private void sendCommand(SupplierCommandType type, Supplier sb) throws ModelException {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SUPPLIER_HOST, "localhost")+":"+model.lookupProperty(SUPPLIER_PORT, "9090")+"/open-ssp-services/maintain/supplier?t=liverworst-5");
             SupplierCommand command = new SupplierCommand();
-            command.setType(type);
-            command.setId(id);
+            command.setCommand(type);
             command.setSupplier(sb);
             StringEntity entity = new StringEntity(new Gson().toJson(command));
             httpPost.setEntity(entity);
@@ -97,7 +94,7 @@ public class SupplierServerHandler implements Runnable {
             if (response.getStatusLine().getStatusCode() == 200) {
                 String json = EntityUtils.toString(response.getEntity(), "UTF-8");
                 SupplierResponse sr = new Gson().fromJson(json, SupplierResponse.class);
-                if (sr.getStatus() == ServerResponseStatus.SUCCESS) {
+                if (sr.getStatus() == ResponseStatus.SUCCESS) {
                     model.handleList(sr.getSuppliers());
                 } else {
                     String m = type+" command failed with error: " + sr.getReason();
@@ -114,30 +111,6 @@ public class SupplierServerHandler implements Runnable {
             model.setMessageAsFault("Could not access server: "+e.getMessage());
             throw new ModelException(e.getMessage());
         }
-    }
-
-    public void sendShutdownCommand() throws ModelException {
-        sendCommand(ServerCommandType.SHUTDOWN);
-    }
-
-    public void sendRestartCommand() throws ModelException {
-        sendCommand(ServerCommandType.RESTART);
-    }
-
-    public void sendNormalCommand() throws ModelException {
-        sendCommand(ServerCommandType.RETURN_NORMAL);
-    }
-
-    public void sendReturnNoneCommand() throws ModelException {
-        sendCommand(ServerCommandType.RETURN_NONE);
-    }
-
-    public void send400Command() throws ModelException {
-        sendCommand(ServerCommandType.ONLY_400);
-    }
-
-    public void send500Command() throws ModelException {
-        sendCommand(ServerCommandType.ONLY_500);
     }
 
 }

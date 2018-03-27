@@ -1,6 +1,6 @@
-package com.atg.openssp.dspSimUi.model.dsp;
+package com.atg.openssp.dspSimUi.model.site;
 
-import com.atg.openssp.dspSimUi.SiteServerHandler;
+import com.atg.openssp.dspSimUi.site.SiteServerHandler;
 import com.atg.openssp.dspSimUi.model.BaseModel;
 import com.atg.openssp.dspSimUi.model.ModelException;
 import openrtb.bidrequest.model.Site;
@@ -23,19 +23,17 @@ import java.util.Properties;
 public class SiteModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(SiteModel.class);
     private final Properties props = new Properties();
-    private final int index;
     private DefaultListModel<Site> mSites = new DefaultListModel<Site>();
     private final SiteServerHandler serverHandler;
 
-    public SiteModel(int index) throws ModelException {
-        this.index = index;
+    public SiteModel() throws ModelException {
         loadProperties();
         serverHandler = new SiteServerHandler(this);
     }
 
     private void loadProperties() {
         try {
-            File file = new File("DspSimClient_"+index+".properties");
+            File file = new File("SiteSimClient.properties");
             InputStream is;
             if (file.exists()) {
                 is = new FileInputStream(file);
@@ -121,27 +119,4 @@ public class SiteModel extends BaseModel {
         serverHandler.sendRemoveCommand(id);
     }
 
-    public void sendShutdownCommand() throws ModelException {
-        serverHandler.sendShutdownCommand();
-    }
-
-    public void sendRestartCommand() throws ModelException {
-        serverHandler.sendRestartCommand();
-    }
-
-    public void sendNormalCommand() throws ModelException {
-        serverHandler.sendNormalCommand();
-    }
-
-    public void sendReturnNoneCommand() throws ModelException {
-        serverHandler.sendReturnNoneCommand();
-    }
-
-    public void send400Command() throws ModelException {
-        serverHandler.send400Command();
-    }
-
-    public void send500Command() throws ModelException {
-        serverHandler.send500Command();
-    }
 }

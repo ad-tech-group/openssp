@@ -1,9 +1,8 @@
-package com.atg.openssp.dspSimUi;
+package com.atg.openssp.dspSimUi.site;
 
 import com.atg.openssp.dspSimUi.model.ModelException;
 import com.atg.openssp.dspSimUi.model.client.*;
-import com.atg.openssp.dspSimUi.model.dsp.DspModel;
-import com.atg.openssp.dspSimUi.model.dsp.SiteModel;
+import com.atg.openssp.dspSimUi.model.site.SiteModel;
 import com.google.gson.Gson;
 import openrtb.bidrequest.model.Site;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -59,37 +58,34 @@ public class SiteServerHandler implements Runnable {
     }
 
     private void sendListCommand() throws ModelException {
-        sendCommand(ServerCommandType.LIST);
+        sendCommand(SiteCommandType.LIST);
     }
 
     public void sendAddCommand(Site sb) throws ModelException {
-        sendCommand(ServerCommandType.ADD, sb.getId(), sb);
-    }
-
-    public void sendRemoveCommand(String id) throws ModelException {
-        sendCommand(ServerCommandType.REMOVE, id);
+        sendCommand(SiteCommandType.ADD, sb);
     }
 
     public void sendUpdateCommand(Site sb) throws ModelException {
-        sendCommand(ServerCommandType.UPDATE, sb.getId(), sb);
+        sendCommand(SiteCommandType.UPDATE, sb);
     }
 
-    private void sendCommand(ServerCommandType type) throws ModelException {
-        sendCommand(type, null, null);
+    public void sendRemoveCommand(String id) throws ModelException {
+        Site s = new Site();
+        s.setId(id);
+        sendCommand(SiteCommandType.REMOVE, s);
     }
 
-    private void sendCommand(ServerCommandType type, String id) throws ModelException {
-        sendCommand(type, id, null);
+    private void sendCommand(SiteCommandType type) throws ModelException {
+        sendCommand(type, null);
     }
 
-    private void sendCommand(ServerCommandType type, String id, Site sb) throws ModelException {
+    private void sendCommand(SiteCommandType type, Site sb) throws ModelException {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SITE_HOST, "localhost")+":"+model.lookupProperty(SITE_PORT, "9090")+"/open-ssp-services/maintain/site?t=liverworst-5");
             System.out.println(httpPost);
             SiteCommand command = new SiteCommand();
-            command.setType(type);
-            command.setId(id);
+            command.setCommand(type);
             command.setSite(sb);
             StringEntity entity = new StringEntity(new Gson().toJson(command));
             httpPost.setEntity(entity);
@@ -99,7 +95,7 @@ public class SiteServerHandler implements Runnable {
             if (response.getStatusLine().getStatusCode() == 200) {
                 String json = EntityUtils.toString(response.getEntity(), "UTF-8");
                 SiteResponse sr = new Gson().fromJson(json, SiteResponse.class);
-                if (sr.getStatus() == ServerResponseStatus.SUCCESS) {
+                if (sr.getStatus() == ResponseStatus.SUCCESS) {
                     model.handleList(sr.getSites());
                 } else {
                     String m = type+" command failed with error: " + sr.getReason();
@@ -116,30 +112,6 @@ public class SiteServerHandler implements Runnable {
             model.setMessageAsFault("Could not access server: "+e.getMessage());
             throw new ModelException(e.getMessage());
         }
-    }
-
-    public void sendShutdownCommand() throws ModelException {
-        sendCommand(ServerCommandType.SHUTDOWN);
-    }
-
-    public void sendRestartCommand() throws ModelException {
-        sendCommand(ServerCommandType.RESTART);
-    }
-
-    public void sendNormalCommand() throws ModelException {
-        sendCommand(ServerCommandType.RETURN_NORMAL);
-    }
-
-    public void sendReturnNoneCommand() throws ModelException {
-        sendCommand(ServerCommandType.RETURN_NONE);
-    }
-
-    public void send400Command() throws ModelException {
-        sendCommand(ServerCommandType.ONLY_400);
-    }
-
-    public void send500Command() throws ModelException {
-        sendCommand(ServerCommandType.ONLY_500);
     }
 
 }

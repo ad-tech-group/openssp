@@ -1,16 +1,16 @@
-package com.atg.openssp.dspSimUi.model.client;
+package com.atg.openssp.dataprovider.provider.dto;
 
-import com.atg.openssp.common.demand.Supplier;
+import openrtb.bidrequest.model.Site;
 
 import java.util.List;
 
 /**
  * @author Brian Sorensen
  */
-public class SupplierResponse {
+public class SiteResponse {
     private ResponseStatus status;
     private String reason="";
-    private List<Supplier> suppliers;
+    private List<Site> sites;
 
     public void setStatus(ResponseStatus status) {
         this.status = status;
@@ -28,12 +28,12 @@ public class SupplierResponse {
         return reason;
     }
     
-    public void setSuppliers(List<Supplier> suppliers) {
-        this.suppliers = suppliers;
+    public void setSites(List<Site> sites) {
+        this.sites = sites;
     }
 
-    public List<Supplier> getSuppliers() {
-        return suppliers;
+    public List<Site> getSites() {
+        return sites;
     }
 
 }

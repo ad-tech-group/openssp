@@ -1,14 +1,13 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
 import com.atg.openssp.common.demand.Supplier;
-import com.atg.openssp.common.demand.SupplierAdFormat;
-import com.atg.openssp.common.demand.SupplierAdPlatform;
 import com.atg.openssp.core.cache.broker.dto.SupplierDto;
 import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
+import com.atg.openssp.dataprovider.provider.dto.ResponseStatus;
 import com.atg.openssp.dataprovider.provider.dto.SupplierMaintenanceDto;
+import com.atg.openssp.dataprovider.provider.dto.SupplierResponse;
 import com.google.gson.*;
-import openrtb.bidrequest.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.properties.ProjectProperty;
@@ -58,36 +57,42 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
                     Gson gson = builder.create();
 
                     SupplierMaintenanceDto dto = gson.fromJson(request.getReader(), SupplierMaintenanceDto.class);
-                    dto.getCommand();
 
                     Path path = Paths.get(location+"supplier_db.json");
                     String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
                     SupplierDto data = gson.fromJson(content, SupplierDto.class);
+                    SupplierResponse result = new SupplierResponse();
 
-                    String result;
-                    if (dto.getCommand() == MaintenanceCommand.ADD) {
+                    if (dto.getCommand() == MaintenanceCommand.LIST) {
+                        result.setStatus(ResponseStatus.SUCCESS);
+                        result.setSupplier(data.getSupplier());
+                    } else if (dto.getCommand() == MaintenanceCommand.ADD) {
                         Supplier s = dto.getSupplier();
                         data.getSupplier().add(s);
                         save(gson, path, data);
-                        result = gson.toJson(data);
+                        result.setSupplier(data.getSupplier());
+                        result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
                         Supplier s = dto.getSupplier();
                         remove(data, s);
                         save(gson, path, data);
-                        result = gson.toJson(data);
+                        result.setSupplier(data.getSupplier());
+                        result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         Supplier s = dto.getSupplier();
                         remove(data, s);
                         data.getSupplier().add(s);
                         save(gson, path, data);
-                        result = gson.toJson(data);
+                        result.setSupplier(data.getSupplier());
+                        result.setStatus(ResponseStatus.SUCCESS);
                     } else {
-                        result = "{}";
+                        result.setReason("No request data given");
+                        result.setStatus(ResponseStatus.FAILURE);
                     }
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
                     OutputStream os = response.getOutputStream();
-                    os.write(result.getBytes());
+                    os.write(gson.toJson(result).getBytes());
                     os.close();
                 } else {
                     response.setStatus(401);

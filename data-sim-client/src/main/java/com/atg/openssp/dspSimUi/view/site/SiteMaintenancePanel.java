@@ -1,11 +1,10 @@
-package com.atg.openssp.dspSimUi.view.dsp;
+package com.atg.openssp.dspSimUi.view.site;
 
 import com.atg.openssp.dspSimUi.model.MessageNotificationListener;
 import com.atg.openssp.dspSimUi.model.MessageStatus;
 import com.atg.openssp.dspSimUi.model.ModelException;
-import com.atg.openssp.dspSimUi.model.dsp.DspModel;
-import com.atg.openssp.common.demand.Supplier;
-import com.atg.openssp.dspSimUi.model.dsp.SupplierModel;
+import com.atg.openssp.dspSimUi.model.site.SiteModel;
+import openrtb.bidrequest.model.Site;
 import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,21 +16,17 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.Collections;
-import java.util.UUID;
 
 /**
  * @author Brian Sorensen
  */
-public class SupplierMaintenancePanel extends JPanel implements ListSelectionListener, ActionListener, MessageNotificationListener {
-    private static final Logger log = LoggerFactory.getLogger(SupplierMaintenancePanel.class);
-    private final SupplierModel model;
-    private final JList<Supplier> lSuppliers;
+public class SiteMaintenancePanel extends JPanel implements ListSelectionListener, ActionListener, MessageNotificationListener {
+    private static final Logger log = LoggerFactory.getLogger(SiteMaintenancePanel.class);
+    private final SiteModel model;
+    private final JList<Site> lSites;
     private final JLabel lbId = new JLabel("");
-//    private final JTextField tfImpId = new JTextField(12);
-    private final JTextField tfAddImpId = new JTextField(12);
+    private final JTextField tfShortName = new JTextField(20);
+    private final JTextField tfAddShortName = new JTextField(12);
     private final JTextField tfPrice = new JTextField(8);
     private final JTextField tfAddPrice = new JTextField(8);
     private final JTextField tfAdId = new JTextField(12);
@@ -65,16 +60,10 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
     private final JButton bRemove = new JButton("remove");
     private final JButton bAdd = new JButton("add");
     private final JTextField tfMemo = new JTextField(20);
-    private final JButton bRestart = new JButton("Restart SIM");
-    private final JButton bShutdown = new JButton("Shutdown SIM");
-    private final JButton bSendNormal = new JButton("Send As Normal");
-    private final JButton bReturnNone = new JButton("Return None");
-    private final JButton bSend400 = new JButton("Send 400");
-    private final JButton bSend500 = new JButton("Send 500");
 
-    public SupplierMaintenancePanel(SupplierModel model) {
+    public SiteMaintenancePanel(SiteModel model) {
         this.model = model;
-        lSuppliers = new JList<>(model.getSupplierModel());
+        lSites = new JList<>(model.getSiteModel());
 
         setLayout(new BorderLayout());
 
@@ -89,22 +78,9 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
         pRight.setLayout(new BoxLayout(pRight, BoxLayout.Y_AXIS));
         add(pRight, BorderLayout.EAST);
 
-        bShutdown.addActionListener(this);
-        addItem(pTop, "", bShutdown);
-        bRestart.addActionListener(this);
-        addItem(pTop, "", bRestart);
-        bSendNormal.addActionListener(this);
-        addItem(pTop, "", bSendNormal);
-        bReturnNone.addActionListener(this);
-        addItem(pTop, "", bReturnNone);
-        bSend400.addActionListener(this);
-        addItem(pTop, "", bSend400);
-        bSend500.addActionListener(this);
-        addItem(pTop, "", bSend500);
-
-        lSuppliers.setVisibleRowCount(10);
-        addItem(pTop, "Suppliers: ", lSuppliers);
-        lSuppliers.addListSelectionListener(this);
+        lSites.setVisibleRowCount(10);
+        addItem(pTop, "Sites: ", lSites);
+        lSites.addListSelectionListener(this);
         bUpdate.setEnabled(false);
         bUpdate.addActionListener(this);
         addItem(pTop, "", bUpdate);
@@ -112,9 +88,9 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
         bRemove.addActionListener(this);
         addItem(pTop, "", bRemove);
 
-        pMiddle.setBorder(new TitledBorder("Active Supplier"));
+        pMiddle.setBorder(new TitledBorder("Active Site"));
         addItem(pMiddle, "ID:", lbId);
-//        addItem(pMiddle, "IMP ID:", tfImpId);
+        addItem(pMiddle, "Short Name:", tfShortName);
         addItem(pMiddle, "Price:", tfPrice);
         addItem(pMiddle, "AD ID:", tfAdId);
 //        addItem(pMiddle, "N Url:", tfNUrl);
@@ -125,8 +101,8 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
         addItem(pMiddle, "CR ID:", tfCrId);
         addItem(pMiddle, "CAT:", lCat);
 
-        pRight.setBorder(new TitledBorder("Add Supplier"));
-        addItem(pRight, "IMP ID:", tfAddImpId);
+        pRight.setBorder(new TitledBorder("Add Site"));
+        addItem(pRight, "Short Name:", tfAddShortName);
         addItem(pRight, "Price:", tfAddPrice);
         addItem(pRight, "AD ID:", tfAddAdId);
         addItem(pRight, "N URL:", tfAddNUrl);
@@ -174,20 +150,20 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
     @Override
     public void valueChanged(ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
-            Supplier sb = lSuppliers.getSelectedValue();
+            Site sb = lSites.getSelectedValue();
             if (sb != null) {
-                lbId.setText(Long.toString(sb.getSupplierId()));
+                lbId.setText(sb.getId());
                 resetActiveDisplay(sb);
                 bUpdate.setEnabled(true);
                 bRemove.setEnabled(true);
             } else {
-                if (lSuppliers.getModel().getSize() == 0) {
+                if (lSites.getModel().getSize() == 0) {
                     resetActiveDisplay(sb);
                     bUpdate.setEnabled(false);
                     bRemove.setEnabled(false);
                 } else {
                     resetActiveDisplay(sb);
-                    lSuppliers.setSelectedIndex(0);
+                    lSites.setSelectedIndex(0);
                     bUpdate.setEnabled(true);
                     bRemove.setEnabled(true);
                 }
@@ -197,9 +173,9 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
         model.setMessage("");
     }
 
-    private void resetActiveDisplay(Supplier sb) {
+    private void resetActiveDisplay(Site sb) {
         if (sb == null) {
-//            tfImpId.setText("");
+            tfShortName.setText("");
             tfPrice.setText("");
             tfAdId.setText("");
 //            tfNUrl.setText("");
@@ -210,8 +186,9 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
             mCat.clear();
             tfMemo.setText("");
         } else {
+            //tfShortName.setText(sb.getShortName());
+            
             /*
-//            tfImpId.setText(sb.getImpId());
             DecimalFormat formatter = new DecimalFormat("###,###,###.00");
             tfPrice.setText(formatter.format(sb.getPrice()));
             tfAdId.setText(sb.getAdId());
@@ -229,21 +206,21 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
                 mCat.addElement(s);
             }
             */
-            tfMemo.setText("Supplier selected.");
+            tfMemo.setText("Site selected.");
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == bUpdate) {
-            Supplier sb = lSuppliers.getSelectedValue();
+            Site sb = lSites.getSelectedValue();
             if (sb != null) {
                 /*
                 DecimalFormat formatter = new DecimalFormat("###,###,###.00");
                 try {
                     float newPrice = formatter.parse(tfPrice.getText()).floatValue();
 
-                    Supplier sbN = new Supplier(sb.getId());
+                    Site sbN = new Site(sb.getId());
 //                    sbN.setImpId(tfImpId.getText());
                     sbN.setPrice(newPrice);
                     sbN.setAdId(tfAdId.getText());
@@ -255,17 +232,18 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
                     sbN.setCrId(tfCrId.getText());
                     sbN.setCats(Collections.list(mCat.elements()));
                     model.sendUpdateCommand(sbN);
-                    model.setMessage("Supplier saved.");
+                    model.setMessage("Site saved.");
                 } catch (ModelException e) {
                     model.setMessageAsFault(e.getMessage());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     e.printStackTrace();
-                    model.setMessageAsFault("Could not save Supplier due to invalid price.");
+
+                    model.setMessageAsFault("Could not save Site due to invalid price.");
                 }
                 */
             } else {
-                model.setMessageAsWarning("No Supplier selected.");
+                model.setMessageAsWarning("No Site selected.");
             }
             repaint();
         } else if (ev.getSource() == bAdd) {
@@ -273,7 +251,7 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
             DecimalFormat formatter = new DecimalFormat("###,###,###.00");
             try {
                 float newPrice = formatter.parse(tfAddPrice.getText()).floatValue();
-                Supplier sbN = new Supplier(UUID.randomUUID().toString());
+                Site sbN = new Site(UUID.randomUUID().toString());
 //                sbN.setImpId(tfAddImpId.getText());
                 sbN.setPrice(newPrice);
                 sbN.setAdId(tfAddAdId.getText());
@@ -286,7 +264,7 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
                 sbN.setCats(Collections.list(mCat.elements()));
 
                 model.sendAddCommand(sbN);
-                model.setMessage("Supplier added.");
+                model.setMessage("Site added.");
                 tfAddImpId.setText("");
                 tfAddPrice.setText("");
                 tfAddAdId.setText("");
@@ -300,20 +278,20 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
             } catch (ModelException e) {
                 model.setMessageAsFault(e.getMessage());
             } catch (ParseException e) {
-                model.setMessageAsFault("Could not add Supplier due to invalid price.");
+                model.setMessageAsFault("Could not add Site due to invalid price.");
             }
             */
             repaint();
         } else if (ev.getSource() == bRemove) {
-            Supplier sb = lSuppliers.getSelectedValue();
+            Site sb = lSites.getSelectedValue();
             if (sb != null) {
                 try {
-                    model.sendRemoveCommand(sb.getSupplierId());
+                    model.sendRemoveCommand(sb.getId());
                 } catch (ModelException e) {
                     model.setMessageAsFault(e.getMessage());
                 }
             } else {
-                model.setMessageAsWarning("No Supplier selected.");
+                model.setMessageAsWarning("No Site selected.");
             }
             repaint();
         } else if (ev.getSource() == bAddADomain) {
@@ -327,42 +305,6 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
             if (!"".equals(value.trim())) {
                 mAddCat.addElement(value);
                 tfAddNewCat.setText("");
-            }
-        } else if (ev.getSource() == bShutdown) {
-            try {
-                model.sendShutdownCommand();
-            } catch (ModelException e) {
-                model.setMessageAsFault(e.getMessage());
-            }
-        } else if (ev.getSource() == bRestart) {
-            try {
-                model.sendRestartCommand();
-            } catch (ModelException e) {
-                model.setMessageAsFault(e.getMessage());
-            }
-        } else if (ev.getSource() == bSendNormal) {
-            try {
-                model.sendNormalCommand();
-            } catch (ModelException e) {
-                model.setMessageAsFault(e.getMessage());
-            }
-        } else if (ev.getSource() == bReturnNone) {
-            try {
-                model.sendReturnNoneCommand();
-            } catch (ModelException e) {
-                model.setMessageAsFault(e.getMessage());
-            }
-        } else if (ev.getSource() == bSend400) {
-            try {
-                model.send400Command();
-            } catch (ModelException e) {
-                model.setMessageAsFault(e.getMessage());
-            }
-        } else if (ev.getSource() == bSend500) {
-            try {
-                model.send500Command();
-            } catch (ModelException e) {
-                model.setMessageAsFault(e.getMessage());
             }
         }
 

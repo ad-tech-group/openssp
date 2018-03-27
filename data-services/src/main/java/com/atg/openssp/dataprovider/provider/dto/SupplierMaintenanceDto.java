@@ -2,6 +2,9 @@ package com.atg.openssp.dataprovider.provider.dto;
 
 import com.atg.openssp.common.demand.Supplier;
 
+/**
+ * @author Brian Sorensen
+ */
 public class SupplierMaintenanceDto {
     private MaintenanceCommand command;
     private Supplier supplier;

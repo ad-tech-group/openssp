@@ -1,8 +1,7 @@
 package com.atg.openssp.dspSimUi.model.dsp;
 
 import com.atg.openssp.common.demand.Supplier;
-import com.atg.openssp.dspSimUi.ServerHandler;
-import com.atg.openssp.dspSimUi.SupplierServerHandler;
+import com.atg.openssp.dspSimUi.supplier.SupplierServerHandler;
 import com.atg.openssp.dspSimUi.model.BaseModel;
 import com.atg.openssp.dspSimUi.model.ModelException;
 import org.slf4j.Logger;
@@ -24,19 +23,17 @@ import java.util.Properties;
 public class SupplierModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(SupplierModel.class);
     private final Properties props = new Properties();
-    private final int index;
     private DefaultListModel<Supplier> mSuppliers = new DefaultListModel<Supplier>();
-    private final SupplierServerHandler serverHandler;
+    private final SupplierServerHandler supplierHandler;
 
-    public SupplierModel(int index) throws ModelException {
-        this.index = index;
+    public SupplierModel() throws ModelException {
         loadProperties();
-        serverHandler = new SupplierServerHandler(this);
+        supplierHandler = new SupplierServerHandler(this);
     }
 
     private void loadProperties() {
         try {
-            File file = new File("DspSimClient_"+index+".properties");
+            File file = new File("SupplierSimClient.properties");
             InputStream is;
             if (file.exists()) {
                 is = new FileInputStream(file);
@@ -81,7 +78,7 @@ public class SupplierModel extends BaseModel {
     }
 
     public void start() {
-        serverHandler.start();
+        supplierHandler.start();
     }
 
     public void handleList(List<Supplier> suppliers) {
@@ -114,38 +111,15 @@ public class SupplierModel extends BaseModel {
     }
 
     public void sendAddCommand(Supplier sb) throws ModelException {
-        serverHandler.sendAddCommand(sb);
+        supplierHandler.sendAddCommand(sb);
     }
 
     public void sendUpdateCommand(Supplier sb) throws ModelException {
-        serverHandler.sendUpdateCommand(sb);
+        supplierHandler.sendUpdateCommand(sb);
     }
 
     public void sendRemoveCommand(long id) throws ModelException {
-        serverHandler.sendRemoveCommand(id);
+        supplierHandler.sendRemoveCommand(id);
     }
 
-    public void sendShutdownCommand() throws ModelException {
-        serverHandler.sendShutdownCommand();
-    }
-
-    public void sendRestartCommand() throws ModelException {
-        serverHandler.sendRestartCommand();
-    }
-
-    public void sendNormalCommand() throws ModelException {
-        serverHandler.sendNormalCommand();
-    }
-
-    public void sendReturnNoneCommand() throws ModelException {
-        serverHandler.sendReturnNoneCommand();
-    }
-
-    public void send400Command() throws ModelException {
-        serverHandler.send400Command();
-    }
-
-    public void send500Command() throws ModelException {
-        serverHandler.send500Command();
-    }
 }

@@ -6,33 +6,24 @@ import openrtb.bidrequest.model.Site;
  * @author Brian Sorensen
  */
 public class SiteCommand {
-    private ServerCommandType type;
-    private String id;
-    private Site sb;
+    private SiteCommandType command;
+    private Site site;
 
 
-    public void setType(ServerCommandType type) {
-        this.type = type;
+    public SiteCommandType getCommand() {
+        return command;
     }
 
-    public ServerCommandType getType() {
-        return type;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setSite(Site sb) {
-        this.sb = sb;
+    public void setCommand(SiteCommandType command) {
+        this.command = command;
     }
 
     public Site getSite() {
-        return sb;
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
     }
 
 }

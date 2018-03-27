@@ -8,15 +8,15 @@ import java.util.List;
  * @author Brian Sorensen
  */
 public class ServerResponse {
-    private ServerResponseStatus status;
+    private ResponseStatus status;
     private String reason="";
     private List<SimBidder> bidders;
 
-    public void setStatus(ServerResponseStatus status) {
+    public void setStatus(ResponseStatus status) {
         this.status = status;
     }
 
-    public ServerResponseStatus getStatus() {
+    public ResponseStatus getStatus() {
         return status;
     }
 

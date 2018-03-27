@@ -2,6 +2,9 @@ package com.atg.openssp.dataprovider.provider.dto;
 
 import openrtb.bidrequest.model.Site;
 
+/**
+ * @author Brian Sorensen
+ */
 public class SiteMaintenanceDto {
     private MaintenanceCommand command;
     private Site site;

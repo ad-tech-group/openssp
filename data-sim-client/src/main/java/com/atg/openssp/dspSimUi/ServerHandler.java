@@ -4,7 +4,7 @@ import com.atg.openssp.dspSimUi.model.ModelException;
 import com.atg.openssp.dspSimUi.model.client.ServerCommand;
 import com.atg.openssp.dspSimUi.model.client.ServerCommandType;
 import com.atg.openssp.dspSimUi.model.client.ServerResponse;
-import com.atg.openssp.dspSimUi.model.client.ServerResponseStatus;
+import com.atg.openssp.dspSimUi.model.client.ResponseStatus;
 import com.atg.openssp.dspSimUi.model.dsp.DspModel;
 import com.atg.openssp.dspSimUi.model.dsp.SimBidder;
 import com.google.gson.Gson;
@@ -100,7 +100,7 @@ public class ServerHandler implements Runnable {
             if (response.getStatusLine().getStatusCode() == 200) {
                 String json = EntityUtils.toString(response.getEntity(), "UTF-8");
                 ServerResponse sr = new Gson().fromJson(json, ServerResponse.class);
-                if (sr.getStatus() == ServerResponseStatus.SUCCESS) {
+                if (sr.getStatus() == ResponseStatus.SUCCESS) {
                     model.handleList(sr.getBidders());
                 } else {
                     String m = type+" command failed with error: " + sr.getReason();

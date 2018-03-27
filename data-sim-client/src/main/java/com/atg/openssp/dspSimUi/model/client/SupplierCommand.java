@@ -1,39 +1,29 @@
 package com.atg.openssp.dspSimUi.model.client;
 
 import com.atg.openssp.common.demand.Supplier;
-import com.atg.openssp.dspSimUi.model.dsp.SimBidder;
 
 /**
  * @author Brian Sorensen
  */
 public class SupplierCommand {
-    private ServerCommandType type;
-    private long id;
-    private Supplier sb;
+    private SupplierCommandType command;
+    private Supplier supplier;
 
 
-    public void setType(ServerCommandType type) {
-        this.type = type;
+    public SupplierCommandType getCommand() {
+        return command;
     }
 
-    public ServerCommandType getType() {
-        return type;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setSupplier(Supplier sb) {
-        this.sb = sb;
+    public void setCommand(SupplierCommandType command) {
+        this.command = command;
     }
 
     public Supplier getSupplier() {
-        return sb;
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
 }

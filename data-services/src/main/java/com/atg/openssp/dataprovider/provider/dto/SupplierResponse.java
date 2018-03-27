@@ -1,4 +1,4 @@
-package com.atg.openssp.dspSimUi.model.client;
+package com.atg.openssp.dataprovider.provider.dto;
 
 import com.atg.openssp.common.demand.Supplier;
 
@@ -28,11 +28,11 @@ public class SupplierResponse {
         return reason;
     }
     
-    public void setSuppliers(List<Supplier> suppliers) {
+    public void setSupplier(List<Supplier> suppliers) {
         this.suppliers = suppliers;
     }
 
-    public List<Supplier> getSuppliers() {
+    public List<Supplier> getSupplier() {
         return suppliers;
     }
 
