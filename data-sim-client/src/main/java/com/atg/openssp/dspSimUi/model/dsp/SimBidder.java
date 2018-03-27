@@ -121,7 +121,12 @@ public class SimBidder {
 
     public List<ContentCategory> getCats() {
         ArrayList<ContentCategory> list = new ArrayList();
-        cat.forEach(c->list.add(ContentCategory.convertValue(c)));
+        for (String c : cat) {
+            ContentCategory cc = ContentCategory.convertValue(c);
+            if (cc != null) {
+                list.add(cc);
+            }
+        }
         return list;
     }
 

@@ -49,6 +49,7 @@ public class SupplierDataHandler extends DataHandler {
                     OutputStream os = response.getOutputStream();
                     os.write(result.getBytes());
                     os.close();
+                    log.info("<--"+result);
                 } else {
                     response.setStatus(401);
                 }

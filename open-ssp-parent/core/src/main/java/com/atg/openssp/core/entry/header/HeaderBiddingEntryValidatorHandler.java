@@ -112,7 +112,13 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 pm.setPromoSizes(a.getPromoSizes());
 
                 pm.setIpAddress(request.getRemoteAddr());
-                pm.setBrowserUserAgentString(request.getHeader("user-agent"));
+                Enumeration<String> headerNames = request.getHeaderNames();
+                while(headerNames.hasMoreElements()) {
+                    String name = headerNames.nextElement().toLowerCase();
+                    if ("user-agent".equals(name)) {
+                        pm.setBrowserUserAgentString(request.getHeader(name));
+                    }
+                }
                 pmList.add(pm);
             }
 

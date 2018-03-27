@@ -37,8 +37,8 @@ public final class RemoteSupplierDataBroker extends AbstractDataBroker<SupplierD
 		try {
 			final SupplierDto dto = super.connect(SupplierDto.class);
 			if (dto != null) {
-				log.info("sizeof supplier data=" + dto.getSuppliers().size());
-				dto.getSuppliers().forEach(supplier -> {
+				log.info("sizeof supplier data=" + dto.getSupplier().size());
+				dto.getSupplier().forEach(supplier -> {
 					final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);
 					ConnectorCache.instance.add(openRtbConnector);
 				});

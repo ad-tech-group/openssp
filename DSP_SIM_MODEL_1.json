@@ -1,7 +1,7 @@
 [
   {
     "id": "QRh2T-YNIFk_1",
-    "price": 0.01,
+    "price": 1.01,
     "adId": "823011",
     "adm": "\u003cimg src\u003e\"https://media.giphy.com/media/rROnGyH8ZpI2c/giphy.gif\" width\u003d\"300\" height\u003d\"250\" border\u003d\"0\" \u003e",
     "adomain": [
@@ -16,7 +16,7 @@
   },
   {
     "id": "da4c9536-6498-45fb-b091-94a226e4467a",
-    "price": 1.0,
+    "price": 0.01,
     "adId": "1",
     "adm": "1",
     "adomain": [],

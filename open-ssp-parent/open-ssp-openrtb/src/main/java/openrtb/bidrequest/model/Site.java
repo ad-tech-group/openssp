@@ -84,7 +84,6 @@ public final class Site implements Cloneable {
 		return list;
 	}
 
-	/*
 	public void setCat(final List<ContentCategory> cat) {
 		this.cat.clear();
 		if (cat != null) {
@@ -111,7 +110,6 @@ public final class Site implements Cloneable {
             }
         }
 	}
-*/
 
 	public void addCat(final ContentCategory cat) {
 		if (cat != null) {
