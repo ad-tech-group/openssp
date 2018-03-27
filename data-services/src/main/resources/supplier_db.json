@@ -1,5 +1,5 @@
 {
-  "suppliers": [
+  "supplier": [
     {
       "shortName": "dsp_1",
       "endPoint": "http://localhost:8081/dsp-sim/DemandService",
@@ -14,7 +14,8 @@
         "VIDEO"
       ],
       "allowedPlatforms": [
-        "DESKTOP"
+        "DESKTOP",
+        "MOBILE"
       ],
       "underTest": 1,
       "active": 1
@@ -33,6 +34,7 @@
         "VIDEO"
       ],
       "allowedPlatforms": [
+        "DESKTOP",
         "MOBILE"
       ],
       "underTest": 1,

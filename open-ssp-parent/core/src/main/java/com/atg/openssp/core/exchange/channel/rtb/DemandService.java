@@ -8,6 +8,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import com.atg.openssp.common.demand.SupplierAdPlatform;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.exchange.BidRequestBuilder;
 import com.atg.openssp.core.exchange.RequestSessionAgent;
@@ -124,26 +125,44 @@ public class DemandService implements Callable<AdProviderReader> {
 		final List<DemandBroker> connectors = new ArrayList<>();
 
 		final BidRequest bidRequest = BidRequestBuilder.getInstance().build(agent);
+		boolean isMobile = bidRequest.getDevice().getUa().contains("Mobi");
+        log.info(bidRequest.getDevice().getUa());
+		log.info("is Mobile: "+isMobile);
 
 		connectorList.stream().filter(b -> b.getSupplier().getActive().getValue() == 1).forEach(connector -> {
 
-			if (connector.getSupplier().getTmax() != null) {
-				bidRequest.setTmax(connector.getSupplier().getTmax());
-			}
-			final DemandBroker demandBroker = new DemandBroker(agent.getBiddingServiceInfo(), connector.getSupplier(), connector, agent);
-			if (bidRequest.getImp().get(0).getBidfloor() > 0) {
-				final Impression imp = bidRequest.getImp().get(0);
-				// floorprice in EUR -> multiply with rate to get target
-				// currency therfore floorprice currency is always the same
-				// as supplier currency
-				imp.setBidfloor(bidRequest.getImp().get(0).getBidfloor() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
-				imp.setBidfloorcur(connector.getSupplier().getCurrency());
-			}
+			boolean processingIsOK = false;
+            if (connector.getSupplier().getAllowedPlatforms().size() == 0) {
+                processingIsOK = true;
+            } else if (
+                    isMobile && connector.getSupplier().getAllowedPlatforms().contains(SupplierAdPlatform.MOBILE) ||
+                    !isMobile && connector.getSupplier().getAllowedPlatforms().contains(SupplierAdPlatform.DESKTOP)
+                    ) {
+                processingIsOK = true;
+            }
 
-			bidRequest.setTest(connector.getSupplier().getUnderTest());
-			demandBroker.setBidRequest(bidRequest);
-			agent.getBidExchange().setBidRequest(connector.getSupplier(), bidRequest);
-			connectors.add(demandBroker);
+			if (processingIsOK) {
+                log.info("keeping: "+connector.getSupplier().getShortName());
+				if (connector.getSupplier().getTmax() != null) {
+					bidRequest.setTmax(connector.getSupplier().getTmax());
+				}
+				final DemandBroker demandBroker = new DemandBroker(agent.getBiddingServiceInfo(), connector.getSupplier(), connector, agent);
+				if (bidRequest.getImp().get(0).getBidfloor() > 0) {
+					final Impression imp = bidRequest.getImp().get(0);
+					// floorprice in EUR -> multiply with rate to get target
+					// currency therfore floorprice currency is always the same
+					// as supplier currency
+					imp.setBidfloor(bidRequest.getImp().get(0).getBidfloor() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
+					imp.setBidfloorcur(connector.getSupplier().getCurrency());
+				}
+
+				bidRequest.setTest(connector.getSupplier().getUnderTest());
+				demandBroker.setBidRequest(bidRequest);
+				agent.getBidExchange().setBidRequest(connector.getSupplier(), bidRequest);
+				connectors.add(demandBroker);
+			} else {
+                log.info("skipping: "+connector.getSupplier().getShortName());
+            }
 		});
 
 		return connectors;

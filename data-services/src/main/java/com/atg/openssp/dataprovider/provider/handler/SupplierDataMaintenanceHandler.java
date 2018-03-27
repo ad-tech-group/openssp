@@ -67,7 +67,7 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
                     String result;
                     if (dto.getCommand() == MaintenanceCommand.ADD) {
                         Supplier s = dto.getSupplier();
-                        data.getSuppliers().add(s);
+                        data.getSupplier().add(s);
                         save(gson, path, data);
                         result = gson.toJson(data);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
@@ -78,7 +78,7 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         Supplier s = dto.getSupplier();
                         remove(data, s);
-                        data.getSuppliers().add(s);
+                        data.getSupplier().add(s);
                         save(gson, path, data);
                         result = gson.toJson(data);
                     } else {
@@ -103,10 +103,10 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
 
     private void remove(SupplierDto data, Supplier s) {
         ArrayList<Supplier> working = new ArrayList();
-        working.addAll(data.getSuppliers());
+        working.addAll(data.getSupplier());
         for (Supplier ss : working) {
             if (ss.getSupplierId() == s.getSupplierId()) {
-                data.getSuppliers().remove(ss);
+                data.getSupplier().remove(ss);
             }
         }
 
