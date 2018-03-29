@@ -46,7 +46,6 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	public DemandBroker(BiddingServiceInfo info, final Supplier supplier, final OpenRtbConnector connector, final SessionAgent agent) {
 		super(agent);
-		System.out.println("BKSBKSBKS: DemandBroker "+supplier.getShortName()+":"+supplier.getSupplierId());
 		this.info = info;
 		this.supplier = supplier;
 		this.connector = connector;
@@ -73,11 +72,11 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		try {
 			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
 
-			log.info("biderquest: " + jsonBidrequest);
+			log.debug("biderquest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
-			log.info("bidresponse: " + result);
+			log.debug("bidresponse: " + result);
 			RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
 
 			if (!StringUtils.isEmpty(result)) {

@@ -82,11 +82,7 @@ public class DemandService implements Callable<AdProviderReader> {
 					// return;// important!
 					// }
 					if (responseContainer != null) {
-						System.err.println("################# got response container");
 						agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
-					} else {
-						System.err.println("################# no response container");
-//						log.error("ExecutionException {} {}", agent.getRequestid(), "################# no response container");
 					}
 				} catch (final ExecutionException e) {
 					log.error("ExecutionException {} {}", agent.getRequestid(), e.getMessage());

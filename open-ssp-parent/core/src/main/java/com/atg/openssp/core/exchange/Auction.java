@@ -168,42 +168,42 @@ public class Auction {
 	// bidList must be sorted
 	private static RtbAdProvider evaluateWinner(BiddingServiceInfo info, final List<Bidder> bidList) throws InvalidBidException {
 		final Bidder bestBidder = bidList.get(0);
-		// returns 1 if bidder is already in EUR
+		// returns 1 if bidder is already system's currency
 		final float bestBidCurrencyRate = CurrencyCache.instance.get(bestBidder.getCurrency());
-		// normalize the price to EUR
-		final float bestBidPriceEUR = bestBidder.getPrice() / bestBidCurrencyRate;
+		// normalize the price to system currency
+		final float exchangedBestBidPrice = bestBidder.getPrice() / bestBidCurrencyRate;
 
-		// floor in EUR
+		// floor in system's currency
 		final float floorCurrencyRate = CurrencyCache.instance.get(bestBidder.getBidfloorCurrency());
-		final float floorEUR = bestBidder.getBidFloorprice() / floorCurrencyRate;
-		if (false == FloatComparator.greaterOrEqual(bestBidPriceEUR, floorEUR)) {
-			throw new InvalidBidException(Auction.class.getSimpleName() + ", winner invalid cause bid lower than floor [" + bestBidPriceEUR + " EUR < " + floorEUR + " EUR] "
+		final float exchangedFloor = bestBidder.getBidFloorprice() / floorCurrencyRate;
+		if (false == FloatComparator.greaterOrEqual(exchangedBestBidPrice, exchangedFloor)) {
+		    //TODO: BKS output needs to be localized
+			throw new InvalidBidException(Auction.class.getSimpleName() + ", winner invalid cause bid lower than floor [" + exchangedBestBidPrice + " EUR < " + exchangedFloor + " EUR] "
 			        + bestBidder.getSupplier().getShortName() + " [" + floorCurrencyRate + "," + bestBidder.getBidFloorprice() + ", " + bestBidder.getBidfloorCurrency()
 			        + "] DealID:" + bestBidder.getDealId());
 		}
 
-		float winnerPriceEUR;
+		float exchangedWinnerPrice;
 		if (bidList.size() > 1) {
 			if (info.getAuctionType() == AuctionType.SECOND_PRICE) {
 				AuctionMethodHandler methodHandler = new SecondBestBidderHandler();
-				winnerPriceEUR = methodHandler.generateWinningPrice(bidList, floorEUR, bestBidPriceEUR);
+                exchangedWinnerPrice = methodHandler.generateWinningPrice(bidList, exchangedFloor, exchangedBestBidPrice);
 			} else {
-				winnerPriceEUR = bestBidPriceEUR;
-//				AuctionMethodHandler methodHandler = new SingleBidderHandler();
-//				winnerPriceEUR = methodHandler.generateWinningPrice(bidList, floorEUR, bestBidPriceEUR);
+			    // First Best - let it ride
+                exchangedWinnerPrice = exchangedBestBidPrice;
 			}
 		} else {
 			AuctionMethodHandler methodHandler = new SingleBidderHandler();
-			winnerPriceEUR = methodHandler.generateWinningPrice(bidList, floorEUR, bestBidPriceEUR);
+            exchangedWinnerPrice = methodHandler.generateWinningPrice(bidList, exchangedFloor, exchangedBestBidPrice);
 		}
 
-		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(winnerPriceEUR * bestBidCurrencyRate)).setAdjustedCurrencyPrice(FloatComparator.rr(winnerPriceEUR))
+		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(exchangedWinnerPrice * bestBidCurrencyRate)).setAdjustedCurrencyPrice(FloatComparator.rr(exchangedWinnerPrice))
 		        .setSupplier(bestBidder.getSupplier()).setWinningSeat(bestBidder.getSeat()).setCurrency(bestBidder.getCurrency()).setDealId(bestBidder.getDealId()).build();
 	}
 
-	private static float calcPriceIncrement(final float secondBidPriceEUR, final float bestBidPriceEUR) {
+	private static float calcPriceIncrement(final float exchangedSecondBidPrice, final float exchangedBestBidPrice) {
 		final float defautlIncrement = 0.01f;
-		if (FloatComparator.isEqual(secondBidPriceEUR, bestBidPriceEUR) || FloatComparator.isDiffSmallerThanEpsilon(bestBidPriceEUR, secondBidPriceEUR, defautlIncrement)) {
+		if (FloatComparator.isEqual(exchangedSecondBidPrice, exchangedBestBidPrice) || FloatComparator.isDiffSmallerThanEpsilon(exchangedBestBidPrice, exchangedSecondBidPrice, defautlIncrement)) {
 			return 0f;
 		}
 		return defautlIncrement;
@@ -474,40 +474,40 @@ public class Auction {
 	}
 
 	public static abstract class AuctionMethodHandler {
-		public abstract float generateWinningPrice(List<Bidder> bidList, float floorPriceEUR, float bestBidPriceEUR);
+		public abstract float generateWinningPrice(List<Bidder> bidList, float exchangedFloorPrice, float exchangedBestBidPrice);
 
-		protected final float calcPriceForSingleBid(float floorPriceEUR, float bestBidPriceEUR) {
-			float winnerPriceEUR = 0;
-			if (floorPriceEUR > 0) {
-				winnerPriceEUR = floorPriceEUR;
+		protected final float calcPriceForSingleBid(float exchangedFloorPrice, float exchangedBestBidPrice) {
+			float exchangedWinnerPrice = 0;
+			if (exchangedFloorPrice > 0) {
+                exchangedWinnerPrice = exchangedFloorPrice;
 			} else {
-				winnerPriceEUR = bestBidPriceEUR - (bestBidPriceEUR * GlobalContext.getDrawModeration());
+                exchangedWinnerPrice = exchangedBestBidPrice - (exchangedBestBidPrice * GlobalContext.getDrawModeration());
 			}
-			return winnerPriceEUR;
+			return exchangedWinnerPrice;
 		}
 	}
 
 	public static class SecondBestBidderHandler extends AuctionMethodHandler {
 		@Override
-		public float generateWinningPrice(List<Bidder> bidList, float floorPriceEUR, float bestBidPriceEUR) {
+		public float generateWinningPrice(List<Bidder> bidList, float exchangedFloorPrice, float exchangedBestBidPrice) {
 			final Auction.Bidder secondBestBidder = bidList.get(1);
 			final float secondBestBidprice = secondBestBidder.getPrice();
 			final float secondBestBidCurrencyRate = CurrencyCache.instance.get(secondBestBidder.getCurrency());
-			final float secondBidPriceEUR = secondBestBidprice / secondBestBidCurrencyRate;
-			if (FloatComparator.greaterOrEqual(secondBidPriceEUR, floorPriceEUR)) {
+			final float exchangedSecondBidPrice = secondBestBidprice / secondBestBidCurrencyRate;
+			if (FloatComparator.greaterOrEqual(exchangedSecondBidPrice, exchangedFloorPrice)) {
 				// in the case that we have a second bidder wen need a increment value to increment the bidprice
-				final float priceIncrement = calcPriceIncrement(secondBidPriceEUR, bestBidPriceEUR);
-				return secondBidPriceEUR + priceIncrement;
+				final float priceIncrement = calcPriceIncrement(exchangedSecondBidPrice, exchangedBestBidPrice);
+				return exchangedSecondBidPrice + priceIncrement;
 			} else {
-				return calcPriceForSingleBid(floorPriceEUR, bestBidPriceEUR);
+				return calcPriceForSingleBid(exchangedFloorPrice, exchangedBestBidPrice);
 			}
 		}
 	}
 
 	public static class SingleBidderHandler extends AuctionMethodHandler {
 		@Override
-		public float generateWinningPrice(List<Bidder> bidList, float floorPriceEUR, float bestBidPriceEUR) {
-			return calcPriceForSingleBid(floorPriceEUR, bestBidPriceEUR);
+		public float generateWinningPrice(List<Bidder> bidList, float exchangedFloorPrice, float exchangedBestBidPrice) {
+			return calcPriceForSingleBid(exchangedFloorPrice, exchangedBestBidPrice);
 		}
 	}
 
