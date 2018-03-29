@@ -137,7 +137,9 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				}
 				out.append(responseData);
 
-				winner.perform(agent);
+                if (agent.getBiddingServiceInfo().sendNurlNotifications()) {
+                    winner.perform(agent);
+                }
 
 				out.flush();
 

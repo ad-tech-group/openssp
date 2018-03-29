@@ -23,8 +23,7 @@ public class BiddingServiceInfo {
     private String characterEncoding;
     private boolean activateAccessAllowOrigin;
     private AuctionType auctionType = AuctionType.SECOND_PRICE;
-//    private DemandBrokerFilter brokerFilter = new PassthroughFilter();
-//    private DemandBrokerFilter brokerFilter = new MangoMediaFilter();
+    private boolean sendNurlNotifications = true;
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -107,4 +106,14 @@ public class BiddingServiceInfo {
         }
         return filter;
     }
+
+
+    public boolean sendNurlNotifications() {
+        return sendNurlNotifications;
+    }
+
+    public void disableSendNurlNotifications() {
+        this.sendNurlNotifications = false;
+    }
 }
+
