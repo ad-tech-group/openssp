@@ -31,7 +31,7 @@ class ChannelFactory {
 	 * @see AdservingService
 	 * @see AdProviderReader
 	 */
-	static List<Callable<AdProviderReader>> createListOfChannels(final SessionAgent agent) {
+	static List<Callable<AdProviderReader>> createListOfChannels(final RequestSessionAgent agent) {
 		final List<Callable<AdProviderReader>> callables = new ArrayList<>();
 
 		/*
@@ -46,17 +46,17 @@ class ChannelFactory {
 		 * activate if corresponding jar is imported and marker in properties file local.runtime.xml is set to true
 		 * 
 		 */
-		// if (LocalContext.isAdservingChannelEnabled()) {
-		// callables.add(new AdservingService(agent));
-		// }
+		 if (LocalContext.isAdservingChannelEnabled()) {
+		 	callables.add(new AdservingService(agent));
+		 }
 
 		/*
 		 * activate if corresponding jar is imported and marker in properties file local.runtime.xml is set to true
 		 * 
 		 */
-		// if (LocalContext.isSSPChannelEnabled()) {
-		// callables.add(new SSPService(agent));
-		// }
+		 if (LocalContext.isSSPChannelEnabled()) {
+//		     callables.add(new SSPService(agent));
+		 }
 
 		return callables;
 	}

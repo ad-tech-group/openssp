@@ -1,5 +1,9 @@
 package openrtb.bidrequest.model;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import openrtb.tables.ContentCategory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,18 +16,28 @@ public final class Site implements Cloneable {
 	private String id;
 
 	private String name;
+
 	private String domain;
+
+	private String page;
 
 	// see product taxonomy -> "http://www.google.com/basepages/producttype/taxonomy.en-US.txt"
 	private List<String> cat;
 
-	private String page;
+	private List<String> pagecat;
+
+	private List<String> sectioncat;
+
+    private String ref;
 
 	private Publisher publisher;
+
 	private Object ext;
 
-	public Site() {
+    public Site() {
 		cat = new ArrayList<>();
+		pagecat = new ArrayList<>();
+		sectioncat = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -46,16 +60,73 @@ public final class Site implements Cloneable {
 		return domain;
 	}
 
-	public List<String> getCat() {
-		return cat;
+	public List<ContentCategory> getCat() {
+		ArrayList<ContentCategory> list = new ArrayList();
+		for (String c : cat) {
+			list.add(ContentCategory.convertValue(c));
+		}
+		return list;
 	}
 
-	public void setCat(final List<String> cat) {
-		this.cat = cat;
+	public List<ContentCategory> getPagecat() {
+		ArrayList<ContentCategory> list = new ArrayList();
+		for (String c : pagecat) {
+			list.add(ContentCategory.convertValue(c));
+		}
+		return list;
 	}
 
-	public void addCat(final String cat) {
-		this.cat.add(cat);
+	public List<ContentCategory> getSectioncat() {
+		ArrayList<ContentCategory> list = new ArrayList();
+		for (String c : sectioncat) {
+			list.add(ContentCategory.convertValue(c));
+		}
+		return list;
+	}
+
+	public void setCat(final List<ContentCategory> cat) {
+		this.cat.clear();
+		if (cat != null) {
+			for (ContentCategory c : cat) {
+				this.cat.add(c.getValue());
+			}
+		}
+	}
+
+	public void setPagecat(final List<ContentCategory> pagecat) {
+        this.pagecat.clear();
+        if (pagecat != null) {
+            for (ContentCategory c : pagecat) {
+                this.pagecat.add(c.getValue());
+            }
+        }
+	}
+
+	public void setSectioncat(final List<ContentCategory> sectioncat) {
+        this.sectioncat.clear();
+        if (sectioncat != null) {
+            for (ContentCategory c : sectioncat) {
+                this.sectioncat.add(c.getValue());
+            }
+        }
+	}
+
+	public void addCat(final ContentCategory cat) {
+		if (cat != null) {
+			this.cat.add(cat.getValue());
+		}
+	}
+
+	public void addPagecat(final ContentCategory pagecat) {
+		if (pagecat != null) {
+			this.pagecat.add(pagecat.getValue());
+		}
+	}
+
+	public void addSectioncat(final ContentCategory sectioncat) {
+		if (sectioncat != null) {
+			this.sectioncat.add(sectioncat.getValue());
+		}
 	}
 
 	public String getPage() {
@@ -78,7 +149,15 @@ public final class Site implements Cloneable {
 		this.domain = domain;
 	}
 
-	public Publisher getPublisher() {
+    public void setRef(String ref) {
+        this.ref = ref;
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
+    public Publisher getPublisher() {
 		return publisher;
 	}
 
@@ -86,7 +165,7 @@ public final class Site implements Cloneable {
 		this.publisher = publisher;
 	}
 
-	@Override
+    @Override
 	public Site clone() {
 		try {
 			final Site clone = (Site) super.clone();
@@ -97,7 +176,12 @@ public final class Site implements Cloneable {
 		return null;
 	}
 
-	public static class Builder {
+    public static void populateTypeAdapters(GsonBuilder builder) {
+//        builder.registerTypeAdapter(ContentCategory.class, (JsonDeserializer<ContentCategory>) (json, typeOfT, context) -> ContentCategory.valueOf(json.getAsString()));
+//TODO: BKS
+    }
+
+    public static class Builder {
 
 		private final Site site;
 
@@ -115,8 +199,18 @@ public final class Site implements Cloneable {
 			return this;
 		}
 
-		public Builder addCat(final String cat) {
+		public Builder addCat(final ContentCategory cat) {
 			site.addCat(cat);
+			return this;
+		}
+
+		public Builder addPagecat(final ContentCategory pagecat) {
+			site.addPagecat(pagecat);
+			return this;
+		}
+
+		public Builder addSectioncat(final ContentCategory sectioncat) {
+			site.addSectioncat(sectioncat);
 			return this;
 		}
 
@@ -140,8 +234,18 @@ public final class Site implements Cloneable {
 			return this;
 		}
 
-		public Builder addCats(final List<Integer> cats) {
-			cats.forEach(c -> site.addCat(String.valueOf(c)));
+		public Builder addCats(final List<ContentCategory> cats) {
+			cats.forEach(c -> site.addCat(c));
+			return this;
+		}
+
+		public Builder addPagecats(final List<ContentCategory> pagecats) {
+            pagecats.forEach(c -> site.addPagecat(c));
+			return this;
+		}
+
+		public Builder addSectioncats(final List<ContentCategory> sectioncats) {
+            sectioncats.forEach(c -> site.addSectioncat(c));
 			return this;
 		}
 
@@ -153,7 +257,12 @@ public final class Site implements Cloneable {
 
 	@Override
 	public String toString() {
-		return String.format("Site [id=%s, name=%s, domain=%s, cat=%s, page=%s, ext=%s]", id, name, domain, cat, page, ext);
+		return String.format("Site [id=%s, name=%s, domain=%s, cat=%s, pagecat=%s, sectioncat=%s, page=%s, ext=%s]", id, name, domain, cat, pagecat, sectioncat, page, ext);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
 	}
 
 }

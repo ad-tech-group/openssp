@@ -70,6 +70,17 @@ public class RequestResponseHelper {
 		return bidRequest;
 	}
 
+	public static BidRequest.Builder createRequest(final float floor, final float[] dealFloor, final String cur, final String dealid, final int private_auction) {
+		final BidRequest.Builder bidRequest = new BidRequest.Builder();
+		// impression
+		final Impression.Builder[] imps = new Impression.Builder[dealFloor.length];
+		for (int i=0; i<dealFloor.length; i++) {
+			imps[i] = createImpression(floor, dealFloor[i], cur, dealid, private_auction);
+			bidRequest.addImp(imps[i]);
+		}
+		return bidRequest;
+	}
+
 	public static BidResponse createResponse(final float price, final String cur, final String dealId) {
 
 		final BidResponse responseBuilder = new BidResponse();

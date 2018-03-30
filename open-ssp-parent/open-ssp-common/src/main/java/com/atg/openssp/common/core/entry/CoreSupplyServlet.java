@@ -1,6 +1,7 @@
 package com.atg.openssp.common.core.entry;
 
 import java.io.IOException;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
@@ -8,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.atg.openssp.common.exception.ERROR_CODE;
+
+import org.apache.http.client.HttpResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +47,11 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 			agent = getAgent(request, response);
 			hasResult = server.processExchange(agent);
 		} catch (final RequestException e) {
+			response.sendError(401, e.getMessage());
+		} catch (final CancellationException e) {
+
+			response.sendError(200, "exchange timeout");
+		} catch (final Exception e) {
 			log.error(e.getMessage());
 		} finally {
 			stopwatch.stop();

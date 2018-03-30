@@ -9,10 +9,11 @@ import com.atg.openssp.common.provider.AdProviderWriter;
  * @author André Schmer
  *
  */
-public class AdservingCampaignProvider implements AdProviderReader, AdProviderWriter {
+public abstract class AdservingCampaignProvider implements AdProviderReader, AdProviderWriter {
 
 	private boolean isValid = Boolean.TRUE;
 
+	/*
 	private static final String currency = "EUR";
 
 	private float cpm;
@@ -30,17 +31,19 @@ public class AdservingCampaignProvider implements AdProviderReader, AdProviderWr
 	public void setPrice(final float bidPrice) {
 		cpm = bidPrice;
 	}
+	*/
 
 	@Override
-	public void setIsValid(final boolean valid) {
+	public final void setIsValid(final boolean valid) {
 		isValid = valid;
 	}
 
 	@Override
-	public boolean isValid() {
+	public final boolean isValid() {
 		return isValid;
 	}
 
+	/*
 	@Override
 	public float getPriceEur() {
 		return cpm * 1;
@@ -83,5 +86,6 @@ public class AdservingCampaignProvider implements AdProviderReader, AdProviderWr
 	public String toString() {
 		return "AdservingCampaignProvider [isValid=" + isValid + ", currency=" + currency + ", cpm=" + cpm + ", adid=" + adid + ", vasturl=" + vasturl + "]";
 	}
+	*/
 
 }

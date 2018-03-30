@@ -1,11 +1,11 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.common.provider.AdProviderWriter;
 import com.atg.openssp.common.provider.WinningNotifier;
-
 import openrtb.bidresponse.model.SeatBid;
 
 /**
@@ -27,7 +27,7 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 
 	private String dealid;
 
-	private float priceEur;
+	private float adjustedCurrencyPrice;
 
 	@Override
 	public void perform(final SessionAgent agent) {
@@ -66,7 +66,7 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 		// ad.getGlobalID());
 		// sb.append(content);
 
-		return supplier.getShortName() + " " + priceEur + " EUR";
+		return supplier.getShortName() + " " + adjustedCurrencyPrice + " "+ CurrencyCache.instance.getBaseCurrency();
 	}
 
 	@Override
@@ -108,13 +108,13 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 	}
 
 	@Override
-	public void setPriceEur(final float priceEur) {
-		this.priceEur = priceEur;
+	public void setAdjustedCurrencyPrice(final float adjustedCurrencyPrice) {
+		this.adjustedCurrencyPrice = adjustedCurrencyPrice;
 	}
 
 	@Override
-	public float getPriceEur() {
-		return priceEur;
+	public float getAdjustedCurrencyPrice() {
+		return adjustedCurrencyPrice;
 	}
 
 	@Override
@@ -143,8 +143,8 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 			return this;
 		}
 
-		public Builder setPriceEur(final float priceEUR) {
-			rtbAdProvider.setPriceEur(priceEUR);
+		public Builder setAdjustedCurrencyPrice(final float priceEUR) {
+			rtbAdProvider.setAdjustedCurrencyPrice(priceEUR);
 			return this;
 		}
 

@@ -6,7 +6,7 @@ import java.util.List;
 import openrtb.bidrequest.model.Site;
 
 /**
- * 
+ *
  * @author André Schmer
  *
  */
@@ -22,7 +22,7 @@ public class SiteDto implements Serializable {
 		return sites;
 	}
 
-	public void setSupplier(final List<Site> sites) {
+	public void setSite(final List<Site> sites) {
 		this.sites = sites;
 	}
 

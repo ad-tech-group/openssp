@@ -8,9 +8,16 @@ import com.atg.openssp.common.core.entry.SessionAgent;
  */
 public class AbstractBroker {
 
-	protected SessionAgent sessionAgent;
+	private SessionAgent sessionAgent;
 
-	public SessionAgent getSessionAgent() {
+	public AbstractBroker() {
+	}
+
+    public AbstractBroker(SessionAgent sessionAgent) {
+        this.sessionAgent = sessionAgent;
+    }
+
+    public SessionAgent getSessionAgent() {
 		return sessionAgent;
 	}
 

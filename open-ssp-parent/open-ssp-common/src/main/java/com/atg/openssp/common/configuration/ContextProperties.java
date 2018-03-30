@@ -124,11 +124,22 @@ public enum ContextProperties {
 	VALIDATOR_HANDLER_FOR_BANNER_CLASS("validator-handler-for-banner-class"),
 
 	@RuntimeMeta(type = Scope.GLOBAL)
+	VALIDATOR_HANDLER_FOR_HEADER_CLASS("validator-handler-for-header-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
 	ADSERVER_BROKER_HANDLER_CLASS("adserver-broker-handler-class"),
 
 	@RuntimeMeta(type = Scope.GLOBAL)
-	BUILD_REQUEST_BUILDER_HANDLER_CLASS("bid-request-builder-handler-class"),
+	BUILD_REQUEST_BUILDER_HANDLER_FOR_VIDEO_CLASS("bid-request-builder-handler-for-video-class"),
 
+	@RuntimeMeta(type = Scope.GLOBAL)
+	BUILD_REQUEST_BUILDER_HANDLER_FOR_BANNER_CLASS("bid-request-builder-handler-for-banner-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	BUILD_REQUEST_BUILDER_HANDLER_FOR_HEADER_CLASS("bid-request-builder-handler-for-header-class"),
+
+	@RuntimeMeta(type = Scope.GLOBAL)
+	GEO_IP_INFO_HANDLER_CLASS("geo-ip-info-handler-class"),
 
 	//###########################################################
     /**
@@ -140,7 +151,7 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	APP_DATA_HANDLER_CLASS("app-data-handler-class"),
 
-	/**
+    /**
      * currency data service
      */
     @RuntimeMeta(type = Scope.LOCAL)
@@ -149,7 +160,7 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	CURRENCY_DATA_HANDLER_CLASS("currency-data-handler-class"),
 
-	/**
+    /**
      * login service
      */
     @RuntimeMeta(type = Scope.LOCAL)
@@ -176,14 +187,20 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	SITE_DATA_HANDLER_CLASS("site-data-handler-class"),
 
-	/**
+	@RuntimeMeta(type = Scope.LOCAL)
+	SITE_DATA_MAINTENANCE_HANDLER_CLASS("site-data-maintenance-handler-class"),
+
+    /**
      * app data service
      */
     @RuntimeMeta(type = Scope.LOCAL)
     SUPPLIER_DATA_SERVICE_ENABLED("supplier-data-service-enabled"),
 
 	@RuntimeMeta(type = Scope.LOCAL)
-	SUPPLIER_DATA_HANDLER_CLASS("supplier-data-handler-class");
+	SUPPLIER_DATA_HANDLER_CLASS("supplier-data-handler-class"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	SUPPLIER_DATA_MAINTENANCE_HANDLER_CLASS("supplier-data-maintenance-handler-class");
 
 
 	//###########################################################

@@ -1,17 +1,25 @@
 package com.atg.openssp.dspSim.model.dsp;
 
 import com.atg.openssp.dspSim.model.ModelException;
+import com.atg.openssp.dspSim.model.client.ClientCommandType;
+import com.atg.openssp.dspSim.model.dsp.filter.DspReturnFilter;
+import com.atg.openssp.dspSim.model.dsp.filter.PassthroughFilter;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import openrtb.bidrequest.model.BidRequest;
-import openrtb.bidrequest.model.Impression;
+import openrtb.bidrequest.model.*;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
+import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -19,20 +27,53 @@ import java.util.*;
  */
 public class DspModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
-    private static final String FILE_NAME = "DSP_SIM_MODEL.json";
-    private final ArrayList<SimBidderListener> simBidderListeners = new ArrayList();
-    private final ArrayList<SimBidder> bList = new ArrayList();
-    private final HashMap<String, SimBidder> bMap = new LinkedHashMap();
+    private final ArrayList<SimBidderListener> simBidderListeners = new ArrayList<SimBidderListener>();
+    private final ArrayList<SimBidder> bList = new ArrayList<SimBidder>();
+    private final HashMap<String, SimBidder> bMap = new LinkedHashMap<String, SimBidder>();
+    private final Properties properties = new Properties();
+    private final int index;
+    private final File modelFile;
+    private DspReturnFilter filter;
+    private ClientCommandType mode = ClientCommandType.RETURN_NORMAL;
 
-    public DspModel() throws ModelException {
+    public DspModel(int index) throws ModelException {
+        this.index = index;
+        modelFile = new File("DSP_SIM_MODEL_"+index+".json");
+
+        loadProperties();
         loadModel();
+        loadFilter();
+    }
+
+    private void loadProperties() {
+        File file = new File("dsp-sim-dsp_"+index+".properties");
+        if (file.exists()) {
+            try {
+                FileInputStream is = new FileInputStream(file);
+                properties.load(is);
+                is.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                InputStream is = getClass().getClassLoader().getResourceAsStream(file.getName());
+                if (is != null) {
+                    properties.load(is);
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void loadModel() throws ModelException {
         try {
-            File f = new File(FILE_NAME);
-            if (f.exists()) {
-                FileReader fr = new FileReader(f);
+            if (modelFile.exists()) {
+                FileReader fr = new FileReader(modelFile);
                 List<SimBidder> buffer = new Gson().fromJson(fr, new TypeToken<List<SimBidder>>(){}.getType());
                 fr.close();
                 bList.addAll(buffer);
@@ -42,19 +83,37 @@ public class DspModel {
             }
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
-            throw new ModelException("Could not load model from store.");
+            System.out.println(e.getMessage());
+            throw new ModelException("Could not load model from store: "+modelFile.getAbsolutePath());
         }
     }
 
     public void saveModel() throws ModelException {
         try {
-            PrintWriter fw = new PrintWriter(new FileWriter(FILE_NAME));
+            PrintWriter fw = new PrintWriter(new FileWriter(modelFile));
             String json = new Gson().toJson(bList);
             fw.println(json);
             fw.close();
         } catch (IOException e) {
             log.warn(e.getMessage(), e);
-            throw new ModelException("Could not save model from store.");
+            throw new ModelException("Could not save model to store: "+modelFile);
+        }
+    }
+
+    private void loadFilter() throws ModelException {
+        if (filter == null) {
+            String filterClassName = this.getProperty("filter-class");
+            if (filterClassName == null) {
+                filter = new PassthroughFilter();
+            } else {
+                try {
+                    Class<? extends DspReturnFilter> filterClass = (Class<? extends DspReturnFilter>) Class.forName(filterClassName);
+                    Constructor<? extends DspReturnFilter> cc = filterClass.getConstructor(new Class[]{});
+                    filter = cc.newInstance(new Object[]{});
+                } catch (Exception e) {
+                    throw new ModelException(e.getMessage());
+                }
+            }
         }
     }
 
@@ -82,28 +141,109 @@ public class DspModel {
         }
     }
 
-    public BidResponse createBidResponse(BidRequest request) {
+    public BidResponse createBidResponse(String server, int port, BidRequest request) {
         BidResponse response = new BidResponse();
-        response.setId(UUID.randomUUID().toString());
-        response.setBidid(request.getId());
+        response.setId(request.getId());
+        response.setBidid(UUID.randomUUID().toString());
 
         for (Impression i : request.getImp()) {
             for (SimBidder sb : bList) {
-                response.addSeatBid(fabricateSeatBid(sb, i));
+                response.addSeatBid(fabricateSeatBid(server, port, request.getSite(), sb, i));
             }
         }
         return response;
     }
 
-    private SeatBid fabricateSeatBid(SimBidder simBidder, Impression i) {
+    private SeatBid fabricateSeatBid(String server, int port, Site site, SimBidder simBidder, Impression i) {
         SeatBid sb = new SeatBid();
         Bid b = new Bid();
+        sb.getBid().add(b);
         b.setId(simBidder.getId());
         b.setImpid(i.getId());
         b.setPrice(simBidder.getPrice());
-        sb.getBid().add(b);
+        b.setAdid(simBidder.getAdid());
+        String nUrl = "http://"+server+":"+port+"/win?i="+simBidder.getId()+"&price=${AUCTION_PRICE}";
+        b.setNurl(nUrl);
+//        b.setNurl(simBidder.getNUrl());
+        b.setAdm(simBidder.getAdm());
+        b.setAdomain(simBidder.getAdomain());
+        b.setIurl(simBidder.getIurl());
+        b.setCid(simBidder.getCid());
+        b.setCrid(simBidder.getCrid());
+        b.addAllCats(site.getCat());
+        List<ContentCategory> c2  = site.getPagecat();
+        List<ContentCategory> c3  = site.getSectioncat();
+        if (site.getPublisher() != null) {
+            for (ContentCategory c : site.getPublisher().getCat()) {
+                if (!b.getCat().contains(c)) {
+                    b.addCat(c);
+                }
+            }
+        }
+        if (site.getPublisher() != null) {
+            List<ContentCategory> c4 = site.getPublisher().getCat();
+        }
+
+        if (i.hasVideo()) {
+            Video video = i.getVideo();
+            b.setH(video.getH());
+            b.setW(video.getW());
+        } else if (i.hasBanner()) {
+            Banner banner = i.getBanner();
+            b.setH(banner.getH());
+            b.setW(banner.getW());
+        }
         return sb;
     }
+        /*
+{
+  "id": "4487159888663217854",
+  "imp": [
+    {
+      "id": "1",
+      "banner": {
+        "w": "300",
+        "h": "250"
+      }
+    }
+  ],
+  "site": {
+    "page": "http://test.com/page1?param=value"
+  },
+  "device": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2",
+    "ip": "1.1.1.1"
+  }
+}
+
+{
+  "id": "4487159888663217854",
+  "seatbid": [
+    {
+      "bid": [
+        {
+          "id": "QRh2T-YNIFk_0",
+          "impid": "1",
+          "price": 0.01,
+          "adid": "823011",
+          "nurl": "http://rtb.adkernel.com/win?i=QRh2T-YNIFk_0&price=${AUCTION_PRICE}",
+          "adm": "<a href=\"http://rtb.adkernel.com/click?i=QRh2T-YNIFk_0\" target=\"_blank\"><img src=\"http://rtb.adkernel.com/n1/ad/300x250_EUNqbCsW.png\" width=\"300\" height=\"250\" border=\"0\" ></a><img src='http://rtb.adkernel.com/pixel?i=QRh2T-YNIFk_0' alt=' ' style='display:none'>",
+          "adomain": [
+            "adkernel.com"
+          ],
+          "iurl": "http://xs.wowconversions.com/n1/ad/300x250_EUNqbCsW.png",
+          "cid": "28734",
+          "crid": "823011",
+          "cat": [
+            "IAB3-1"
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+         */
 
     public synchronized void addSimBidderListener(SimBidderListener lis) {
         simBidderListeners.add(lis);
@@ -124,4 +264,32 @@ public class DspModel {
         return bMap.get(id);
     }
 
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+
+    public String getProperty(String key, String defaultValue) {
+        String v = getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        } else {
+            return v;
+        }
+    }
+
+    public String filterResult(BidResponse brsp) {
+        return filter.filterResult(brsp);
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setMode(ClientCommandType mode) {
+        this.mode = mode;
+    }
+
+    public ClientCommandType getMode() {
+        return mode;
+    }
 }

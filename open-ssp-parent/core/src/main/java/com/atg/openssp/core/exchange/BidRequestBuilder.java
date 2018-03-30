@@ -1,38 +1,75 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
-
-import openrtb.bidrequest.model.BidRequest;
-import openrtb.bidrequest.model.Device;
-import openrtb.bidrequest.model.Gender;
-import openrtb.bidrequest.model.Geo;
-import openrtb.bidrequest.model.Impression;
-import openrtb.bidrequest.model.User;
-import openrtb.bidrequest.model.Video;
+import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.entry.BiddingServiceInfo;
+import com.atg.openssp.core.entry.SessionAgentType;
+import com.atg.openssp.core.system.loader.LocalContextLoader;
+import openrtb.bidrequest.model.*;
 import openrtb.tables.VideoBidResponseProtocol;
 
 /**
  * RequestBuilder builds the BidRequest Object for RTB Exchange.
- * 
- * @author André Schmer
  *
+ * @author André Schmer
  */
-public class BidRequestBuilder {
+public final class BidRequestBuilder {
+    private static BidRequestBuilder instance;
+    private BidRequestBuilderHandler handler;
+    private boolean initialized;
 
-	/**
-	 * Build a request object regarding to the OpenRTB Specification.
-	 * 
-	 * @return {@see BidRequest}
-	 */
-	public static BidRequest build(final SessionAgent agent) {
+    private BidRequestBuilder() {
+    }
 
-		final BidRequest bidRequest = new BidRequest.Builder().setId(agent.getRequestid()).setSite(agent.getParamValues().getSite()).setDevice(new Device.Builder().setGeo(
-		        new Geo.Builder().setCity("Hamburg").setCountry("DEU").setLat(53.563452f).setLon(9.925742f).setZip("22761").build()).build()).addImp(new Impression.Builder().setId(
-		                "1").setVideo(new Video.Builder().addMime("application/x-shockwave-flash").setH(400).setW(600).setMaxduration(100).setMinduration(30).addProtocol(
-		                        VideoBidResponseProtocol.VAST_2_0.getValue()).setStartdelay(1).build()).build()).setUser(new User.Builder().setBuyeruid("HHcFrt-76Gh4aPl")
-		                                .setGender(Gender.MALE).setId("99").setYob(1981).build()).build();
+    /**
+     * Build a request object regarding to the OpenRTB Specification.
+     *
+     * @return {@see BidRequest}
+     */
+    public BidRequest build(final RequestSessionAgent agent) throws RequestException {
+        if (!initialized) {
+            initialized = true;
 
-		return bidRequest;
-	}
+            BiddingServiceInfo info = agent.getBiddingServiceInfo();
+            SessionAgentType type = info.getType();
 
+            if (type == SessionAgentType.VIDEO) {
+                try {
+                    String handlerClassName = GlobalContext.getBidRequestBuilderHandlerForVideoObjectsClass();
+                    Class c = Class.forName(handlerClassName);
+                    handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
+                } catch (Exception e) {
+                    handler = new TestBidRequestBuilderHandler();
+                }
+            } else if (type == SessionAgentType.BANNER) {
+                try {
+                    String handlerClassName = GlobalContext.getBidRequestBuilderHandlerForBannerObjectsClass();
+                    Class c = Class.forName(handlerClassName);
+                    handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
+                } catch (Exception e) {
+                    handler = new TestBidRequestBuilderHandler();
+                }
+            } else if (type == SessionAgentType.HEADER) {
+                try {
+                    String handlerClassName = GlobalContext.getBidRequestBuilderHandlerForHeaderBiddingClass();
+                    Class c = Class.forName(handlerClassName);
+                    handler = (BidRequestBuilderHandler) c.getConstructor(null).newInstance(null);
+                } catch (Exception e) {
+                    handler = new TestBidRequestBuilderHandler();
+                }
+            } else {
+                handler = new TestBidRequestBuilderHandler();
+            }
+        }
+
+        return handler.constructRequest(agent);
+    }
+
+    public synchronized static BidRequestBuilder getInstance() {
+        if (instance == null) {
+            instance = new BidRequestBuilder();
+        }
+        return instance;
+    }
 }

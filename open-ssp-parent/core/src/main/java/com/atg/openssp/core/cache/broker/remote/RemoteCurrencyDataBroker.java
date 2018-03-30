@@ -1,13 +1,11 @@
 package com.atg.openssp.core.cache.broker.remote;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import restful.context.Path;
 import restful.context.PathBuilder;
 import restful.exception.RestException;
@@ -32,13 +30,14 @@ public final class RemoteCurrencyDataBroker extends AbstractDataBroker<CurrencyD
 		try {
 			final CurrencyDto dto = super.connect(CurrencyDto.class);
 			if (dto != null) {
+			    CurrencyCache.instance.setBaseCurrency(dto.getCurrency());
 				log.info("sizeof Currency data=" + dto.getData().size());
 				dto.getData().forEach(c -> CurrencyCache.instance.put(c.getCurrency(), c.getRate()));
 				return true;
 			}
 			log.error("no Currency data");
 		} catch (final RestException | EmptyHostException e) {
-			log.error(e.getMessage());
+            log.error(getClass() + ", " + e.getMessage());
 		}
 		return false;
 	}

@@ -3,6 +3,9 @@ package channel.adserving;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import com.atg.openssp.common.configuration.ContextCache;
+import com.atg.openssp.common.configuration.ContextProperties;
+import com.atg.openssp.common.configuration.GlobalContext;
 import org.apache.http.client.utils.URIBuilder;
 
 import com.atg.openssp.common.core.broker.AbstractBroker;
@@ -20,22 +23,21 @@ import com.google.gson.Gson;
  */
 public class AdserverBroker extends AbstractBroker {
 
-	private final Gson gson;
+    private AdserverBrokerHandler handler;
 
-	private final JsonGetConnector jsonGetConnector;
-
-	// define endpoint
-	private static final String scheme = "http";
-	private static final String host = "doamin.com";
-	private static final String path = "/path/to/target";
-
-	final URIBuilder uriBuilder;
-
-	public AdserverBroker() {
-		uriBuilder = new URIBuilder().setCharset(StandardCharsets.UTF_8).setScheme(scheme).setHost(host).setPath(path);
-
-		jsonGetConnector = new JsonGetConnector();
-		gson = new Gson();
+    public AdserverBroker() {
+		String handlerClassName = GlobalContext.getAdserverBrokerHandlerClass();
+		if (handlerClassName != null && !"".equals(handlerClassName)) {
+			try {
+				Class c = Class.forName(handlerClassName);
+				handler = (AdserverBrokerHandler) c.getConstructor(null).newInstance(null);
+			} catch (Exception e) {
+				handler = new TestAdserverBrokerHandler();
+				e.printStackTrace();
+			}
+		} else {
+			handler = new TestAdserverBrokerHandler();
+		}
 	}
 
 	/**
@@ -47,9 +49,8 @@ public class AdserverBroker extends AbstractBroker {
 	public Optional<AdProviderReader> call() throws BidProcessingException {
 		final Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
-
-			final String result = jsonGetConnector.connect(uriBuilder);
-			final AdProviderReader adProvider = gson.fromJson(result, AdservingCampaignProvider.class);
+			final String result = handler.getConnector().connect(handler.getUriBuilder());
+			final AdProviderReader adProvider = handler.getGson().fromJson(result, handler.getProvider());
 			stopwatch.stop();
 			return Optional.ofNullable(adProvider);
 		} finally {

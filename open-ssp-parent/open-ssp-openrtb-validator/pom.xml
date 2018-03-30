@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.atg.openssp</groupId>
     <artifactId>open-ssp-parent</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
   </parent>
   <artifactId>open-ssp-openrtb-validator</artifactId>
   
@@ -83,6 +83,11 @@
             <artifactId>cucumber-junit</artifactId>
             <version>${cucumber.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.3</version>
         </dependency>
     </dependencies>
 

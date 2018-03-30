@@ -1,5 +1,8 @@
 package util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -15,9 +18,6 @@ import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Utility class to determine some useful catalina environment data.
  * 
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CatalinaUtil {
 
-	private static final Logger log = LoggerFactory.getLogger(CatalinaUtil.class);
+	private static final Logger log = (Logger) LoggerFactory.getLogger(CatalinaUtil.class);
 
 	private static String ip;
 

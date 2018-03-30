@@ -10,7 +10,7 @@ public final class User implements Cloneable {
 
 	private String buyeruid;
 
-	private int yob;
+	private Integer yob;
 
 	private String gender;
 
@@ -20,6 +20,7 @@ public final class User implements Cloneable {
 
 	public User(final User clone) {
 		id = clone.getId();
+		buyeruid = clone.getBuyeruid();
 		yob = clone.getYob();
 		gender = clone.getGender();
 		ext = clone.getExt();

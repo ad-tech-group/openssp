@@ -1,5 +1,7 @@
 package com.atg.openssp.common.demand;
 
+import com.atg.openssp.common.cache.dto.VideoAd;
+import openrtb.bidrequest.model.App;
 import openrtb.bidrequest.model.Publisher;
 import openrtb.bidrequest.model.Site;
 
@@ -11,11 +13,12 @@ import openrtb.bidrequest.model.Site;
  * @author André Schmer
  *
  */
-public class ParamValue {
+public abstract class ParamValue {
 
 	// private Zone zone;
 	private Site site;
-	// private VideoAd videoad;
+	private App app;
+	 private VideoAd videoad;
 	// private String w;
 	// private String h;
 	// private List<String> mimes;
@@ -23,16 +26,23 @@ public class ParamValue {
 	// private String page;
 	// private List<Integer> protocols;
 	// private int startdelay;
-	private String isTest;
+	private String ipAddress;
+	private String browserUserAgentString;
 
-	private Publisher publisher;
-
-	public Site getSite() {
+	public final Site getSite() {
 		return site;
 	}
 
-	public void setSite(final Site site) {
+	public final void setSite(final Site site) {
 		this.site = site;
+	}
+
+	public final App getApp() {
+		return app;
+	}
+
+	public final void setApp(final App app) {
+		this.app = app;
 	}
 
 	// public String getW() {
@@ -92,25 +102,37 @@ public class ParamValue {
 	// return startdelay;
 	// }
 
-	public Publisher getPublisher() {
-		return publisher;
+	public String getBrowserUserAgentString() {
+		return browserUserAgentString;
 	}
 
-	public void setPublisher(final Publisher publisher) {
-		this.publisher = publisher;
+	public void setBrowserUserAgentString(String browserUserAgentString) {
+		this.browserUserAgentString = browserUserAgentString;
 	}
 
-	public String getIsTest() {
-		return isTest;
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 
-	public void setIsTest(final String isTest) {
-		this.isTest = isTest;
+	public String getIpAddress() {
+		return ipAddress;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("ParamValue [site=%s, publisher=%s]", site, publisher);
+		String siteString;
+		if (site != null) {
+			siteString = "site=%s";
+		} else {
+			siteString = "";
+		}
+		String appString;
+		if (app != null) {
+			appString = "app=%s";
+		} else {
+			appString = "";
+		}
+		return "ParamValue ["+siteString+appString+"]";
 	}
 
 }
