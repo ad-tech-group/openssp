@@ -118,7 +118,7 @@ public class AuctionServiceDealSingleBidTest {
 			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			final float currencyRate = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertTrue(winner.isValid());
 		} catch (final InvalidBidException e) {
 			Assert.fail("Exception thrown: " + e.getMessage());
@@ -145,7 +145,7 @@ public class AuctionServiceDealSingleBidTest {
 			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			final float currencyRate = CurrencyCache.instance.get(currency);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
-			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertTrue(winner.isValid());
 		} catch (final InvalidBidException e) {
 			Assert.fail("Exception thrown: " + e.getMessage());

@@ -5,6 +5,7 @@ import com.atg.openssp.dspSim.model.client.ClientCommandType;
 import com.atg.openssp.dspSim.model.dsp.filter.DspReturnFilter;
 import com.atg.openssp.dspSim.model.dsp.filter.PassthroughFilter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -71,10 +72,13 @@ public class DspModel {
     }
 
     private void loadModel() throws ModelException {
+        GsonBuilder builder = new GsonBuilder();
+        SimBidder.populateTypeAdapters(builder);
+
         try {
             if (modelFile.exists()) {
                 FileReader fr = new FileReader(modelFile);
-                List<SimBidder> buffer = new Gson().fromJson(fr, new TypeToken<List<SimBidder>>(){}.getType());
+                List<SimBidder> buffer = builder.create().fromJson(fr, new TypeToken<List<SimBidder>>(){}.getType());
                 fr.close();
                 bList.addAll(buffer);
                 for (SimBidder sb : bList) {
@@ -89,9 +93,11 @@ public class DspModel {
     }
 
     public void saveModel() throws ModelException {
+        GsonBuilder builder = new GsonBuilder();
+        SimBidder.populateTypeAdapters(builder);
         try {
             PrintWriter fw = new PrintWriter(new FileWriter(modelFile));
-            String json = new Gson().toJson(bList);
+            String json = builder.create().toJson(bList);
             fw.println(json);
             fw.close();
         } catch (IOException e) {

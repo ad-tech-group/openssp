@@ -1,15 +1,11 @@
 package com.atg.openssp.core.exchange;
 
-import java.util.*;
-import java.util.Map.Entry;
-
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
-
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.core.entry.BiddingServiceInfo;
 import com.google.gson.Gson;
@@ -23,6 +19,9 @@ import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
 import openrtb.tables.AuctionType;
 import util.math.FloatComparator;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * This is the standard Auction Service.
@@ -197,7 +196,7 @@ public class Auction {
             exchangedWinnerPrice = methodHandler.generateWinningPrice(bidList, exchangedFloor, exchangedBestBidPrice);
 		}
 
-		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(exchangedWinnerPrice * bestBidCurrencyRate)).setAdjustedCurrencyPrice(FloatComparator.rr(exchangedWinnerPrice))
+		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(exchangedWinnerPrice * bestBidCurrencyRate)).setExchangedCurrencyPrice(FloatComparator.rr(exchangedWinnerPrice))
 		        .setSupplier(bestBidder.getSupplier()).setWinningSeat(bestBidder.getSeat()).setCurrency(bestBidder.getCurrency()).setDealId(bestBidder.getDealId()).build();
 	}
 
@@ -333,8 +332,8 @@ public class Auction {
 		}
 
 		@Override
-		public float getAdjustedCurrencyPrice() {
-			return winningProvider.getAdjustedCurrencyPrice();
+		public float getExchangedCurrencyPrice() {
+			return winningProvider.getExchangedCurrencyPrice();
 		}
 
 		@Override
@@ -417,8 +416,8 @@ public class Auction {
 		}
 
 		@Override
-		public float getAdjustedCurrencyPrice() {
-			return winningProvider.get(0).getAdjustedCurrencyPrice();
+		public float getExchangedCurrencyPrice() {
+			return winningProvider.get(0).getExchangedCurrencyPrice();
 		}
 
 		@Override

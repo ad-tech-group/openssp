@@ -103,7 +103,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(3.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(3.51f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(3.51f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier2.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals(null, winner.getDealId());
 		} catch (final InvalidBidException e) {
@@ -145,7 +145,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(2.51f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(2.51f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier1.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals(null, winner.getDealId());
 		} catch (final InvalidBidException e) {
@@ -193,7 +193,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.81f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(2.81f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(2.81f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier3.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals(null, winner.getDealId());
 		} catch (final InvalidBidException e) {
@@ -246,7 +246,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.81f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(2.81f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(2.81f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier3.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals(null, winner.getDealId());
 		} catch (final InvalidBidException e) {
@@ -301,7 +301,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.21f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(2.21f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(2.21f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier1.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals(null, winner.getDealId());
 		} catch (final InvalidBidException e) {
@@ -328,7 +328,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.61f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(2.61f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(2.61f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier1.getShortName(), winner.getSupplier().getShortName());
 		} catch (final InvalidBidException e) {
 			Assert.fail("Exception thrown: " + e.getMessage());
@@ -355,7 +355,7 @@ public class OpenAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(2.61f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(2.61f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(2.61f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier1.getShortName(), winner.getSupplier().getShortName());
 		} catch (final InvalidBidException e) {
 			Assert.fail("Exception thrown: " + e.getMessage());

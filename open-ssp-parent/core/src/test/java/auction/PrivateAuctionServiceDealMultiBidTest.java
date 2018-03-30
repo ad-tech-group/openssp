@@ -97,7 +97,7 @@ public class PrivateAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(3.51f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(3.51f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(3.51f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier2.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals("998866", winner.getDealId());
 		} catch (final InvalidBidException e) {
@@ -144,8 +144,8 @@ public class PrivateAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(4.10f, winner.getPrice(), 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			System.out.println(winner.getAdjustedCurrencyPrice()*currencyRateEUR);
-			Assert.assertEquals(FloatComparator.rr(4.10f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			System.out.println(winner.getExchangedCurrencyPrice()*currencyRateEUR);
+			Assert.assertEquals(FloatComparator.rr(4.10f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(supplier2.getShortName(), winner.getSupplier().getShortName());
 			Assert.assertEquals("998866", winner.getDealId());
 		} catch (final InvalidBidException e) {
@@ -237,7 +237,7 @@ public class PrivateAuctionServiceDealMultiBidTest {
 			Assert.assertTrue(winner.isValid());
 			Assert.assertEquals(winner.getPrice(), 3.15f, 0);
 			final float currencyRateEUR = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(3.15f / currencyRateEUR), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(3.15f / currencyRateEUR), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertEquals(winner.getSupplier().getShortName(), supplier3.getShortName());
 			Assert.assertEquals(winner.getDealId(), deal_id_2);
 		} catch (final InvalidBidException e) {

@@ -1,5 +1,6 @@
 package com.atg.openssp.dspSim.model.dsp;
 
+import com.google.gson.GsonBuilder;
 import openrtb.tables.ContentCategory;
 
 import java.util.ArrayList;
@@ -142,5 +143,8 @@ public class SimBidder {
         crid = simBidder.crid;
         cat.clear();
         cat.addAll(simBidder.cat);
+    }
+
+    public static void populateTypeAdapters(GsonBuilder builder) {
     }
 }
