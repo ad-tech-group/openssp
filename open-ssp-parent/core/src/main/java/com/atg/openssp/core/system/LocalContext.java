@@ -66,7 +66,6 @@ public class LocalContext extends Context {
 	private static String supplierDataMaintenanceHandlerClass;
     //#######################################
 
-
 	static {
 		initData();
 	}

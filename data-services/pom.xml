@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atg.openssp</groupId>
     <artifactId>open-ssp-data-services</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2</version>
     <name>open-ssp-data-services</name>
     <url>http://maven.apache.org</url>
     <packaging>war</packaging>
@@ -117,17 +117,17 @@
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
-            <version>0.3.3-SNAPSHOT</version>
+            <version>0.4</version>
         </dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>core</artifactId>
-            <version>0.3.3-SNAPSHOT</version>
+            <version>0.4</version>
         </dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-openrtb</artifactId>
-            <version>0.3.3-SNAPSHOT</version>
+            <version>0.4</version>
         </dependency>
 
     </dependencies>

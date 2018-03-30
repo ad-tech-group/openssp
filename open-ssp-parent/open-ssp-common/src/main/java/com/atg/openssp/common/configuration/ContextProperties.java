@@ -169,7 +169,7 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	LOGIN_HANDLER_CLASS("login-handler-class"),
 
-    /**
+	/**
      * pricelayer data service
      */
     @RuntimeMeta(type = Scope.LOCAL)
@@ -178,7 +178,7 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	PRICELAYER_DATA_HANDLER_CLASS("pricelayer-data-handler-class"),
 
-    /**
+	/**
      * site data service
      */
     @RuntimeMeta(type = Scope.LOCAL)
