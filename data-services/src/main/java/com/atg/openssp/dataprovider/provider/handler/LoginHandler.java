@@ -1,8 +1,8 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
 import com.atg.openssp.core.system.LocalContext;
-import com.atg.openssp.dataprovider.provider.dto.TokenWrapper;
 import com.google.gson.Gson;
+import com.atg.openssp.dataprovider.provider.dto.TokenWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

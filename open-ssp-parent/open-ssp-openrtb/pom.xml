@@ -3,11 +3,17 @@
   <parent>
     <groupId>com.atg.openssp</groupId>
     <artifactId>open-ssp-parent</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
   </parent>
   <artifactId>open-ssp-openrtb</artifactId>
   
   <dependencies>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.11</version>
+          <scope>test</scope>
+      </dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>

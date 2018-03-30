@@ -6,7 +6,7 @@ import java.util.List;
 import com.atg.openssp.common.demand.Supplier;
 
 /**
- * 
+ *
  * @author André Schmer
  *
  */
@@ -32,3 +32,4 @@ public class SupplierDto implements Serializable {
 	}
 
 }
+

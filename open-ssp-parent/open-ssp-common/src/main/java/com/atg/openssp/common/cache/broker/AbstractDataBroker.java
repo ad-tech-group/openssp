@@ -3,7 +3,6 @@ package com.atg.openssp.common.cache.broker;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.common.exception.EmptyHostException;
-
 import restful.client.JsonDataProviderConnector;
 import restful.context.PathBuilder;
 import restful.exception.RestException;

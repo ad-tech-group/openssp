@@ -2,6 +2,9 @@ package com.atg.openssp.core.exchange.channel.rtb;
 
 import java.util.concurrent.Callable;
 
+import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
+import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
+import com.atg.openssp.core.entry.BiddingServiceInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
@@ -29,18 +32,21 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	private static final Logger log = LoggerFactory.getLogger(DemandBroker.class);
 
+	private final BiddingServiceInfo info;
+
 	private final Supplier supplier;
 
 	private final OpenRtbConnector connector;
 
 	private final Header[] headers;
 
-	private final Gson gson;
+	private Gson gson;
 
 	private BidRequest bidrequest;
 
-	public DemandBroker(final Supplier supplier, final OpenRtbConnector connector, final SessionAgent agent) {
-		sessionAgent = agent;
+	public DemandBroker(BiddingServiceInfo info, final Supplier supplier, final OpenRtbConnector connector, final SessionAgent agent) {
+		super(agent);
+		this.info = info;
 		this.supplier = supplier;
 		this.connector = connector;
 
@@ -50,7 +56,11 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		// headers[2] = new BasicHeader("Accept-Encoding", supplier.getAcceptEncoding());
 		// headers[3] = new BasicHeader("Content-Encoding", supplier.getContentEncoding());
 
-		gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
+		try {
+			gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
+		} catch (Throwable t) {
+			log.error(t.getMessage(), t);
+		}
 	}
 
 	@Override
@@ -60,20 +70,25 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		}
 
 		try {
-			final String jsonBidrequest = gson.toJson(bidrequest, BidRequest.class);
+			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
+
 			log.debug("biderquest: " + jsonBidrequest);
+			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
+
 			final String result = connector.connect(jsonBidrequest, headers);
+			log.debug("bidresponse: " + result);
+			RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
+
 			if (!StringUtils.isEmpty(result)) {
-				log.debug("bidresponse: " + result);
-
-				final BidResponse bidResponse = gson.fromJson(result, BidResponse.class);
-
+				final BidResponse bidResponse = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterResponse(gson, result);
 				return new ResponseContainer(supplier, bidResponse);
 			}
 		} catch (final BidProcessingException e) {
 			log.error(getClass().getSimpleName() + " " + e.getMessage());
+			throw e;
 		} catch (final Exception e) {
 			log.error(getClass().getSimpleName() + " " + e.getMessage());
+			//throw e;
 		}
 		return null;
 	}

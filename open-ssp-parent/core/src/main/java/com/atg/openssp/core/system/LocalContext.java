@@ -34,7 +34,7 @@ public class LocalContext extends Context {
 	private static String sspVersion = new MavenProperties().getVersion();
 
 
-	private static boolean isSspChannelEnabled;
+    private static boolean isSspChannelEnabled;
 
 	//#######################################
     private static boolean isAppDataServiceEnabled = false;
@@ -59,9 +59,12 @@ public class LocalContext extends Context {
 
 	private static String siteDataHandlerClass;
 
-	private static String supplierDataHandlerClass;
-	//#######################################
+	private static String siteDataMaintenanceHandlerClass;
 
+	private static String supplierDataHandlerClass;
+
+	private static String supplierDataMaintenanceHandlerClass;
+    //#######################################
 
 	static {
 		initData();
@@ -88,6 +91,9 @@ public class LocalContext extends Context {
 		pricelayerDataHandlerClass = ContextCache.instance.get(ContextProperties.PRICELAYER_DATA_HANDLER_CLASS);
 		siteDataHandlerClass = ContextCache.instance.get(ContextProperties.SITE_DATA_HANDLER_CLASS);
 		supplierDataHandlerClass = ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_HANDLER_CLASS);
+
+		siteDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.SITE_DATA_MAINTENANCE_HANDLER_CLASS);
+		supplierDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_MAINTENANCE_HANDLER_CLASS);
 	}
 
 	private static void initData() {
@@ -203,4 +209,11 @@ public class LocalContext extends Context {
 		return supplierDataHandlerClass;
 	}
 
+	public static String getSiteDataMaintenanceHandlerClass() {
+		return siteDataMaintenanceHandlerClass;
+	}
+
+	public static String getSupplierDataMaintenanceHandlerClass() {
+		return supplierDataMaintenanceHandlerClass;
+	}
 }

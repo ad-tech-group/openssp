@@ -1,12 +1,15 @@
 package com.atg.openssp.dspSim.model.client;
 
+import com.atg.openssp.dspSim.model.dsp.SimBidder;
+import com.atg.openssp.dspSim.model.client.ClientCommandType;
+
 /**
  * @author Brian Sorensen
  */
 public class ClientCommand {
     private ClientCommandType type;
     private String id;
-    private float price;
+    private SimBidder sb;
 
     public void setType(ClientCommandType type) {
         this.type = type;
@@ -24,12 +27,12 @@ public class ClientCommand {
         return id;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
+    public void setSimBidder(SimBidder sb) {
+        this.sb = sb;
     }
 
-    public float getPrice() {
-        return price;
+    public SimBidder getSimBidder() {
+        return sb;
     }
 
 }

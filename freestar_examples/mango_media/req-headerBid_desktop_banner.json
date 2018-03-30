@@ -1,0 +1,20 @@
+{
+  "id": "4487159888663217856",
+  "site": {
+    "page": "http://coindesk.com/zcashs-coming-hard-fork-pave-way-even/"
+  },
+  "imp": [
+    {
+      "id": "1",
+      "banner": {
+        "w": 300,
+        "h": 250
+      }
+    }
+  ],
+  "device": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Version/5.1.7 Safari/537.36",
+    "ip": "70.166.199.103"
+  },
+  "test": true
+}

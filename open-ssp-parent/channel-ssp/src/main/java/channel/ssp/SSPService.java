@@ -70,7 +70,7 @@ public class SSPService implements Callable<AdProviderReader> {
 		// broker.setSessionAgent(agent);
 		// final ResponseContainer resp = broker.call();
 		//
-		// // System.out.println("eval bidrequest: " + new
+		// // log.info("eval bidrequest: " + new
 		// // Gson().toJson(bidRequest));
 		// // TODO: wehre to store???
 		// // this.agent.getBidExchange().setBidRequest(broker.getSupplier(),

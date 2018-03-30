@@ -1,19 +1,34 @@
 package openrtb.tables;
 
 /**
- * @author André Schmer
+ * @author Brian Sorensen
  *
  */
-public abstract class VideoApiFramework {
+public enum VideoApiFramework {
 
-	public static final int VPAID_1_0 = 1;
+	VPAID_1_0(1),
+	VPAID_2_0(2),
+	MRAID_1(3),
+	ORMMA(4),
+	MRAID_2(5);
 
-	public static final int VPAID_2_0 = 2;
+	private int value;
 
-	public static final int MRAID_1 = 3;
+	VideoApiFramework(int value) {
+		this.value = value;
+	}
 
-	public static final int ORMMA = 4;
+	public int getValue()
+	{
+		return value;
+	}
 
-	public static final int MRAID_2 = 5;
-
+	public static VideoApiFramework convertValue(final int value) {
+		for (final VideoApiFramework v : values()) {
+			if (v.getValue() == value) {
+				return v;
+			}
+		}
+		return null;
+	}
 }

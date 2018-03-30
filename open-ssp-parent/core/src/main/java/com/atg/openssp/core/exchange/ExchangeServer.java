@@ -1,21 +1,23 @@
 package com.atg.openssp.core.exchange;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.core.exchange.Exchange;
 import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
+import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.common.provider.AdProviderReader;
-
+import com.atg.openssp.core.entry.BiddingServiceInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.math.FloatComparator;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * This is the server which is mainly responsible to start the bidprocess, collect the result and build a reponse for the client.
@@ -44,12 +46,12 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 	 * @return true if a provider, {@link AdProviderReader}, exists and building a response is successful, false otherwise
 	 */
 	@Override
-	public boolean processExchange(final RequestSessionAgent agent) {
+	public boolean processExchange(final RequestSessionAgent agent) throws ExecutionException, RequestException {
 		final AdProviderReader winner = execute(agent);
 		return evaluateResponse(agent, winner);
 	}
 
-	private AdProviderReader execute(final SessionAgent agent) {
+	private AdProviderReader execute(final RequestSessionAgent agent) throws ExecutionException, RequestException {
 		try {
 			final List<Callable<AdProviderReader>> callables = ChannelFactory.createListOfChannels(agent);
 			final List<Future<AdProviderReader>> futures = ExchangeExecutorServiceFacade.instance.invokeAll(callables);
@@ -57,8 +59,15 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 			if (winnerFuture != null) {
 				try {
 					return winnerFuture.get();
+				} catch (ArrayIndexOutOfBoundsException ex) {
+					log.error("no winner detected (winnerFuture is empty)");
 				} catch (final ExecutionException e) {
-					log.error(e.getMessage());
+					if (e.getCause() instanceof RequestException) {
+						throw (RequestException) e.getCause();
+					} else {
+						log.error(e.getMessage(), e);
+					}
+					throw e;
 				}
 			} else {
 				log.error("no winner detected");
@@ -78,27 +87,64 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				return b;
 			}
 
-			if (FloatComparator.greaterThanWithPrecision(a.get().getPriceEur(), b.get().getPriceEur())) {
+			if (FloatComparator.greaterThanWithPrecision(a.get().getAdjustedCurrencyPrice(), b.get().getAdjustedCurrencyPrice())) {
 				return a;
 			}
-		} catch (final InterruptedException | ExecutionException e) {
+		} catch (final InterruptedException e) {
 			log.error(e.getMessage());
+		} catch (final CancellationException e) {
+			log.error(e.getMessage());
+		} catch (final ExecutionException e) {
+			log.error(e.getMessage(), e);
 		}
 
 		return b;
 	}
 
-	private boolean evaluateResponse(final SessionAgent agent, final AdProviderReader winner) {
+	private boolean evaluateResponse(final RequestSessionAgent agent, final AdProviderReader winner) {
+
+		BiddingServiceInfo info = agent.getBiddingServiceInfo();
+
+		agent.getHttpResponse().setCharacterEncoding(info.getCharacterEncoding());
+		agent.getHttpResponse().setContentType("Content-Type: "+info.getContentType());
+
+		if (info.isAccessAllowOriginActivated() && winner instanceof Auction.AuctionResult) {
+			if (((Auction.AuctionResult)winner).getBidRequest() != null) {
+				//TODO:  BKS need app
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", "http://" + ((Auction.AuctionResult) winner).getBidRequest().getSite().getDomain());
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
+				agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
+			}
+		}
+		Map<String, String> headers = info.getHeaders();
+		for (Map.Entry<String, String> entry : headers.entrySet()) {
+			agent.getHttpResponse().addHeader(entry.getKey(), entry.getValue());
+		}
+
 		try (Writer out = agent.getHttpResponse().getWriter()) {
 			if (winner != null && winner.isValid()) {
 
-				final String responseData = winner.buildResponse();
+				final String responseData;
+				if (winner instanceof Auction.AuctionResult) {
+					if (((Auction.AuctionResult)winner).getBidRequest() != null) {
+						responseData = ((Auction.AuctionResult) winner).buildHeaderBidResponse();
+					} else {
+						responseData = "";
+					}
+				} else {
+					responseData = winner.buildResponse();
+				}
 				out.append(responseData);
 
-				agent.getHttpResponse().setContentType("application/javascript");
-				winner.perform(agent);
+                if (agent.getBiddingServiceInfo().sendNurlNotifications()) {
+                    winner.perform(agent);
+                }
+
 				out.flush();
+
 				return true;
+				/*
 			} else {
 				// remove this in production environmant
 				if (agent.getParamValues().getIsTest().equals("1")) {
@@ -108,9 +154,10 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 					out.flush();
 					return true;
 				}
+				*/
 			}
 		} catch (final IOException e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		}
 		return false;
 	}

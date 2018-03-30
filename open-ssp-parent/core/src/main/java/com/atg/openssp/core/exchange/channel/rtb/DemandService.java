@@ -8,6 +8,10 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import com.atg.openssp.common.demand.SupplierAdPlatform;
+import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.exchange.BidRequestBuilder;
+import com.atg.openssp.core.exchange.RequestSessionAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +23,6 @@ import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.core.cache.type.ConnectorCache;
 import com.atg.openssp.core.exchange.Auction;
-import com.atg.openssp.core.exchange.BidRequestBuilder;
 
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Impression;
@@ -32,14 +35,14 @@ public class DemandService implements Callable<AdProviderReader> {
 
 	private static final Logger log = LoggerFactory.getLogger(DemandService.class);
 
-	private final SessionAgent agent;
+	private final RequestSessionAgent agent;
 
 	/**
 	 * 
 	 * @param {@link
 	 *            SessionAgent}
 	 */
-	public DemandService(final SessionAgent agent) {
+	public DemandService(final RequestSessionAgent agent) {
 		this.agent = agent;
 	}
 
@@ -51,7 +54,7 @@ public class DemandService implements Callable<AdProviderReader> {
 	 * <ul>
 	 * <li>Loads the connectors as callables from the cache {@link DemandBroker}</li>
 	 * <li>Invoke the callables due to the {@link DemandExecutorServiceFacade}</li>
-	 * <li>For every result in the list of futures, the response will be validated {@link OpenRtbVideoValidator} and stored in a {@link BidExchange} object</li>
+	 * <li>For every result in the list of futures, the response will be validated and stored in a {@link BidExchange} object</li>
 	 * <li>From the set of reponses in the {@link BidExchange} a bidding winner will be calculated in the Auction service {@link Auction}</li>
 	 * </ul>
 	 * <p>
@@ -69,6 +72,7 @@ public class DemandService implements Callable<AdProviderReader> {
 			futures.parallelStream().filter(Objects::nonNull).forEach(future -> {
 				try {
 					final ResponseContainer responseContainer = future.get();
+
 					// final boolean valid = OpenRtbVideoValidator.instance.validate(agent.getBidExchange().getBidRequest(responseContainer.getSupplier()),
 					// responseContainer
 					// .getBidResponse());
@@ -77,7 +81,9 @@ public class DemandService implements Callable<AdProviderReader> {
 					// LogFacade.logException(this.getClass(), ExceptionCode.E003, agent.getRequestid(), responseContainer.getBidResponse().toString());
 					// return;// important!
 					// }
-					agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
+					if (responseContainer != null) {
+						agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
+					}
 				} catch (final ExecutionException e) {
 					log.error("ExecutionException {} {}", agent.getRequestid(), e.getMessage());
 				} catch (final InterruptedException e) {
@@ -88,7 +94,9 @@ public class DemandService implements Callable<AdProviderReader> {
 			});
 
 			try {
-				adProvider = Auction.auctioneer(agent.getBidExchange());
+				adProvider = Auction.auctioneer(agent.getBiddingServiceInfo(), agent.getBidExchange());
+			} catch (final ArrayIndexOutOfBoundsException e) {
+				log.error("No DSP points available.", agent.getRequestid(), e.getMessage());
 			} catch (final InvalidBidException e) {
 				log.error("{} {}", agent.getRequestid(), e.getMessage());
 			}
@@ -108,27 +116,49 @@ public class DemandService implements Callable<AdProviderReader> {
 	 * 
 	 * @link SessionAgent
 	 */
-	private List<DemandBroker> loadSupplierConnectors() {
+	private List<DemandBroker> loadSupplierConnectors() throws RequestException {
 		final List<OpenRtbConnector> connectorList = ConnectorCache.instance.getAll();
 		final List<DemandBroker> connectors = new ArrayList<>();
 
-		final BidRequest bidRequest = BidRequestBuilder.build(agent);
-		connectorList.stream().filter(b -> b.getSupplier().getActive() == 1).forEach(connector -> {
+		final BidRequest bidRequest = BidRequestBuilder.getInstance().build(agent);
+		boolean isMobile = bidRequest.getDevice().getUa().contains("Mobi");
+        log.info(bidRequest.getDevice().getUa());
+		log.info("is Mobile: "+isMobile);
 
-			final DemandBroker demandBroker = new DemandBroker(connector.getSupplier(), connector, agent);
-			if (bidRequest.getImp().get(0).getBidfloor() > 0) {
-				final Impression imp = bidRequest.getImp().get(0);
-				// floorprice in EUR -> multiply with rate to get target
-				// currency therfore floorprice currency is always the same
-				// as supplier currency
-				imp.setBidfloor(bidRequest.getImp().get(0).getBidfloor() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
-				imp.setBidfloorcur(connector.getSupplier().getCurrency());
-			}
+		connectorList.stream().filter(b -> b.getSupplier().getActive().getValue() == 1).forEach(connector -> {
 
-			bidRequest.setTest(connector.getSupplier().getUnderTest());
-			demandBroker.setBidRequest(bidRequest);
-			agent.getBidExchange().setBidRequest(connector.getSupplier(), bidRequest);
-			connectors.add(demandBroker);
+			boolean processingIsOK = false;
+            if (connector.getSupplier().getAllowedPlatforms().size() == 0) {
+                processingIsOK = true;
+            } else if (
+                    isMobile && connector.getSupplier().getAllowedPlatforms().contains(SupplierAdPlatform.MOBILE) ||
+                    !isMobile && connector.getSupplier().getAllowedPlatforms().contains(SupplierAdPlatform.DESKTOP)
+                    ) {
+                processingIsOK = true;
+            }
+
+			if (processingIsOK) {
+                log.info("keeping: "+connector.getSupplier().getShortName());
+				if (connector.getSupplier().getTmax() != null) {
+					bidRequest.setTmax(connector.getSupplier().getTmax());
+				}
+				final DemandBroker demandBroker = new DemandBroker(agent.getBiddingServiceInfo(), connector.getSupplier(), connector, agent);
+				if (bidRequest.getImp().get(0).getBidfloor() > 0) {
+					final Impression imp = bidRequest.getImp().get(0);
+					// floorprice in EUR -> multiply with rate to get target
+					// currency therfore floorprice currency is always the same
+					// as supplier currency
+					imp.setBidfloor(bidRequest.getImp().get(0).getBidfloor() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
+					imp.setBidfloorcur(connector.getSupplier().getCurrency());
+				}
+
+				bidRequest.setTest(connector.getSupplier().getUnderTest());
+				demandBroker.setBidRequest(bidRequest);
+				agent.getBidExchange().setBidRequest(connector.getSupplier(), bidRequest);
+				connectors.add(demandBroker);
+			} else {
+                log.info("skipping: "+connector.getSupplier().getShortName());
+            }
 		});
 
 		return connectors;

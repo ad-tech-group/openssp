@@ -11,18 +11,18 @@
 	
 	<!-- the timeout in ms for execution the executor service -->
 	<!-- default is 500ms --> 
-	<entry key="cdl-timeout">500</entry>
-	
+	<entry key="cdl-timeout">5000</entry>
+
 	<!-- url of the data provider where the cache is updated from -->
 	<entry key="data-provider-scheme">http</entry>
 
 	<entry key="data-provider-host">localhost</entry>
 
 	<entry key="data-provider-port">9090</entry>
-	
+
 	<!-- credential for remote access -->
 	<entry key="master_pw">frogs</entry>
-	
+
 	<!-- credential for remote access -->
 	<entry key="master_user">izod</entry>
 
@@ -35,11 +35,20 @@
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
 
-    <entry key="validator-handler-for-video-class">io.freestar.ssp.entry.FreestarEntryValidatorForVideoHandler</entry>
+    <entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
 
-	<entry key="validator-handler-for-banner-class">io.freestar.ssp.entry.FreestarEntryValidatorForBannerHandler</entry>
+	<entry key="validator-handler-for-banner-class">com.atg.openssp.core.entry.banner.BannerObjectEntryValidatorHandler</entry>
 
-    <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+	<entry key="validator-handler-for-header-class">com.atg.openssp.core.entry.header.HeaderBiddingEntryValidatorHandler</entry>
 
-	<entry key="bid-request-builder-handler-class">io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler</entry>
+	<entry key="bid-request-builder-handler-for-video-class">com.atg.openssp.core.exchange.VideoObjectBidRequestBuilderHandler</entry>
+
+	<entry key="bid-request-builder-handler-for-banner-class">com.atg.openssp.core.exchange.BannerObjectBidRequestBuilderHandler</entry>
+
+	<entry key="bid-request-builder-handler-for-header-class">com.atg.openssp.core.exchange.HeaderBiddingBidRequestBuilderHandler</entry>
+
+	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+
+	<!-- <entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIp2InfoHandler</entry> -->
+
 </properties>

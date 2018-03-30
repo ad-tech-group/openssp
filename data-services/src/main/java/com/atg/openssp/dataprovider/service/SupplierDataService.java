@@ -2,7 +2,6 @@ package com.atg.openssp.dataprovider.service;
 
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.system.LocalContext;
-import com.atg.openssp.dataprovider.provider.handler.AppDataHandler;
 import com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler;
 import com.atg.openssp.dataprovider.provider.handler.DataHandler;
 

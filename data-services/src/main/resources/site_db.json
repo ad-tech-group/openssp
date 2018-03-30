@@ -1,33 +1,41 @@
 {
-	"sites": [{
-		"id": "1",
-		"name": "site_1",
-		"domain": "site_1.com",
-		"cat": ["1"],
-		"page": "www.site_1.com",
-		"publisher": {
-			"id": "pubisher_1",
-			"name": "publisher_1_name",
-			"cat": [],
-			"domain": "www.publisher_1.com",
-			"ext": null
-			},
-		"ext": null
-		},
-		{
-		"id": "testsite.com",
-		"name": "testsite.com",
-		"domain": "testsite.com",
-		"cat": ["1"],
-		"page": "http://alexs-mbp:8000/integrationExamples/gpt/freestar_hello_world.html",
-		"publisher": {
-			"id": "testpublisher_1",
-			"name": "testpublisher 1",
-			"cat": [],
-			"domain": "www.testpublisher_1.com",
-			"ext": null
-		},
-		"ext": null
-	}
-	]
+  "sites": [
+    {
+      "id": "testmango.com",
+      "name": "testmango",
+      "cat": [],
+      "pagecat": [],
+      "sectioncat": []
+    },
+    {
+      "id": "coindesk.com",
+      "name": "coindesk.com",
+      "cat": [],
+      "pagecat": [],
+      "sectioncat": []
+    },
+    {
+      "id": "testsite.com",
+      "name": "testsite.com",
+      "cat": [
+        "1"
+      ],
+      "pagecat": [],
+      "sectioncat": [],
+      "publisher": {
+        "id": "testpublisher_1",
+        "name": "testpublisher 1",
+        "cat": [],
+        "domain": "www.testpublisher_1.com"
+      }
+      },
+    {
+      "id": "webdesignledger.com",
+      "name": "webdesignledger",
+      "domain": "webdesignledger.com",
+      "cat": [],
+      "pagecat": [],
+      "sectioncat": []
+    }
+  ]
 }

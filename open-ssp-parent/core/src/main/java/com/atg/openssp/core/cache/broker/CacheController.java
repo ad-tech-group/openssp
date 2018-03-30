@@ -1,10 +1,8 @@
 package com.atg.openssp.core.cache.broker;
 
-import java.util.Observable;
+import com.atg.openssp.core.cache.broker.remote.*;
 
-import com.atg.openssp.core.cache.broker.json.PricelayerBrokerJson;
-import com.atg.openssp.core.cache.broker.json.SiteDataBrokerJson;
-import com.atg.openssp.core.cache.broker.json.SupplierDataBrokerJson;
+import java.util.Observable;
 
 /**
  * 
@@ -27,19 +25,31 @@ public class CacheController extends Observable {
 		 * Use the following types of brokers to load JSON based configured data into cache.
 		 */
 		// loads supplier data from supplier_db.json into the cache
-		addObserver(new SupplierDataBrokerJson());
+		//addObserver(new SupplierDataBrokerJson());
 
 		// loads site data from site_db.json into the cache
-		addObserver(new SiteDataBrokerJson());
+		//addObserver(new SiteDataBrokerJson());
 
 		// loads priceinformation from price_layer.json into the cache
-		addObserver(new PricelayerBrokerJson());
+		//addObserver(new PricelayerBrokerJson());
+
+		// loads priceinformation from price_layer.json into the cache
+		//addObserver(new CurrencyBrokerJson());
 
 		/**
 		 * Use the following types of brokers to load remote e.g. RESTful webservice based configured data into cache.
 		 */
 		// loads currency data from webservice into the cache
-		// addObserver(new RemoteCurrencyDataBroker());
+		addObserver(new RemoteCurrencyDataBroker());
+
+		// loads site data from webservice into the cache
+		addObserver(new RemoteSiteDataBroker());
+
+		// loads app data from webservice into the cache
+		addObserver(new RemoteAppDataBroker());
+
+		// loads priceinformation from webservice into the cache
+		addObserver(new RemotePricelayerBroker());
 
 		// loads website data from webservice into the cache
 		// addObserver(new RemoteWebsiteDataBroker());
@@ -48,7 +58,7 @@ public class CacheController extends Observable {
 		// addObserver(new RemoteVideoadDataBroker());
 
 		// loads supplier data from webservice into the cache
-		// addObserver(new RemoteSupplierDataBroker());
+		 addObserver(new RemoteSupplierDataBroker());
 	}
 
 	/**

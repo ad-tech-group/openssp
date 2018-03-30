@@ -2,10 +2,12 @@ package com.atg.openssp.core.entry;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.demand.ParamValue;
-import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.cache.type.SiteDataCache;
+import com.atg.openssp.core.entry.test.TestEntryValidatorHandler;
+
+import java.util.List;
 
 /**
  * The kind and diversity of request parameters my be vary and depends on the different conditions. See also at {@link ParamValue} for the kind aof params.
@@ -15,6 +17,30 @@ import com.atg.openssp.core.cache.type.SiteDataCache;
  */
 public class EntryValidator {
 
+    private EntryValidatorHandler handler;
+
+    public EntryValidator(SessionAgentType type) {
+		String handlerClassName = null;
+    	if (type == SessionAgentType.VIDEO) {
+			handlerClassName = GlobalContext.getEntryValidatorHandlerForVideoClass();
+		} else if (type == SessionAgentType.BANNER) {
+			handlerClassName = GlobalContext.getEntryValidatorHandlerForBannerClass();
+		} else if (type == SessionAgentType.HEADER) {
+			handlerClassName = GlobalContext.getEntryValidatorHandlerForHeaderClass();
+		}
+	    if (handlerClassName != null && !"".equals(handlerClassName)) {
+            try {
+                Class c = Class.forName(handlerClassName);
+                handler = (EntryValidatorHandler) c.getConstructor(null).newInstance(null);
+            } catch (Exception e) {
+                handler = new TestEntryValidatorHandler();
+                e.printStackTrace();
+            }
+        } else {
+	        handler = new TestEntryValidatorHandler();
+        }
+	}
+
 	/**
 	 * Extracts and validates the request parameters.
 	 * 
@@ -23,33 +49,8 @@ public class EntryValidator {
 	 *             if params are mandatory and empty and cannot be replaced by an alternative value.
 	 * @return {@link ParamValue}
 	 */
-	public ParamValue validateEntryParams(final HttpServletRequest request) throws RequestException {
-
-		final ParamValue pm = new ParamValue();
-		pm.setIsTest(request.getParameter("test"));
-
-		// Note:
-		// You may define your individual parameter or payloadto work with.
-		// Neither the "ParamValue" - object nor the list of params may fit to your requirements out of the box.
-
-		// geo data could be solved by a geo lookup service and ipaddress
-
-		final String siteid = request.getParameter("site");
-		try {
-			pm.setSite(SiteDataCache.instance.get(siteid));
-		} catch (final EmptyCacheException e) {
-			throw new RequestException(e.getMessage());
-		}
-
-		// pm.setDomain(checkValue(request.getParameter("domain"), ERROR_CODE.E906, "Domain"));
-		// pm.setH(checkValue(request.getParameter("h"), ERROR_CODE.E906, "Height"));
-		// pm.setW(checkValue(request.getParameter("w"), ERROR_CODE.E906, "Width"));
-		// pm.setMimes(convertMimes(request.getParameter("mimes")));
-		// pm.setPage(checkValue(request.getParameter("page"), pm.getDomain()));
-		// pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
-		// pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
-
-		return pm;
+	public List<ParamValue> validateEntryParams(final HttpServletRequest request) throws RequestException {
+	    return handler.validateEntryParams(request);
 	}
 
 	// private static String checkValue(final String toCheck, final ERROR_CODE code, final String message) throws RequestException {

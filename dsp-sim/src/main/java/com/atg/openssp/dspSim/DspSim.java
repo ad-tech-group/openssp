@@ -18,29 +18,33 @@ public class DspSim {
     private DspModel dspModel;
     private AdModel adModel;
 
-    public DspSim() throws ModelException {
-        dspModel = new DspModel();
-        adModel = new AdModel();
+    public DspSim(int index) throws ModelException {
+        dspModel = new DspModel(index);
+        adModel = new AdModel(index);
     }
 
     public void start() {
         try {
-            HttpServer server = HttpServer.create(new InetSocketAddress(8082), 0);
+            int port = Integer.parseInt(dspModel.getProperty("server-port", "8081"));
+            System.out.println("starting sim on port: "+port);
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
             server.createContext("/dsp-sim/admin", new ClientHandler(dspModel));
             server.createContext("/dsp-sim/DemandService", new DspHandler(dspModel));
             server.createContext("/dsp-sim/myAds", new AdServerHandler(adModel));
+            server.createContext("/win", new DspWinHandler(dspModel));
             server.setExecutor(null); // creates a default executor
             server.start();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
-
     }
 
     public static void main(String[] args) {
         try {
-            DspSim sim = new DspSim();
-            sim.start();
+            for (int i=0; i<2; i++) {
+                DspSim sim = new DspSim(i);
+                sim.start();
+            }
             while(true) {
                 try {
                     Thread.sleep(100000);

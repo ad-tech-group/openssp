@@ -1,14 +1,44 @@
 {
-	"supplier": [{
-			"shortName": "dsp_1",
-			"endPoint": "http://localhost:8082/dsp-sim/DemandService",
-			"connectionKeepAlive": true,
-			"openRtbVersion": 2.2,
-			"contentType": "application/json",
-			"supplierId": "1",
-			"currency": "USD",
-			"underTest": 1,
-			"active": 1
-		}
-	]
+  "supplier": [
+    {
+      "shortName": "dsp_1",
+      "endPoint": "http://localhost:8081/dsp-sim/DemandService",
+      "connectionKeepAlive": true,
+      "openRtbVersion": 2.4,
+      "contentType": "application/json",
+      "supplierId": "1",
+      "currency": "USD",
+      "tmax": 300,
+      "allowedAdFormats": [
+        "BANNER",
+        "VIDEO"
+      ],
+      "allowedPlatforms": [
+        "DESKTOP",
+        "MOBILE"
+      ],
+      "underTest": 1,
+      "active": 1
+    },
+    {
+      "shortName": "dsp_2",
+      "endPoint": "http://localhost:8082/dsp-sim/DemandService",
+      "connectionKeepAlive": true,
+      "openRtbVersion": 2.4,
+      "contentType": "application/json",
+      "supplierId": "2",
+      "currency": "USD",
+      "tmax": 300,
+      "allowedAdFormats": [
+        "BANNER",
+        "VIDEO"
+      ],
+      "allowedPlatforms": [
+        "DESKTOP",
+        "MOBILE"
+      ],
+      "underTest": 1,
+      "active": 1
+    }
+  ]
 }
