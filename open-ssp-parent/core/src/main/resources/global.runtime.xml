@@ -47,8 +47,8 @@
 
 	<entry key="bid-request-builder-handler-for-header-class">com.atg.openssp.core.exchange.HeaderBiddingBidRequestBuilderHandler</entry>
 
-	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+	<entry key="adserver-broker-handler-class">channel.adserving.TestAdserverBrokerHandler</entry>
 
-	<!-- <entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIp2InfoHandler</entry> -->
+	<entry key="geo-ip-info-handler-class">com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler</entry>
 
 </properties>

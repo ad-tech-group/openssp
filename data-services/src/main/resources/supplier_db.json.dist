@@ -9,7 +9,7 @@
       "supplierId": "1",
       "currency": "USD",
       "tmax": 300,
-      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
+      "demandBrokerFilterClassName": "com.atg.openssp.core.exchange.channel.rtb.PassthroughFilter",
       "underTest": 1,
       "active": 1
     }

@@ -5,13 +5,13 @@
 	<entry key="rtb">true</entry>
 	
 	<!-- switch to enable/disable ssp support (ssp channel)-->
-	<entry key="ssp">false</entry>
+	<entry key="ssp">true</entry>
 	
 	<!-- switch to enable/disable adserving support -->
-	<entry key="adserving">false</entry>
+	<entry key="adserving">true</entry>
 	
 	<!-- switch to enable/disable debugging -->	
-	<entry key="debug">false</entry>
+	<entry key="debug">true</entry>
 	
 	<!-- switch to enable/disable verbose output -->
 	<entry key="verbose">false</entry>
