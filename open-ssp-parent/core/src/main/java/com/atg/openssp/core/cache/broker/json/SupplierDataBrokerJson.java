@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +35,14 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 	 */
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		final Gson gson = new Gson();
 		try {
 			final String content = new String(Files.readAllBytes(Paths.get("supplier_db.json")), StandardCharsets.UTF_8);
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("SupplierData", startTS, endTS, endTS-startTS);
 				log.info("sizeof supplier data=" + dto.getSupplier().size());
 				dto.getSupplier().forEach(supplier -> {
 					final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);

@@ -24,6 +24,7 @@ public class BiddingServiceInfo {
     private boolean activateAccessAllowOrigin;
     private AuctionType auctionType = AuctionType.SECOND_PRICE;
     private boolean sendNurlNotifications = true;
+    private String loggingId;
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -114,6 +115,14 @@ public class BiddingServiceInfo {
 
     public void disableSendNurlNotifications() {
         this.sendNurlNotifications = false;
+    }
+
+    public String getLoggingId() {
+        return loggingId;
+    }
+
+    public void setLoggingId(String logginId) {
+        this.loggingId = logginId;
     }
 }
 

@@ -2,6 +2,7 @@ package com.atg.openssp.core.cache.broker.remote;
 
 import java.util.Arrays;
 
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,11 +37,14 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		try {
 			final String jsonString = super.connect();
 			final Website[] data = gson.fromJson(jsonString, Website[].class);
 			if (data != null && data.length > 0) {
-				log.info(this.getClass().getSimpleName() + " sizeof Website data=" + data.length);
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("WebsiteData", startTS, endTS, endTS-startTS);
+				log.debug(this.getClass().getSimpleName() + " sizeof Website data=" + data.length);
 				Arrays.stream(data).forEach(c -> WebsiteDataCache.instance.put(c.getWebsiteId(), c));
 
 				Arrays.stream(data).forEach(c -> Arrays.stream(c.getZones()).forEach(zone -> {

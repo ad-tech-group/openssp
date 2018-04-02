@@ -26,7 +26,9 @@ public class BidRequestService extends CoreSupplyServlet<RequestSessionAgent> {
 		info.setType(SessionAgentType.BANNER);
 		info.setContentType("application/javascript");
 		info.setCharacterEncoding("UTF-8");
-		return new RequestSessionAgent(request, response, info);
+		RequestSessionAgent agent =  new RequestSessionAgent(request, response, info);
+		info.setLoggingId(agent.getRequestid());
+		return agent;
 	}
 
 	@Override

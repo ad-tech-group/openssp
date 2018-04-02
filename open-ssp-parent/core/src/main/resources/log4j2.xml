@@ -134,6 +134,47 @@
 			<DefaultRolloverStrategy max="30" />
 		</RollingFile>
 
+		<RollingFile name="TimeInfoFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/time-info.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/time-info-%d.log.gz"
+					 append="true" bufferedIO="true">
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
+
+		<RollingFile name="DataBrokerFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/data-broker.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/data-broker-%d.log.gz"
+					 append="true" bufferedIO="true">
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
+
+		<RollingFile name="AuctionFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/auction.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/auction-%d.log.gz"
+					 append="true" bufferedIO="true">
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
 
 		<!-- tomcat.pid -->
 		<File name="PIDFile" fileName="${sys:catalina.home}/logfiles/tomcat.pid"
@@ -184,6 +225,18 @@
 
 		<Logger name="request" additivity="false">
 			<AppenderRef ref="RequestFile" />
+		</Logger>
+
+		<Logger name="time-info" additivity="false">
+			<AppenderRef ref="TimeInfoFile" />
+		</Logger>
+
+		<Logger name="data-broker" additivity="false">
+			<AppenderRef ref="DataBrokerFile" />
+		</Logger>
+
+		<Logger name="auction" additivity="false">
+			<AppenderRef ref="AuctionFile" />
 		</Logger>
 
 		<!-- <Root level="info" additivity="false">

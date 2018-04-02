@@ -6,6 +6,7 @@ import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
+import com.atg.openssp.common.logadapter.AuctionLogProcessor;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.core.entry.BiddingServiceInfo;
 import com.google.gson.Gson;
@@ -82,6 +83,7 @@ public class Auction {
 				continue;
 			}
 			final BidRequest request = bidExchange.getBidRequest(bidResponses.getKey());
+            ArrayList<Bid> logBidList = new ArrayList();
 			// considering that only ONE impression containing the bidrequest
 			for (Impression imp : request.getImp()) {
 				List<Bidder> dealBidList = dealBidListMap.get(imp.getId());
@@ -113,10 +115,21 @@ public class Auction {
 								bidder.setBidFloorprice(imp.getBidfloor());
 								nonDealBidList.add(bidder);
 							}
+							logBidList.add(bid);
 						}
 					}
 				}
 			}
+			AuctionLogProcessor.instance.setLogData(
+					info.getLoggingId(),
+					request.getId(),
+					request.getUser().getId(),
+					bidResponses.getKey().getSupplierId(),
+					bidResponses.getKey().getShortName(),
+					request.getSite().getPage(),
+					logBidList,
+					request.getSite());
+
 		}
 
 		HashMap<String, RtbAdProvider> winningProviderMap = new HashMap<String, RtbAdProvider>();

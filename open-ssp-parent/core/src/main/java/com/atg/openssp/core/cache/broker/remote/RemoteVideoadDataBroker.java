@@ -2,6 +2,7 @@ package com.atg.openssp.core.cache.broker.remote;
 
 import java.util.Arrays;
 
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +36,14 @@ public final class RemoteVideoadDataBroker extends AbstractRemoteDataProvider {
 
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		try {
 			final String jsonString = super.connect();
 			final VideoAd[] data = gson.fromJson(jsonString, VideoAd[].class);
 			if (data != null && data.length > 0) {
-				log.info(this.getClass().getSimpleName() + " sizeof VideoAd data=" + data.length);
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("VideoAdData", startTS, endTS, endTS-startTS);
+				log.debug(this.getClass().getSimpleName() + " sizeof VideoAd data=" + data.length);
 				Arrays.stream(data).forEach(c -> VideoAdDataCache.instance.put(c.getVideoadId(), c));
 				return true;
 			}

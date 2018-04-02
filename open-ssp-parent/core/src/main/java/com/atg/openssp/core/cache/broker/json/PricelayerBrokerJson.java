@@ -1,6 +1,7 @@
 package com.atg.openssp.core.cache.broker.json;
 
 import com.atg.openssp.common.cache.broker.DataBrokerObserver;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.atg.openssp.core.cache.broker.dto.PricelayerDto;
 import com.atg.openssp.core.cache.type.PricelayerCache;
 import com.google.gson.Gson;
@@ -24,11 +25,14 @@ public class PricelayerBrokerJson extends DataBrokerObserver {
 
 	@Override
 	protected boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		final Gson gson = new Gson();
 		try {
 			final String content = new String(Files.readAllBytes(Paths.get("price_layer.json")), StandardCharsets.UTF_8);
 			final PricelayerDto dto = gson.fromJson(content, PricelayerDto.class);
 			if (dto != null) {
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("Pricelayer", startTS, endTS, endTS-startTS);
 				log.info("sizeof pricelayer data=" + dto.getPricelayer().size());
 				dto.getPricelayer().forEach(pricelayer -> {
 					PricelayerCache.instance.put(pricelayer.getSiteid(), pricelayer);

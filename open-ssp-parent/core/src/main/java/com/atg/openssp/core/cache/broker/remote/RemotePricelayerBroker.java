@@ -2,6 +2,7 @@ package com.atg.openssp.core.cache.broker.remote;
 
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.exception.EmptyHostException;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.atg.openssp.core.cache.broker.dto.PricelayerDto;
 import com.atg.openssp.core.cache.type.PricelayerCache;
 import org.slf4j.Logger;
@@ -27,10 +28,13 @@ public final class RemotePricelayerBroker extends AbstractDataBroker<PricelayerD
 
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		try {
 			final PricelayerDto dto = super.connect(PricelayerDto.class);
 			if (dto != null) {
-				log.info("sizeof pricelayer data=" + dto.getPricelayer().size());
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("Pricelayer", startTS, endTS, endTS-startTS);
+				log.debug("sizeof pricelayer data=" + dto.getPricelayer().size());
 				dto.getPricelayer().forEach(pricelayer -> {
 					PricelayerCache.instance.put(pricelayer.getSiteid(), pricelayer);
 				});

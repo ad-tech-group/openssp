@@ -2,6 +2,7 @@ package com.atg.openssp.core.cache.broker.remote;
 
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.exception.EmptyHostException;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.atg.openssp.core.cache.broker.dto.SiteDto;
 import com.atg.openssp.core.cache.type.SiteDataCache;
 import org.slf4j.Logger;
@@ -27,10 +28,13 @@ public final class RemoteSiteDataBroker extends AbstractDataBroker<SiteDto> {
 
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		try {
 			final SiteDto dto = super.connect(SiteDto.class);
 			if (dto != null) {
-				log.info("sizeof Site data=" + dto.getSites().size());
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("SiteData", startTS, endTS, endTS-startTS);
+				log.debug("sizeof Site data=" + dto.getSites().size());
 				dto.getSites().forEach(site -> {
 					SiteDataCache.instance.put(site.getId(), site);
 				});
