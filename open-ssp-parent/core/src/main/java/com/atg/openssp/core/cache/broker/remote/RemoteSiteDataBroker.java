@@ -33,7 +33,7 @@ public final class RemoteSiteDataBroker extends AbstractDataBroker<SiteDto> {
 			final SiteDto dto = super.connect(SiteDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("SiteData", startTS, endTS, endTS-startTS);
+				DataBrokerLogProcessor.instance.setLogData("SiteData", dto.getSites().size(), startTS, endTS, endTS-startTS);
 				log.debug("sizeof Site data=" + dto.getSites().size());
 				dto.getSites().forEach(site -> {
 					SiteDataCache.instance.put(site.getId(), site);

@@ -33,7 +33,7 @@ public final class RemotePricelayerBroker extends AbstractDataBroker<PricelayerD
 			final PricelayerDto dto = super.connect(PricelayerDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("Pricelayer", startTS, endTS, endTS-startTS);
+				DataBrokerLogProcessor.instance.setLogData("Pricelayer", dto.getPricelayer().size(), startTS, endTS, endTS-startTS);
 				log.debug("sizeof pricelayer data=" + dto.getPricelayer().size());
 				dto.getPricelayer().forEach(pricelayer -> {
 					PricelayerCache.instance.put(pricelayer.getSiteid(), pricelayer);

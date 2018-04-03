@@ -6,7 +6,9 @@ import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
+import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.cache.type.PricelayerCache;
 import com.atg.openssp.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
@@ -96,8 +98,14 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
             i.setVideo(createVideo(pValues));
             i.setBanner(createBanner(pValues));
             //i.setNative(createNative(pValues));
-            //TODO: BKS
-            i.setBidfloor(0f);
+            try {
+                i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
+                i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
+            } catch (EmptyCacheException e) {
+                log.info("price floor does not exist for site: "+site.getId());
+                i.setBidfloor(0f);
+                i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+            }
             i.setSecure(ImpressionSecurity.NON_SECURE);
             bidRequest.addImp(i);
 

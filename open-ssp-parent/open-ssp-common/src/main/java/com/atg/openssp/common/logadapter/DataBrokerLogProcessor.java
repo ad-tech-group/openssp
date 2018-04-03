@@ -47,11 +47,13 @@ public class DataBrokerLogProcessor extends Thread {
 	 * @param delta
 	 *            {@link SessionAgent}
 	 */
-	public void setLogData(String type, long startTS, long endTS, long delta) {
+	public void setLogData(String type, int count, long startTS, long endTS, long delta) {
 		if (shuttingDown || loggerTerminated) {
 			return;
 		}
 		StringBuilder sb = new StringBuilder(type);
+		sb.append("|");
+		sb.append(count);
 		sb.append("|");
 		sb.append(startTS);
 		sb.append("|");

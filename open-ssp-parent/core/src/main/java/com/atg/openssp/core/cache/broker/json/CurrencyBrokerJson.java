@@ -32,7 +32,7 @@ public final class CurrencyBrokerJson extends DataBrokerObserver {
 			final CurrencyDto dto = gson.fromJson(content, CurrencyDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("Currency", startTS, endTS, endTS-startTS);
+				DataBrokerLogProcessor.instance.setLogData("Currency", dto.getData().size(), startTS, endTS, endTS-startTS);
 			    CurrencyCache.instance.setBaseCurrency(dto.getCurrency());
 				log.info("sizeof Currency data=" + dto.getData().size());
 				dto.getData().forEach(c -> CurrencyCache.instance.put(c.getCurrency(), c.getRate()));

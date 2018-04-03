@@ -33,7 +33,7 @@ public final class RemoteCurrencyDataBroker extends AbstractDataBroker<CurrencyD
 			final CurrencyDto dto = super.connect(CurrencyDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("Currency", startTS, endTS, endTS-startTS);
+				DataBrokerLogProcessor.instance.setLogData("Currency", dto.getData().size(), startTS, endTS, endTS-startTS);
 			    CurrencyCache.instance.setBaseCurrency(dto.getCurrency());
 				log.debug("sizeof Currency data=" + dto.getData().size());
 				dto.getData().forEach(c -> CurrencyCache.instance.put(c.getCurrency(), c.getRate()));

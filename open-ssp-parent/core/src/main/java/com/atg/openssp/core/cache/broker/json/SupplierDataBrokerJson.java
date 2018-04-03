@@ -42,7 +42,7 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("SupplierData", startTS, endTS, endTS-startTS);
+				DataBrokerLogProcessor.instance.setLogData("SupplierData", dto.getSupplier().size(), startTS, endTS, endTS-startTS);
 				log.info("sizeof supplier data=" + dto.getSupplier().size());
 				dto.getSupplier().forEach(supplier -> {
 					final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);

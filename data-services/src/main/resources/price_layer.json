@@ -1,8 +1,23 @@
 {
   "pricelayer": [
     {
-      "siteid": "1",
-      "bidfloor": 1.2,
+      "siteid": "testmango.com",
+      "bidfloor": 0.1,
+      "currency": "USD"
+    },
+    {
+      "siteid": "coindesk.com",
+      "bidfloor": 0.1,
+      "currency": "USD"
+    },
+    {
+      "siteid": "testsite.com",
+      "bidfloor": 0.1,
+      "currency": "USD"
+    },
+    {
+      "siteid": "webdesignledger.com",
+      "bidfloor": 0.1,
       "currency": "USD"
     }
   ]

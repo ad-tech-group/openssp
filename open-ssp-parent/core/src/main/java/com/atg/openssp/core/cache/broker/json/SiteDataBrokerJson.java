@@ -32,7 +32,7 @@ public class SiteDataBrokerJson extends DataBrokerObserver {
 			final SiteDto dto = gson.fromJson(content, SiteDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("SiteData", startTS, endTS, endTS-startTS);
+				DataBrokerLogProcessor.instance.setLogData("SiteData", dto.getSites().size(), startTS, endTS, endTS-startTS);
 				log.info("sizeof site data=" + dto.getSites().size());
 				dto.getSites().forEach(site -> {
 					SiteDataCache.instance.put(site.getId(), site);

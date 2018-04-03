@@ -43,7 +43,7 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 			final Website[] data = gson.fromJson(jsonString, Website[].class);
 			if (data != null && data.length > 0) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("WebsiteData", startTS, endTS, endTS-startTS);
+				DataBrokerLogProcessor.instance.setLogData("WebsiteData", data.length, startTS, endTS, endTS-startTS);
 				log.debug(this.getClass().getSimpleName() + " sizeof Website data=" + data.length);
 				Arrays.stream(data).forEach(c -> WebsiteDataCache.instance.put(c.getWebsiteId(), c));
 
