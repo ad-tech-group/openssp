@@ -2,26 +2,33 @@
   {
     "id": "QRh2T-YNIFk_1",
     "price": 1.01,
-    "adId": "823011",
+    "adid": "823011",
+    "impid": "impid1",
+    "nurl": "nurl1",
     "adm": "\u003cimg src\u003e\"https://media.giphy.com/media/rROnGyH8ZpI2c/giphy.gif\" width\u003d\"300\" height\u003d\"250\" border\u003d\"0\" \u003e",
     "adomain": [
       "adkernel.com"
     ],
-    "iUrl": "http://xs.wowconversions.com/n1/ad/300x250_EUNqbCsW.png",
-    "cId": "28734",
-    "crId": "823011",
+    "iurl": "http://xs.wowconversions.com/n1/ad/300x250_EUNqbCsW.png",
+    "cid": "28734",
+    "crid": "823011",
     "cat": [
+      "IAB1"
     ]
   },
   {
     "id": "da4c9536-6498-45fb-b091-94a226e4467a",
     "price": 0.01,
-    "adId": "1",
+    "adid": "1",
+    "impid": "",
+    "nurl": "",
     "adm": "1",
     "adomain": [],
-    "iUrl": "1",
-    "cId": "1",
-    "crId": "1",
-    "cat": []
+    "iurl": "1",
+    "cid": "1",
+    "crid": "1",
+    "cat": [
+      "IAB1-1"
+    ]
   }
 ]

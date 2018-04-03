@@ -87,15 +87,15 @@ public class DspModel extends BaseModel {
                 mBidders.addElement(bidder);
             } else {
                 map.remove(bidder.getId());
-//                check.setImpId(bidder.getImpId());
+                check.setImpid(bidder.getImpid());
                 check.setPrice(bidder.getPrice());
-                check.setAdId(bidder.getAdId());
-//                check.setNUrl(bidder.getNUrl());
+                check.setAdid(bidder.getAdid());
+                check.setNurl(bidder.getNurl());
                 check.setAdm(bidder.getAdm());
                 check.setAdomain(bidder.getAdomain());
-                check.setIUrl(bidder.getIUrl());
-                check.setCId(bidder.getCId());
-                check.setCrId(bidder.getCrId());
+                check.setIurl(bidder.getIurl());
+                check.setCid(bidder.getCid());
+                check.setCrid(bidder.getCrid());
                 check.setCats(bidder.getCats());
             }
         }

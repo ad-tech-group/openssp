@@ -30,13 +30,13 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final DspModel model;
     private final JList<SimBidder> lBidders;
     private final JLabel lbId = new JLabel("");
-//    private final JTextField tfImpId = new JTextField(12);
+    private final JTextField tfImpId = new JTextField(12);
     private final JTextField tfAddImpId = new JTextField(12);
     private final JTextField tfPrice = new JTextField(8);
     private final JTextField tfAddPrice = new JTextField(8);
     private final JTextField tfAdId = new JTextField(12);
     private final JTextField tfAddAdId = new JTextField(12);
-//    private final JTextField tfNUrl = new JTextField(20);
+    private final JTextField tfNUrl = new JTextField(20);
     private final JTextField tfAddNUrl = new JTextField(20);
     private final JTextField tfAdm = new JTextField(25);
     private final JTextField tfAddAdm = new JTextField(25);
@@ -52,12 +52,13 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final JTextField tfAddCrId = new JTextField(25);
     private final DefaultListModel<ContentCategory> mCat = new DefaultListModel<ContentCategory>();
     private final JList<ContentCategory> lCat = new JList<ContentCategory>(mCat);
-    private final DefaultListModel<String> mAddCat = new DefaultListModel<String>();
-    private final JList<String> lAddCat = new JList<String>(mAddCat);
+    private final DefaultListModel<ContentCategory> mAddCat = new DefaultListModel<ContentCategory>();
+    private final JList<ContentCategory> lAddCat = new JList<ContentCategory>(mAddCat);
 
 
     private final JTextField tfAddNewADomain = new JTextField(25);
-    private final JTextField tfAddNewCat = new JTextField(25);
+    private DefaultComboBoxModel<ContentCategory> mAddNewCat = new DefaultComboBoxModel<ContentCategory>();
+    private final JComboBox<ContentCategory> cbAddNewCat = new JComboBox<ContentCategory>(mAddNewCat);
     private final JButton bAddADomain = new JButton("add");
     private final JButton bAddCat = new JButton("add");
 
@@ -114,10 +115,12 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
 
         pMiddle.setBorder(new TitledBorder("Active Bidder"));
         addItem(pMiddle, "ID:", lbId);
-//        addItem(pMiddle, "IMP ID:", tfImpId);
+        addItem(pMiddle, "IMP ID:", tfImpId);
+        tfImpId.setEditable(false);
         addItem(pMiddle, "Price:", tfPrice);
         addItem(pMiddle, "AD ID:", tfAdId);
-//        addItem(pMiddle, "N Url:", tfNUrl);
+        addItem(pMiddle, "N Url:", tfNUrl);
+        tfNUrl.setEditable(false);
         addItem(pMiddle, "ADM:", tfAdm);
         addItem(pMiddle, "A DOMAIN:", lAdomain);
         addItem(pMiddle, "I URL:", tfIUrl);
@@ -127,9 +130,11 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
 
         pRight.setBorder(new TitledBorder("Add Bidder"));
         addItem(pRight, "IMP ID:", tfAddImpId);
+        tfAddNUrl.setEditable(false);
         addItem(pRight, "Price:", tfAddPrice);
         addItem(pRight, "AD ID:", tfAddAdId);
         addItem(pRight, "N URL:", tfAddNUrl);
+        tfAddNUrl.setEditable(false);
         addItem(pRight, "ADM:", tfAddAdm);
         addItem(pRight, "A DOMAIN:", lAddAdomain);
         JPanel p = new JPanel();
@@ -145,7 +150,10 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
         addItem(pRight, "NEW CAT:", p);
-        p.add(tfAddNewCat);
+        p.add(cbAddNewCat);
+        for (ContentCategory c : ContentCategory.values()) {
+            mAddNewCat.addElement(c);
+        }
         p.add(bAddCat);
 
 
@@ -199,10 +207,10 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
 
     private void resetActiveDisplay(SimBidder sb) {
         if (sb == null) {
-//            tfImpId.setText("");
+            tfImpId.setText("");
             tfPrice.setText("");
             tfAdId.setText("");
-//            tfNUrl.setText("");
+            tfNUrl.setText("");
             tfAdm.setText("");
             mAdomain.clear();
             tfCId.setText("");
@@ -210,19 +218,19 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             mCat.clear();
             tfMemo.setText("");
         } else {
-//            tfImpId.setText(sb.getImpId());
+            tfImpId.setText(sb.getImpid());
             DecimalFormat formatter = new DecimalFormat("###,###,###.00");
             tfPrice.setText(formatter.format(sb.getPrice()));
-            tfAdId.setText(sb.getAdId());
-//            tfNUrl.setText(sb.getNUrl());
+            tfAdId.setText(sb.getAdid());
+            tfNUrl.setText(sb.getNurl());
             tfAdm.setText(sb.getAdm());
             mAdomain.clear();
             for (String s : sb.getAdomain()) {
                 mAdomain.addElement(s);
             }
-            tfIUrl.setText(sb.getIUrl());
-            tfCId.setText(sb.getCId());
-            tfCrId.setText(sb.getCrId());
+            tfIUrl.setText(sb.getIurl());
+            tfCId.setText(sb.getCid());
+            tfCrId.setText(sb.getCrid());
             mCat.clear();
             for (ContentCategory s : sb.getCats()) {
                 mCat.addElement(s);
@@ -241,15 +249,15 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
                     float newPrice = formatter.parse(tfPrice.getText()).floatValue();
 
                     SimBidder sbN = new SimBidder(sb.getId());
-//                    sbN.setImpId(tfImpId.getText());
+                    sbN.setImpid(tfImpId.getText());
                     sbN.setPrice(newPrice);
-                    sbN.setAdId(tfAdId.getText());
-//                    sbN.setNUrl(tfNUrl.getText());
+                    sbN.setAdid(tfAdId.getText());
+                    sbN.setNurl(tfNUrl.getText());
                     sbN.setAdm(tfAdm.getText());
                     sbN.setAdomain(Collections.list(mAdomain.elements()));
-                    sbN.setIUrl(tfIUrl.getText());
-                    sbN.setCId(tfCId.getText());
-                    sbN.setCrId(tfCrId.getText());
+                    sbN.setIurl(tfIUrl.getText());
+                    sbN.setCid(tfCId.getText());
+                    sbN.setCrid(tfCrId.getText());
                     sbN.setCats(Collections.list(mCat.elements()));
                     model.sendUpdateCommand(sbN);
                     model.setMessage("Bidder saved.");
@@ -269,15 +277,15 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             try {
                 float newPrice = formatter.parse(tfAddPrice.getText()).floatValue();
                 SimBidder sbN = new SimBidder(UUID.randomUUID().toString());
-//                sbN.setImpId(tfAddImpId.getText());
+                sbN.setImpid(tfAddImpId.getText());
                 sbN.setPrice(newPrice);
-                sbN.setAdId(tfAddAdId.getText());
-//                sbN.setNUrl(tfAddNUrl.getText());
+                sbN.setAdid(tfAddAdId.getText());
+                sbN.setNurl(tfAddNUrl.getText());
                 sbN.setAdm(tfAddAdm.getText());
                 sbN.setAdomain(Collections.list(mAddAdomain.elements()));
-                sbN.setIUrl(tfAddIUrl.getText());
-                sbN.setCId(tfAddCId.getText());
-                sbN.setCrId(tfAddCrId.getText());
+                sbN.setIurl(tfAddIUrl.getText());
+                sbN.setCid(tfAddCId.getText());
+                sbN.setCrid(tfAddCrId.getText());
                 sbN.setCats(Collections.list(mCat.elements()));
 
                 model.sendAddCommand(sbN);
@@ -317,11 +325,9 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
                 tfAddNewADomain.setText("");
             }
         } else if (ev.getSource() == bAddCat) {
-            String value = tfAddNewCat.getText();
-            if (!"".equals(value.trim())) {
-                mAddCat.addElement(value);
-                tfAddNewCat.setText("");
-            }
+            ContentCategory value = (ContentCategory) cbAddNewCat.getSelectedItem();
+            mAddCat.addElement(value);
+            cbAddNewCat.setSelectedItem(null);
         } else if (ev.getSource() == bShutdown) {
             try {
                 model.sendShutdownCommand();
