@@ -1,9 +1,12 @@
 package com.atg.openssp.core.exchange;
 
+import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.TestParamValue;
+import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.cache.type.PricelayerCache;
 import com.atg.openssp.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
@@ -54,10 +57,22 @@ public class TestBidRequestBuilderHandler extends BidRequestBuilderHandler {
             pValues = new TestParamValue();
         }
 
+        Site site = pValues.getSite();
+        float workingBidfloor;
+        String workingBidfloorcur;
+        try {
+            workingBidfloor = PricelayerCache.instance.get(site.getId()).getBidfloor();
+            workingBidfloorcur = PricelayerCache.instance.get(site.getId()).getCurrency();
+        } catch (EmptyCacheException e) {
+            log.info("price floor does not exist for site: "+site.getId());
+            workingBidfloor = 0f;
+            workingBidfloorcur = CurrencyCache.instance.getBaseCurrency();
+        }
+
         return new BidRequest.Builder()
                 .setId(agent.getRequestid())
                 .setAt(agent.getBiddingServiceInfo().getAuctionType())
-                .setSite(pValues.getSite())
+                .setSite(site)
                 .setApp(pValues.getApp())
                 .setDevice(
                         new Device.Builder()
@@ -68,6 +83,8 @@ public class TestBidRequestBuilderHandler extends BidRequestBuilderHandler {
                 ).addImp(
                         new Impression.Builder()
                                 .setId("1")
+                                .setBidfloor(workingBidfloor)
+                                .setBidfloorcurrency(workingBidfloorcur)
                                 .setVideo(new Video.Builder()
                                         .addMime("application/x-shockwave-flash")
                                         .setH(400)
@@ -88,7 +105,10 @@ public class TestBidRequestBuilderHandler extends BidRequestBuilderHandler {
 //                                .setTmax()
 //                                        .setGeo()
                                 .build()
-                ).build();
+                )
+                .addCur(CurrencyCache.instance.getBaseCurrency())
+                .setTmax((int)GlobalContext.getExecutionTimeout())
+                .build();
 
     }
 

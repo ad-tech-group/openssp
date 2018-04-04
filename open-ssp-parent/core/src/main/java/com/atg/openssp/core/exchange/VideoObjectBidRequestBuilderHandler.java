@@ -5,13 +5,16 @@ import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.demand.VideoObjectParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
+import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.cache.type.PricelayerCache;
 import com.atg.openssp.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
 import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.GeoType;
+import openrtb.tables.ImpressionSecurity;
 import openrtb.tables.VideoBidResponseProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +85,15 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
             Impression i = new Impression.Builder().build();
             i.setId(Integer.toString(idCount++));
             i.setVideo(createVideo(pValues));
+            try {
+                i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
+                i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
+            } catch (EmptyCacheException e) {
+                log.info("price floor does not exist for site: "+site.getId());
+                i.setBidfloor(0f);
+                i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+            }
+            i.setSecure(ImpressionSecurity.NON_SECURE);
             bidRequest.addImp(i);
 
         }

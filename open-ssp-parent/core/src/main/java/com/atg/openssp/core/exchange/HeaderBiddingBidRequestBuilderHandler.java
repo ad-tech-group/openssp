@@ -87,7 +87,19 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                 .setDevice(dd)
                 .setUser(createUser(masterValues))
                 .addCur(CurrencyCache.instance.getBaseCurrency())
+                //TODO: BKS
+//                .addBadv(null)
+//                .addBcat(null)
+                // set tmax temporarily - set in DemandService (supplier info)
+                .setTmax((int)GlobalContext.getExecutionTimeout())
+                // set test temporarily - set in DemandService (supplier info)
+                .setTest(BooleanInt.FALSE)
+//                .setExtension()
                 .build();
+        /*
+	private Object ext;
+
+         */
 
         int idCount = 1;
         for (ParamValue pOrigin : pValueList) {
@@ -131,19 +143,15 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     private Video createVideo(HeaderBiddingParamValue pValues) {
-        return null;
-        // Video not implemeneted yet.  We need a way to specify type
-        /*
         return new Video.Builder()
-                .addMimeX("application/x-shockwave-flash")
-                .setHX(400)
-                .setWX(600)
-                .setMaxdurationX(100)
-                .setMindurationX(30)
-                .addProtocolX(VideoBidResponseProtocol.VAST_2_0)
-                .setStartdelayX(1)
+                .addMime("application/x-shockwave-flash")
+                .setH(400)
+                .setW(600)
+                .setMaxduration(100)
+                .setMinduration(30)
+                .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
+                .setStartdelay(1)
                 .build();
-                */
     }
 
     private Geo createSiteGeo(HeaderBiddingParamValue pValues) {
@@ -210,12 +218,12 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         b.setFormat(sizes.toArray());
 
         //TODO: BKS
-        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
+//        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
 //        b.setApi();
-        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
+//        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
 //        b.setExpdir();
         b.setMimes(new String[]{});
-        b.setPos(AddPosition.FOOTER);
+//        b.setPos(AddPosition.FOOTER);
 //        b.setTopframe();
 //        b.setExt();
         return b;
