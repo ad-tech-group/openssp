@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Site;
+import openrtb.bidrequest.model.User;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import org.slf4j.Logger;
@@ -48,12 +49,15 @@ public class AuctionLogProcessor extends Thread {
     /**
      * Writes data to file with request information.
      *  @param loggingId
-     * @param page
-     * @param o
+     * @param requestId
+     * @param user
+     * @param supplierId
+     * @param supplierName
      * @param site
+     * @param o
      *            {@link SessionAgent}
      */
-    public void setLogData(String loggingId, String requestId, String userId, Long supplierId, String supplierName, String page, List<Bid> o, Site site) {
+    public void setLogData(String loggingId, String requestId, User user, Long supplierId, String supplierName, Site site, List<Bid> o) {
         if (shuttingDown || loggerTerminated) {
             return;
         }
@@ -61,12 +65,16 @@ public class AuctionLogProcessor extends Thread {
         try {
             ale.setLogginId(loggingId);
             ale.setRequestId(requestId);
-            ale.setUserId(userId);
+            if (user != null) {
+				ale.setUserId(user.getId());
+			}
             ale.setSupplierId(supplierId);
             ale.setSupplierName(supplierName);
-            ale.setPage(page);
+            if (site != null) {
+                ale.setPage(site.getPage());
+                ale.setSite(site);
+            }
             ale.setBids(o);
-            ale.setSite(site);
             logQueue.put(ale);
         } catch (final InterruptedException e) {
             try {

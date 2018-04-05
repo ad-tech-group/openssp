@@ -11,10 +11,7 @@ import com.atg.openssp.common.provider.AdProviderReader;
 import com.atg.openssp.core.entry.BiddingServiceInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import openrtb.bidrequest.model.BidRequest;
-import openrtb.bidrequest.model.DirectDeal;
-import openrtb.bidrequest.model.Impression;
-import openrtb.bidrequest.model.PMP;
+import openrtb.bidrequest.model.*;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
@@ -120,15 +117,15 @@ public class Auction {
 					}
 				}
 			}
+			User user = request.getUser();
 			AuctionLogProcessor.instance.setLogData(
 					info.getLoggingId(),
 					request.getId(),
-					request.getUser().getId(),
+					request.getUser(),
 					bidResponses.getKey().getSupplierId(),
 					bidResponses.getKey().getShortName(),
-					request.getSite().getPage(),
-					logBidList,
-					request.getSite());
+					request.getSite(),
+					logBidList);
 
 		}
 
