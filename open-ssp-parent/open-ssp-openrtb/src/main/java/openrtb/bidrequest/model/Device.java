@@ -11,9 +11,6 @@ import openrtb.tables.NetworkConnectionType;
  */
 public final class Device implements Cloneable {
 
-	// normally recommended, but not available?
-	// private String ua;
-
 	@Since(2.0)
 	private Geo geo;
 

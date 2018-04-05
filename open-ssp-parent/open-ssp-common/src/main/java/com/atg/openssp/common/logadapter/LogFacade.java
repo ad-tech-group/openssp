@@ -147,7 +147,11 @@ public class LogFacade {
         sb.append("|");
         sb.append(ale.getSupplierName());
         sb.append("|");
-        sb.append(ale.getSite().getId());
+        if (ale.getSite() == null) {
+			sb.append("UNKN");
+		} else {
+			sb.append(ale.getSite().getId());
+		}
         sb.append("|");
 		sb.append(ale.getPage());
         sb.append("|");

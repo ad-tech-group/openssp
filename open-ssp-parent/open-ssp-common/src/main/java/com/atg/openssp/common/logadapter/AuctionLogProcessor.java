@@ -37,7 +37,9 @@ public class AuctionLogProcessor extends Thread {
 		try {
 			while (shuttingDown == false) {
 				final AuctionLogEntry item = logQueue.take();
-				LogFacade.logAuction(item);
+				if (item != null) {
+                    LogFacade.logAuction(item);
+                }
 			}
 		} catch (final InterruptedException e) {
 			log.error(e.getMessage());
@@ -75,6 +77,9 @@ public class AuctionLogProcessor extends Thread {
                 ale.setSite(site);
             }
             ale.setBids(o);
+            if (ale.getLogginId() == null) {
+                ale.setLogginId("UNKN");
+            }
             logQueue.put(ale);
         } catch (final InterruptedException e) {
             try {
