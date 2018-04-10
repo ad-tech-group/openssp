@@ -118,6 +118,8 @@ public class ClientHandler extends TimerTask implements HttpHandler {
             model.setMode(cc.getType());
             cr.setStatus(ClientResponseStatus.SUCCESS);
         }
+
+        cr.setMode(model.getMode());
         String result = new Gson().toJson(cr);
         log.info("CR<--"+result);
         httpExchange.sendResponseHeaders(200, result.length());

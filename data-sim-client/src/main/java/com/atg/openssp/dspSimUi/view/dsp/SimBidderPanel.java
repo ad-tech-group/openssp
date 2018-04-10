@@ -3,13 +3,16 @@ package com.atg.openssp.dspSimUi.view.dsp;
 import com.atg.openssp.dspSimUi.model.MessageNotificationListener;
 import com.atg.openssp.dspSimUi.model.MessageStatus;
 import com.atg.openssp.dspSimUi.model.ModelException;
+import com.atg.openssp.dspSimUi.model.client.ServerCommandType;
 import com.atg.openssp.dspSimUi.model.dsp.DspModel;
+import com.atg.openssp.dspSimUi.model.dsp.ModeChangeListener;
 import com.atg.openssp.dspSimUi.model.dsp.SimBidder;
 import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -25,57 +28,48 @@ import java.util.UUID;
 /**
  * @author Brian Sorensen
  */
-public class SimBidderPanel extends JPanel implements ListSelectionListener, ActionListener, MessageNotificationListener {
+public class SimBidderPanel extends JPanel implements ListSelectionListener, ActionListener, MessageNotificationListener, ModeChangeListener {
     private static final Logger log = LoggerFactory.getLogger(SimBidderPanel.class);
     private final DspModel model;
     private final JList<SimBidder> lBidders;
     private final JLabel lbId = new JLabel("");
     private final JTextField tfImpId = new JTextField(12);
-    private final JTextField tfAddImpId = new JTextField(12);
     private final JTextField tfPrice = new JTextField(8);
-    private final JTextField tfAddPrice = new JTextField(8);
     private final JTextField tfAdId = new JTextField(12);
-    private final JTextField tfAddAdId = new JTextField(12);
     private final JTextField tfNUrl = new JTextField(20);
-    private final JTextField tfAddNUrl = new JTextField(20);
     private final JTextField tfAdm = new JTextField(25);
-    private final JTextField tfAddAdm = new JTextField(25);
     private final DefaultListModel<String> mAdomain = new DefaultListModel<String>();
     private final JList<String> lAdomain = new JList<String>(mAdomain);
-    private final DefaultListModel<String> mAddAdomain = new DefaultListModel<String>();
-    private final JList<String> lAddAdomain = new JList<String>(mAddAdomain);
     private final JTextField tfIUrl = new JTextField(25);
-    private final JTextField tfAddIUrl = new JTextField(25);
     private final JTextField tfCId = new JTextField(25);
-    private final JTextField tfAddCId = new JTextField(25);
     private final JTextField tfCrId = new JTextField(25);
-    private final JTextField tfAddCrId = new JTextField(25);
     private final DefaultListModel<ContentCategory> mCat = new DefaultListModel<ContentCategory>();
     private final JList<ContentCategory> lCat = new JList<ContentCategory>(mCat);
-    private final DefaultListModel<ContentCategory> mAddCat = new DefaultListModel<ContentCategory>();
-    private final JList<ContentCategory> lAddCat = new JList<ContentCategory>(mAddCat);
+//    private final DefaultListModel<ContentCategory> mAddCat = new DefaultListModel<ContentCategory>();
+//    private final JList<ContentCategory> lAddCat = new JList<ContentCategory>(mAddCat);
 
 
     private final JTextField tfAddNewADomain = new JTextField(25);
     private DefaultComboBoxModel<ContentCategory> mAddNewCat = new DefaultComboBoxModel<ContentCategory>();
     private final JComboBox<ContentCategory> cbAddNewCat = new JComboBox<ContentCategory>(mAddNewCat);
-    private final JButton bAddADomain = new JButton("add");
-    private final JButton bAddCat = new JButton("add");
+//    private final JButton bAddADomain = new JButton("add");
+//    private final JButton bAddCat = new JButton("add");
 
     private final JButton bUpdate = new JButton("update");
-    private final JButton bRemove = new JButton("remove");
-    private final JButton bAdd = new JButton("add");
+//    private final JButton bRemove = new JButton("remove");
+//    private final JButton bAdd = new JButton("add");
     private final JTextField tfMemo = new JTextField(20);
     private final JButton bRestart = new JButton("Restart SIM");
     private final JButton bShutdown = new JButton("Shutdown SIM");
-    private final JButton bSendNormal = new JButton("Send As Normal");
+    private final JButton bSendNormal = new JButton("Return Normal Set");
     private final JButton bReturnNone = new JButton("Return None");
-    private final JButton bSend400 = new JButton("Send 400");
-    private final JButton bSend500 = new JButton("Send 500");
+    private final JButton bSend400 = new JButton("Return 400");
+    private final JButton bSend500 = new JButton("Return 500");
 
     public SimBidderPanel(DspModel model) {
         this.model = model;
         lBidders = new JList<>(model.getBidderModel());
+        model.addModeChangeListener(this);
 
         setLayout(new BorderLayout());
 
@@ -90,28 +84,57 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         pRight.setLayout(new BoxLayout(pRight, BoxLayout.Y_AXIS));
         add(pRight, BorderLayout.EAST);
 
+        JPanel pCommands = new JPanel();
+        pCommands.setLayout(new FlowLayout(FlowLayout.CENTER));
+        pBottom.add(pCommands, BorderLayout.SOUTH);
+
+        JPanel pAppCommands = new JPanel();
+        pAppCommands.setBorder(BorderFactory.createTitledBorder("Admin Controls:"));
+        pAppCommands.setLayout(new BoxLayout(pAppCommands, BoxLayout.X_AXIS));
+        pCommands.add(pAppCommands);
+
         bShutdown.addActionListener(this);
-        addItem(pTop, "", bShutdown);
+        bShutdown.setBackground(Color.RED);
+        bShutdown.setOpaque(true);
+        addItem(pAppCommands, "", bShutdown);
         bRestart.addActionListener(this);
-        addItem(pTop, "", bRestart);
+        bRestart.setBackground(Color.YELLOW);
+        bRestart.setOpaque(true);
+        addItem(pAppCommands, "", bRestart);
+
+
+        JPanel pInterfaceCommands = new JPanel();
+        pInterfaceCommands.setBorder(BorderFactory.createTitledBorder("Interface Controls:"));
+        pInterfaceCommands.setLayout(new BoxLayout(pInterfaceCommands, BoxLayout.X_AXIS));
+        pCommands.add(pInterfaceCommands);
         bSendNormal.addActionListener(this);
-        addItem(pTop, "", bSendNormal);
+        bSendNormal.setBackground(getBackground());
+        bSendNormal.setOpaque(true);
+        addItem(pInterfaceCommands, "", bSendNormal);
         bReturnNone.addActionListener(this);
-        addItem(pTop, "", bReturnNone);
+        bReturnNone.setBackground(getBackground());
+        bReturnNone.setOpaque(true);
+        addItem(pInterfaceCommands, "", bReturnNone);
         bSend400.addActionListener(this);
-        addItem(pTop, "", bSend400);
+        bSend400.setBackground(getBackground());
+        bSend400.setOpaque(true);
+        addItem(pInterfaceCommands, "", bSend400);
         bSend500.addActionListener(this);
-        addItem(pTop, "", bSend500);
+        bSend500.setBackground(getBackground());
+        bSend500.setOpaque(true);
+        addItem(pInterfaceCommands, "", bSend500);
 
         lBidders.setVisibleRowCount(10);
         addItem(pTop, "Bidders: ", lBidders);
         lBidders.addListSelectionListener(this);
+        /*
         bUpdate.setEnabled(false);
         bUpdate.addActionListener(this);
         addItem(pTop, "", bUpdate);
         bRemove.setEnabled(false);
         bRemove.addActionListener(this);
         addItem(pTop, "", bRemove);
+*/
 
         pMiddle.setBorder(new TitledBorder("Active Bidder"));
         addItem(pMiddle, "ID:", lbId);
@@ -128,41 +151,14 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         addItem(pMiddle, "CR ID:", tfCrId);
         addItem(pMiddle, "CAT:", lCat);
 
-        pRight.setBorder(new TitledBorder("Add Bidder"));
-        addItem(pRight, "IMP ID:", tfAddImpId);
-        tfAddNUrl.setEditable(false);
-        addItem(pRight, "Price:", tfAddPrice);
-        addItem(pRight, "AD ID:", tfAddAdId);
-        addItem(pRight, "N URL:", tfAddNUrl);
-        tfAddNUrl.setEditable(false);
-        addItem(pRight, "ADM:", tfAddAdm);
-        addItem(pRight, "A DOMAIN:", lAddAdomain);
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-        addItem(pRight, "NEW A DOMAIN:", p);
-        p.add(tfAddNewADomain);
-        p.add(bAddADomain);
-
-        addItem(pRight, "I URL:", tfAddIUrl);
-        addItem(pRight, "C ID:", tfAddCId);
-        addItem(pRight, "CR ID:", tfAddCrId);
-        addItem(pRight, "CAT:", lAddCat);
-        p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-        addItem(pRight, "NEW CAT:", p);
-        p.add(cbAddNewCat);
-        for (ContentCategory c : ContentCategory.values()) {
-            mAddNewCat.addElement(c);
-        }
-        p.add(bAddCat);
-
-
-        bAddADomain.addActionListener(this);
-        bAddCat.addActionListener(this);
-        bAdd.addActionListener(this);
-        addItem(pRight, "", bAdd);
+//        bAddADomain.addActionListener(this);
+//        bAddCat.addActionListener(this);
+//        bAdd.addActionListener(this);
+//        addItem(pRight, "", bAdd);
 
         tfMemo.setEditable(false);
+        tfMemo.setBackground(Color.GREEN);
+        tfMemo.setOpaque(true);
         pBottom.add(tfMemo);
         model.addMessageNotificationListener(this);
         model.setMessage("");
@@ -186,18 +182,18 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             if (sb != null) {
                 lbId.setText(sb.getId());
                 resetActiveDisplay(sb);
-                bUpdate.setEnabled(true);
-                bRemove.setEnabled(true);
+  //              bUpdate.setEnabled(true);
+  //              bRemove.setEnabled(true);
             } else {
                 if (lBidders.getModel().getSize() == 0) {
                     resetActiveDisplay(sb);
-                    bUpdate.setEnabled(false);
-                    bRemove.setEnabled(false);
+  //                  bUpdate.setEnabled(false);
+  //                  bRemove.setEnabled(false);
                 } else {
                     resetActiveDisplay(sb);
                     lBidders.setSelectedIndex(0);
-                    bUpdate.setEnabled(true);
-                    bRemove.setEnabled(true);
+  //                  bUpdate.setEnabled(true);
+  //                  bRemove.setEnabled(true);
                 }
 
             }
@@ -242,14 +238,15 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == bUpdate) {
+        /*
             SimBidder sb = lBidders.getSelectedValue();
             if (sb != null) {
                 DecimalFormat formatter = new DecimalFormat("###,###,###.00");
                 try {
-                    float newPrice = formatter.parse(tfPrice.getText()).floatValue();
+                    float newPrice = formatter.parse(tfAddPrice.getText()).floatValue();
 
                     SimBidder sbN = new SimBidder(sb.getId());
-                    sbN.setImpid(tfImpId.getText());
+                    sbN.setImpid(tfAddImpId.getText());
                     sbN.setPrice(newPrice);
                     sbN.setAdid(tfAdId.getText());
                     sbN.setNurl(tfNUrl.getText());
@@ -334,6 +331,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
             } catch (ModelException e) {
                 model.setMessageAsFault(e.getMessage());
             }
+            */
         } else if (ev.getSource() == bRestart) {
             try {
                 model.sendRestartCommand();
@@ -365,7 +363,6 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
                 model.setMessageAsFault(e.getMessage());
             }
         }
-
     }
 
     @Override
@@ -374,4 +371,28 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         tfMemo.setBackground(s.getColor());
     }
 
+    @Override
+    public void updateMode(ServerCommandType mode) {
+        if (mode == ServerCommandType.ONLY_400) {
+            bSendNormal.setBackground(getBackground());
+            bReturnNone.setBackground(getBackground());
+            bSend400.setBackground(Color.GREEN);
+            bSend500.setBackground(getBackground());
+        } else if (mode == ServerCommandType.ONLY_500) {
+            bSendNormal.setBackground(getBackground());
+            bReturnNone.setBackground(getBackground());
+            bSend400.setBackground(getBackground());
+            bSend500.setBackground(Color.GREEN);
+        } else if (mode == ServerCommandType.RETURN_NONE) {
+            bSendNormal.setBackground(getBackground());
+            bReturnNone.setBackground(Color.GREEN);
+            bSend400.setBackground(getBackground());
+            bSend500.setBackground(getBackground());
+        } else if (mode == ServerCommandType.RETURN_NORMAL) {
+            bSendNormal.setBackground(Color.GREEN);
+            bReturnNone.setBackground(getBackground());
+            bSend400.setBackground(getBackground());
+            bSend500.setBackground(getBackground());
+        }
+    }
 }

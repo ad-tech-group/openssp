@@ -102,6 +102,7 @@ public class ServerHandler implements Runnable {
                 ServerResponse sr = new Gson().fromJson(json, ServerResponse.class);
                 if (sr.getStatus() == ResponseStatus.SUCCESS) {
                     model.handleList(sr.getBidders());
+                    model.handleMode(sr.getMode());
                 } else {
                     String m = type+" command failed with error: " + sr.getReason();
                     model.setMessageAsFault(m);
