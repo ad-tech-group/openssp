@@ -28,6 +28,17 @@ public class JsonPostConnector extends DefaultConnector {
 
 	private static final Logger log = LoggerFactory.getLogger(JsonPostConnector.class);
 
+	public JsonPostConnector() {
+		super();
+	}
+
+	/**
+	 * @param keepAlive
+	 */
+	public JsonPostConnector(boolean keepAlive) {
+		super(keepAlive);
+	}
+
 	/**
 	 * Does a connection with POST method and sends the data in {@code entity}. Reads the response and returns it as string value.
 	 * 

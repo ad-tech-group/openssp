@@ -78,15 +78,17 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
-			log.debug("bidresponse: " + result);
-			RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
-
 			if (!StringUtils.isEmpty(result)) {
+                log.debug("bidresponse: " + result);
+                RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
 				final BidResponse bidResponse = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterResponse(gson, result);
 				return new ResponseContainer(supplier, bidResponse);
-			}
+			} else {
+                log.debug("bidresponse: is null");
+                RtbResponseLogProcessor.instance.setLogData("is null", "bidresponse", supplier.getShortName());
+            }
 		} catch (final BidProcessingException e) {
-			log.error(getClass().getSimpleName() + " " + e.getMessage());
+			log.error(getClass().getSimpleName() + " " + ""+e.getMessage());
             TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), supplier.getSupplierId()+" fault ("+e.getMessage()+")");
 			throw e;
 		} catch (final Exception e) {

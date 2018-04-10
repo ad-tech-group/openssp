@@ -26,7 +26,7 @@ public class OpenRtbConnector {
 	public OpenRtbConnector(final Supplier supplier) {
 		this.supplier = supplier;
 		endpoint = supplier.getEndPoint();
-		jsonPostConnector = new JsonPostConnector();
+		jsonPostConnector = new JsonPostConnector(supplier.isConnectionKeepAlive());
 	}
 
 	/**

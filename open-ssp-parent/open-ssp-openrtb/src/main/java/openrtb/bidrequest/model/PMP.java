@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class PMP implements Cloneable {
 
-	private int private_auction;
+	private int private_auction=0;
 	private List<DirectDeal> deals;
 	private Object ext;
 
