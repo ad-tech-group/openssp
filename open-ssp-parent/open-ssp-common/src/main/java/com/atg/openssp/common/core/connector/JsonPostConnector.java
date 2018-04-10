@@ -56,6 +56,8 @@ public class JsonPostConnector extends DefaultConnector {
 				} else {
 					log.debug("bad result: {}", statusCode);
 				}
+			} else if (HttpStatus.SC_NO_CONTENT == statusCode) {
+				return "";
 			}
 		} catch (final IOException e) {
 			throw new BidProcessingException("IO " + e.getMessage());
