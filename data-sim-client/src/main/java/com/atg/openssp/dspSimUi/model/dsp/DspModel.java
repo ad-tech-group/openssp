@@ -21,6 +21,7 @@ import java.util.*;
  */
 public class DspModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
+    private final ResourceBundle bundle;
     private ArrayList<ModeChangeListener> modeChangeListeners = new ArrayList<ModeChangeListener>();
     private final Properties props = new Properties();
     private final int index;
@@ -29,6 +30,7 @@ public class DspModel extends BaseModel {
 
     public DspModel(int index) throws ModelException {
         this.index = index;
+        bundle = ResourceBundle.getBundle("DisplayTemplate");
         loadProperties();
         serverHandler = new ServerHandler(this);
     }
@@ -118,10 +120,6 @@ public class DspModel extends BaseModel {
         }
     }
 
-    public void sendAddCommand(SimBidder sb) throws ModelException {
-        serverHandler.sendAddCommand(sb);
-    }
-
     public void sendUpdateCommand(SimBidder sb) throws ModelException {
         serverHandler.sendUpdateCommand(sb);
     }
@@ -162,5 +160,9 @@ public class DspModel extends BaseModel {
         for (ModeChangeListener lis : modeChangeListeners) {
             lis.updateMode(mode);
         }
+    }
+
+    public String getTemplateText(String tag) {
+        return bundle.getString(tag);
     }
 }

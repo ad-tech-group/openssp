@@ -64,10 +64,6 @@ public class ServerHandler implements Runnable {
         sendCommand(ServerCommandType.LIST);
     }
 
-    public void sendAddCommand(SimBidder sb) throws ModelException {
-        sendCommand(ServerCommandType.ADD, sb.getId(), sb);
-    }
-
     public void sendRemoveCommand(String id) throws ModelException {
         sendCommand(ServerCommandType.REMOVE, id);
     }

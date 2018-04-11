@@ -41,25 +41,6 @@ public class ClientHandler extends TimerTask implements HttpHandler {
         } else if (cc.getType() == ClientCommandType.LIST) {
             cr.setStatus(ClientResponseStatus.SUCCESS);
             cr.setBidders(model.getBidders());
-        } else if (cc.getType() == ClientCommandType.ADD) {
-            SimBidder sb = model.lookupBidder(cc.getId());
-            if (sb == null) {
-                sb = new SimBidder(cc.getId());
-                sb.populate(cc.getSimBidder());
-                model.add(sb);
-                try {
-                    model.saveModel();
-                    cr.setStatus(ClientResponseStatus.SUCCESS);
-                } catch (ModelException e) {
-                    log.error(e.getMessage(), e);
-                    cr.setStatus(ClientResponseStatus.FAILURE);
-                    cr.setReason("add save failed: "+e.getMessage());
-                }
-            } else {
-                cr.setStatus(ClientResponseStatus.FAILURE);
-                cr.setReason("SimBidder already exists");
-            }
-            cr.setBidders(model.getBidders());
         } else if (cc.getType() == ClientCommandType.REMOVE) {
             SimBidder sb = model.lookupBidder(cc.getId());
             if (sb == null) {
@@ -80,8 +61,18 @@ public class ClientHandler extends TimerTask implements HttpHandler {
         } else if (cc.getType() == ClientCommandType.UPDATE) {
             SimBidder sb = model.lookupBidder(cc.getId());
             if (sb == null) {
-                cr.setStatus(ClientResponseStatus.FAILURE);
-                cr.setReason("SimBidder not found");
+                // does not exist, need to add it
+                sb = new SimBidder(cc.getId());
+                sb.populate(cc.getSimBidder());
+                model.add(sb);
+                try {
+                    model.saveModel();
+                    cr.setStatus(ClientResponseStatus.SUCCESS);
+                } catch (ModelException e) {
+                    log.error(e.getMessage(), e);
+                    cr.setStatus(ClientResponseStatus.FAILURE);
+                    cr.setReason("add save failed: "+e.getMessage());
+                }
             } else {
                 sb.populate(cc.getSimBidder());
                 cr.setStatus(ClientResponseStatus.SUCCESS);
