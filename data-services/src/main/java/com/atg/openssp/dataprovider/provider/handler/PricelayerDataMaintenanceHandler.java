@@ -3,11 +3,13 @@ package com.atg.openssp.dataprovider.provider.handler;
 import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.DataStore;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
+import com.atg.openssp.dataprovider.provider.dto.PricelayerMaintenanceDto;
+import com.atg.openssp.dataprovider.provider.dto.PricelayerResponse;
 import com.atg.openssp.dataprovider.provider.dto.ResponseStatus;
-import com.atg.openssp.dataprovider.provider.dto.SiteMaintenanceDto;
-import com.atg.openssp.dataprovider.provider.dto.SiteResponse;
-import com.google.gson.*;
-import openrtb.bidrequest.model.Site;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import openrtb.bidrequest.model.Pricelayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.properties.ProjectProperty;
@@ -15,17 +17,17 @@ import util.properties.ProjectProperty;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.PropertyException;
-import java.io.*;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
  * @author André Schmer
  */
-public class SiteDataMaintenanceHandler extends DataHandler {
-    private static final Logger log = LoggerFactory.getLogger(SiteDataMaintenanceHandler.class);
-    public static final String CONTEXT = "/maintain/site";
+public class PricelayerDataMaintenanceHandler extends DataHandler {
+    private static final Logger log = LoggerFactory.getLogger(PricelayerDataMaintenanceHandler.class);
+    public static final String CONTEXT = "/maintain/pricelayer";
 
-    public SiteDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
+    public PricelayerDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isSiteDataServiceEnabled()) {
             try {
                 String location;
@@ -45,34 +47,29 @@ public class SiteDataMaintenanceHandler extends DataHandler {
                     builder.registerTypeAdapter(MaintenanceCommand.class, (JsonDeserializer<MaintenanceCommand>) (json, typeOfT, context)
                             -> MaintenanceCommand.valueOf(json.getAsString()));
 
-                    Site.populateTypeAdapters(builder);
-
                     Gson gson = builder.create();
 
-                    SiteMaintenanceDto dto = gson.fromJson(request.getReader(), SiteMaintenanceDto.class);
+                    PricelayerMaintenanceDto dto = gson.fromJson(request.getReader(), PricelayerMaintenanceDto.class);
 
-                    //Path path = Paths.get(location+"site_db.json");
-                    //String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-                    //SiteDto data = gson.fromJson(content, SiteDto.class);
-                    SiteResponse result = new SiteResponse();
+                    PricelayerResponse result = new PricelayerResponse();
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
                     } else if (dto.getCommand() == MaintenanceCommand.ADD) {
-                        Site s = dto.getSite();
+                        Pricelayer s = dto.getPricelayer();
                         DataStore.getInstance().insert(s);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
-                        Site s = dto.getSite();
+                        Pricelayer s = dto.getPricelayer();
                         DataStore.getInstance().remove(s);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
-                        Site s = dto.getSite();
+                        Pricelayer s = dto.getPricelayer();
                         DataStore.getInstance().update(s);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

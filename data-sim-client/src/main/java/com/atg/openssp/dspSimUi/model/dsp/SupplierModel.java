@@ -122,4 +122,7 @@ public class SupplierModel extends BaseModel {
         supplierHandler.sendRemoveCommand(id);
     }
 
+    public void sendListCommand() throws ModelException {
+        supplierHandler.sendListCommand();
+    }
 }

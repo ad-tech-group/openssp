@@ -2,7 +2,9 @@ package com.atg.openssp.dataprovider.provider.handler;
 
 import com.atg.openssp.core.cache.broker.dto.SiteDto;
 import com.atg.openssp.core.system.LocalContext;
+import com.atg.openssp.dataprovider.provider.DataStore;
 import com.google.gson.Gson;
+import openrtb.bidrequest.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.properties.ProjectProperty;
@@ -10,7 +12,6 @@ import util.properties.ProjectProperty;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.PropertyException;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -34,9 +35,16 @@ public class SiteDataHandler extends DataHandler {
                     log.warn("property file not found.");
                     location="";
                 }
-                Gson gson = new Gson();
-                String content = new String(Files.readAllBytes(Paths.get(location+"site_db.json")), StandardCharsets.UTF_8);
-                SiteDto data = gson.fromJson(content, SiteDto.class);
+                SiteDto data = DataStore.getInstance().lookupSites();
+                if (DataStore.getInstance().wasSitesCreated()) {
+                    Gson gson = new Gson();
+                    String content = new String(Files.readAllBytes(Paths.get(location + "site_db.json")), StandardCharsets.UTF_8);
+                    SiteDto newData = gson.fromJson(content, SiteDto.class);
+                    for (Site s : newData.getSites()) {
+                        DataStore.getInstance().insert(s);
+                    }
+                    data = DataStore.getInstance().lookupSites();
+                }
 
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
@@ -53,7 +61,7 @@ public class SiteDataHandler extends DataHandler {
                 } else {
                     response.setStatus(401);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 response.setStatus(500);
                 log.error(e.getMessage(), e);
             }

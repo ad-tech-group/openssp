@@ -4,6 +4,7 @@ import com.atg.openssp.core.system.job.WatchdogService;
 import com.atg.openssp.core.system.loader.ConfigLoader;
 import com.atg.openssp.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.core.system.loader.LocalContextLoader;
+import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ public class ServicesInit extends GenericServlet {
 
     @Override
     public void init() throws ServletException {
+        System.out.println("*************************************");
         InitLogging.setSystemProperties();
         log.info("**** Initing core application ****");
         //LocalContext.setVersion(new MavenProperties().getVersion());
@@ -41,6 +43,9 @@ public class ServicesInit extends GenericServlet {
             log.error(e.getMessage());
         }
         super.init();
+        for (ContentCategory c: ContentCategory.values()) {
+            // do the add
+        }
     }
 
         @Override

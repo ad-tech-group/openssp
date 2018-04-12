@@ -60,6 +60,7 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
     private final JButton bUpdate = new JButton("update");
     private final JButton bRemove = new JButton("remove");
     private final JButton bAdd = new JButton("add");
+    private final JButton bRefresh = new JButton("refresh");
     private final JTextField tfMemo = new JTextField(20);
 
     public SupplierMaintenancePanel(SupplierModel model) {
@@ -130,6 +131,8 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
         bAddCat.addActionListener(this);
         bAdd.addActionListener(this);
         addItem(pRight, "", bAdd);
+        bRefresh.addActionListener(this);
+        addItem(pRight, "", bRefresh);
 
         tfMemo.setEditable(false);
         pBottom.add(tfMemo);
@@ -239,6 +242,12 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
                 model.setMessageAsWarning("No Supplier selected.");
             }
             repaint();
+        } else if (ev.getSource() == bRefresh) {
+            try {
+                model.sendListCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
         } else if (ev.getSource() == bAdd) {
             try {
 //                float newPrice = formatter.parse(tfAddPrice.getText()).floatValue();

@@ -81,7 +81,7 @@
       "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
-      "supplierId": "1",
+      "supplierId": "100000",
       "currency": "USD",
       "tmax": 300,
       "allowedAdFormats": [
@@ -101,7 +101,7 @@
       "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
-      "supplierId": "2",
+      "supplierId": "100001",
       "currency": "USD",
       "tmax": 300,
       "allowedAdFormats": [

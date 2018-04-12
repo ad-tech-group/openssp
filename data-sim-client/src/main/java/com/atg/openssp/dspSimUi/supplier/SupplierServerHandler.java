@@ -57,7 +57,7 @@ public class SupplierServerHandler implements Runnable {
         }
     }
 
-    private void sendListCommand() throws ModelException {
+    public void sendListCommand() throws ModelException {
         sendCommand(SupplierCommandType.LIST);
     }
 
