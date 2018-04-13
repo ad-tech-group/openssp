@@ -1,6 +1,6 @@
 package com.atg.openssp.dspSimUi.view.supplier;
 
-import com.atg.openssp.dspSimUi.model.dsp.SupplierModel;
+import com.atg.openssp.dspSimUi.model.supplier.SupplierModel;
 import com.atg.openssp.dspSimUi.supplier.SupplierServerHandler;
 
 import javax.swing.*;

@@ -66,6 +66,15 @@ public class Publisher implements Cloneable {
         return list;
 	}
 
+	public void setCat(final List<ContentCategory> cat) {
+		this.cat.clear();
+		if (cat != null) {
+			for (ContentCategory c : cat) {
+				this.cat.add(c.getValue());
+			}
+		}
+	}
+
 	public void addCat(final ContentCategory cat) {
 		this.cat.add(cat.getValue());
 	}

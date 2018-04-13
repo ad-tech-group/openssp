@@ -4,6 +4,7 @@ import com.atg.openssp.core.cache.broker.dto.SiteDto;
 import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.DataStore;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +38,15 @@ public class SiteDataHandler extends DataHandler {
                 }
                 SiteDto data = DataStore.getInstance().lookupSites();
                 if (DataStore.getInstance().wasSitesCreated()) {
-                    Gson gson = new Gson();
+                    GsonBuilder builder = new GsonBuilder();
+                    Site.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
                     String content = new String(Files.readAllBytes(Paths.get(location + "site_db.json")), StandardCharsets.UTF_8);
                     SiteDto newData = gson.fromJson(content, SiteDto.class);
                     for (Site s : newData.getSites()) {
                         DataStore.getInstance().insert(s);
                     }
+                    DataStore.getInstance().clearSitesCreatedFlag();
                     data = DataStore.getInstance().lookupSites();
                 }
 
