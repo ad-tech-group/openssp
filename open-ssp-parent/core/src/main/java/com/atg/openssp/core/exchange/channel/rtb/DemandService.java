@@ -128,11 +128,11 @@ public class DemandService implements Callable<AdProviderReader> {
 		connectorList.stream().filter(b -> b.getSupplier().getActive().getValue() == 1).forEach(connector -> {
 
 			boolean processingIsOK = false;
-            if (connector.getSupplier().getAllowedPlatforms().size() == 0) {
+            if (connector.getSupplier().getAllowedAdPlatforms().size() == 0) {
                 processingIsOK = true;
             } else if (
-                    isMobile && connector.getSupplier().getAllowedPlatforms().contains(SupplierAdPlatform.MOBILE) ||
-                    !isMobile && connector.getSupplier().getAllowedPlatforms().contains(SupplierAdPlatform.DESKTOP)
+                    isMobile && connector.getSupplier().getAllowedAdPlatforms().contains(SupplierAdPlatform.MOBILE) ||
+                    !isMobile && connector.getSupplier().getAllowedAdPlatforms().contains(SupplierAdPlatform.DESKTOP)
                     ) {
                 processingIsOK = true;
             }
