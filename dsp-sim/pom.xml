@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.atg.openssp</groupId>
 	<artifactId>open-ssp-dsp-sim</artifactId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.2-SNAPSHOT</version>
 	<name>open-ssp-dsp-sim</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.atg.openssp</groupId>
 			<artifactId>open-ssp-common</artifactId>
-			<version>0.4.1-SNAPSHOT</version>
+			<version>0.4.2-SNAPSHOT</version>
 		</dependency>
         <dependency>
             <groupId>junit</groupId>

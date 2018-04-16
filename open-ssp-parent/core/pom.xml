@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.atg.openssp</groupId>
 		<artifactId>open-ssp-parent</artifactId>
-		<version>0.4.1-SNAPSHOT</version>
+        <version>0.4.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>core</artifactId>
 	<name>core</name>
@@ -17,8 +17,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
         <my.dev.catalina.home>tomcat</my.dev.catalina.home>
+		<docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
+		<docker.image.version>latest</docker.image.version>
 	</properties>
-
 	<profiles>
 		<profile>
 			<id>mock-catalina-home</id>
@@ -46,7 +47,8 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-install-plugin</artifactId>
-                        <executions>
+						<version>2.5.2</version>
+						<executions>
                             <execution>
                                 <phase>install</phase>
                                 <goals>
@@ -130,9 +132,28 @@
                     </execution>
                 </executions>
             </plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.13</version>
+				<configuration>
+					<forceTags>true</forceTags>
+					<imageTags>
+						<imageTag>${docker.image.version}</imageTag>
+					</imageTags>
+					<imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.war</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
 
 
@@ -251,6 +272,4 @@
             <version>2.11.0</version>
         </dependency>
      </dependencies>
-
-
 </project>

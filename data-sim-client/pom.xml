@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.atg.openssp</groupId>
 	<artifactId>open-ssp-dsp-sim-client</artifactId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.2-SNAPSHOT</version>
 	<name>open-ssp-dsp-sim-client</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -42,17 +42,29 @@
 		<dependency>
 			<groupId>com.atg.openssp</groupId>
 			<artifactId>open-ssp-common</artifactId>
+<<<<<<< HEAD
 			<version>0.4.1-SNAPSHOT</version>
+=======
+			<version>0.4.1</version>
+>>>>>>> master
 		</dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-openrtb</artifactId>
+<<<<<<< HEAD
             <version>0.4.1-SNAPSHOT</version>
+=======
+            <version>0.4.1</version>
+>>>>>>> master
         </dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
+<<<<<<< HEAD
             <version>0.4.1-SNAPSHOT</version>
+=======
+            <version>0.4.1</version>
+>>>>>>> master
         </dependency>
 
     </dependencies>
