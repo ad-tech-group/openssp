@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.atg.openssp</groupId>
 	<artifactId>open-ssp-dsp-sim</artifactId>
-	<version>0.2</version>
+	<version>0.2.1</version>
 	<name>open-ssp-dsp-sim</name>
 	<url>http://maven.apache.org</url>
 	<properties>
