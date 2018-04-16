@@ -53,6 +53,16 @@
 		</pluginManagement>
 	</build>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.truth</groupId>
+				<artifactId>truth</artifactId>
+				<version>0.28</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>snapshots</id>
