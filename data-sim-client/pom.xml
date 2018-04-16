@@ -42,29 +42,17 @@
 		<dependency>
 			<groupId>com.atg.openssp</groupId>
 			<artifactId>open-ssp-common</artifactId>
-<<<<<<< HEAD
-			<version>0.4.1-SNAPSHOT</version>
-=======
-			<version>0.4.1</version>
->>>>>>> master
+			<version>0.4.2-SNAPSHOT</version>
 		</dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-openrtb</artifactId>
-<<<<<<< HEAD
-            <version>0.4.1-SNAPSHOT</version>
-=======
-            <version>0.4.1</version>
->>>>>>> master
+            <version>0.4.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
-<<<<<<< HEAD
-            <version>0.4.1-SNAPSHOT</version>
-=======
-            <version>0.4.1</version>
->>>>>>> master
+            <version>0.4.2-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -115,4 +103,16 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>freestar-snapshots</name>
+			<url>https://freestar.jfrog.io/freestar/libs-snapshot</url>
+		</snapshotRepository>
+		<repository>
+			<id>central</id>
+			<name>freestar-releases</name>
+			<url>https://freestar.jfrog.io/freestar/libs-release</url>
+		</repository>
+	</distributionManagement>
 </project>
