@@ -11,7 +11,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
-        <my.dev.catalina.home>y</my.dev.catalina.home>
+        <my.dev.catalina.home>tomcat</my.dev.catalina.home>
+		<docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
+		<docker.image.version>latest</docker.image.version>
     </properties>
     <profiles>
 		<profile>
@@ -38,6 +40,7 @@
     					<version>${maven.surefire.plugin.version}</version>
 						<configuration>
 							<systemProperties>
+								<encoding>UTF-8</encoding>
 								<property>
 									<name>catalina.home</name>
 									<value>${my.dev.catalina.home}</value>
@@ -51,7 +54,9 @@
     </profiles>
 
     <build>
+
 		<finalName>open-ssp-services</finalName>
+
         <plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
@@ -76,6 +81,7 @@
 					<outputFile>
 						${project.build.outputDirectory}/app.properties
 					</outputFile>
+					<properties/>
 				</configuration>
 				<executions>
 					<execution>
@@ -92,9 +98,30 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
 			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.13</version>
+				<configuration>
+					<forceTags>true</forceTags>
+					<imageTags>
+						<imageTag>${docker.image.version}</imageTag>
+					</imageTags>
+					<imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.war</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
     <dependencies>
+
 
         <dependency>
             <groupId>junit</groupId>
