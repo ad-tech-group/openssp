@@ -116,12 +116,14 @@
         </plugins>
     </build>
 
+    <!--
     <distributionManagement>
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
-    </distributionManagement> 
+    </distributionManagement>
+    -->
 
     <scm>
         <url>https://github.com/openrtb/openrtb2x/tree/2.0/openrtb-validator</url>
