@@ -15,6 +15,8 @@
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
+        <docker.image.version>latest</docker.image.version>
     </properties>
 
     <profiles>
@@ -88,6 +90,26 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.6</version>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.13</version>
+                <configuration>
+                    <forceTags>true</forceTags>
+                    <imageTags>
+                        <imageTag>${docker.image.version}</imageTag>
+                    </imageTags>
+                    <imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.war</include>
+                        </resource>
+                    </resources>
+                </configuration>
             </plugin>
         </plugins>
     </build>
