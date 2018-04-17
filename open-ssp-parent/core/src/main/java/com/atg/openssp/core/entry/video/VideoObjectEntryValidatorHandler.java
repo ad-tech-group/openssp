@@ -1,12 +1,12 @@
 package com.atg.openssp.core.entry.video;
 
+import com.atg.openssp.common.core.cache.type.AppDataCache;
+import com.atg.openssp.common.core.cache.type.SiteDataCache;
+import com.atg.openssp.common.core.entry.EntryValidatorHandler;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.demand.VideoObjectParamValue;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.cache.type.AppDataCache;
-import com.atg.openssp.core.cache.type.SiteDataCache;
-import com.atg.openssp.core.entry.EntryValidatorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

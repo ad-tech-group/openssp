@@ -1,6 +1,7 @@
 package auction;
 
-import com.atg.openssp.core.entry.BiddingServiceInfo;
+import com.atg.openssp.common.core.entry.BiddingServiceInfo;
+import com.atg.openssp.common.core.exchange.Auction;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -10,7 +11,6 @@ import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
-import com.atg.openssp.core.exchange.Auction;
 
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidresponse.model.BidResponse;

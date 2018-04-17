@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.atg.openssp</groupId>
 			<artifactId>open-ssp-common</artifactId>
-			<version>0.4</version>
+			<version>0.4.1</version>
 		</dependency>
         <dependency>
             <groupId>junit</groupId>
