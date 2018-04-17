@@ -2,7 +2,7 @@ package com.atg.openssp.core.cache.broker.json;
 
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.cache.broker.DataBrokerObserver;
-import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
+import com.atg.openssp.common.core.broker.dto.CurrencyDto;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
