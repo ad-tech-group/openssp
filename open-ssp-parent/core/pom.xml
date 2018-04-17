@@ -45,19 +45,6 @@
 							</systemProperties>
 						</configuration>
 					</plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemProperties>
-                                <encoding>UTF-8</encoding>
-                                <property>
-                                    <name>catalina.home</name>
-                                    <value>${my.dev.catalina.home}</value>
-                                </property>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
