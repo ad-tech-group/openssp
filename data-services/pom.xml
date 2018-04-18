@@ -144,7 +144,7 @@
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
     <distributionManagement>
