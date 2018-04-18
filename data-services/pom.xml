@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atg.openssp</groupId>
     <artifactId>open-ssp-data-services</artifactId>
-    <version>0.2.3</version>
+    <version>1.0-SNAPSHOT</version>
     <name>open-ssp-data-services</name>
     <url>http://maven.apache.org</url>
     <packaging>war</packaging>
@@ -144,19 +144,13 @@
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
-            <version>0.4.3</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <distributionManagement>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>freestar-snapshots</name>
-            <url>https://freestar.jfrog.io/freestar/libs-snapshot</url>
-        </snapshotRepository>
         <repository>
-            <id>central</id>
-            <name>freestar-releases</name>
-            <url>https://freestar.jfrog.io/freestar/libs-release</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </distributionManagement>
 </project>
