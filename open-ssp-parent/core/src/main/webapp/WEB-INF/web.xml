@@ -3,7 +3,7 @@
   <display-name>ATG SSP</display-name>
   <servlet>
     <servlet-name>ApplicationInit</servlet-name>
-    <servlet-class>com.atg.openssp.core.system.ApplicationInit</servlet-class>
+    <servlet-class>com.atg.openssp.common.core.system.ApplicationInit</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 </web-app>
