@@ -1,10 +1,10 @@
 package com.atg.openssp.dataprovider.provider;
 
+import com.atg.openssp.common.core.broker.dto.CurrencyDto;
+import com.atg.openssp.common.core.broker.dto.PricelayerDto;
+import com.atg.openssp.common.core.broker.dto.SiteDto;
+import com.atg.openssp.common.core.broker.dto.SupplierDto;
 import com.atg.openssp.common.demand.Supplier;
-import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
-import com.atg.openssp.core.cache.broker.dto.PricelayerDto;
-import com.atg.openssp.core.cache.broker.dto.SiteDto;
-import com.atg.openssp.core.cache.broker.dto.SupplierDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.Pricelayer;

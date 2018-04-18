@@ -1,8 +1,6 @@
 package com.atg.openssp.dataprovider.provider.dto;
 
-import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
-
-import java.util.List;
+import com.atg.openssp.common.core.broker.dto.CurrencyDto;
 
 /**
  * @author Brian Sorensen

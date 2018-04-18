@@ -1,6 +1,6 @@
 package io.freestar.ssp.channel.rtb;
 
-import com.atg.openssp.core.exchange.channel.rtb.DemandBrokerFilter;
+import com.atg.openssp.common.core.exchange.channel.rtb.DemandBrokerFilter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

@@ -1,9 +1,9 @@
 package com.atg.openssp.dataprovider.provider.handler.currency;
 
+import com.atg.openssp.common.core.broker.dto.CurrencyDto;
+import com.atg.openssp.common.core.exchange.geo.UnavailableHandlerException;
+import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.model.EurRef;
-import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
-import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
-import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.handler.DataHandler;
 import com.atg.openssp.dataprovider.provider.handler.LoginHandler;
 import com.google.gson.Gson;

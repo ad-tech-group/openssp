@@ -1,13 +1,15 @@
 package io.freestar.ssp.exchange.geo;
 
-import com.atg.openssp.core.exchange.geo.AddressNotFoundException;
-import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
-import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
+import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
+import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
+import com.atg.openssp.common.core.exchange.geo.UnavailableHandlerException;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
-import com.maxmind.geoip2.record.*;
-import openrtb.bidrequest.model.Geo;
+import com.maxmind.geoip2.record.City;
+import com.maxmind.geoip2.record.Country;
+import com.maxmind.geoip2.record.Location;
+import com.maxmind.geoip2.record.Postal;
 import openrtb.bidrequest.model.GeoIpInfo;
 import openrtb.tables.IpServiceType;
 

@@ -1,8 +1,8 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
+import com.atg.openssp.common.core.broker.dto.SupplierDto;
+import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.demand.Supplier;
-import com.atg.openssp.core.cache.broker.dto.SupplierDto;
-import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.DataStore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

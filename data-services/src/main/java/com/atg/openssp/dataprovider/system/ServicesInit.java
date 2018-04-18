@@ -1,9 +1,9 @@
 package com.atg.openssp.dataprovider.system;
 
-import com.atg.openssp.core.system.job.WatchdogService;
-import com.atg.openssp.core.system.loader.ConfigLoader;
-import com.atg.openssp.core.system.loader.GlobalContextLoader;
-import com.atg.openssp.core.system.loader.LocalContextLoader;
+import com.atg.openssp.common.core.system.job.WatchdogService;
+import com.atg.openssp.common.core.system.loader.ConfigLoader;
+import com.atg.openssp.common.core.system.loader.GlobalContextLoader;
+import com.atg.openssp.common.core.system.loader.LocalContextLoader;
 import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

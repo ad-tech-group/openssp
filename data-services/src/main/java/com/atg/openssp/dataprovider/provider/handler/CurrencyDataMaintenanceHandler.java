@@ -1,7 +1,7 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
-import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
-import com.atg.openssp.core.system.LocalContext;
+import com.atg.openssp.common.core.broker.dto.CurrencyDto;
+import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.DataStore;
 import com.atg.openssp.dataprovider.provider.dto.*;
 import com.google.gson.Gson;
