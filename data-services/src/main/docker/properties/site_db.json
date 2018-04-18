@@ -1,0 +1,38 @@
+{
+	"sites": [
+		{
+		"id": "1",
+		"name": "WebDesign Ledger",
+		"domain": "webdesignledger.com",
+			"cat": [
+				"IAB19", "IAB19-20", "IAB19-24", "IAB19-34"
+			],
+		"page": "",
+		"publisher": {
+			"id": "1",
+			"name": "WebDesign Ledger",
+				"cat": ["IAB19"],
+			"domain": "webdesignledger.com",
+			"ext": null
+			},
+		"ext": null
+		},
+		{
+			"id": "2",
+			"name": "Headphone Review",
+			"domain": "headphonereview.com",
+			"cat": [
+				"IAB6", "IAB9", "IAB9-1"
+			],
+			"page": "",
+			"publisher": {
+				"id": "2",
+				"name": "Headphone Review",
+				"cat": ["IAB6"],
+				"domain": "headphonereview.com",
+		"ext": null
+		},
+		"ext": null
+		}
+	]
+}

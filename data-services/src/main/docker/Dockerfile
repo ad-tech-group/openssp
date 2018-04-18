@@ -1,6 +1,23 @@
-FROM frolvlad/alpine-oraclejdk8:slim
-VOLUME /tmp
-ADD open-ssp-services.war open-ssp-services.war
-RUN sh -c 'touch /open-ssp-services.war'
-ENV JAVA_OPTS=""
-ENTRYPOINT exec java $JAVA_OPTS -server -XX:+AlwaysPreTouch -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly  -Djava.security.egd=file:/dev/./urandom -jar /open-ssp-services.war
+FROM tomcat:8.0.20-jre8
+#clean up extra apps
+RUN rm -rf /usr/local/tomcat/webapps/examples
+RUN rm -rf /usr/local/tomcat/webapps/docs
+RUN rm -rf /usr/local/tomcat/webapps/host-manager
+RUN rm -rf /usr/local/tomcat/webapps/manager
+
+#copy our war into place
+COPY /open-ssp-services.war /usr/local/tomcat/webapps
+
+#set-up config
+RUN mkdir -p /usr/local/tomcat/logfiles
+RUN mkdir -p /usr/local/tomcat/properties
+COPY /properties/config.xml /usr/local/tomcat/properties
+COPY /properties/global.runtime.xml /usr/local/tomcat/properties
+COPY /properties/local.runtime.xml /usr/local/tomcat/properties
+COPY /properties/log4j2.xml /usr/local/tomcat/properties
+
+COPY /properties/app_db.json /usr/local/tomcat/properties
+COPY /properties/currency_db.json /usr/local/tomcat/properties
+COPY /properties/price_layer.json /usr/local/tomcat/properties
+COPY /properties/site_db.json /usr/local/tomcat/properties
+COPY /properties/supplier_db.json /usr/local/tomcat/properties
