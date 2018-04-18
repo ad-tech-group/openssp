@@ -27,7 +27,7 @@
 	<!-- <entry key="currency-data-handler-class">com.atg.openssp.dataprovider.provider.handler.currency.EcbEuropaDataHandler</entry> -->
 
 	<!-- handler class to use for service authorization grant requests -->
-	<entry key="login-handler-class">com.atg.openssp.dataprovider.provider.handler.LoginHandler</entry>
+	<entry key="login-handler-class">com.atg.openssp.common.provider.LoginHandler</entry>
 
 	<!-- handler class to use service Pricelayer Data requests -->
 	<entry key="pricelayer-data-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataHandler</entry>

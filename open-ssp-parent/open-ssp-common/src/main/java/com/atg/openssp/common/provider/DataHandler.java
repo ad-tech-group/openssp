@@ -1,4 +1,4 @@
-package com.atg.openssp.dataprovider.provider.handler;
+package com.atg.openssp.common.provider;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
