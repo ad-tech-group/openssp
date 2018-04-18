@@ -16,7 +16,9 @@ COPY /properties/global.runtime.xml /usr/local/tomcat/properties
 COPY /properties/local.runtime.xml /usr/local/tomcat/properties
 COPY /properties/log4j2.xml /usr/local/tomcat/properties
 
-EXPOSE 8080
+COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
+
+EXPOSE 80
 
 CMD ["/usr/local/tomcat/bin/startup.sh", "run"]
 
