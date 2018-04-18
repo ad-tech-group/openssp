@@ -1,15 +1,15 @@
 package agent;
 
-import com.atg.openssp.core.entry.BiddingServiceInfo;
-import com.atg.openssp.core.entry.SessionAgentType;
+import com.atg.openssp.common.core.cache.type.SiteDataCache;
+import com.atg.openssp.common.core.entry.BiddingServiceInfo;
+import com.atg.openssp.common.core.entry.SessionAgentType;
+import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.cache.type.SiteDataCache;
-import com.atg.openssp.core.exchange.RequestSessionAgent;
 
 import junit.framework.Assert;
 import openrtb.bidrequest.model.Site;
