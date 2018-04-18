@@ -21,3 +21,11 @@ COPY /properties/currency_db.json /usr/local/tomcat/properties
 COPY /properties/price_layer.json /usr/local/tomcat/properties
 COPY /properties/site_db.json /usr/local/tomcat/properties
 COPY /properties/supplier_db.json /usr/local/tomcat/properties
+
+#RUN #sed -i -e 's/8080/8886/g' /usr/local/tomcat/conf/server.xml
+COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
+
+EXPOSE 8886
+
+CMD ["/usr/local/tomcat/bin/startup.sh", "run"]
+
