@@ -12,4 +12,5 @@ COPY /open-ssp-services.war /usr/local/tomcat/webapps
 RUN mkdir -p /usr/local/tomcat/logfiles
 RUN mkdir -p /usr/local/tomcat/properties
 
-CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+#CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+ENTRYPOINT exec /usr/local/tomcat/bin/catalina.sh
