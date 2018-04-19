@@ -1,4 +1,4 @@
-
+FROM tomcat:8.0.20-jre8
 #clean up extra apps
 RUN rm -rf /usr/local/tomcat/webapps/examples
 RUN rm -rf /usr/local/tomcat/webapps/docs
