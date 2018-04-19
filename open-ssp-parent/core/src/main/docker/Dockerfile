@@ -1,6 +1,15 @@
-FROM frolvlad/alpine-oraclejdk8:slim
-VOLUME /tmp
-ADD open-ssp.war open-ssp.war
-RUN sh -c 'touch /open-ssp.war'
-ENV JAVA_OPTS=""
-ENTRYPOINT exec java $JAVA_OPTS -server -XX:+AlwaysPreTouch -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly  -Djava.security.egd=file:/dev/./urandom -jar /open-ssp.war
+FROM tomcat:8.0.20-jre8
+#clean up extra apps
+RUN rm -rf /usr/local/tomcat/webapps/examples
+RUN rm -rf /usr/local/tomcat/webapps/docs
+RUN rm -rf /usr/local/tomcat/webapps/host-manager
+RUN rm -rf /usr/local/tomcat/webapps/manager
+
+#copy our war into place
+COPY /open-ssp.war /usr/local/tomcat/webapps
+
+#set-up config
+RUN mkdir -p /usr/local/tomcat/logfiles
+RUN mkdir -p /usr/local/tomcat/properties
+
+CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
