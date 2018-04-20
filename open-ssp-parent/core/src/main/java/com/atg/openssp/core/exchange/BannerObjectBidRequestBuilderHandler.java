@@ -81,7 +81,7 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
             BannerObjectParamValue pValues = (BannerObjectParamValue) pOrigin;
 
             Impression i = new Impression.Builder().build();
-            i.setId(Integer.toString(idCount++));
+            i.setId(pValues.getId());
             i.setBanner(createBanner(pValues));
             bidRequest.addImp(i);
 

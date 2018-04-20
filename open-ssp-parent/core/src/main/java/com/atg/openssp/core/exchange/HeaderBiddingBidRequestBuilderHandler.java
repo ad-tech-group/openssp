@@ -94,7 +94,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
             HeaderBiddingParamValue pValues = (HeaderBiddingParamValue) pOrigin;
 
             Impression i = new Impression.Builder().build();
-            i.setId(Integer.toString(idCount++));
+            i.setId(pValues.getId());
             i.setVideo(createVideo(pValues));
             i.setBanner(createBanner(pValues));
             //i.setNative(createNative(pValues));
