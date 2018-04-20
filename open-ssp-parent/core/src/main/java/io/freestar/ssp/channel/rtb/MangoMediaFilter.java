@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
+import openrtb.bidresponse.model.SeatBid;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -78,14 +79,15 @@ public class MangoMediaFilter extends DemandBrokerFilter {
     @Override
     public BidResponse filterResponse(Gson gson, String response) {
         BidResponse resp =  gson.fromJson(response, BidResponse.class);
-        // The adm field needs the auction price substituted similar to the the nUrl.
-        List<Bid> bids = resp.getWinningSeat().getBid();
-        for (Bid b : bids) {
-            String adm = b.getAdm();
-            Matcher m = auction_price.matcher(adm);
-            if (m.find()) {
-                float price = b.getPrice();
-                b.setAdm(m.replaceAll(String.valueOf(price)));
+
+        for (SeatBid sb : resp.getSeatbid()) {
+            for (Bid b : sb.getBid()) {
+                String adm = b.getAdm();
+                Matcher m = auction_price.matcher(adm);
+                if (m.find()) {
+                    float price = b.getPrice();
+                    b.setAdm(m.replaceAll(String.valueOf(price)));
+                }
             }
         }
         return resp;
