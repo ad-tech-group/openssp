@@ -2,19 +2,33 @@
   {
     "id": "QRh2T-YNIFk_0",
     "price": 2.01,
+    "adid": "",
+    "impid": "",
+    "nurl": "",
     "adm": "\u003cimg src\u003e\"https://media.giphy.com/media/rROnGyH8ZpI2c/giphy.gif\" width\u003d\"300\" height\u003d\"250\" border\u003d\"0\" \u003e",
     "adomain": [
       "adkernel.com"
     ],
+    "iurl": "",
+    "cid": "",
+    "crid": "",
     "cat": [
-      null
+      "IAB1-2"
     ]
   },
   {
     "id": "da4c9536-6498-45fb-b091-94a226e4467a",
     "price": 0.01,
+    "adid": "",
+    "impid": "",
+    "nurl": "",
     "adm": "1",
     "adomain": [],
-    "cat": []
+    "iurl": "",
+    "cid": "",
+    "crid": "",
+    "cat": [
+      "IAB1-1"
+    ]
   }
 ]

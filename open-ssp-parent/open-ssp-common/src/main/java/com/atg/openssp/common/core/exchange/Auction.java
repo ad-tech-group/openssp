@@ -7,13 +7,11 @@ import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
+import com.atg.openssp.common.logadapter.AuctionLogProcessor;
 import com.atg.openssp.common.provider.AdProviderReader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import openrtb.bidrequest.model.BidRequest;
-import openrtb.bidrequest.model.DirectDeal;
-import openrtb.bidrequest.model.Impression;
-import openrtb.bidrequest.model.PMP;
+import openrtb.bidrequest.model.*;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
@@ -82,6 +80,7 @@ public class Auction {
 				continue;
 			}
 			final BidRequest request = bidExchange.getBidRequest(bidResponses.getKey());
+            ArrayList<Bid> logBidList = new ArrayList();
 			// considering that only ONE impression containing the bidrequest
 			for (Impression imp : request.getImp()) {
 				List<Bidder> dealBidList = dealBidListMap.get(imp.getId());
@@ -113,10 +112,21 @@ public class Auction {
 								bidder.setBidFloorprice(imp.getBidfloor());
 								nonDealBidList.add(bidder);
 							}
+							logBidList.add(bid);
 						}
 					}
 				}
 			}
+			User user = request.getUser();
+			AuctionLogProcessor.instance.setLogData(
+					info.getLoggingId(),
+					request.getId(),
+					request.getUser(),
+					bidResponses.getKey().getSupplierId(),
+					bidResponses.getKey().getShortName(),
+					request.getSite(),
+					logBidList);
+
 		}
 
 		HashMap<String, RtbAdProvider> winningProviderMap = new HashMap<String, RtbAdProvider>();
@@ -196,7 +206,7 @@ public class Auction {
             exchangedWinnerPrice = methodHandler.generateWinningPrice(bidList, exchangedFloor, exchangedBestBidPrice);
 		}
 
-		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(exchangedWinnerPrice * bestBidCurrencyRate)).setAdjustedCurrencyPrice(FloatComparator.rr(exchangedWinnerPrice))
+		return new RtbAdProvider.Builder().setIsValid(true).setPrice(FloatComparator.rr(exchangedWinnerPrice * bestBidCurrencyRate)).setExchangedCurrencyPrice(FloatComparator.rr(exchangedWinnerPrice))
 		        .setSupplier(bestBidder.getSupplier()).setWinningSeat(bestBidder.getSeat()).setCurrency(bestBidder.getCurrency()).setDealId(bestBidder.getDealId()).build();
 	}
 
@@ -332,8 +342,8 @@ public class Auction {
 		}
 
 		@Override
-		public float getAdjustedCurrencyPrice() {
-			return winningProvider.getAdjustedCurrencyPrice();
+		public float getExchangedCurrencyPrice() {
+			return winningProvider.getExchangedCurrencyPrice();
 		}
 
 		@Override
@@ -416,8 +426,8 @@ public class Auction {
 		}
 
 		@Override
-		public float getAdjustedCurrencyPrice() {
-			return winningProvider.get(0).getAdjustedCurrencyPrice();
+		public float getExchangedCurrencyPrice() {
+			return winningProvider.get(0).getExchangedCurrencyPrice();
 		}
 
 		@Override

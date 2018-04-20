@@ -27,7 +27,7 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 
 	private String dealid;
 
-	private float adjustedCurrencyPrice;
+	private float exchangedCurrencyPrice;
 
 	@Override
 	public void perform(final SessionAgent agent) {
@@ -66,7 +66,7 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 		// ad.getGlobalID());
 		// sb.append(content);
 
-		return supplier.getShortName() + " " + adjustedCurrencyPrice + " "+ CurrencyCache.instance.getBaseCurrency();
+		return supplier.getShortName() + " " + exchangedCurrencyPrice + " "+ CurrencyCache.instance.getBaseCurrency();
 	}
 
 	@Override
@@ -108,13 +108,13 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 	}
 
 	@Override
-	public void setAdjustedCurrencyPrice(final float adjustedCurrencyPrice) {
-		this.adjustedCurrencyPrice = adjustedCurrencyPrice;
+	public void setExchangedCurrencyPrice(final float exchangedCurrencyPrice) {
+		this.exchangedCurrencyPrice = exchangedCurrencyPrice;
 	}
 
 	@Override
-	public float getAdjustedCurrencyPrice() {
-		return adjustedCurrencyPrice;
+	public float getExchangedCurrencyPrice() {
+		return exchangedCurrencyPrice;
 	}
 
 	@Override
@@ -143,8 +143,8 @@ public class RtbAdProvider implements AdProviderReader, AdProviderWriter {
 			return this;
 		}
 
-		public Builder setAdjustedCurrencyPrice(final float priceEUR) {
-			rtbAdProvider.setAdjustedCurrencyPrice(priceEUR);
+		public Builder setExchangedCurrencyPrice(final float price) {
+			rtbAdProvider.setExchangedCurrencyPrice(price);
 			return this;
 		}
 

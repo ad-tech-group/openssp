@@ -8,6 +8,7 @@ import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.BidProcessingException;
 import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
+import com.atg.openssp.common.logadapter.TimeInfoLogProcessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.BidRequest;
@@ -66,6 +67,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		if (bidrequest == null) {
 			return null;
 		}
+		long startTS = System.currentTimeMillis();
 
 		try {
 			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
@@ -74,19 +76,27 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
-			log.debug("bidresponse: " + result);
-			RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
-
 			if (!StringUtils.isEmpty(result)) {
+                log.debug("bidresponse: " + result);
+                RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
 				final BidResponse bidResponse = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterResponse(gson, result);
 				return new ResponseContainer(supplier, bidResponse);
-			}
+			} else {
+                log.debug("bidresponse: is null");
+                RtbResponseLogProcessor.instance.setLogData("is null", "bidresponse", supplier.getShortName());
+            }
 		} catch (final BidProcessingException e) {
-			log.error(getClass().getSimpleName() + " " + e.getMessage());
+			log.error(getClass().getSimpleName() + " " + ""+e.getMessage());
+            TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), supplier.getSupplierId()+" fault ("+e.getMessage()+")");
 			throw e;
 		} catch (final Exception e) {
 			log.error(getClass().getSimpleName() + " " + e.getMessage());
+            TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), supplier.getSupplierId()+" fault ("+e.getMessage()+")");
 			//throw e;
+		} finally {
+            long endTS = System.currentTimeMillis();
+
+            TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), bidrequest.getId(), bidrequest.getUser().getId(), supplier.getSupplierId(), supplier.getShortName(), startTS, endTS, endTS-startTS);
 		}
 		return null;
 	}

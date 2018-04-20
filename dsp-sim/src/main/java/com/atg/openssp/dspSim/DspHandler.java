@@ -34,7 +34,7 @@ public class DspHandler implements HttpHandler {
             rawRequest.append(line+"\n");
         }
         RtbRequestLogProcessor.instance.setLogData(rawRequest.toString(), "bidrequest", httpExchange.getRemoteAddress().getHostName());
-        System.out.println("-->"+rawRequest);
+        log.info("-->"+rawRequest);
         if (model.getMode() == ClientCommandType.RETURN_NONE) {
             httpExchange.sendResponseHeaders(200, 0);
         } else if (model.getMode() == ClientCommandType.ONLY_400) {
@@ -50,7 +50,7 @@ public class DspHandler implements HttpHandler {
 
                 String result = model.filterResult(brsp);
                 RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", httpExchange.getRemoteAddress().getHostName());
-                System.out.println("<--"+result);
+                log.info("<--"+result);
                 httpExchange.sendResponseHeaders(200, result.length());
                 OutputStream os = httpExchange.getResponseBody();
                 os.write(result.getBytes());

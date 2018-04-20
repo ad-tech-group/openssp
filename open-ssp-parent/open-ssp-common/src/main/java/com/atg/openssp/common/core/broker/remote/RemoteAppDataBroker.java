@@ -30,7 +30,7 @@ public final class RemoteAppDataBroker extends AbstractDataBroker<AppDto> {
 		try {
 			final AppDto dto = super.connect(AppDto.class);
 			if (dto != null) {
-				log.info("sizeof App data=" + dto.getApps().size());
+				log.debug("sizeof App data=" + dto.getApps().size());
 				dto.getApps().forEach(app -> {
 					AppDataCache.instance.put(app.getId(), app);
 				});

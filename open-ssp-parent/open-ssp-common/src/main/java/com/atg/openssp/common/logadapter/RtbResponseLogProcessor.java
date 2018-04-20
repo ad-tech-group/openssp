@@ -51,7 +51,11 @@ public class RtbResponseLogProcessor extends Thread {
 			return;
 		}
 		final ParamMessage paramMessage = new ParamMessage();
-		paramMessage.setMessage(object.toString());
+		if (object != null) {
+			paramMessage.setMessage(object.toString());
+		} else {
+			paramMessage.setMessage("");
+		}
 		paramMessage.setParams(params);
 		try {
 			logQueue.put(paramMessage);

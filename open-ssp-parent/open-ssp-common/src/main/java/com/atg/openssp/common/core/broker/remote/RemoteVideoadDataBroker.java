@@ -3,6 +3,7 @@ package com.atg.openssp.common.core.broker.remote;
 import com.atg.openssp.common.cache.dto.VideoAd;
 import com.atg.openssp.common.core.cache.type.VideoAdDataCache;
 import com.atg.openssp.common.exception.EmptyHostException;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
@@ -33,11 +34,14 @@ public final class RemoteVideoadDataBroker extends AbstractRemoteDataProvider {
 
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		try {
 			final String jsonString = super.connect();
 			final VideoAd[] data = gson.fromJson(jsonString, VideoAd[].class);
 			if (data != null && data.length > 0) {
-				log.info(this.getClass().getSimpleName() + " sizeof VideoAd data=" + data.length);
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("VideoAdData", data.length, startTS, endTS, endTS-startTS);
+				log.debug(this.getClass().getSimpleName() + " sizeof VideoAd data=" + data.length);
 				Arrays.stream(data).forEach(c -> VideoAdDataCache.instance.put(c.getVideoadId(), c));
 				return true;
 			}

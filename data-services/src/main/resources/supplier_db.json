@@ -1,9 +1,84 @@
 {
   "supplier": [
     {
+      "shortName": "MangoMedia-desktop-test",
+      "rtName": "MangoMedia-desktop-test",
+      "endPoint": "http://rtb-useast.mangomediaads.com/rtb?zone=54049",
+      "connectionKeepAlive": false,
+      "openRtbVersion": 2.4,
+      "contentType": "application/json",
+      "supplierId": "1",
+      "currency": "USD",
+      "tmax": 300,
+      "allowedAdFormats": [
+        "BANNER"
+      ],
+      "allowedPlatforms": [
+        "DESKTOP"
+      ],
+      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
+      "underTest": 1,
+      "active": 0
+    },
+    {
+      "shortName": "MangoMedia-mobile-test",
+      "endPoint": "http://rtb-useast.mangomediaads.com/rtb?zone=54050",
+      "connectionKeepAlive": false,
+      "openRtbVersion": 2.4,
+      "contentType": "application/json",
+      "supplierId": "2",
+      "currency": "USD",
+      "tmax": 300,
+      "allowedAdFormats": [
+        "BANNER"
+      ],
+      "allowedPlatforms": [
+        "MOBILE"
+      ],
+      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
+      "underTest": 1,
+      "active": 0
+    },
+    {
+      "shortName": "arTeeBee-desktop-test",
+      "endPoint": "http://freestardisplay.ssp.rtb-bidder.com/rtb/bid/FreestarDisplay",
+      "connectionKeepAlive": false,
+      "openRtbVersion": 2.4,
+      "contentType": "application/json",
+      "supplierId": "3",
+      "currency": "USD",
+      "tmax": 1000,
+      "allowedAdFormats": [
+        "BANNER"
+      ],
+      "allowedPlatforms": [
+        "DESKTOP"
+      ],
+      "underTest": 1,
+      "active": 1
+    },
+    {
+      "shortName": "arTeeBee-mobile-test",
+      "endPoint": "http://freestarmobileweb.ssp.rtb-bidder.com/rtb/bid/FreestarMobileWeb",
+      "connectionKeepAlive": false,
+      "openRtbVersion": 2.4,
+      "contentType": "application/json",
+      "supplierId": "4",
+      "currency": "USD",
+      "tmax": 1000,
+      "allowedAdFormats": [
+        "BANNER"
+      ],
+      "allowedPlatforms": [
+        "MOBILE"
+      ],
+      "underTest": 1,
+      "active": 1
+    },
+    {
       "shortName": "dsp_1",
       "endPoint": "http://localhost:8081/dsp-sim/DemandService",
-      "connectionKeepAlive": true,
+      "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
       "supplierId": "1",
@@ -18,12 +93,12 @@
         "MOBILE"
       ],
       "underTest": 1,
-      "active": 1
+      "active": 0
     },
     {
       "shortName": "dsp_2",
       "endPoint": "http://localhost:8082/dsp-sim/DemandService",
-      "connectionKeepAlive": true,
+      "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
       "supplierId": "2",
@@ -38,7 +113,7 @@
         "MOBILE"
       ],
       "underTest": 1,
-      "active": 1
+      "active": 0
     }
   ]
 }

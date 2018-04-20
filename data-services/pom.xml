@@ -10,11 +10,12 @@
     <packaging>war</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
-        <my.dev.catalina.home>tomcat</my.dev.catalina.home>
+		<maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
+        <my.dev.catalina.home>unit-test-logs</my.dev.catalina.home>
         <docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
         <docker.image.version>latest</docker.image.version>
     </properties>
+
     <profiles>
         <profile>
             <id>mock-catalina-home</id>
@@ -120,9 +121,8 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
-
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -147,22 +147,4 @@
             <version>LATEST</version>
         </dependency>
     </dependencies>
-    <distributionManagement>
-        <!--
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-		-->
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>freestar-snapshots</name>
-            <url>https://freestar.jfrog.io/freestar/libs-snapshot</url>
-        </snapshotRepository>
-        <repository>
-            <id>central</id>
-            <name>freestar-releases</name>
-            <url>https://freestar.jfrog.io/freestar/libs-release</url>
-        </repository>
-    </distributionManagement>
 </project>
