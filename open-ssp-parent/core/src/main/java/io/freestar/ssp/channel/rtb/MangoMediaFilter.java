@@ -73,7 +73,6 @@ public class MangoMediaFilter extends DemandBrokerFilter {
         req.remove("cur");
         req.addProperty("test", true);
 
-        System.out.println("BKS: "+req);
         return req.toString();
     }
 

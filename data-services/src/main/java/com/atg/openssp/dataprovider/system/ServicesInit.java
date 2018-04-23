@@ -13,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -29,6 +31,11 @@ public class ServicesInit extends GenericServlet {
         System.out.println("*************************************");
         InitLogging.setSystemProperties();
         log.info("**** Initing core application ****");
+        try {
+            System.out.println("-->"+ InetAddress.getLocalHost().getHostName()+":"+InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         //LocalContext.setVersion(new MavenProperties().getVersion());
         //log.info("**** SSP Version: " + LocalContext.getVersion() + " ****");
 

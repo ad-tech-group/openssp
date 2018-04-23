@@ -75,6 +75,9 @@
                         <JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
                     </systemProperties>
                     <port>8080</port>
+                    <httpsPort>8443</httpsPort>
+                    <keystoreFile>${basedir}/certificates/openssp.jks</keystoreFile>
+                    <keystorePass>changeit</keystorePass>
                 </configuration>
             </plugin>
 
@@ -83,6 +86,7 @@
                 <artifactId>properties-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
+                    <properties></properties>
                     <outputFile>
                         ${project.build.outputDirectory}/app.properties
                     </outputFile>

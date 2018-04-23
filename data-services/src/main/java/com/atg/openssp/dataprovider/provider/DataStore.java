@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DataStore {
     private static final Logger log = LoggerFactory.getLogger(DataStore.class);
-    private final static String dbURL = "jdbc:derby:OpenSSPDataServiceDB;create=true";
+    private final static String dbURL = "jdbc:derby:/opt/tomcat/properties/OpenSSPDataServiceDB;create=true";
     private static final String TABLE_SITES = "SITES";
     private static final String TABLE_PRICELAYERS = "PRICELAYERS";
     private static final String TABLE_SUPPLIERS = "SUPPLIERS";

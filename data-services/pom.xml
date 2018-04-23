@@ -69,7 +69,10 @@
                     <systemProperties>
                         <JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
                     </systemProperties>
-                    <port>9090</port>
+                    <port>0</port>
+                    <httpsPort>9443</httpsPort>
+                    <keystoreFile>${basedir}/certificates/openssp.jks</keystoreFile>
+                    <keystorePass>changeit</keystorePass>
                 </configuration>
             </plugin>
 
@@ -135,6 +138,12 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
