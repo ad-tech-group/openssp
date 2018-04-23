@@ -13,7 +13,7 @@ import java.util.List;
  * @author André Schmer
  *
  */
-public class Supplier implements Serializable {
+public class Supplier implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 4638985536819833964L;
 
@@ -42,6 +42,8 @@ public class Supplier implements Serializable {
     private List<SupplierAdPlatform> allowedPlatforms = new ArrayList();
 
     private String demandBrokerFilterClassName;
+
+    private String cookieSync;
 
     private int underTest;
 
@@ -115,6 +117,14 @@ public class Supplier implements Serializable {
 
 	public void setCurrency(final String currency) {
 		this.currency = currency;
+	}
+
+	public String getCookieSync() {
+		return cookieSync;
+	}
+
+	public void setCookieSync(final String cookieSync) {
+		this.cookieSync = cookieSync;
 	}
 
 	public BooleanInt getUnderTest() {
@@ -257,6 +267,27 @@ public class Supplier implements Serializable {
 	public void setDemandBrokerFilterClassName(String demandBrokerFilterClassName) {
 		this.demandBrokerFilterClassName = demandBrokerFilterClassName;
 	}
+
+	public Supplier clone() {
+	    Supplier s = new Supplier();
+        s.shortName = shortName;
+        s.endPoint = endPoint;
+        s.connectionKeepAlive = connectionKeepAlive;
+        s.openRtbVersion = openRtbVersion;
+        s.contentType = contentType;
+        s.acceptEncoding = acceptEncoding;// gzip
+        s.contentEncoding = contentEncoding;// gzip
+        s.supplierId = supplierId;
+        s.currency = currency;
+        s.tmax = tmax;
+        s.allowedAdFormats.addAll(allowedAdFormats);
+        s.allowedPlatforms.addAll(allowedPlatforms);
+        s.demandBrokerFilterClassName = demandBrokerFilterClassName;
+        s.cookieSync = cookieSync;
+        s.underTest = underTest;
+        s.active = active;
+	    return s;
+    }
 
     public static void populateTypeAdapters(GsonBuilder builder) {
         builder.registerTypeAdapter(SupplierAdFormat.class, (JsonDeserializer<SupplierAdFormat>) (json, typeOfT, context) -> SupplierAdFormat.valueOf(json.getAsString()));

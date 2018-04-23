@@ -19,6 +19,7 @@ import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLEncoder;
 import java.util.concurrent.Callable;
 
 /**
@@ -79,8 +80,28 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			if (!StringUtils.isEmpty(result)) {
                 log.debug("bidresponse: " + result);
                 RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
-				final BidResponse bidResponse = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterResponse(gson, result);
-				return new ResponseContainer(supplier, bidResponse);
+                DemandBrokerFilter brokerFilter = info.getDemandBrokerFilter(supplier, gson, bidrequest);
+                final BidResponse bidResponse = brokerFilter.filterResponse(gson, result);
+
+				Supplier s = supplier.clone();
+				ResponseContainer container =  new ResponseContainer(s, bidResponse);
+
+				String cookieSync = s.getCookieSync();
+				if (!"".equals(cookieSync)) {
+                    StringBuilder sspRedirUrl = new StringBuilder();
+                    String uid = bidrequest.getUser().getId();
+                    String dspUid = uid;
+                    String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
+                    String protocol = "https";
+//                    int port = getSessionAgent().getHttpRequest().getLocalPort();
+//                    sspRedirUrl.append(protocol+"://"+addr+":"+port+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid="+dspUid);
+                    sspRedirUrl.append(protocol+"://"+addr+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid="+dspUid);
+                    s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
+//                    s.setCookieSync(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()));
+                }
+//<img src='//sync.adkernel.com/user-sync?zone={zone_id}&t=image&r=SSP_REDIR_URL' style ='display:none' width='0' height='0'></img>
+//https://openssp.pub.network/cookiesync?fsuid=41624435-5e3e-47c6-b382-a938abb79283&dsp=mango&dsp_uid=124092432-66543-124846086
+				return container;
 			} else {
                 log.debug("bidresponse: is null");
                 RtbResponseLogProcessor.instance.setLogData("is null", "bidresponse", supplier.getShortName());
