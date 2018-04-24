@@ -43,7 +43,9 @@ public enum ContentCategory {
 
     public static ContentCategory convertValue(final String value) {
         for (final ContentCategory v : values()) {
-            if (value.equals(v.getValue())) {
+            if (value == null) {
+                return null;
+            } else if (value.equals(v.getValue())) {
                 return v;
             }
         }

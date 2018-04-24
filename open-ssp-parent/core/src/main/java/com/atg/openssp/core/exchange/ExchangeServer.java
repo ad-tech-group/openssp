@@ -89,7 +89,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				return b;
 			}
 
-			if (FloatComparator.greaterThanWithPrecision(a.get().getAdjustedCurrencyPrice(), b.get().getAdjustedCurrencyPrice())) {
+			if (FloatComparator.greaterThanWithPrecision(a.get().getExchangedCurrencyPrice(), b.get().getExchangedCurrencyPrice())) {
 				return a;
 			}
 		} catch (final InterruptedException e) {

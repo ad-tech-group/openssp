@@ -1,5 +1,6 @@
 package com.atg.openssp.dspSim.model.dsp;
 
+import com.google.gson.GsonBuilder;
 import openrtb.tables.ContentCategory;
 
 import java.util.ArrayList;
@@ -12,8 +13,8 @@ public class SimBidder {
     private final String id;
     private float price;
     private String adid;
-//    private String impid;
-//    private String nurl;
+    private String impid;
+    private String nurl;
     private String adm;
     private List<String> adomain = new ArrayList<String>();
     private String iurl;
@@ -29,13 +30,13 @@ public class SimBidder {
         return id;
     }
 
-//    public void setImpId(String impId) {
-//        this.impId = impId;
-//    }
+    public void setImpid(String impid) {
+        this.impid = impid;
+    }
 
-//    public String getImpId() {
-//        return impId;
-//    }
+    public String getImpid() {
+        return impid;
+    }
 
     public void setPrice(float price) {
         this.price = price;
@@ -53,13 +54,13 @@ public class SimBidder {
         return adid;
     }
 
-//    public void setNUrl(String nUrl) {
-//        this.nUrl = nUrl;
-//    }
+    public void setNurl(String nurl) {
+        this.nurl = nurl;
+    }
 
-//    public String getNUrl() {
-//        return nUrl;
-//    }
+    public String getNurl() {
+        return nurl;
+    }
 
     public void setAdm(String adm) {
         this.adm = adm;
@@ -69,10 +70,10 @@ public class SimBidder {
         return adm;
     }
 
-//    public void setAdomain(List<String> adomain) {
-//        this.adomain.clear();
-//        this.adomain.addAll(adomain);
-//    }
+    public void setAdomain(List<String> adomain) {
+        this.adomain.clear();
+        this.adomain.addAll(adomain);
+    }
 
     public List<String> getAdomain() {
         return adomain;
@@ -84,8 +85,7 @@ public class SimBidder {
 
     @Override
     public String toString() {
-//        return id + ":"+impId+":"+adId+" - ("+price+")";
-        return id + ":"+adid+" - ("+price+")";
+        return id + ":"+impid+":"+adid+" - ("+price+")";
     }
 
     public void setIurl(String iurl) {
@@ -104,7 +104,7 @@ public class SimBidder {
         return cid;
     }
 
-    public void setCrId(String crid) {
+    public void setCrid(String crid) {
         this.crid = crid;
     }
 
@@ -112,28 +112,28 @@ public class SimBidder {
         return crid;
     }
 
-//    public void setCats(List<ContentCategory> cat) {
-//        this.cat.clear();
-//        if (cat != null) {
-//            cat.forEach(c -> this.cat.add(c.getValue()));
-//        }
-//    }
+    public void setCats(List<ContentCategory> cat) {
+        this.cat.clear();
+        if (cat != null) {
+            cat.forEach(c -> this.cat.add(c.getValue()));
+        }
+    }
 
-//    public List<ContentCategory> getCats() {
-//        ArrayList<ContentCategory> list = new ArrayList();
-//        cat.forEach(c->list.add(ContentCategory.convertValue(c)));
-//        return list;
-//    }
+    public List<ContentCategory> getCats() {
+        ArrayList<ContentCategory> list = new ArrayList();
+        cat.forEach(c->list.add(ContentCategory.convertValue(c)));
+        return list;
+    }
 
     public void addCat(ContentCategory cat) {
         this.cat.add(cat.getValue());
     }
 
     public void populate(SimBidder simBidder) {
-//        impId = simBidder.impId;
+        impid = simBidder.impid;
         price = simBidder.price;
         adid = simBidder.adid;
-//        nurl = simBidder.nurl;
+        nurl = simBidder.nurl;
         adm = simBidder.adm;
         adomain.clear();
         adomain.addAll(simBidder.adomain);
@@ -142,5 +142,8 @@ public class SimBidder {
         crid = simBidder.crid;
         cat.clear();
         cat.addAll(simBidder.cat);
+    }
+
+    public static void populateTypeAdapters(GsonBuilder builder) {
     }
 }

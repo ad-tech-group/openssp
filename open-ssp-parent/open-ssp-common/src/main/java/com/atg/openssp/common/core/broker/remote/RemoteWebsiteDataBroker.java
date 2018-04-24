@@ -4,6 +4,7 @@ import com.atg.openssp.common.cache.dto.Website;
 import com.atg.openssp.common.core.cache.type.WebsiteDataCache;
 import com.atg.openssp.common.core.cache.type.ZoneDataCache;
 import com.atg.openssp.common.exception.EmptyHostException;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
@@ -34,11 +35,14 @@ public final class RemoteWebsiteDataBroker extends AbstractRemoteDataProvider {
 
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		try {
 			final String jsonString = super.connect();
 			final Website[] data = gson.fromJson(jsonString, Website[].class);
 			if (data != null && data.length > 0) {
-				log.info(this.getClass().getSimpleName() + " sizeof Website data=" + data.length);
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("WebsiteData", data.length, startTS, endTS, endTS-startTS);
+				log.debug(this.getClass().getSimpleName() + " sizeof Website data=" + data.length);
 				Arrays.stream(data).forEach(c -> WebsiteDataCache.instance.put(c.getWebsiteId(), c));
 
 				Arrays.stream(data).forEach(c -> Arrays.stream(c.getZones()).forEach(zone -> {

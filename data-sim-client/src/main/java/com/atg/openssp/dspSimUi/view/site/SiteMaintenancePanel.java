@@ -3,7 +3,10 @@ package com.atg.openssp.dspSimUi.view.site;
 import com.atg.openssp.dspSimUi.model.MessageNotificationListener;
 import com.atg.openssp.dspSimUi.model.MessageStatus;
 import com.atg.openssp.dspSimUi.model.ModelException;
+import com.atg.openssp.dspSimUi.model.client.ServerCommandType;
+import com.atg.openssp.dspSimUi.model.dsp.ModeChangeListener;
 import com.atg.openssp.dspSimUi.model.site.SiteModel;
+import openrtb.bidrequest.model.Publisher;
 import openrtb.bidrequest.model.Site;
 import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
@@ -16,6 +19,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.UUID;
 
 /**
  * @author Brian Sorensen
@@ -24,113 +31,186 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
     private static final Logger log = LoggerFactory.getLogger(SiteMaintenancePanel.class);
     private final SiteModel model;
     private final JList<Site> lSites;
+    
+    /*
+	private String id;
+	private String name;
+	private String domain;
+	private String page;
+	// see product taxonomy -> "http://www.google.com/basepages/producttype/taxonomy.en-US.txt"
+	private List<String> cat;
+	private List<String> pagecat;
+	private List<String> sectioncat;
+    private String ref;
+	private Publisher publisher;
+	private Object ext;
+	
+	private String id;
+	private String name;
+	// see factual categories -> "http://developer.factual.com/working-with-categories/"
+	private final List<String> cat;
+	private String domain;
+	private Object ext;
+     */
+    
     private final JLabel lbId = new JLabel("");
-    private final JTextField tfShortName = new JTextField(20);
-    private final JTextField tfAddShortName = new JTextField(12);
-    private final JTextField tfPrice = new JTextField(8);
-    private final JTextField tfAddPrice = new JTextField(8);
-    private final JTextField tfAdId = new JTextField(12);
-    private final JTextField tfAddAdId = new JTextField(12);
-//    private final JTextField tfNUrl = new JTextField(20);
-    private final JTextField tfAddNUrl = new JTextField(20);
-    private final JTextField tfAdm = new JTextField(25);
-    private final JTextField tfAddAdm = new JTextField(25);
-    private final DefaultListModel<String> mAdomain = new DefaultListModel<String>();
-    private final JList<String> lAdomain = new JList<String>(mAdomain);
-    private final DefaultListModel<String> mAddAdomain = new DefaultListModel<String>();
-    private final JList<String> lAddAdomain = new JList<String>(mAddAdomain);
-    private final JTextField tfIUrl = new JTextField(25);
-    private final JTextField tfAddIUrl = new JTextField(25);
-    private final JTextField tfCId = new JTextField(25);
-    private final JTextField tfAddCId = new JTextField(25);
-    private final JTextField tfCrId = new JTextField(25);
-    private final JTextField tfAddCrId = new JTextField(25);
+    private final JTextField tfName = new JTextField(12);
+    private final JTextField tfDomain = new JTextField(50);
+    private final JTextField tfPage = new JTextField(60);
     private final DefaultListModel<ContentCategory> mCat = new DefaultListModel<ContentCategory>();
     private final JList<ContentCategory> lCat = new JList<ContentCategory>(mCat);
-    private final DefaultListModel<String> mAddCat = new DefaultListModel<String>();
-    private final JList<String> lAddCat = new JList<String>(mAddCat);
+    private final DefaultListModel<ContentCategory> mPageCat = new DefaultListModel<ContentCategory>();
+    private final JList<ContentCategory> lPageCat = new JList<ContentCategory>(mPageCat);
+    private final DefaultListModel<ContentCategory> mSectionCat = new DefaultListModel<ContentCategory>();
+    private final JList<ContentCategory> lSectionCat = new JList<ContentCategory>(mSectionCat);
+    private final JTextField tfRef = new JTextField(20);
+    
+    private final JTextField tfPubId = new JTextField(25);
+    private final JTextField tfPubName = new JTextField(25);
+    private final DefaultListModel<ContentCategory> mPubCat = new DefaultListModel<ContentCategory>();
+    private final JList<ContentCategory> lPubCat = new JList<ContentCategory>(mPubCat);
+    private final JTextField tfPubDomain = new JTextField(25);
 
+    private final DefaultComboBoxModel<ContentCategory> mAddCat = new DefaultComboBoxModel<ContentCategory>();
+    private final JComboBox<ContentCategory> cbAddCat = new JComboBox<ContentCategory>(mAddCat);
 
-    private final JTextField tfAddNewADomain = new JTextField(25);
-    private final JTextField tfAddNewCat = new JTextField(25);
-    private final JButton bAddADomain = new JButton("add");
-    private final JButton bAddCat = new JButton("add");
-
-    private final JButton bUpdate = new JButton("update");
-    private final JButton bRemove = new JButton("remove");
-    private final JButton bAdd = new JButton("add");
     private final JTextField tfMemo = new JTextField(20);
+
+    private final JButton bAddCat;
+    private final JButton bRemoveCat;
+    private final JButton bAddPageCat;
+    private final JButton bRemovePageCat;
+    private final JButton bAddSectionCat;
+    private final JButton bRemoveSectionCat;
+    private final JButton bAddPubCat;
+    private final JButton bRemovePubCat;
+    private final JButton bUpdate;
+    private final JButton bRemove;
+    private final JButton bAdd;
+    private Site active;
 
     public SiteMaintenancePanel(SiteModel model) {
         this.model = model;
-        lSites = new JList<>(model.getSiteModel());
-
         setLayout(new BorderLayout());
+
+        for (ContentCategory cc : ContentCategory.values()) {
+            mAddCat.addElement(cc);
+        }
+        cbAddCat.setSelectedItem(null);
+        lSites = new JList<>(model.getSiteModel());
+        lSites.setSelectedIndex(-1);
+
+        bAddCat = new JButton(model.getTemplateText("CAT_ADD"));
+        bRemoveCat = new JButton(model.getTemplateText("CAT_REMOVE"));
+        bAddPageCat = new JButton(model.getTemplateText("PAGE_CAT_ADD"));
+        bRemovePageCat = new JButton(model.getTemplateText("PAGE_CAT_REMOVE"));
+        bAddSectionCat = new JButton(model.getTemplateText("SECTION_CAT_ADD"));
+        bRemoveSectionCat = new JButton(model.getTemplateText("SECTION_CAT_REMOVE"));
+        bAddPubCat = new JButton(model.getTemplateText("PUB_CAT_ADD"));
+        bRemovePubCat = new JButton(model.getTemplateText("PUB_CAT_REMOVE"));
+        bUpdate = new JButton(model.getTemplateText("SITE_UPDATE"));
+        bRemove = new JButton(model.getTemplateText("SITE_REMOVE"));
+        bAdd = new JButton(model.getTemplateText("SITE_INIT"));
 
         JPanel pTop = new JPanel();
         add(pTop, BorderLayout.NORTH);
         JPanel pBottom = new JPanel();
         pBottom.setLayout(new BoxLayout(pBottom, BoxLayout.Y_AXIS));
         add(pBottom, BorderLayout.SOUTH);
+        JPanel p = new JPanel();
         JPanel pMiddle = new JPanel();
-        add(pMiddle, BorderLayout.CENTER);
+        pMiddle.setLayout(new BoxLayout(pMiddle, BoxLayout.Y_AXIS));
+        p.add(pMiddle);
+
+        JPanel pSite = new JPanel();
+        pMiddle.add(pSite);
+        JPanel pPublisher = new JPanel();
+        pMiddle.add(pPublisher);
+
+        add(p, BorderLayout.CENTER);
         JPanel pRight = new JPanel();
         pRight.setLayout(new BoxLayout(pRight, BoxLayout.Y_AXIS));
         add(pRight, BorderLayout.EAST);
 
+        JPanel pCommands = new JPanel();
+        pCommands.setLayout(new FlowLayout(FlowLayout.CENTER));
+        pBottom.add(pCommands, BorderLayout.SOUTH);
+
         lSites.setVisibleRowCount(10);
-        addItem(pTop, "Sites: ", lSites);
+        addItem(pTop, model.getTemplateText("SITES"), lSites);
         lSites.addListSelectionListener(this);
-        bUpdate.setEnabled(false);
-        bUpdate.addActionListener(this);
-        addItem(pTop, "", bUpdate);
-        bRemove.setEnabled(false);
-        bRemove.addActionListener(this);
-        addItem(pTop, "", bRemove);
-
-        pMiddle.setBorder(new TitledBorder("Active Site"));
-        addItem(pMiddle, "ID:", lbId);
-        addItem(pMiddle, "Short Name:", tfShortName);
-        addItem(pMiddle, "Price:", tfPrice);
-        addItem(pMiddle, "AD ID:", tfAdId);
-//        addItem(pMiddle, "N Url:", tfNUrl);
-        addItem(pMiddle, "ADM:", tfAdm);
-        addItem(pMiddle, "A DOMAIN:", lAdomain);
-        addItem(pMiddle, "I URL:", tfIUrl);
-        addItem(pMiddle, "C ID:", tfCId);
-        addItem(pMiddle, "CR ID:", tfCrId);
-        addItem(pMiddle, "CAT:", lCat);
-
-        pRight.setBorder(new TitledBorder("Add Site"));
-        addItem(pRight, "Short Name:", tfAddShortName);
-        addItem(pRight, "Price:", tfAddPrice);
-        addItem(pRight, "AD ID:", tfAddAdId);
-        addItem(pRight, "N URL:", tfAddNUrl);
-        addItem(pRight, "ADM:", tfAddAdm);
-        addItem(pRight, "A DOMAIN:", lAddAdomain);
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-        addItem(pRight, "NEW A DOMAIN:", p);
-        p.add(tfAddNewADomain);
-        p.add(bAddADomain);
-
-        addItem(pRight, "I URL:", tfAddIUrl);
-        addItem(pRight, "C ID:", tfAddCId);
-        addItem(pRight, "CR ID:", tfAddCrId);
-        addItem(pRight, "CAT:", lAddCat);
-        p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-        addItem(pRight, "NEW CAT:", p);
-        p.add(tfAddNewCat);
-        p.add(bAddCat);
 
 
-        bAddADomain.addActionListener(this);
-        bAddCat.addActionListener(this);
+        bAdd.setEnabled(true);
         bAdd.addActionListener(this);
         addItem(pRight, "", bAdd);
 
+        bUpdate.setEnabled(false);
+        bUpdate.addActionListener(this);
+        addItem(pRight, "", bUpdate);
+        bRemove.setEnabled(false);
+        bRemove.addActionListener(this);
+        addItem(pRight, "", bRemove);
+
+        pSite.setBorder(new TitledBorder(model.getTemplateText("ACTIVE_SITE")));
+        pSite.setLayout(new BoxLayout(pSite, BoxLayout.Y_AXIS));
+        addItem(pSite, model.getTemplateText("ID"), lbId);
+        addItem(pSite, model.getTemplateText("NAME"), tfName);
+        addItem(pSite, model.getTemplateText("DOMAIN"), tfDomain);
+        addItem(pSite, model.getTemplateText("PAGE"), tfPage);
+        addItem(pSite, model.getTemplateText("CAT"), new JScrollPane(lCat));
+        lCat.setVisibleRowCount(3);
+        addItem(pSite, model.getTemplateText("PAGECAT"), new JScrollPane(lPageCat));
+        lPageCat.setVisibleRowCount(3);
+        addItem(pSite, model.getTemplateText("SECTIONCAT"), new JScrollPane(lSectionCat));
+        lSectionCat.setVisibleRowCount(3);
+        addItem(pSite, model.getTemplateText("REF"),  tfRef);
+
+        pPublisher.setBorder(new TitledBorder(model.getTemplateText("ACTIVE_PUBLISHER")));
+        pPublisher.setLayout(new BoxLayout(pPublisher, BoxLayout.Y_AXIS));
+        addItem(pPublisher, model.getTemplateText("PUBLISHERID"), tfPubId);
+        addItem(pPublisher, model.getTemplateText("PUBLISHERNAME"), tfPubName);
+        addItem(pPublisher, model.getTemplateText("PUBLISHERDOMAIN"), tfPubDomain);
+        addItem(pPublisher, model.getTemplateText("PUBCAT"), new JScrollPane(lPubCat));
+        lPubCat.setVisibleRowCount(3);
+
+
+        p = new JPanel();
+        p.setBorder(new TitledBorder(model.getTemplateText("MAINTAIN_CATEGORY")));
+        addItem(pMiddle, model.getTemplateText("CATATORIES"), p);
+        p.add(cbAddCat);
+
+        bAddCat.addActionListener(this);
+        bAddCat.setEnabled(false);
+        addItem(p, "", bAddCat);
+        bRemoveCat.addActionListener(this);
+        bRemoveCat.setEnabled(false);
+        addItem(p, "", bRemoveCat);
+
+        bAddPageCat.addActionListener(this);
+        bAddPageCat.setEnabled(false);
+        addItem(p, "", bAddPageCat);
+        bRemovePageCat.addActionListener(this);
+        bRemovePageCat.setEnabled(false);
+        addItem(p, "", bRemovePageCat);
+
+        bAddSectionCat.addActionListener(this);
+        bAddSectionCat.setEnabled(false);
+        addItem(p, "", bAddSectionCat);
+        bRemoveSectionCat.addActionListener(this);
+        bRemoveSectionCat.setEnabled(false);
+        addItem(p, "", bRemoveSectionCat);
+
+        bAddPubCat.addActionListener(this);
+        bAddPubCat.setEnabled(false);
+        addItem(p, "", bAddPubCat);
+        bRemovePubCat.addActionListener(this);
+        bRemovePubCat.setEnabled(false);
+        addItem(p, "", bRemovePubCat);
+
         tfMemo.setEditable(false);
+        tfMemo.setBackground(Color.GREEN);
+        tfMemo.setOpaque(true);
         pBottom.add(tfMemo);
         model.addMessageNotificationListener(this);
         model.setMessage("");
@@ -150,165 +230,251 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
     @Override
     public void valueChanged(ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
-            Site sb = lSites.getSelectedValue();
-            if (sb != null) {
-                lbId.setText(sb.getId());
-                resetActiveDisplay(sb);
+            active = lSites.getSelectedValue();
+            setStateForActive();
+        }
+        model.setMessage("");
+    }
+
+    private void setStateForActive() {
+        if (active != null) {
+            lbId.setText(active.getId());
+            resetActiveDisplay(active);
+            bUpdate.setEnabled(true);
+            bRemove.setEnabled(true);
+            bAddCat.setEnabled(true);
+            bRemoveCat.setEnabled(true);
+            bAddPageCat.setEnabled(true);
+            bRemovePageCat.setEnabled(true);
+            bAddSectionCat.setEnabled(true);
+            bRemoveSectionCat.setEnabled(true);
+            bAddPubCat.setEnabled(true);
+            bRemovePubCat.setEnabled(true);
+        } else {
+            if (lSites.getModel().getSize() == 0) {
+                resetActiveDisplay(active);
+                bUpdate.setEnabled(false);
+                bRemove.setEnabled(false);
+                bAddCat.setEnabled(false);
+                bRemoveCat.setEnabled(false);
+                bAddPageCat.setEnabled(false);
+                bRemovePageCat.setEnabled(false);
+                bAddSectionCat.setEnabled(false);
+                bRemoveSectionCat.setEnabled(false);
+                bAddPubCat.setEnabled(false);
+                bRemovePubCat.setEnabled(false);
+            } else {
+                resetActiveDisplay(active);
+                lSites.setSelectedIndex(0);
                 bUpdate.setEnabled(true);
                 bRemove.setEnabled(true);
-            } else {
-                if (lSites.getModel().getSize() == 0) {
-                    resetActiveDisplay(sb);
-                    bUpdate.setEnabled(false);
-                    bRemove.setEnabled(false);
-                } else {
-                    resetActiveDisplay(sb);
-                    lSites.setSelectedIndex(0);
-                    bUpdate.setEnabled(true);
-                    bRemove.setEnabled(true);
-                }
+                bAddCat.setEnabled(true);
+                bRemoveCat.setEnabled(true);
+                bAddPageCat.setEnabled(true);
+                bRemovePageCat.setEnabled(true);
+                bAddSectionCat.setEnabled(true);
+                bRemoveSectionCat.setEnabled(true);
+                bAddPubCat.setEnabled(true);
+                bRemovePubCat.setEnabled(true);
+            }
 
-    }
-}
-        model.setMessage("");
+        }
     }
 
     private void resetActiveDisplay(Site sb) {
         if (sb == null) {
-            tfShortName.setText("");
-            tfPrice.setText("");
-            tfAdId.setText("");
-//            tfNUrl.setText("");
-            tfAdm.setText("");
-            mAdomain.clear();
-            tfCId.setText("");
-            tfCrId.setText("");
+            tfName.setText("");
+            tfDomain.setText("");
+            tfPage.setText("");
+            tfRef.setText("");
+            tfPubId.setText("");
+            tfPubDomain.setText("");
             mCat.clear();
+            mPageCat.clear();
+            mSectionCat.clear();
+            mPubCat.clear();
+            cbAddCat.setSelectedItem(null);
             tfMemo.setText("");
         } else {
-            //tfShortName.setText(sb.getShortName());
-            
-            /*
-            DecimalFormat formatter = new DecimalFormat("###,###,###.00");
-            tfPrice.setText(formatter.format(sb.getPrice()));
-            tfAdId.setText(sb.getAdId());
-//            tfNUrl.setText(sb.getNUrl());
-            tfAdm.setText(sb.getAdm());
-            mAdomain.clear();
-            for (String s : sb.getAdomain()) {
-                mAdomain.addElement(s);
-            }
-            tfIUrl.setText(sb.getIUrl());
-            tfCId.setText(sb.getCId());
-            tfCrId.setText(sb.getCrId());
+            tfName.setText(sb.getName());
+            tfDomain.setText(sb.getDomain());
+            tfPage.setText(sb.getPage());
+            tfRef.setText(sb.getRef());
             mCat.clear();
-            for (ContentCategory s : sb.getCats()) {
+            for (ContentCategory s : sb.getCat()) {
                 mCat.addElement(s);
             }
-            */
+            mPageCat.clear();
+            for (ContentCategory s : sb.getPagecat()) {
+                mPageCat.addElement(s);
+            }
+            mSectionCat.clear();
+            for (ContentCategory s : sb.getSectioncat()) {
+                mSectionCat.addElement(s);
+            }
+            mPubCat.clear();
+            if (sb.getPublisher() == null) {
+                tfPubId.setText("");
+                tfPubName.setText("");
+                tfPubDomain.setText("");
+            } else {
+                tfPubId.setText(sb.getPublisher().getId());
+                tfPubName.setText(sb.getPublisher().getName());
+                tfPubDomain.setText(sb.getPublisher().getDomain());
+                for (ContentCategory s : sb.getPublisher().getCat()) {
+                    mPubCat.addElement(s);
+                }
+            }
             tfMemo.setText("Site selected.");
         }
+    }
+
+    private void populate(Site sb) throws ParseException {
+        sb.setName(tfName.getText());
+        sb.setDomain(tfDomain.getText());
+        sb.setPage(tfPage.getText());
+        sb.setRef(tfRef.getText());
+        sb.getPublisher().setId(tfPubId.getText());
+        sb.getPublisher().setName(tfPubName.getText());
+        sb.getPublisher().setDomain(tfPubDomain.getText());
+        sb.setCat(Collections.list(mCat.elements()));
+        sb.setPagecat(Collections.list(mCat.elements()));
+        sb.setSectioncat(Collections.list(mCat.elements()));
+        sb.getPublisher().setCat(Collections.list(mPubCat.elements()));
     }
 
     @Override
     public void actionPerformed(ActionEvent ev) {
         if (ev.getSource() == bUpdate) {
-            Site sb = lSites.getSelectedValue();
-            if (sb != null) {
-                /*
-                DecimalFormat formatter = new DecimalFormat("###,###,###.00");
+            if (active != null) {
                 try {
-                    float newPrice = formatter.parse(tfPrice.getText()).floatValue();
-
-                    Site sbN = new Site(sb.getId());
-//                    sbN.setImpId(tfImpId.getText());
-                    sbN.setPrice(newPrice);
-                    sbN.setAdId(tfAdId.getText());
-//                    sbN.setNUrl(tfNUrl.getText());
-                    sbN.setAdm(tfAdm.getText());
-                    sbN.setAdomain(Collections.list(mAdomain.elements()));
-                    sbN.setIUrl(tfIUrl.getText());
-                    sbN.setCId(tfCId.getText());
-                    sbN.setCrId(tfCrId.getText());
-                    sbN.setCats(Collections.list(mCat.elements()));
+                    Site sbN = new Site();
+                    sbN.setId(active.getId());
+                    populate(sbN);
                     model.sendUpdateCommand(sbN);
-                    model.setMessage("Site saved.");
+                    model.setMessage("Bidder saved.");
+                    active = null;
+                    setStateForActive();
                 } catch (ModelException e) {
                     model.setMessageAsFault(e.getMessage());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     e.printStackTrace();
-
-                    model.setMessageAsFault("Could not save Site due to invalid price.");
+                    model.setMessageAsFault("Could not save Bidder due to invalid price.");
                 }
-                */
             } else {
-                model.setMessageAsWarning("No Site selected.");
+                model.setMessageAsWarning("No Bidder selected.");
             }
             repaint();
         } else if (ev.getSource() == bAdd) {
-            /*
-            DecimalFormat formatter = new DecimalFormat("###,###,###.00");
-            try {
-                float newPrice = formatter.parse(tfAddPrice.getText()).floatValue();
-                Site sbN = new Site(UUID.randomUUID().toString());
-//                sbN.setImpId(tfAddImpId.getText());
-                sbN.setPrice(newPrice);
-                sbN.setAdId(tfAddAdId.getText());
-//                sbN.setNUrl(tfAddNUrl.getText());
-                sbN.setAdm(tfAddAdm.getText());
-                sbN.setAdomain(Collections.list(mAddAdomain.elements()));
-                sbN.setIUrl(tfAddIUrl.getText());
-                sbN.setCId(tfAddCId.getText());
-                sbN.setCrId(tfAddCrId.getText());
-                sbN.setCats(Collections.list(mCat.elements()));
-
-                model.sendAddCommand(sbN);
-                model.setMessage("Site added.");
-                tfAddImpId.setText("");
-                tfAddPrice.setText("");
-                tfAddAdId.setText("");
-                tfAddNUrl.setText("");
-                tfAddAdm.setText("");
-                mAddAdomain.clear();
-                tfAddIUrl.setText("");
-                tfAddCId.setText("");
-                tfAddCrId.setText("");
-                mAddCat.clear();
-            } catch (ModelException e) {
-                model.setMessageAsFault(e.getMessage());
-            } catch (ParseException e) {
-                model.setMessageAsFault("Could not add Site due to invalid price.");
-            }
-            */
+            lSites.setSelectedIndex(-1);
+            active = new Site();
+            active.setId(UUID.randomUUID().toString());
+            resetActiveDisplay(active);
+            setStateForActive();
             repaint();
         } else if (ev.getSource() == bRemove) {
-            Site sb = lSites.getSelectedValue();
-            if (sb != null) {
+            if (active != null) {
                 try {
-                    model.sendRemoveCommand(sb.getId());
+                    model.sendRemoveCommand(active.getId());
                 } catch (ModelException e) {
                     model.setMessageAsFault(e.getMessage());
                 }
             } else {
-                model.setMessageAsWarning("No Site selected.");
+                model.setMessageAsWarning("No Bidder selected.");
             }
             repaint();
-        } else if (ev.getSource() == bAddADomain) {
-            String value = tfAddNewADomain.getText();
-            if (!"".equals(value.trim())) {
-                mAddAdomain.addElement(value);
-                tfAddNewADomain.setText("");
-            }
         } else if (ev.getSource() == bAddCat) {
-            String value = tfAddNewCat.getText();
-            if (!"".equals(value.trim())) {
-                mAddCat.addElement(value);
-                tfAddNewCat.setText("");
+            ContentCategory value = (ContentCategory) cbAddCat.getSelectedItem();
+            if (value != null && !mCat.contains(value)) {
+                mCat.addElement(value);
             }
+            cbAddCat.setSelectedItem(null);
+            repaint();
+        } else if (ev.getSource() == bRemoveCat) {
+            ContentCategory value = lCat.getSelectedValue();
+            if (value != null) {
+                mCat.removeElement(value);
+                lCat.setSelectedIndex(-1);
+            } else {
+                value = (ContentCategory) cbAddCat.getSelectedItem();
+                if (value != null) {
+                    mCat.removeElement(value);
+                    cbAddCat.setSelectedIndex(-1);
+                } else {
+                    model.setMessage("Need to select category to remove.");
+                }
+            }
+            repaint();
+        } else if (ev.getSource() == bAddPageCat) {
+            ContentCategory value = (ContentCategory) cbAddCat.getSelectedItem();
+            if (value != null && !mCat.contains(value)) {
+                mPageCat.addElement(value);
+            }
+            cbAddCat.setSelectedItem(null);
+            repaint();
+        } else if (ev.getSource() == bRemovePageCat) {
+            ContentCategory value = lPageCat.getSelectedValue();
+            if (value != null) {
+                mPageCat.removeElement(value);
+                lPageCat.setSelectedIndex(-1);
+            } else {
+                value = (ContentCategory) cbAddCat.getSelectedItem();
+                if (value != null) {
+                    mPageCat.removeElement(value);
+                    cbAddCat.setSelectedIndex(-1);
+                } else {
+                    model.setMessage("Need to select category to remove.");
+                }
+            }
+            repaint();
+        } else if (ev.getSource() == bAddSectionCat) {
+            ContentCategory value = (ContentCategory) cbAddCat.getSelectedItem();
+            if (value != null && !mSectionCat.contains(value)) {
+                mSectionCat.addElement(value);
+            }
+            cbAddCat.setSelectedItem(null);
+            repaint();
+        } else if (ev.getSource() == bRemoveSectionCat) {
+            ContentCategory value = lSectionCat.getSelectedValue();
+            if (value != null) {
+                mSectionCat.removeElement(value);
+                lSectionCat.setSelectedIndex(-1);
+            } else {
+                value = (ContentCategory) cbAddCat.getSelectedItem();
+                if (value != null) {
+                    mSectionCat.removeElement(value);
+                    cbAddCat.setSelectedIndex(-1);
+                } else {
+                    model.setMessage("Need to select category to remove.");
+                }
+            }
+            repaint();
+        } else if (ev.getSource() == bAddPubCat) {
+            ContentCategory value = (ContentCategory) cbAddCat.getSelectedItem();
+            if (value != null && !mPubCat.contains(value)) {
+                mPubCat.addElement(value);
+            }
+            cbAddCat.setSelectedItem(null);
+            repaint();
+        } else if (ev.getSource() == bRemovePubCat) {
+            ContentCategory value = lPubCat.getSelectedValue();
+            if (value != null) {
+                mPubCat.removeElement(value);
+                lPubCat.setSelectedIndex(-1);
+            } else {
+                value = (ContentCategory) cbAddCat.getSelectedItem();
+                if (value != null) {
+                    mPubCat.removeElement(value);
+                    cbAddCat.setSelectedIndex(-1);
+                } else {
+                    model.setMessage("Need to select category to remove.");
+                }
+            }
+            repaint();
         }
-
     }
+
 
     @Override
     public void sendMessage(MessageStatus s, String m) {

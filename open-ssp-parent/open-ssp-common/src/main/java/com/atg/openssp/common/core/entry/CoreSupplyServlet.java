@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.atg.openssp.common.exception.ERROR_CODE;
 
+import com.atg.openssp.common.logadapter.TimeInfoLogProcessor;
 import org.apache.http.client.HttpResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
+		long startTS = System.currentTimeMillis();
 		final Stopwatch stopwatch = Stopwatch.createStarted();
 		T agent = null;
 		boolean hasResult = false;
@@ -47,11 +49,13 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 			agent = getAgent(request, response);
 			hasResult = server.processExchange(agent);
 		} catch (final RequestException e) {
+            TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault-401");
 			response.sendError(401, e.getMessage());
 		} catch (final CancellationException e) {
-
+            TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault-200");
 			response.sendError(200, "exchange timeout");
 		} catch (final Exception e) {
+            TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault");
 			log.error(e.getMessage());
 		} finally {
 			stopwatch.stop();
@@ -61,9 +65,10 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 			if (agent != null) {
 				agent.cleanUp();
 			}
+			long endTS = System.currentTimeMillis();
+			TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), startTS, endTS, endTS-startTS);
 			agent = null;
 		}
-
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.atg.openssp.dataprovider.provider.dto;
+package com.atg.openssp.common.provider.dto;
 
 /**
  * @author André Schmer

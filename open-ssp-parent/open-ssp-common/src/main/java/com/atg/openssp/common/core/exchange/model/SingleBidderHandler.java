@@ -4,7 +4,10 @@ import java.util.List;
 
 public class SingleBidderHandler extends AuctionMethodHandler {
     @Override
-    public AuctionWinner generate(List<Bidder> bidders) {
-        return null;
+    protected AuctionWinner generateWinner(List<Bidder> bidders, Bidder bestBidder, float exchangedBestBidPrice, float exchangedFloor) {
+        AuctionWinner winner =  new AuctionWinner(bestBidder);
+        winner.setPrice(exchangedBestBidPrice);
+        winner.setExchangedPrice(exchangedBestBidPrice);
+        return winner;
     }
 }

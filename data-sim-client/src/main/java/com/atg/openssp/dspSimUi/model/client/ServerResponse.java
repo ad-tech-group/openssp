@@ -11,6 +11,7 @@ public class ServerResponse {
     private ResponseStatus status;
     private String reason="";
     private List<SimBidder> bidders;
+    private ServerCommandType mode;
 
     public void setStatus(ResponseStatus status) {
         this.status = status;
@@ -36,4 +37,11 @@ public class ServerResponse {
         return bidders;
     }
 
+    public void setMode(ServerCommandType mode) {
+        this.mode = mode;
+    }
+
+    public ServerCommandType getMode() {
+        return mode;
+    }
 }

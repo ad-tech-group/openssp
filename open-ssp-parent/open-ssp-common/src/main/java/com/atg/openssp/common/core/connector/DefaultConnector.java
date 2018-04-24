@@ -20,14 +20,21 @@ public class DefaultConnector {
 	protected CloseableHttpClient httpClient;
 
 	/**
-	 * 
+	 *
 	 */
 	public DefaultConnector() {
+		this(true);
+	}
+
+	/**
+	 * 
+	 */
+	public DefaultConnector(boolean keepAlive) {
 		final PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 		cm.closeIdleConnections(120, TimeUnit.SECONDS);
 
 		// would be nice to set this from outside -> keep alive
-		final SocketConfig sConfig = SocketConfig.custom().setSoKeepAlive(true).setSoTimeout(Context.SOCKET_TO).build();
+		final SocketConfig sConfig = SocketConfig.custom().setSoKeepAlive(keepAlive).setSoTimeout(Context.SOCKET_TO).build();
 		cm.setDefaultSocketConfig(sConfig);
 
 		cm.setMaxTotal(150);

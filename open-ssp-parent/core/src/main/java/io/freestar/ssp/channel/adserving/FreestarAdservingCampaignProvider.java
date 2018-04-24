@@ -31,7 +31,7 @@ public class FreestarAdservingCampaignProvider extends AdservingCampaignProvider
     }
 
     @Override
-    public float getAdjustedCurrencyPrice() {
+    public float getExchangedCurrencyPrice() {
 		return cpm * 1;
     }
 
@@ -59,7 +59,7 @@ public class FreestarAdservingCampaignProvider extends AdservingCampaignProvider
     }
 
 	@Override
-	public void setAdjustedCurrencyPrice(final float priceNormalized) {
+	public void setExchangedCurrencyPrice(final float priceNormalized) {
 		cpm = priceNormalized;
 	}
 

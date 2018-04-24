@@ -1,0 +1,104 @@
+package com.atg.openssp.common.logadapter;
+
+import com.atg.openssp.common.core.entry.SessionAgent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+/**
+ * Threadsafe logging of rtb request data with a {@link BlockingQueue}
+ * 
+ * @author André Schmer
+ */
+public class DataBrokerLogProcessor extends Thread {
+
+	private static final Logger log = LoggerFactory.getLogger(DataBrokerLogProcessor.class);
+
+	public static final DataBrokerLogProcessor instance = new DataBrokerLogProcessor();
+	private final BlockingQueue<String> logQueue = new ArrayBlockingQueue<>(1000, true);
+	private boolean shuttingDown, loggerTerminated;
+
+	private DataBrokerLogProcessor() {
+		super.start();
+	}
+
+	@Override
+	public void run() {
+		try {
+			while (shuttingDown == false) {
+				final String item = logQueue.take();
+				LogFacade.logDataBroker(item);
+			}
+		} catch (final InterruptedException e) {
+			log.error(e.getMessage());
+			loggerTerminated = true;
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	/**
+	 * Writes data to file with request information.
+	 * 
+	 * @param type
+	 * @param startTS
+	 * @param endTS
+	 * @param delta
+	 *            {@link SessionAgent}
+	 */
+	public void setLogData(String type, int count, long startTS, long endTS, long delta) {
+		if (shuttingDown || loggerTerminated) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder(type);
+		sb.append("|");
+		sb.append(count);
+		sb.append("|");
+		sb.append(startTS);
+		sb.append("|");
+		sb.append(endTS);
+		sb.append("|");
+		sb.append(delta);
+		try {
+			logQueue.put(sb.toString());
+		} catch (final InterruptedException e) {
+			try {
+				// try again
+				logQueue.put(sb.toString());
+			} catch (final InterruptedException ignore) {
+				log.error("interrupted again, giving up.");
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	public void setLogData(final String loggingId, final String memo) {
+		if (shuttingDown || loggerTerminated) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder(loggingId);
+		sb.append("|");
+		sb.append(memo);
+		try {
+			logQueue.put(memo);
+		} catch (final InterruptedException e) {
+			try {
+				// try again
+				logQueue.put(memo);
+			} catch (final InterruptedException ignore) {
+				log.error("interrupted again, giving up.");
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	/**
+	 * Sets an indicator to shutdown this thread.
+	 */
+	public void shutDown() {
+		shuttingDown = true;
+		log.info("shutDown request received");
+	}
+
+}

@@ -4,6 +4,7 @@ import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.cache.broker.AbstractDataBroker;
 import com.atg.openssp.common.core.broker.dto.CurrencyDto;
 import com.atg.openssp.common.exception.EmptyHostException;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restful.context.Path;
@@ -27,11 +28,14 @@ public final class RemoteCurrencyDataBroker extends AbstractDataBroker<CurrencyD
 
 	@Override
 	public boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		try {
 			final CurrencyDto dto = super.connect(CurrencyDto.class);
 			if (dto != null) {
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("Currency", dto.getData().size(), startTS, endTS, endTS-startTS);
 			    CurrencyCache.instance.setBaseCurrency(dto.getCurrency());
-				log.info("sizeof Currency data=" + dto.getData().size());
+				log.debug("sizeof Currency data=" + dto.getData().size());
 				dto.getData().forEach(c -> CurrencyCache.instance.put(c.getCurrency(), c.getRate()));
 				return true;
 			}

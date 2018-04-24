@@ -32,7 +32,9 @@ public class HeaderBiddingService extends CoreSupplyServlet<RequestSessionAgent>
 		info.activateAccessAllowOrigin();
 		info.setAuctionType(AuctionType.FIRST_PRICE);
 		info.disableSendNurlNotifications();
-		return new RequestSessionAgent(request, response, info);
+		RequestSessionAgent agent =  new RequestSessionAgent(request, response, info);
+		info.setLoggingId(agent.getRequestid());
+		return agent;
 	}
 
 	@Override

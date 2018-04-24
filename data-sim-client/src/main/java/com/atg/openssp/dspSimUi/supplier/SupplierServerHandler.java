@@ -3,8 +3,9 @@ package com.atg.openssp.dspSimUi.supplier;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.dspSimUi.model.ModelException;
 import com.atg.openssp.dspSimUi.model.client.*;
-import com.atg.openssp.dspSimUi.model.dsp.SupplierModel;
+import com.atg.openssp.dspSimUi.model.supplier.SupplierModel;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -57,7 +58,7 @@ public class SupplierServerHandler implements Runnable {
         }
     }
 
-    private void sendListCommand() throws ModelException {
+    public void sendListCommand() throws ModelException {
         sendCommand(SupplierCommandType.LIST);
     }
 
@@ -93,7 +94,10 @@ public class SupplierServerHandler implements Runnable {
             CloseableHttpResponse response = client.execute(httpPost);
             if (response.getStatusLine().getStatusCode() == 200) {
                 String json = EntityUtils.toString(response.getEntity(), "UTF-8");
-                SupplierResponse sr = new Gson().fromJson(json, SupplierResponse.class);
+
+                GsonBuilder builder = new GsonBuilder();
+                Supplier.populateTypeAdapters(builder);
+                SupplierResponse sr = builder.create().fromJson(json, SupplierResponse.class);
                 if (sr.getStatus() == ResponseStatus.SUCCESS) {
                     model.handleList(sr.getSuppliers());
                 } else {

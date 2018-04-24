@@ -16,7 +16,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
-        <my.dev.catalina.home>tomcat</my.dev.catalina.home>
+        <my.dev.catalina.home>unit-test-logs</my.dev.catalina.home>
 		<docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
 		<docker.image.version>latest</docker.image.version>
 	</properties>
@@ -31,6 +31,15 @@
 			</activation>
 			<build>
 				<plugins>
+				    <plugin>
+				        <groupId>org.apache.maven.plugins</groupId>
+				        <artifactId>maven-compiler-plugin</artifactId>
+				        <version>3.5.1</version>
+				        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                        </configuration>
+                    </plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -66,6 +75,9 @@
                         <JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
                     </systemProperties>
                     <port>8080</port>
+                    <httpsPort>8443</httpsPort>
+                    <keystoreFile>${basedir}/certificates/openssp.jks</keystoreFile>
+                    <keystorePass>changeit</keystorePass>
                 </configuration>
             </plugin>
 
@@ -74,6 +86,7 @@
                 <artifactId>properties-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
+                    <properties></properties>
                     <outputFile>
                         ${project.build.outputDirectory}/app.properties
                     </outputFile>

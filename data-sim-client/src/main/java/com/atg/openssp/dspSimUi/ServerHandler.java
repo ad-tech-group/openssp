@@ -64,10 +64,6 @@ public class ServerHandler implements Runnable {
         sendCommand(ServerCommandType.LIST);
     }
 
-    public void sendAddCommand(SimBidder sb) throws ModelException {
-        sendCommand(ServerCommandType.ADD, sb.getId(), sb);
-    }
-
     public void sendRemoveCommand(String id) throws ModelException {
         sendCommand(ServerCommandType.REMOVE, id);
     }
@@ -87,7 +83,7 @@ public class ServerHandler implements Runnable {
     private void sendCommand(ServerCommandType type, String id, SimBidder sb) throws ModelException {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SERVER_HOST, "localhost")+":"+model.lookupProperty(SERVER_PORT, "8082")+"/dsp-sim/admin");
+            HttpPost httpPost = new HttpPost("https://"+model.lookupProperty(SERVER_HOST, "localhost")+":"+model.lookupProperty(SERVER_PORT, "8082")+"/dsp-sim/admin");
             ServerCommand command = new ServerCommand();
             command.setType(type);
             command.setId(id);
@@ -102,6 +98,7 @@ public class ServerHandler implements Runnable {
                 ServerResponse sr = new Gson().fromJson(json, ServerResponse.class);
                 if (sr.getStatus() == ResponseStatus.SUCCESS) {
                     model.handleList(sr.getBidders());
+                    model.handleMode(sr.getMode());
                 } else {
                     String m = type+" command failed with error: " + sr.getReason();
                     model.setMessageAsFault(m);

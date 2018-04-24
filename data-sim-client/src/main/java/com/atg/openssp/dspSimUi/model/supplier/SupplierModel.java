@@ -1,4 +1,4 @@
-package com.atg.openssp.dspSimUi.model.dsp;
+package com.atg.openssp.dspSimUi.model.supplier;
 
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.dspSimUi.supplier.SupplierServerHandler;
@@ -12,21 +12,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Brian Sorensen
  */
 public class SupplierModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(SupplierModel.class);
+    private final ResourceBundle bundle;
     private final Properties props = new Properties();
     private DefaultListModel<Supplier> mSuppliers = new DefaultListModel<Supplier>();
     private final SupplierServerHandler supplierHandler;
 
     public SupplierModel() throws ModelException {
+        bundle = ResourceBundle.getBundle("SupplierDisplayTemplate");
         loadProperties();
         supplierHandler = new SupplierServerHandler(this);
     }
@@ -81,8 +80,7 @@ public class SupplierModel extends BaseModel {
         supplierHandler.start();
     }
 
-    public void handleList(List<Supplier> suppliers) {
-        HashMap<Long, Supplier> map = getSuppliers();
+    public void handleList(List<Supplier> suppliers) { HashMap<Long, Supplier> map = getSuppliers();
         for (Supplier supplier : suppliers) {
             Supplier check = map.get(supplier.getSupplierId());
             if (check == null) {
@@ -90,7 +88,7 @@ public class SupplierModel extends BaseModel {
             } else {
                 map.remove(supplier.getSupplierId());
                 check.setShortName(supplier.getShortName());
-                check.setAllowedPlatforms(supplier.getAllowedPlatforms());
+                check.setAllowedAdPlatforms(supplier.getAllowedAdPlatforms());
                 check.setActive(supplier.getActive());
                 check.setTmax(supplier.getTmax());
                 check.setOpenRtbVersion(supplier.getOpenRtbVersion());
@@ -108,6 +106,7 @@ public class SupplierModel extends BaseModel {
         for (Map.Entry<Long, Supplier> tSupplier : map.entrySet()) {
             mSuppliers.removeElement(tSupplier.getValue());
         }
+        setMessage("list updated");
     }
 
     public void sendAddCommand(Supplier sb) throws ModelException {
@@ -122,4 +121,11 @@ public class SupplierModel extends BaseModel {
         supplierHandler.sendRemoveCommand(id);
     }
 
+    public void sendListCommand() throws ModelException {
+        supplierHandler.sendListCommand();
+    }
+
+    public String getTemplateText(String tag) {
+        return bundle.getString(tag);
+    }
 }

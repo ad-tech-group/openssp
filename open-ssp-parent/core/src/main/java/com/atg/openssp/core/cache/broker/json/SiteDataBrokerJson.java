@@ -3,6 +3,7 @@ package com.atg.openssp.core.cache.broker.json;
 import com.atg.openssp.common.cache.broker.DataBrokerObserver;
 import com.atg.openssp.common.core.broker.dto.SiteDto;
 import com.atg.openssp.common.core.cache.type.SiteDataCache;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +25,14 @@ public class SiteDataBrokerJson extends DataBrokerObserver {
 
 	@Override
 	protected boolean doCaching() {
+		long startTS = System.currentTimeMillis();
 		final Gson gson = new Gson();
 		try {
 			final String content = new String(Files.readAllBytes(Paths.get("site_db.json")), StandardCharsets.UTF_8);
 			final SiteDto dto = gson.fromJson(content, SiteDto.class);
 			if (dto != null) {
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("SiteData", dto.getSites().size(), startTS, endTS, endTS-startTS);
 				log.info("sizeof site data=" + dto.getSites().size());
 				dto.getSites().forEach(site -> {
 					SiteDataCache.instance.put(site.getId(), site);

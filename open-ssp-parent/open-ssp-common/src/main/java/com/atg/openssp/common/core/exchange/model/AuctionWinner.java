@@ -5,22 +5,27 @@ import openrtb.bidresponse.model.SeatBid;
 
 public class AuctionWinner {
     private float price;
-    private float adjustedCurrencyPrice;
-    private Supplier supplier;
-    private SeatBid seat;
-    private String currency;
-    private String dealId;
+    private float exchangedPrice;
     private Bidder bestBidder;
 
     public AuctionWinner(Bidder bestBidder) {
+        this.bestBidder = bestBidder;
     }
 
     public float getPrice() {
         return price;
     }
 
-    public float getAdjustedCurrencyPrice() {
-        return adjustedCurrencyPrice;
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public float getExchangedPrice() {
+        return exchangedPrice;
+    }
+
+    public void setExchangedPrice(float exchangedPrice) {
+        this.exchangedPrice = exchangedPrice;
     }
 
     public Supplier getSupplier() {
