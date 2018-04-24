@@ -12,24 +12,15 @@ COPY /open-ssp.war /usr/local/tomcat/webapps
 RUN mkdir -p /usr/local/tomcat/logfiles
 RUN mkdir -p /usr/local/tomcat/properties
 RUN mkdir -p /usr/local/tomcat/conf/certs
-RUN mkdir -p /usr/local/ssl
 
-COPY /cert/star.pub.network.key /usr/local/ssl
-COPY /cert/star.pub.network.cert /usr/local/ssl
+COPY cert/star.pub.network.jks conf/certs/star.pub.network.jks
 
-RUN echo "changeit\nchangeit\nBrian Sorensen\nengineering\nfreestar.io\nphoenix\nAZ\nUS\ny\n\n" | /usr/bin/keytool -genkey -alias tomcat -keyalg RSA
-
-#RUN /usr/bin/keytool -genkey -alias tomcat -keyalg RSA
-#RUN openssl genrsa -aes256 -out ca-key.pem 4096
-#RUN openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
-#RUN openssl req -new -x509 -text -key client.key -out client.cert
+RUN echo "changeit\nchangeit\nBrian Sorensen\nengineering\nfreestar.io\nphoenix\nAZ\nUS\ny\n\n" | /usr/bin/keytool -genkey -alias root -keyalg RSA
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
 COPY /properties/local.runtime.xml /usr/local/tomcat/properties
 COPY /properties/log4j2.xml /usr/local/tomcat/properties
-
-#COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
 
 COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
 #RUN #sed -i -e 's/8080/8886/g' /usr/local/tomcat/conf/server.xml

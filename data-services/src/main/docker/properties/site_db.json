@@ -7,7 +7,7 @@
 			"cat": [
 				"IAB19", "IAB19-20", "IAB19-24", "IAB19-34"
 			],
-		"page": "",
+		"page": "https",
 		"publisher": {
 			"id": "1",
 			"name": "WebDesign Ledger",
@@ -24,7 +24,7 @@
 			"cat": [
 				"IAB6", "IAB9", "IAB9-1"
 			],
-			"page": "",
+			"page": "https",
 			"publisher": {
 				"id": "2",
 				"name": "Headphone Review",

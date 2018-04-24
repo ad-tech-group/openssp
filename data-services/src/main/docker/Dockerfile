@@ -14,20 +14,9 @@ RUN mkdir -p /usr/local/tomcat/properties
 RUN mkdir -p /usr/local/tomcat/conf/certs
 RUN mkdir -p /usr/local/ssl
 
-COPY /cert/star.pub.network.key /usr/local/ssl
-COPY /cert/star.pub.network.cert /usr/local/ssl
-COPY cert/freestar.jks conf/certs/freestar.jks
-COPY cert/pub.network.jks conf/certs/pub.network.jks
+COPY cert/star.pub.network.jks conf/certs/star.pub.network.jks
 
-#RUN echo "changeit\nchangeit\nBrian Sorensen\nengineering\nfreestar.io\nphoenix\nAZ\nUS\ny\n\n" | /usr/bin/keytool -genkey -alias tomcat -keyalg RSA
-#RUN /usr/bin/keytool -import -v -trustcacerts -alias keyAlias -file server.cer -keystore cacerts.jks -keypass changeit -storepass changeit
-#RUN /usr/bin/keytool -import -v -trustcacerts -alias pub.network -keystore conf/certs/freestar.jks -keypass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -storepass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b
-RUN /usr/bin/keytool -import -v -trustcacerts -alias pub.network -keystore conf/certs/pub.network.jks -keypass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -storepass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b
-
-#RUN /usr/bin/keytool -genkey -alias tomcat -keyalg RSA
-#RUN openssl genrsa -aes256 -out ca-key.pem 4096
-#RUN openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
-#RUN openssl req -new -x509 -text -key client.key -out client.cert
+RUN echo "changeit\nchangeit\nBrian Sorensen\nengineering\nfreestar.io\nphoenix\nAZ\nUS\ny\n\n" | /usr/bin/keytool -genkey -alias root -keyalg RSA
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
