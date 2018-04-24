@@ -16,15 +16,15 @@
 	<!-- url of the data provider where the cache is updated from -->
 	<entry key="data-provider-scheme">https</entry>
 
-	<entry key="data-provider-host">35.226.42.246</entry>
+	<entry key="data-provider-host">sspservices.pub.network</entry>
 
 	<entry key="data-provider-port">443</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_pw">frogs</entry>
+	<entry key="master_pw">frogs!</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_user">izod</entry>
+	<entry key="master_user">sbsp</entry>
 
 	<!-- url of the adserver provider where the cache is updated from -->
 	<entry key="adserver-provider-scheme">https</entry>

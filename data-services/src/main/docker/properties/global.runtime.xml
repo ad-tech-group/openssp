@@ -21,10 +21,10 @@
 	<entry key="data-provider-port">3025</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_pw">frogs</entry>
+	<entry key="master_pw">frogs!</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_user">izod</entry>
+	<entry key="master_user">sbsp</entry>
 
 	<!-- url of the adserver provider where the cache is updated from -->
 	<entry key="adserver-provider-scheme">http</entry>
