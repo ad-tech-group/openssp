@@ -13,10 +13,14 @@ RUN mkdir -p /usr/local/tomcat/logfiles
 RUN mkdir -p /usr/local/tomcat/properties
 RUN mkdir -p /usr/local/tomcat/conf/certs
 RUN mkdir -p /usr/local/ssl
+RUN mkdir -p /root
 
-COPY cert/star.pub.network.jks conf/certs/star.pub.network.jks
+COPY cert/pub.network.jks conf/certs/star.pub.network.jks
+COPY cert/pub.network.jks /root/.keystore
 
-RUN echo "changeit\nchangeit\nBrian Sorensen\nengineering\nfreestar.io\nphoenix\nAZ\nUS\ny\n\n" | /usr/bin/keytool -genkey -alias root -keyalg RSA
+RUN keytool -storepasswd -new changeit -storepass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -keystore /root/.keystore
+RUN keytool -keypasswd -alias pub.network -new changeit -storepass changeit -keypass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -keystore /root/.keystore
+
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
@@ -34,3 +38,4 @@ COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
 
 EXPOSE 3024
 CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+
