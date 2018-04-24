@@ -16,9 +16,9 @@
 	<!-- url of the data provider where the cache is updated from -->
 	<entry key="data-provider-scheme">https</entry>
 
-	<entry key="data-provider-host">openssp-services.pub.network</entry>
+	<entry key="data-provider-host">dev-api.pub.network</entry>
 
-	<entry key="data-provider-port">3025</entry>
+	<entry key="data-provider-port">443</entry>
 
 	<!-- credential for remote access -->
 	<entry key="master_pw">frogs</entry>
@@ -27,17 +27,19 @@
 	<entry key="master_user">izod</entry>
 
 	<!-- url of the adserver provider where the cache is updated from -->
-	<entry key="adserver-provider-scheme">http</entry>
+	<entry key="adserver-provider-scheme">https</entry>
 
-	<entry key="adserver-provider-host">Admins-MBP</entry>
+	<!--
+	<entry key="adserver-provider-host">dev-api.pub.network</entry>
 
 	<entry key="adserver-provider-port">8885</entry>
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
+	-->
 
-        <entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
+    <entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
 
-    	<entry key="validator-handler-for-banner-class">com.atg.openssp.core.entry.banner.BannerObjectEntryValidatorHandler</entry>
+    <entry key="validator-handler-for-banner-class">com.atg.openssp.core.entry.banner.BannerObjectEntryValidatorHandler</entry>
 
 	<entry key="validator-handler-for-header-class">com.atg.openssp.core.entry.header.HeaderBiddingEntryValidatorHandler</entry>
 
