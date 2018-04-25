@@ -80,7 +80,9 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 final HeaderBiddingParamValue pm = new HeaderBiddingParamValue();
 
                 try {
-                    Site site = SiteDataCache.instance.get(biddingRequest.getSite());
+                    String requestedSite = biddingRequest.getSite();
+                    log.info("requested site: "+requestedSite);
+                    Site site = SiteDataCache.instance.get(requestedSite);
                     site.setDomain(biddingRequest.getSite());
                     String protocol;
                     if (request.getProtocol().toLowerCase().startsWith("https")) {
@@ -94,7 +96,9 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 } catch (final EmptyCacheException e) {
                     e.printStackTrace();
                     try {
-                        pm.setApp(AppDataCache.instance.get(biddingRequest.getApp()));
+                        String requestedApp = biddingRequest.getApp();
+                        log.info("requested app: "+requestedApp);
+                        pm.setApp(AppDataCache.instance.get(requestedApp));
                     } catch (final EmptyCacheException e1) {
                         throw new RequestException(ERROR_CODE.E906, "missing site or app");
                     }
@@ -137,14 +141,18 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
             }
 
             try {
-                Site site = SiteDataCache.instance.get(params.get("site"));
+                String requestedSite = params.get("site");
+                log.info("requested site: "+requestedSite);
+                Site site = SiteDataCache.instance.get(requestedSite);
                 site.setDomain(params.get("site"));
                 site.setPage(site.getDomain() + params.get("page"));
                 site.setRef(request.getHeader("referer"));
                 pm.setSite(site);
             } catch (final EmptyCacheException e) {
                 try {
-                    pm.setApp(AppDataCache.instance.get(params.get("app")));
+                    String requestedApp = params.get("app");
+                    log.info("requested app: "+requestedApp);
+                    pm.setApp(AppDataCache.instance.get(requestedApp));
                 } catch (final EmptyCacheException e1) {
                     throw new RequestException(ERROR_CODE.E906, "missing site or app");
                 }
