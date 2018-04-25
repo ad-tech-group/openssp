@@ -52,7 +52,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
-                log.debug("-->"+json);
+                log.info("<--"+json);
                 StringReader bais = new StringReader(json);
                 biddingRequest = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();
@@ -69,7 +69,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
         } else {
-            //TODO: BKS
+            log.warn("No Content or not Post");
             System.out.println(request.getHeader("User-Agent"));
         }
 
