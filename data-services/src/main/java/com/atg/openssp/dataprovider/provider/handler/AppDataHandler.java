@@ -47,12 +47,13 @@ public class AppDataHandler extends DataHandler {
 
                 if (LoginHandler.TOKEN.equals(t)) {
                     String result = new Gson().toJson(data);
-
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
                     OutputStream os = response.getOutputStream();
                     os.write(result.getBytes());
+                    os.flush();
                     os.close();
+                    log.info("<--"+result);
                 } else {
                     response.setStatus(401);
                 }

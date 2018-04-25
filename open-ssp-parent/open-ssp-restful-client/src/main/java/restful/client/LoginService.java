@@ -10,6 +10,8 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.TrustStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,6 +28,7 @@ import javax.net.ssl.SSLContext;
  *
  */
 public final class LoginService {
+    private static final Logger log = LoggerFactory.getLogger(LoginService.class);
 
 	/**
 	 * Creates a login call to remote webservice.
@@ -75,7 +78,7 @@ public final class LoginService {
 			final TokenWrapper result = restTemplate.postForObject(uri, map, TokenWrapper.class);
 			return result.getToken();
 		} catch (final URISyntaxException | RestClientException e) {
-			System.out.println("[WARNING] LoginService: " + e.getMessage());
+            log.warn(e.getMessage(), e);
 		}
 
 		return null;

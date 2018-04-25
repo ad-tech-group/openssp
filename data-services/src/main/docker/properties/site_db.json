@@ -5,7 +5,7 @@
 		"name": "WebDesign Ledger",
 		"domain": "webdesignledger.com",
 			"cat": [
-				"IAB19", "IAB19-20", "IAB19-24", "IAB19-34"
+				"IAB19", "IAB19_20", "IAB19_24", "IAB19_34"
 			],
 		"page": "https",
 		"publisher": {
