@@ -100,7 +100,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                         log.info("requested app: "+requestedApp);
                         pm.setApp(AppDataCache.instance.get(requestedApp));
                     } catch (final EmptyCacheException e1) {
-                        throw new RequestException(ERROR_CODE.E906, "missing site or app");
+                        throw new RequestException(ERROR_CODE.E906, "missing site or app (1)");
                     }
                 }
 
@@ -154,7 +154,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                     log.info("requested app: "+requestedApp);
                     pm.setApp(AppDataCache.instance.get(requestedApp));
                 } catch (final EmptyCacheException e1) {
-                    throw new RequestException(ERROR_CODE.E906, "missing site or app");
+                    throw new RequestException(ERROR_CODE.E906, "missing site or app (2)");
                 }
             }
             pm.setRequestId(params.get("id"));

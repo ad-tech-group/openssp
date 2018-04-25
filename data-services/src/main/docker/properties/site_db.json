@@ -22,7 +22,7 @@
 			"name": "Headphone Review",
 			"domain": "headphonereview.com",
 			"cat": [
-				"IAB6", "IAB9", "IAB9-1"
+				"IAB6", "IAB9", "IAB9_1"
 			],
 			"page": "https",
 			"publisher": {
