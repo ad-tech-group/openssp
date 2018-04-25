@@ -71,8 +71,8 @@
                     </systemProperties>
                     <port>0</port>
                     <httpsPort>9443</httpsPort>
-                    <keystoreFile>${basedir}/certificates/openssp.jks</keystoreFile>
-                    <keystorePass>changeit</keystorePass>
+                    <keystoreFile>${basedir}/certificates/pub.network.jks</keystoreFile>
+                    <keystorePass>kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b</keystorePass>
                 </configuration>
             </plugin>
 

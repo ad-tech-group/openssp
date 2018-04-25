@@ -59,7 +59,8 @@ public class JsonDataProviderConnector<T> implements DataProviderConnector<T> {
 		// create message converters list
 		httpMessageConverters = new ArrayList<>();
 		httpMessageConverters.add(mappingJacksonHttpMessageConverter);
-	}
+
+    }
 
 	@Override
 	public T connectDataProvider(final PathBuilder config) throws RestException {
@@ -97,7 +98,7 @@ public class JsonDataProviderConnector<T> implements DataProviderConnector<T> {
 
 	private T connect(final PathBuilder config) throws RestClientException {
 		final RestTemplate restTemplate;
-		if (1==2) {
+		if ("HTTPS".equalsIgnoreCase(config.getScheme())) {
 			TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 
 			try {

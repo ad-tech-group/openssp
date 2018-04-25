@@ -3,8 +3,14 @@ package restful.client;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.security.cert.X509Certificate;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.TrustStrategy;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -12,6 +18,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import restful.context.PathBuilder;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * @author André Schmer
@@ -29,10 +37,40 @@ public final class LoginService {
 		final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 		map.add("u", config.getMaster_user());
 		map.add("p", config.getMaster_pw());
-		final RestTemplate restTemplate = new RestTemplate();
-		final SimpleClientHttpRequestFactory rf = (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
-		rf.setReadTimeout(3000);
-		rf.setConnectTimeout(30000);
+		final RestTemplate restTemplate;
+        if ("HTTPS".equalsIgnoreCase(config.getScheme())) {
+			TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+
+			try {
+				SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
+						.loadTrustMaterial(null, acceptingTrustStrategy)
+						.build();
+				SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
+
+				CloseableHttpClient httpClient = HttpClients.custom()
+						.setSSLSocketFactory(csf)
+						.build();
+
+				HttpComponentsClientHttpRequestFactory requestFactory =
+						new HttpComponentsClientHttpRequestFactory();
+
+				requestFactory.setHttpClient(httpClient);
+				restTemplate = new RestTemplate(requestFactory);
+				final HttpComponentsClientHttpRequestFactory rf = (HttpComponentsClientHttpRequestFactory) restTemplate.getRequestFactory();
+				rf.setReadTimeout(2000);
+				rf.setConnectTimeout(2000);
+			} catch (Exception e) {
+				throw new RestClientException(e.getMessage());
+			}
+		} else {
+			restTemplate = new RestTemplate();
+			final SimpleClientHttpRequestFactory rf = (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
+			rf.setReadTimeout(3000);
+			rf.setConnectTimeout(30000);
+		}
+
+
+
 		try {
 			final URI uri = new URIBuilder().setScheme("https").setCharset(StandardCharsets.UTF_8).setHost(config
 					.getServer()).setPath("/open-ssp-services/login/token").build();
