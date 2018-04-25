@@ -43,6 +43,8 @@ COPY /properties/supplier_db.json /usr/local/tomcat/properties
 COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
 #RUN #sed -i -e 's/8080/8886/g' /usr/local/tomcat/conf/server.xml
 
+RUN cat /usr/local/tomcat/properties/global.runtime.xml
+
 EXPOSE 3024
 CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
 

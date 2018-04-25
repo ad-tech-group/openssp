@@ -21,10 +21,10 @@
 	<entry key="data-provider-port">443</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_pw">frogs!</entry>
+	<entry key="master_pw">frogs</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_user">sbsp</entry>
+	<entry key="master_user">izod</entry>
 
     <entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
 

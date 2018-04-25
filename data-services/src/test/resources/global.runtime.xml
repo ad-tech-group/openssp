@@ -14,9 +14,9 @@
 	<entry key="cdl-timeout">1000</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_pw">frogs!!</entry>
+	<entry key="master_pw">frogs</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_user">sbsp!!</entry>
+	<entry key="master_user">izod</entry>
 
 </properties>
