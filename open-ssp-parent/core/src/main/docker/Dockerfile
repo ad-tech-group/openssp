@@ -4,6 +4,15 @@ RUN rm -rf /usr/local/tomcat/webapps/examples
 RUN rm -rf /usr/local/tomcat/webapps/docs
 RUN rm -rf /usr/local/tomcat/webapps/host-manager
 RUN rm -rf /usr/local/tomcat/webapps/manager
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.xml
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.png
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.gif
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.svg
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.css
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.ico
+RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.txt
+RUN echo "<html><body><div>openssp - healthy</div></body></html>" > /usr/local/tomcat/webapps/ROOT/index.jsp
+RUN cat /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml
 
 #copy our war into place
 COPY /open-ssp.war /usr/local/tomcat/webapps
