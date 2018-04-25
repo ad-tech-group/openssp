@@ -11,20 +11,31 @@
 	
 	<!-- the timeout in ms for execution the executor service -->
 	<!-- default is 500ms --> 
-	<entry key="cdl-timeout">500</entry>
+	<entry key="cdl-timeout">1200</entry>
 
 	<!-- url of the data provider where the cache is updated from -->
-	<entry key="data-provider-scheme">http</entry>
+	<entry key="data-provider-scheme">https</entry>
 
-	<entry key="data-provider-host">localhost</entry>
+    <entry key="data-provider-host">dev-sspservices.pub.network</entry>
 
-	<entry key="data-provider-port">9090</entry>
+    <entry key="data-provider-port">443</entry>
+	<!--
+	<entry key="data-provider-host">Admins-MBP.pub.network</entry>
+
+	<entry key="data-provider-port">9443</entry>
+	-->
+
+	<!--
+	<entry key="data-provider-host">dev-sspservices.pub.network</entry>
+
+	<entry key="data-provider-port">443</entry>
+	-->
 
 	<!-- credential for remote access -->
-	<entry key="master_pw">frogs</entry>
+	<entry key="master_pw">frogs!</entry>
 
 	<!-- credential for remote access -->
-	<entry key="master_user">izod</entry>
+	<entry key="master_user">sbsp</entry>
 
 	<!-- url of the adserver provider where the cache is updated from -->
 	<entry key="adserver-provider-scheme">http</entry>
@@ -35,7 +46,7 @@
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
 
-	<entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
+    <entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
 
 	<entry key="validator-handler-for-banner-class">com.atg.openssp.core.entry.banner.BannerObjectEntryValidatorHandler</entry>
 
@@ -47,8 +58,8 @@
 
 	<entry key="bid-request-builder-handler-for-header-class">com.atg.openssp.core.exchange.HeaderBiddingBidRequestBuilderHandler</entry>
 
-    <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 
-	<!--  <entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIp2InfoHandler</entry> -->
+	<!-- <entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIp2InfoHandler</entry> -->
 
 </properties>

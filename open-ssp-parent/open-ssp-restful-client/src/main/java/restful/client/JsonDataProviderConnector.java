@@ -99,7 +99,7 @@ public class JsonDataProviderConnector<T> implements DataProviderConnector<T> {
 	private T connect(final PathBuilder config) throws RestClientException {
 		final RestTemplate restTemplate;
         config.addParam("t", RestfulContext.getToken());
-		System.out.println("BKS: "+ config.buildEndpointURI());
+        LOGGER.warn("BKS: "+ config.buildEndpointURI());
 		if ("HTTPS".equalsIgnoreCase(config.getScheme())) {
 			TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 
