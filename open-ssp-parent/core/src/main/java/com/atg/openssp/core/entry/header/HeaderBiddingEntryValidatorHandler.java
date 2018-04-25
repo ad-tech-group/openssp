@@ -83,7 +83,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                     String requestedSite = biddingRequest.getSite();
                     log.info("requested site: "+requestedSite);
                     Site site = SiteDataCache.instance.get(requestedSite);
-                    site.setDomain(biddingRequest.getSite());
+                    //site.setDomain(biddingRequest.getSite());
                     String protocol;
                     if (request.getProtocol().toLowerCase().startsWith("https")) {
                         protocol = "https://";

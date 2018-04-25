@@ -25,8 +25,8 @@ public class MangoMediaFilter extends DemandBrokerFilter {
         site.remove("name");
 //        site.remove("domain");
 //        site.remove("cat");
-//        site.remove("pagecat");
-//        site.remove("sectioncat");
+        site.remove("pagecat");
+        site.remove("sectioncat");
         site.remove("ref");
         JsonArray impA = (JsonArray) req.get("imp");
         for (int i=0; i<impA.size(); i++) {
