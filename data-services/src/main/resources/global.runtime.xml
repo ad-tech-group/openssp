@@ -13,4 +13,10 @@
 	<!-- default is 500ms --> 
 	<entry key="cdl-timeout">1000</entry>
 
+	<!-- credential for remote access -->
+	<entry key="master_pw">frogs!</entry>
+
+	<!-- credential for remote access -->
+	<entry key="master_user">sbsp</entry>
+
 </properties>
