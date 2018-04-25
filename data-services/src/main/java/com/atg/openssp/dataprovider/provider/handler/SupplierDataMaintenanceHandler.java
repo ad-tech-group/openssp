@@ -82,6 +82,7 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
                     os.write(gson.toJson(result).getBytes());
                     os.close();
                 } else {
+                    System.out.println("BKS-SUP: "+t);
                     response.setStatus(401);
                 }
             } catch (IOException e) {

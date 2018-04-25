@@ -69,10 +69,8 @@ public final class LoginService {
 			rf.setConnectTimeout(30000);
 		}
 
-
-
 		try {
-			final URI uri = new URIBuilder().setScheme("https").setCharset(StandardCharsets.UTF_8).setHost(config
+			final URI uri = new URIBuilder().setScheme(config.getScheme()).setCharset(StandardCharsets.UTF_8).setHost(config
 					.getServer()).setPath("/open-ssp-services/login/token").build();
 			final TokenWrapper result = restTemplate.postForObject(uri, map, TokenWrapper.class);
 			return result.getToken();
