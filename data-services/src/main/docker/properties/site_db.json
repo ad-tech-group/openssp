@@ -1,38 +1,47 @@
 {
-	"sites": [
-		{
-		"id": "1",
-		"name": "WebDesign Ledger",
-		"domain": "webdesignledger.com",
-			"cat": [
-				"IAB19", "IAB19_20", "IAB19_24", "IAB19_34"
-			],
-		"page": "https",
-		"publisher": {
-			"id": "1",
-			"name": "WebDesign Ledger",
-				"cat": ["IAB19"],
-			"domain": "webdesignledger.com",
-			"ext": null
-			},
-		"ext": null
-		},
-		{
-			"id": "2",
-			"name": "Headphone Review",
-			"domain": "headphonereview.com",
-			"cat": [
-				"IAB6", "IAB9", "IAB9_1"
-			],
-			"page": "https",
-			"publisher": {
-				"id": "2",
-				"name": "Headphone Review",
-				"cat": ["IAB6"],
-				"domain": "headphonereview.com",
-		"ext": null
-		},
-		"ext": null
-		}
-	]
+  "sites": [
+    {
+      "id": "1",
+      "name": "WebDesign Ledger",
+      "domain": "webdesignledger.com",
+      "page": "https",
+      "cat": [
+        "IAB19",
+        "IAB19_20",
+        "IAB19_24",
+        "IAB19_34"
+      ],
+      "publisher": {
+        "id": "1",
+        "name": "WebDesign Ledger",
+        "cat": [
+          "IAB19"
+        ],
+        "domain": "webdesignledger.com",
+        "ext": null
+      },
+      "ext": null
+    },
+    {
+      "id": "2",
+      "name": "Headphone Review",
+      "domain": "headphonereview.com",
+      "page": "https",
+      "cat": [
+        "IAB6",
+        "IAB9",
+        "IAB9_1"
+      ],
+      "publisher": {
+        "id": "2",
+        "name": "Headphone Review",
+        "cat": [
+          "IAB6"
+        ],
+        "domain": "headphonereview.com",
+        "ext": null
+      },
+      "ext": null
+    }
+  ]
 }

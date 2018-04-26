@@ -29,7 +29,6 @@ public class LoginHandler extends DataHandler {
         user = ContextCache.instance.get(ContextProperties.MASTER_USER);
         pw = ContextCache.instance.get(ContextProperties.MASTER_PW);
 
-        log.warn("BKS-!!!: login request");
         if (LocalContext.isLoginServiceEnabled()) {
             try {
                 Map<String,String> parms;
@@ -43,7 +42,6 @@ public class LoginHandler extends DataHandler {
                 String user = parms.get("u");
                 String pw = parms.get("p");
                 if (!isAuthorized(user, pw)) {
-                    log.warn("BKS-REMOVE: "+user+":"+pw);
                     response.setStatus(401);
                 } else {
                     TokenWrapper token = new TokenWrapper();

@@ -54,8 +54,9 @@
       "allowedAdPlatforms": [
         "DESKTOP"
       ],
+      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
       "underTest": 1,
-      "active": 0
+      "active": 1
     },
     {
       "shortName": "arTeeBee-mobile-test",
@@ -72,8 +73,9 @@
       "allowedAdPlatforms": [
         "MOBILE"
       ],
+      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
       "underTest": 1,
-      "active": 0
+      "active": 1
     },
     {
       "shortName": "dsp_1",
@@ -93,7 +95,7 @@
         "MOBILE"
       ],
       "underTest": 1,
-      "active": 1
+      "active": 0
     },
     {
       "shortName": "dsp_2",
@@ -113,7 +115,7 @@
         "MOBILE"
       ],
       "underTest": 1,
-      "active": 1
+      "active": 0
     }
   ]
 }
