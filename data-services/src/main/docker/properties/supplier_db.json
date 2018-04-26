@@ -54,6 +54,7 @@
       "allowedAdPlatforms": [
         "DESKTOP"
       ],
+      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
       "underTest": 1,
       "active": 1
     },
@@ -72,6 +73,7 @@
       "allowedAdPlatforms": [
         "MOBILE"
       ],
+      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
       "underTest": 1,
       "active": 1
     }
