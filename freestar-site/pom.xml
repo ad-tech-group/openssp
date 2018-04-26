@@ -5,13 +5,16 @@
 <!--    <groupId>io.freestar.openssp</groupId> -->
     <groupId>com.atg.openssp</groupId>
     <artifactId>site-information</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>site-information</name>
     <url>http://maven.apache.org</url>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
+        <docker.image.version>latest</docker.image.version>
     </properties>
+
     <profiles>
         <profile>
             <id>mock-catalina-home</id>
@@ -47,6 +50,32 @@
 					</execution>
 				</executions>
 			</plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.13</version>
+                <configuration>
+                    <forceTags>true</forceTags>
+                    <imageTags>
+                        <imageTag>${docker.image.version}</imageTag>
+                    </imageTags>
+                    <imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.war</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -85,4 +114,16 @@
             </exclusions>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>freestar-snapshots</name>
+            <url>https://freestar.jfrog.io/freestar/libs-snapshot</url>
+        </snapshotRepository>
+        <repository>
+            <id>central</id>
+            <name>freestar-releases</name>
+            <url>https://freestar.jfrog.io/freestar/libs-release</url>
+        </repository>
+    </distributionManagement>
 </project>

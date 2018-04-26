@@ -1,7 +1,5 @@
 package com.atg.openssp.common.core.exchange;
 
-import com.atg.openssp.common.cache.CurrencyCache;
-import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.entry.BiddingServiceInfo;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.core.exchange.model.*;

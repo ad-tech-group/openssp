@@ -8,7 +8,9 @@ import java.nio.file.Paths;
 import com.atg.openssp.common.core.broker.dto.SupplierDto;
 import com.atg.openssp.common.core.cache.type.ConnectorCache;
 import com.atg.openssp.common.core.exchange.channel.rtb.OpenRtbConnector;
+import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
+import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +38,9 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 	@Override
 	public boolean doCaching() {
 		long startTS = System.currentTimeMillis();
-		final Gson gson = new Gson();
+		GsonBuilder builder = new GsonBuilder();
+		Supplier.populateTypeAdapters(builder);
+		final Gson gson = builder.create();
 		try {
 			final String content = new String(Files.readAllBytes(Paths.get("supplier_db.json")), StandardCharsets.UTF_8);
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);

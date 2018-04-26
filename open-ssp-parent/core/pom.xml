@@ -74,7 +74,11 @@
                     <systemProperties>
                         <JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
                     </systemProperties>
-                    <port>8080</port>
+                    <port>0</port>
+                    <httpsPort>8443</httpsPort>
+                    <keystoreFile>${basedir}/certificates/pub.network.jks</keystoreFile>
+                    <keystorePass>kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b</keystorePass>
+                    <configurationDir>tomcat</configurationDir>
                 </configuration>
             </plugin>
 
@@ -83,6 +87,7 @@
                 <artifactId>properties-maven-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
+                    <properties></properties>
                     <outputFile>
                         ${project.build.outputDirectory}/app.properties
                     </outputFile>

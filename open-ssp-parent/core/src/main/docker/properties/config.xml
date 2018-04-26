@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<!-- this is non dynamic loadable configuartion file -->
+<!-- values in here will only be loaded during tomcat startup -->
+<!-- changes need tomcat restart to effect-->
+<properties>
+	<!-- switch to enable/disable metrics support -->
+	<entry key="metrics">false</entry>
+</properties>

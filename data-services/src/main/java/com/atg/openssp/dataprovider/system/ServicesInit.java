@@ -4,6 +4,7 @@ import com.atg.openssp.common.core.system.job.WatchdogService;
 import com.atg.openssp.common.core.system.loader.ConfigLoader;
 import com.atg.openssp.common.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.common.core.system.loader.LocalContextLoader;
+import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -25,8 +28,14 @@ public class ServicesInit extends GenericServlet {
 
     @Override
     public void init() throws ServletException {
+        System.out.println("*************************************");
         InitLogging.setSystemProperties();
         log.info("**** Initing core application ****");
+        try {
+            System.out.println("-->"+ InetAddress.getLocalHost().getHostName()+":"+InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         //LocalContext.setVersion(new MavenProperties().getVersion());
         //log.info("**** SSP Version: " + LocalContext.getVersion() + " ****");
 
@@ -41,6 +50,9 @@ public class ServicesInit extends GenericServlet {
             log.error(e.getMessage());
         }
         super.init();
+        for (ContentCategory c: ContentCategory.values()) {
+            // do the add
+        }
     }
 
         @Override

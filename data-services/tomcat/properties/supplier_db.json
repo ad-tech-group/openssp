@@ -13,7 +13,7 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "DESKTOP"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
@@ -33,7 +33,7 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "MOBILE"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
@@ -53,7 +53,7 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "DESKTOP"
       ],
       "cookieSync": "",
@@ -72,7 +72,7 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "MOBILE"
       ],
       "cookieSync": "",
@@ -81,18 +81,18 @@
     },
     {
       "shortName": "dsp_1",
-      "endPoint": "http://localhost:8081/dsp-sim/DemandService",
+      "endPoint": "http://localhost:8081x/dsp-sim/DemandService",
       "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
-      "supplierId": "1",
+      "supplierId": "100000",
       "currency": "USD",
       "tmax": 300,
       "allowedAdFormats": [
         "BANNER",
         "VIDEO"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "DESKTOP",
         "MOBILE"
       ],
@@ -102,18 +102,18 @@
     },
     {
       "shortName": "dsp_2",
-      "endPoint": "http://localhost:8082/dsp-sim/DemandService",
+      "endPoint": "http://localhost:8082x/dsp-sim/DemandService",
       "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
-      "supplierId": "2",
+      "supplierId": "100001",
       "currency": "USD",
       "tmax": 300,
       "allowedAdFormats": [
         "BANNER",
         "VIDEO"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "DESKTOP",
         "MOBILE"
       ],

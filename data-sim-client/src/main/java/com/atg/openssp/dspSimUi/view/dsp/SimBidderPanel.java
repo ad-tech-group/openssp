@@ -44,7 +44,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
     private final DefaultListModel<ContentCategory> mCat = new DefaultListModel<ContentCategory>();
     private final JList<ContentCategory> lCat = new JList<ContentCategory>(mCat);
     private final JTextField tfAddADomain = new JTextField(25);
-    private DefaultComboBoxModel<ContentCategory> mAddCat = new DefaultComboBoxModel<ContentCategory>();
+    private final DefaultComboBoxModel<ContentCategory> mAddCat = new DefaultComboBoxModel<ContentCategory>();
     private final JComboBox<ContentCategory> cbAddCat = new JComboBox<ContentCategory>(mAddCat);
     private final JTextField tfMemo = new JTextField(20);
 
@@ -150,6 +150,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         bAdd.setEnabled(true);
         bAdd.addActionListener(this);
         addItem(pRight, "", bAdd);
+
         bUpdate.setEnabled(false);
         bUpdate.addActionListener(this);
         addItem(pRight, "", bUpdate);
@@ -319,7 +320,7 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
                     model.sendUpdateCommand(sbN);
                     model.setMessage("Bidder saved.");
                     active = null;
-                    this.setStateForActive();
+                    setStateForActive();
                 } catch (ModelException e) {
                     model.setMessageAsFault(e.getMessage());
                 } catch (Exception e) {

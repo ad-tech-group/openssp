@@ -1,8 +1,11 @@
-package com.atg.openssp.dataprovider.provider.handler;
+package com.atg.openssp.common.provider;
 
+import com.atg.openssp.common.configuration.ContextCache;
+import com.atg.openssp.common.configuration.ContextProperties;
+import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.system.LocalContext;
+import com.atg.openssp.common.provider.dto.TokenWrapper;
 import com.google.gson.Gson;
-import com.atg.openssp.dataprovider.provider.dto.TokenWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +22,14 @@ public class LoginHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(LoginHandler.class);
     public static final String TOKEN = "liverworst-5";
     public static final String CONTEXT = "/login/token";
+    private final String user;
+    private final String pw;
 
     public LoginHandler(HttpServletRequest request, HttpServletResponse response) {
+        user = ContextCache.instance.get(ContextProperties.MASTER_USER);
+        pw = ContextCache.instance.get(ContextProperties.MASTER_PW);
+
+        log.warn("BKS-!!!: login request");
         if (LocalContext.isLoginServiceEnabled()) {
             try {
                 Map<String,String> parms;
@@ -34,6 +43,7 @@ public class LoginHandler extends DataHandler {
                 String user = parms.get("u");
                 String pw = parms.get("p");
                 if (!isAuthorized(user, pw)) {
+                    log.warn("BKS-REMOVE: "+user+":"+pw);
                     response.setStatus(401);
                 } else {
                     TokenWrapper token = new TokenWrapper();
@@ -61,7 +71,7 @@ public class LoginHandler extends DataHandler {
     }
 
     private boolean isAuthorized(String user, String pw) {
-        return user != null && "izod".equals(user) && pw != null && "frogs".equals(pw);
+        return user != null && this.user.equals(user) && pw != null && this.pw.equals(pw);
     }
 
 }

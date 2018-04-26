@@ -39,7 +39,7 @@ public class Supplier implements Serializable, Cloneable {
 
     private List<SupplierAdFormat> allowedAdFormats = new ArrayList();
 
-    private List<SupplierAdPlatform> allowedPlatforms = new ArrayList();
+    private List<SupplierAdPlatform> allowedAdPlatforms = new ArrayList();
 
     private String demandBrokerFilterClassName;
 
@@ -69,6 +69,10 @@ public class Supplier implements Serializable, Cloneable {
 
 	public boolean isConnectionKeepAlive() {
 		return connectionKeepAlive;
+	}
+
+	public void setConnectionKeepAlive(boolean connectionKeepAlive) {
+		this.connectionKeepAlive = connectionKeepAlive;
 	}
 
 	public String getOpenRtbVersion() {
@@ -162,24 +166,32 @@ public class Supplier implements Serializable, Cloneable {
     }
 
     public void setAllowedAdFormats(final List<SupplierAdFormat> allowedAdFormats) {
+		allowedAdFormats.clear();
         if (allowedAdFormats != null) {
             this.allowedAdFormats.addAll(allowedAdFormats);
         }
     }
 
-    public void addAllowedPlatforms(final SupplierAdPlatform allowedPlatform) {
-        if (allowedPlatform != null) {
-            this.allowedPlatforms.add(allowedPlatform);
+    public void addAllowedAdFormats(final SupplierAdFormat allowedFormat) {
+        if (allowedFormat != null) {
+            this.allowedAdFormats.add(allowedFormat);
         }
     }
 
-    public List<SupplierAdPlatform> getAllowedPlatforms() {
-        return allowedPlatforms;
+    public List<SupplierAdPlatform> getAllowedAdPlatforms() {
+        return allowedAdPlatforms;
     }
 
-    public void setAllowedPlatforms(final List<SupplierAdPlatform> allowedPlatforms) {
-        if (allowedPlatforms != null) {
-            this.allowedPlatforms.addAll(allowedPlatforms);
+    public void setAllowedAdPlatforms(final List<SupplierAdPlatform> allowedAdPlatforms) {
+        allowedAdPlatforms.clear();
+        if (allowedAdPlatforms != null) {
+            this.allowedAdPlatforms.addAll(allowedAdPlatforms);
+        }
+    }
+
+    public void addAllowedAdPlatforms(final SupplierAdPlatform allowedPlatform) {
+        if (allowedPlatform != null) {
+            this.allowedAdPlatforms.add(allowedPlatform);
         }
     }
 
