@@ -55,7 +55,7 @@
         "DESKTOP"
       ],
       "underTest": 1,
-      "active": 1
+      "active": 0
     },
     {
       "shortName": "arTeeBee-mobile-test",
@@ -73,11 +73,11 @@
         "MOBILE"
       ],
       "underTest": 1,
-      "active": 1
+      "active": 0
     },
     {
       "shortName": "dsp_1",
-      "endPoint": "http://localhost:8081/dsp-sim/DemandService",
+      "endPoint": "http://localhost:8081x/dsp-sim/DemandService",
       "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
@@ -93,11 +93,11 @@
         "MOBILE"
       ],
       "underTest": 1,
-      "active": 0
+      "active": 1
     },
     {
       "shortName": "dsp_2",
-      "endPoint": "http://localhost:8082/dsp-sim/DemandService",
+      "endPoint": "http://localhost:8082x/dsp-sim/DemandService",
       "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
@@ -113,7 +113,7 @@
         "MOBILE"
       ],
       "underTest": 1,
-      "active": 0
+      "active": 1
     }
   ]
 }

@@ -13,7 +13,7 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "DESKTOP"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
@@ -32,7 +32,7 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "MOBILE"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
@@ -51,7 +51,7 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "DESKTOP"
       ],
       "underTest": 1,
@@ -69,49 +69,11 @@
       "allowedAdFormats": [
         "BANNER"
       ],
-      "allowedPlatforms": [
+      "allowedAdPlatforms": [
         "MOBILE"
       ],
       "underTest": 1,
       "active": 1
-    },
-    {
-      "shortName": "dsp_1",
-      "endPoint": "http://35.226.213.130:8081/dsp-sim/DemandService",
-      "connectionKeepAlive": true,
-      "openRtbVersion": 2.4,
-      "contentType": "application/json",
-      "supplierId": "1000",
-      "currency": "USD",
-      "tmax": 300,
-      "allowedAdFormats": [
-        "BANNER"
-      ],
-      "allowedPlatforms": [
-        "DESKTOP",
-        "MOBILE"
-      ],
-      "underTest": 1,
-      "active": 0
-    },
-    {
-      "shortName": "dsp_2",
-      "endPoint": "http://35.226.213.130:8082/dsp-sim/DemandService",
-      "connectionKeepAlive": true,
-      "openRtbVersion": 2.4,
-      "contentType": "application/json",
-      "supplierId": "2000",
-      "currency": "USD",
-      "tmax": 300,
-      "allowedAdFormats": [
-        "BANNER"
-      ],
-      "allowedPlatforms": [
-        "DESKTOP",
-        "MOBILE"
-      ],
-      "underTest": 1,
-      "active": 0
     }
   ]
 }

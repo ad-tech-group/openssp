@@ -78,6 +78,7 @@
                     <httpsPort>8443</httpsPort>
                     <keystoreFile>${basedir}/certificates/pub.network.jks</keystoreFile>
                     <keystorePass>kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b</keystorePass>
+                    <configurationDir>tomcat</configurationDir>
                 </configuration>
             </plugin>
 
