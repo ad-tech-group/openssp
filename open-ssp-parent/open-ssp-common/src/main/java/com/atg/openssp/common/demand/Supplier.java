@@ -293,7 +293,7 @@ public class Supplier implements Serializable, Cloneable {
         s.currency = currency;
         s.tmax = tmax;
         s.allowedAdFormats.addAll(allowedAdFormats);
-        s.allowedPlatforms.addAll(allowedPlatforms);
+        s.allowedAdPlatforms.addAll(allowedAdPlatforms);
         s.demandBrokerFilterClassName = demandBrokerFilterClassName;
         s.cookieSync = cookieSync;
         s.underTest = underTest;
