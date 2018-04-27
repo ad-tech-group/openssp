@@ -32,31 +32,29 @@ public class DspModel {
     private final ArrayList<SimBidder> bList = new ArrayList<SimBidder>();
     private final HashMap<String, SimBidder> bMap = new LinkedHashMap<String, SimBidder>();
     private final Properties properties = new Properties();
-    private final int index;
     private final File modelFile;
     private DspReturnFilter filter;
     private ClientCommandType mode = ClientCommandType.RETURN_NORMAL;
 
-    public DspModel(int index) throws ModelException {
-        this.index = index;
-        modelFile = new File("DSP_SIM_MODEL_"+index+".json");
+    public DspModel() throws ModelException {
+        modelFile = new File("DSP_SIM_MODEL.json");
 
         loadProperties();
         loadModel();
         loadFilter();
     }
 
-    private void loadProperties() {
-        File file = new File("dsp-sim-dsp_"+index+".properties");
+    private void loadProperties() throws ModelException {
+        File file = new File("dsp-sim.properties");
         if (file.exists()) {
             try {
                 FileInputStream is = new FileInputStream(file);
                 properties.load(is);
                 is.close();
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                throw new ModelException(e);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new ModelException(e);
             }
         } else {
             try {
@@ -64,9 +62,11 @@ public class DspModel {
                 if (is != null) {
                     properties.load(is);
                     is.close();
+                } else {
+                    throw new ModelException("properties file missing: "+file);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new ModelException(e);
             }
         }
     }
@@ -285,10 +285,6 @@ public class DspModel {
 
     public String filterResult(BidResponse brsp) {
         return filter.filterResult(brsp);
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public void setMode(ClientCommandType mode) {
