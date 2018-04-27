@@ -24,7 +24,7 @@ public class DspHandlerTest {
     @org.junit.Test
     public void handle() {
         try {
-            DspModel m = new DspModel(0);
+            DspModel m = new DspModel();
             DspHandler h = new DspHandler(m);
             StringBuilder body = new StringBuilder();
             body.append("{\n" +
@@ -100,7 +100,9 @@ public class DspHandlerTest {
             JsonObject testNode = parser.parse(e.getTestResult()).getAsJsonObject();
             testNode.addProperty("bidid", "-zap-");
 
-            assertEquals(testNode.toString(), result.toString());
+            assertEquals(result.toString(), testNode.toString());
+            //<...3217854","seatbid":[[{"bid":[{"id":"QRh2T-YNIFk_0","impid":"1","price":0.01,"adid":"adid1","nurl":"http://friendly.com:20/win?i=QRh2T-YNIFk_0&price=${AUCTION_PRICE}","adm":"<a href='http://rtb.adkernel.com/click?i=QRh2T-YNIFk_0' target='_blank'><img src='http://rtb.adkernel.com/n1/ad/300x250_EUNqbCsW.png' width='300' height='250' border='0' ></a><img src='http://rtb.adkernel.com/pixel?i=QRh2T-YNIFk_0' alt=' ' style='display:none'>","adomain":["adkernel.com"],"attr":[],"api":0,"protocol":0,"w":300,"h":250,"cat":[]}],"group":0}]],"bidid":"-zap-","c...> but was:
+            //<...3217854","seatbid":[[]],"bidid":"-zap-","c...>
 
         } catch (ModelException e) {
             e.printStackTrace();

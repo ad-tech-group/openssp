@@ -24,12 +24,10 @@ public class DspModel extends BaseModel {
     private final ResourceBundle bundle;
     private ArrayList<ModeChangeListener> modeChangeListeners = new ArrayList<ModeChangeListener>();
     private final Properties props = new Properties();
-    private final int index;
     private DefaultListModel<SimBidder> mBidders = new DefaultListModel<SimBidder>();
     private final ServerHandler serverHandler;
 
-    public DspModel(int index) throws ModelException {
-        this.index = index;
+    public DspModel() throws ModelException {
         bundle = ResourceBundle.getBundle("DisplayTemplate");
         loadProperties();
         serverHandler = new ServerHandler(this);
@@ -37,7 +35,7 @@ public class DspModel extends BaseModel {
 
     private void loadProperties() {
         try {
-            File file = new File("DspSimClient_"+index+".properties");
+            File file = new File("dsp-sim-client.properties");
             InputStream is;
             if (file.exists()) {
                 is = new FileInputStream(file);
