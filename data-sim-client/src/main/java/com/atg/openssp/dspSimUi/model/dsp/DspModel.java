@@ -36,7 +36,6 @@ public class DspModel extends BaseModel {
     private void loadProperties() {
         try {
             File file = new File("dsp-sim-client.properties");
-            System.out.println(file.getAbsolutePath());
             InputStream is;
             if (file.exists()) {
                 is = new FileInputStream(file);
