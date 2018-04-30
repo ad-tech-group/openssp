@@ -17,7 +17,7 @@
     <Service name="Catalina">
 
         <Connector port="3024" protocol="org.apache.coyote.http11.Http11NioProtocol"
-                   maxThreads="150" SSLEnabled="true" defaultHost="openssp.pub.network">
+                   maxThreads="150" SSLEnabled="true" defaultHost="dev-ssp.pub.network">
             <SSLHostConfig>
                 <Certificate certificateKeystoreFile="conf/certs/star.pub.network.jks"
                              certificateKeyAlias="pub.network"

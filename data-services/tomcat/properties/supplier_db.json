@@ -18,7 +18,7 @@
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
       "underTest": 1,
-      "active": 0
+      "active": 1
     },
     {
       "shortName": "MangoMedia-mobile-test",
@@ -37,7 +37,7 @@
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
       "underTest": 1,
-      "active": 0
+      "active": 1
     },
     {
       "shortName": "arTeeBee-desktop-test",
@@ -56,7 +56,7 @@
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
       "underTest": 1,
-      "active": 0
+      "active": 1
     },
     {
       "shortName": "arTeeBee-mobile-test",
@@ -75,10 +75,10 @@
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
       "underTest": 1,
-      "active": 0
+      "active": 1
     },
     {
-      "shortName": "dsp_1",
+      "shortName": "dsp",
       "endPoint": "https://Admins-MBP.pub.network:8081/dsp-sim/DemandService",
       "connectionKeepAlive": false,
       "openRtbVersion": 2.4,
@@ -94,8 +94,8 @@
         "DESKTOP",
         "MOBILE"
       ],
-      "underTest": 1,
-      "active": 1
+      "underTest": 0,
+      "active": 0
     }
   ]
 }
