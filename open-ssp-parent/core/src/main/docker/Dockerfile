@@ -32,8 +32,8 @@ RUN keytool -keypasswd -alias pub.network -new changeit -storepass changeit -key
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
-COPY /properties/dev_global.runtime.xml /usr/local/tomcat/properties/dev/global.runtime.xml
-COPY /properties/prd_global.runtime.xml /usr/local/tomcat/properties/prd/global.runtime.xml
+COPY /properties/dev_global.runtime.xml /usr/local/tomcat/properties
+COPY /properties/prd_global.runtime.xml /usr/local/tomcat/properties
 COPY /properties/local.runtime.xml /usr/local/tomcat/properties
 COPY /properties/log4j2.xml /usr/local/tomcat/properties
 

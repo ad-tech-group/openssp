@@ -30,7 +30,7 @@ public class GlobalContextLoader extends AbstractConfigurationLoader {
 		System.out.println("Environment: "+environment);
 		System.err.println("Environment: "+environment);
 		if (environment != null) {
-			return environment+"/";
+			return environment+"_";
 		} else {
 			return "";
 		}
