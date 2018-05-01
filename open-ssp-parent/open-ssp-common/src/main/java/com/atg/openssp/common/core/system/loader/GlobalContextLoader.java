@@ -27,6 +27,8 @@ public class GlobalContextLoader extends AbstractConfigurationLoader {
 	public static String resolveEnvironment() {
 		String environment = System.getProperty("SSP_ENVIRONMENT");
 		log.info("Environment: "+environment);
+		System.out.println("Environment: "+environment);
+		System.err.println("Environment: "+environment);
 		if (environment != null) {
 			return environment+"/";
 		} else {
