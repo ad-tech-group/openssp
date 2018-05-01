@@ -2,6 +2,7 @@ package com.atg.openssp.dataprovider.provider.handler;
 
 import com.atg.openssp.common.core.broker.dto.SupplierDto;
 import com.atg.openssp.common.core.system.LocalContext;
+import com.atg.openssp.common.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
@@ -31,6 +32,10 @@ public class SupplierDataHandler extends DataHandler {
     public SupplierDataHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isSupplierDataServiceEnabled()) {
             try {
+                String environment = GlobalContextLoader.resolveEnvironment();
+                log.info("Environment: "+environment);
+                System.out.println("Environment: "+environment);
+                System.err.println("Environment: "+environment);
                 String location;
                 try {
                     location = ProjectProperty.getPropertiesResourceLocation()+"/";
@@ -43,7 +48,7 @@ public class SupplierDataHandler extends DataHandler {
                     GsonBuilder builder = new GsonBuilder();
                     Supplier.populateTypeAdapters(builder);
                     Gson gson = builder.create();
-                    String content = new String(Files.readAllBytes(Paths.get(location+"supplier_db.json")), StandardCharsets.UTF_8);
+                    String content = new String(Files.readAllBytes(Paths.get(location+environment+"supplier_db.json")), StandardCharsets.UTF_8);
                     SupplierDto newData = gson.fromJson(content, SupplierDto.class);
                     for (Supplier s : newData.getSupplier()) {
                         DataStore.getInstance().insert(s);
