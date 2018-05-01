@@ -32,7 +32,7 @@ public class SupplierDataHandler extends DataHandler {
     public SupplierDataHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isSupplierDataServiceEnabled()) {
             try {
-                String environment = GlobalContextLoader.resolveEnvironment();
+                String environment = resolveEnvironment();
                 log.info("Environment: "+environment);
                 System.out.println("Environment: "+environment);
                 System.err.println("Environment: "+environment);
@@ -85,6 +85,18 @@ public class SupplierDataHandler extends DataHandler {
     @Override
     public void cleanUp() {
 
+    }
+
+    private String resolveEnvironment() {
+        String environment = System.getProperty("SSP_ENVIRONMENT");
+        log.info("Environment: "+environment);
+        System.out.println("Environment: "+environment);
+        System.err.println("Environment: "+environment);
+        if (environment != null) {
+            return environment+"/";
+        } else {
+            return "";
+        }
     }
 
 }
