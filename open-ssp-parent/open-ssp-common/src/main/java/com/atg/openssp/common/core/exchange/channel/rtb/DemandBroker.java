@@ -73,7 +73,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		try {
 			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
 
-			log.debug("biderquest: " + jsonBidrequest);
+			log.debug("bidrequest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
@@ -90,17 +90,11 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 				if (!"".equals(cookieSync)) {
                     StringBuilder sspRedirUrl = new StringBuilder();
                     String uid = bidrequest.getUser().getId();
-                    String dspUid = uid;
                     String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
                     String protocol = "https";
-//                    int port = getSessionAgent().getHttpRequest().getLocalPort();
-//                    sspRedirUrl.append(protocol+"://"+addr+":"+port+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid="+dspUid);
-                    sspRedirUrl.append(protocol+"://"+addr+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid="+dspUid);
+                    sspRedirUrl.append(protocol+"://"+addr+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid={UID}");
                     s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
-//                    s.setCookieSync(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()));
                 }
-//<img src='//sync.adkernel.com/user-sync?zone={zone_id}&t=image&r=SSP_REDIR_URL' style ='display:none' width='0' height='0'></img>
-//https://openssp.pub.network/cookiesync?fsuid=41624435-5e3e-47c6-b382-a938abb79283&dsp=mango&dsp_uid=124092432-66543-124846086
 				return container;
 			} else {
                 log.debug("bidresponse: is null");
