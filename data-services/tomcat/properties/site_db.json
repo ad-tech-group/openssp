@@ -1,25 +1,28 @@
 {
   "sites": [
     {
-      "id": "testmango.com",
+      "id": "1",
       "name": "testmango",
-      "page": "http",
+      "domain": "testmango.com",
+      "page": "https",
       "cat": [],
       "pagecat": [],
       "sectioncat": []
     },
     {
-      "id": "coindesk.com",
+      "id": "2",
       "name": "coindesk.com",
-      "page": "http",
+      "domain": "coindesk.com",
+      "page": "https",
       "cat": [],
       "pagecat": [],
       "sectioncat": []
     },
     {
-      "id": "testsite.com",
-      "page": "http",
+      "id": "3",
       "name": "testsite.com",
+      "domain": "testsite.com",
+      "page": "https",
       "cat": [
         "1"
       ],
@@ -31,12 +34,12 @@
         "cat": [],
         "domain": "www.testpublisher_1.com"
       }
-      },
+    },
     {
-      "id": "webdesignledger.com",
+      "id": "4",
       "name": "webdesignledger",
       "domain": "webdesignledger.com",
-      "page": "http",
+      "page": "https",
       "cat": [],
       "pagecat": [],
       "sectioncat": []

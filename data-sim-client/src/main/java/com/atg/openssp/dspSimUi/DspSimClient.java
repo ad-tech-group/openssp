@@ -16,8 +16,8 @@ public class DspSimClient {
     private DspModel dspModel;
     private AdModel adModel;
 
-    public DspSimClient(int index) throws ModelException {
-        dspModel = new DspModel(index);
+    public DspSimClient() throws ModelException {
+        dspModel = new DspModel();
         dspView = new DspView(dspModel);
         adModel = new AdModel(dspModel.getProperties());
     }
@@ -28,13 +28,11 @@ public class DspSimClient {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 2; i++) {
-            try {
-                DspSimClient sim = new DspSimClient(i);
-                sim.start();
-            } catch (ModelException e) {
-                log.error(e.getMessage(), e);
-            }
+        try {
+            DspSimClient sim = new DspSimClient();
+            sim.start();
+        } catch (ModelException e) {
+            log.error(e.getMessage(), e);
         }
     }
 

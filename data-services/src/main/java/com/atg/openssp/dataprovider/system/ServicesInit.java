@@ -34,7 +34,7 @@ public class ServicesInit extends GenericServlet {
         try {
             System.out.println("-->"+ InetAddress.getLocalHost().getHostName()+":"+InetAddress.getLocalHost().getHostAddress());
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            throw new ServletException(e);
         }
         //LocalContext.setVersion(new MavenProperties().getVersion());
         //log.info("**** SSP Version: " + LocalContext.getVersion() + " ****");

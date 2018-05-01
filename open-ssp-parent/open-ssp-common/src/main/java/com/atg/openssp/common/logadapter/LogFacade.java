@@ -75,7 +75,7 @@ public class LogFacade {
                 rtbResponseLogger = LogManager.getLogger(BID_RESPONSE);
             }
         }
-        rtbResponseLogger.info("{} {}", params, msg);
+        rtbResponseLogger.debug("{} {}", params, msg);
 	}
 
 	public static void logRtbRequest(final String msg, final String... params) {
@@ -84,7 +84,7 @@ public class LogFacade {
                 rtbRequestLogger = LogManager.getLogger(BID_REQUEST);
             }
         }
-        rtbRequestLogger.info("{} {}", params, msg);
+        rtbRequestLogger.debug("{} {}", params, msg);
 	}
 
 	// public static void logAdservingRequest(final String msg, final String... params) {

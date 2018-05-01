@@ -74,7 +74,7 @@ public final class LoginService {
 
 		try {
 			final URI uri = new URIBuilder().setScheme(config.getScheme()).setCharset(StandardCharsets.UTF_8).setHost(config
-					.getServer()).setPath("/open-ssp-services/login/token").build();
+					.getServer()).setPath("/ssp-services/login/token").build();
 			final TokenWrapper result = restTemplate.postForObject(uri, map, TokenWrapper.class);
 			return result.getToken();
 		} catch (final URISyntaxException | RestClientException e) {

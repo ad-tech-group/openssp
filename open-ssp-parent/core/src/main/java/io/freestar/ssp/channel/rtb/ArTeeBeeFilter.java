@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MangoMediaFilter extends DemandBrokerFilter {
+public class ArTeeBeeFilter extends DemandBrokerFilter {
     private final static String AUCTION_PRICE = "\\$\\{AUCTION_PRICE\\}";
     private final static Pattern auction_price = Pattern.compile(AUCTION_PRICE);
 
@@ -52,12 +52,12 @@ public class MangoMediaFilter extends DemandBrokerFilter {
 //        device.remove("geo");
         device.remove("dnt");
         device.remove("lmt");
-//        device.remove("devicetype");
-//        device.remove("h");
-//        device.remove("w");
-//        device.remove("ppi");
-//        device.remove("pxratio");
-//        device.remove("js");
+        device.remove("devicetype");
+        device.remove("h");
+        device.remove("w");
+        device.remove("ppi");
+        device.remove("pxratio");
+        device.remove("js");
         device.remove("geofetch");
 //        device.remove("connectiontype");
 
@@ -71,11 +71,6 @@ public class MangoMediaFilter extends DemandBrokerFilter {
         JsonArray cur = (JsonArray) req.get("cur");
 
         req.remove("cur");
-        if ("0".equals(req.get("test").getAsString())) {
-            req.addProperty("test", false);
-        } else if ("1".equals(req.get("test").getAsString())) {
-            req.addProperty("test", true);
-        }
 
         return req.toString();
     }

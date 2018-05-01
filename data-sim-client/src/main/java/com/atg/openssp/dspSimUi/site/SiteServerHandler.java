@@ -82,7 +82,7 @@ public class SiteServerHandler implements Runnable {
     private void sendCommand(SiteCommandType type, Site sb) throws ModelException {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SITE_HOST, "localhost")+":"+model.lookupProperty(SITE_PORT, "9090")+"/open-ssp-services/maintain/site?t=liverworst-5");
+            HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SITE_HOST, "localhost")+":"+model.lookupProperty(SITE_PORT, "9090")+"/ssp-services/maintain/site?t=liverworst-5");
             System.out.println(httpPost);
             SiteCommand command = new SiteCommand();
             command.setCommand(type);

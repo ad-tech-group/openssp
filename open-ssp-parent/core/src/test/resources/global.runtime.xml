@@ -31,7 +31,7 @@
 
 	<entry key="adserver-provider-host">localhost</entry>
 
-	<entry key="adserver-provider-port">8082</entry>
+	<entry key="adserver-provider-port">8081</entry>
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
 

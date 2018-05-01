@@ -10,45 +10,45 @@
     <packaging>war</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
+        <maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
         <my.dev.catalina.home>unit-test-logs</my.dev.catalina.home>
         <docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
         <docker.image.version>latest</docker.image.version>
     </properties>
 
     <profiles>
-		<profile>
-			<id>mock-catalina-home</id>
-			<activation>
-				<property>
-					<name>!env.catalina.home</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-			<version>3.5.1</version>
-            <configuration>
-                <source>1.8</source>
-                <target>1.8</target>
-            </configuration>
-        </plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-    					<version>${maven.surefire.plugin.version}</version>
-						<configuration>
-							<systemProperties>
-								<encoding>UTF-8</encoding>
-								<property>
-									<name>catalina.home</name>
-									<value>${my.dev.catalina.home}</value>
-								</property>
-							</systemProperties>
-						</configuration>
-					</plugin>
+        <profile>
+            <id>mock-catalina-home</id>
+            <activation>
+                <property>
+                    <name>!env.catalina.home</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.5.1</version>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven.surefire.plugin.version}</version>
+                        <configuration>
+                            <systemProperties>
+                                <encoding>UTF-8</encoding>
+                                <property>
+                                    <name>catalina.home</name>
+                                    <value>${my.dev.catalina.home}</value>
+                                </property>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -56,7 +56,7 @@
 
     <build>
 
-        <finalName>open-ssp-services</finalName>
+        <finalName>ssp-services</finalName>
 
         <plugins>
             <plugin>
@@ -112,7 +112,7 @@
                     <imageTags>
                         <imageTag>${docker.image.version}</imageTag>
                     </imageTags>
-                    <imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
+                    <imageName>${docker.image.prefix}/ssp-services</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
@@ -139,11 +139,6 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.lmax</groupId>
-            <artifactId>disruptor</artifactId>
-            <version>3.3.0</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -160,7 +155,7 @@
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
-            <version>LATEST</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.derby/derby -->
         <dependency>

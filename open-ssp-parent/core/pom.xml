@@ -61,7 +61,7 @@
 
     <build>
 
-        <finalName>open-ssp</finalName>
+        <finalName>ssp-server</finalName>
 
         <plugins>
             <plugin>
@@ -117,7 +117,7 @@
                     <imageTags>
                         <imageTag>${docker.image.version}</imageTag>
                     </imageTags>
-                    <imageName>${docker.image.prefix}/${project.build.finalName}</imageName>
+                    <imageName>${docker.image.prefix}/ssp-server</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>

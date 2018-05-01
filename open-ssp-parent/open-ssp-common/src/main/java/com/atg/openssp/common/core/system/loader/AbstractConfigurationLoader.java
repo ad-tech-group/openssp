@@ -12,6 +12,8 @@ import util.properties.ProjectProperty;
 
 import javax.xml.bind.PropertyException;
 import java.lang.reflect.Field;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -47,7 +49,7 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 
 		for (final Object object : keys) {
 			final String key = (String) object;
-			final String value = properties.getProperty(key);
+			String value = properties.getProperty(key);
 			final ContextProperties contextProps = ContextProperties.get(key);
 			if (contextProps != null) {
 				try {

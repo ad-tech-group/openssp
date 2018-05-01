@@ -15,7 +15,7 @@ RUN echo "<html><body><div>openssp data services - healthy</div></body></html>" 
 RUN cat /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml
 
 #copy our war into place
-COPY /open-ssp-services.war /usr/local/tomcat/webapps
+COPY /ssp-services.war /usr/local/tomcat/webapps
 
 #set-up config
 RUN mkdir -p /usr/local/tomcat/logfiles

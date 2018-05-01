@@ -60,7 +60,7 @@ public class DspHandler implements HttpHandler {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            httpExchange.sendResponseHeaders(201, 0);
+            httpExchange.sendResponseHeaders(405, 0);
         }
 
 
