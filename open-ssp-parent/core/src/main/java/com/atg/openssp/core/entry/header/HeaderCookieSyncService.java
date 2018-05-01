@@ -53,11 +53,6 @@ public class HeaderCookieSyncService extends HttpServlet {
         String dspShortName = params.get("dsp");
         String dspUid = params.get("dsp_uid");
 
-        System.out.println("fsuid: "+ fsuid);
-        System.out.println("dspShortName: "+ dspShortName);
-        System.out.println("dspUid"+ dspUid);
-
-
         response.addHeader("Content-Type", "application/json");
         response.addHeader("Access-Control-Allow-Origin", "https://webdesignledger.com");
 //        response.addHeader("Access-Control-Allow-Methods", "POST");

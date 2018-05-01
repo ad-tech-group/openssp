@@ -4,6 +4,8 @@ import com.atg.openssp.common.configuration.Context;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.system.job.CacheTriggerController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -12,6 +14,7 @@ import java.util.concurrent.CountDownLatch;
  * 
  */
 public class GlobalContextLoader extends AbstractConfigurationLoader {
+	private static final Logger log = LoggerFactory.getLogger(GlobalContextLoader.class);
 
 	public GlobalContextLoader() {
 		super(resolveEnvironment()+Context.RUNTIME_GLOBAL_XML);
@@ -23,7 +26,7 @@ public class GlobalContextLoader extends AbstractConfigurationLoader {
 
 	public static String resolveEnvironment() {
 		String environment = System.getProperty("SSP_ENVIRONMENT");
-		System.out.println("****** ENVIRONMENT ******* "+environment);
+		log.info("Environment: "+environment);
 		if (environment != null) {
 			return environment+"/";
 		} else {

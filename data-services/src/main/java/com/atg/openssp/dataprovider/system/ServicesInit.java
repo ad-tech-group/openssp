@@ -28,14 +28,8 @@ public class ServicesInit extends GenericServlet {
 
     @Override
     public void init() throws ServletException {
-        System.out.println("*************************************");
         InitLogging.setSystemProperties();
         log.info("**** Initing core application ****");
-        try {
-            System.out.println("-->"+ InetAddress.getLocalHost().getHostName()+":"+InetAddress.getLocalHost().getHostAddress());
-        } catch (UnknownHostException e) {
-            throw new ServletException(e);
-        }
         //LocalContext.setVersion(new MavenProperties().getVersion());
         //log.info("**** SSP Version: " + LocalContext.getVersion() + " ****");
 

@@ -120,31 +120,9 @@ public class LocalContext extends Context {
 		return uptime;
 	}
 
-	// static void setToken(final String _token) {
-	// dataProviderToken = _token;
-	// }
-
-	// static String getToken() {
-	// return dataProviderToken;
-	// }
-
-	// static VastResolverBroker getVastResolverBroker() {
-	// return vastResolverBroker;
-	// }
-
 	static boolean isDebugEnabled() {
 		return isDebugEnabled;
 	}
-
-	// static String printContextData(final ContextProperties property) {
-	// return property + "=" + ContextCache.instance.get(property);
-	// }
-
-	// static void printContextData() {
-	// for (final Map.Entry<ContextProperties, String> context : ContextCache.instance.getAll().entrySet()) {
-	// System.out.println(context.getKey() + "=" + context.getValue());
-	// }
-	// }
 
 	static boolean isMetricsEnabled() {
 		return isMetricsEnabled;

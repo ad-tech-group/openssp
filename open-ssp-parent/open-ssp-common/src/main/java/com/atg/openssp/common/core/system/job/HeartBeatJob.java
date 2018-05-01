@@ -8,6 +8,8 @@ import com.atg.openssp.common.core.system.LocalContext;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.CatalinaUtil;
 
 import java.text.DecimalFormat;
@@ -19,6 +21,7 @@ import java.util.Arrays;
  * 
  */
 public class HeartBeatJob implements Job {
+	private static final Logger log = LoggerFactory.getLogger(HeartBeatJob.class);
 
 	private final static DecimalFormat df = new DecimalFormat("####0.00");
 
@@ -60,11 +63,10 @@ public class HeartBeatJob implements Job {
 			sb.append("#exeto:" + GlobalContext.getExecutionTimeout());
 
 			if (LocalContext.isVerboseEnabled()) {
-				System.out.println(sb.toString());
+				log.info(sb.toString());
 			}
 
 			// TODO: log the results - messaging activation necessary
-			// LogFacade.logLatency(sb.toString());
 			// EnginestatLogProducer.instance().send(sb.toString());
 		}
 	}

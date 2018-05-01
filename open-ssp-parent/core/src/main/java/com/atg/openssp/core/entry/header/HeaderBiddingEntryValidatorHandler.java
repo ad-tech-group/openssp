@@ -70,7 +70,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
             }
         } else {
             log.warn("No Content or not Post");
-            System.out.println(request.getHeader("User-Agent"));
+            log.warn(request.getHeader("User-Agent"));
         }
 
         if (biddingRequest != null) {

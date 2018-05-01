@@ -467,7 +467,7 @@ public class DataStore {
             c = getConnection();
             stmt = getConnection().createStatement();
             String sql = "delete from "+table+" where XID='"+externalId+"'";
-            System.out.println(sql);
+            log.debug(sql);
             stmt.executeUpdate(sql);
         } finally {
             close(c, stmt);

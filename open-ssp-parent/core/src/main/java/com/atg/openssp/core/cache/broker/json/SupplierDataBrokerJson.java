@@ -44,9 +44,9 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 		final Gson gson = builder.create();
 		try {
 			String environment = GlobalContextLoader.resolveEnvironment();
-			System.out.println("****** ENVIRONMENT ******* "+environment);
+			log.info("Environment: "+environment);
 			final String content = new String(Files.readAllBytes(Paths.get(environment+"supplier_db.json")), StandardCharsets.UTF_8);
-			System.out.println("looking up: "+content);
+			log.info("looking up: "+content);
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();

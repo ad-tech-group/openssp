@@ -57,13 +57,9 @@ public class GeoIp2InfoHandler extends GeoIpInfoHandler {
             fdii.setCountryName(country.getName());
 
 //            Subdivision subdivision = response.getMostSpecificSubdivision();
-//            System.out.println(subdivision.getName());    // 'Minnesota'
-//            System.out.println(subdivision.getIsoCode()); // 'MN'
+//            subdivision.getName());    // 'Minnesota'
+//            subdivision.getIsoCode()); // 'MN'
 
-            System.out.println(response.getMostSpecificSubdivision());
-            System.out.println(response.getLeastSpecificSubdivision());
-            System.out.println(response.getContinent());
-            System.out.println(response.getLocation());
             City city = response.getCity();
             fdii.setCity(city.getName());
 

@@ -38,8 +38,6 @@ public class DspUserSyncHandler implements HttpHandler {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(r);
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
-        System.out.println("bks: "+response1.getStatusLine());
-
 
         String result = "";
         httpExchange.sendResponseHeaders(200, result.length());
