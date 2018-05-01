@@ -12,6 +12,8 @@ import util.properties.ProjectProperty;
 
 import javax.xml.bind.PropertyException;
 import java.lang.reflect.Field;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -47,7 +49,23 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 
 		for (final Object object : keys) {
 			final String key = (String) object;
-			final String value = properties.getProperty(key);
+			String value = properties.getProperty(key);
+			boolean b1 = value != null;
+			boolean b2 = !"".equals(value);
+			boolean b3 = value.startsWith("[");
+			boolean b4 = value.endsWith("]");
+			if (value != null && (!"".equals(value)) && value.startsWith("[") && value.endsWith("]")) {
+                if ("[KUBE]".equals(value)) {
+                    try {
+                        String myName = InetAddress.getLocalHost().getHostName();
+                        value = myName+"services";
+                        properties.put(key, value);
+                    } catch (UnknownHostException e) {
+                        log.error("[KUBE] substitution failed", e);
+                        e.printStackTrace();
+                    }
+                }
+            }
 			final ContextProperties contextProps = ContextProperties.get(key);
 			if (contextProps != null) {
 				try {

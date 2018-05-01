@@ -61,7 +61,7 @@
 
     <build>
 
-        <finalName>open-ssp</finalName>
+        <finalName>ssp-server</finalName>
 
         <plugins>
             <plugin>

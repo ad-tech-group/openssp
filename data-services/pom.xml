@@ -56,7 +56,7 @@
 
     <build>
 
-        <finalName>open-ssp-services</finalName>
+        <finalName>ssp-services</finalName>
 
         <plugins>
             <plugin>
