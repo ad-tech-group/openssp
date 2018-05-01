@@ -17,6 +17,7 @@
         "DESKTOP"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
+      "cookieSync": "<img src='//sync.adkernel.com/user-sync?zone=54049&t=image&r={SSP_REDIR_URL}' style ='display:none' width='0' height='0'></img>",
       "underTest": 1,
       "active": 1
     },
@@ -36,6 +37,7 @@
         "MOBILE"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.MangoMediaFilter",
+      "cookieSync": "<img src='//sync.adkernel.com/user-sync?zone=54050&t=image&r={SSP_REDIR_URL}' style ='display:none' width='0' height='0'></img>",
       "underTest": 1,
       "active": 1
     },
@@ -55,6 +57,7 @@
         "DESKTOP"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
+      "cookieSync": "",
       "underTest": 1,
       "active": 1
     },
@@ -74,9 +77,9 @@
         "MOBILE"
       ],
       "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
+      "cookieSync": "",
       "underTest": 1,
       "active": 1
     }
   ]
 }
-

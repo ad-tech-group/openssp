@@ -141,7 +141,6 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
 
             Impression i = new Impression.Builder().build();
             i.setId(pValues.getId());
-            i.setId(Integer.toString(idCount++));
             //i.setVideo(createVideo(pValues));
             i.setBanner(createBanner(pValues));
             //i.setNative(createNative(pValues));

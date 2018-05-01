@@ -50,22 +50,6 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 		for (final Object object : keys) {
 			final String key = (String) object;
 			String value = properties.getProperty(key);
-			boolean b1 = value != null;
-			boolean b2 = !"".equals(value);
-			boolean b3 = value.startsWith("[");
-			boolean b4 = value.endsWith("]");
-			if (value != null && (!"".equals(value)) && value.startsWith("[") && value.endsWith("]")) {
-                if ("[KUBE]".equals(value)) {
-                    try {
-                        String myName = InetAddress.getLocalHost().getHostName();
-                        value = myName+"services";
-                        properties.put(key, value);
-                    } catch (UnknownHostException e) {
-                        log.error("[KUBE] substitution failed", e);
-                        e.printStackTrace();
-                    }
-                }
-            }
 			final ContextProperties contextProps = ContextProperties.get(key);
 			if (contextProps != null) {
 				try {

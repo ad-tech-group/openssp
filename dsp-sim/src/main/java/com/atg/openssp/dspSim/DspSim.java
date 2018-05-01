@@ -82,6 +82,7 @@ public class DspSim {
             server.createContext("/dsp-sim/DemandService", new DspHandler(dspModel));
             server.createContext("/dsp-sim/myAds", new AdServerHandler(adModel));
             server.createContext("/win", new DspWinHandler(dspModel));
+            server.createContext("/user-sync", new DspUserSyncHandler(dspModel));
             server.setExecutor(null); // creates a default executor
             server.start();
         } catch (Exception e) {

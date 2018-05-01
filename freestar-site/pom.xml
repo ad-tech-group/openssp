@@ -99,8 +99,8 @@
         </dependency>
         <dependency>
             <groupId>com.atg.openssp</groupId>
-            <artifactId>open-ssp-common</artifactId>
-            <version>LATEST</version>
+            <artifactId>open-ssp-data-services</artifactId>
+            <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
