@@ -11,7 +11,7 @@ RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.svg
 RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.css
 RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.ico
 RUN rm -rf /usr/local/tomcat/webapps/ROOT/*.txt
-RUN echo "<html><body><div>openssp - healthy</div></body></html>" > /usr/local/tomcat/webapps/ROOT/index.jsp
+RUN echo "<html><body><div>ssp - healthy</div></body></html>" > /usr/local/tomcat/webapps/ROOT/index.jsp
 RUN cat /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml
 
 #copy our war into place
@@ -19,7 +19,8 @@ COPY /ssp-server.war /usr/local/tomcat/webapps
 
 #set-up config
 RUN mkdir -p /usr/local/tomcat/logfiles
-RUN mkdir -p /usr/local/tomcat/properties
+RUN mkdir -p /usr/local/tomcat/properties/dev
+RUN mkdir -p /usr/local/tomcat/properties/prd
 RUN mkdir -p /usr/local/tomcat/conf/certs
 RUN mkdir -p /root
 
@@ -31,6 +32,8 @@ RUN keytool -keypasswd -alias pub.network -new changeit -storepass changeit -key
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
+COPY /properties/dev_global.runtime.xml /usr/local/tomcat/properties/dev/global.runtime.xml
+COPY /properties/prd_global.runtime.xml /usr/local/tomcat/properties/prd/global.runtime.xml
 COPY /properties/local.runtime.xml /usr/local/tomcat/properties
 COPY /properties/log4j2.xml /usr/local/tomcat/properties
 

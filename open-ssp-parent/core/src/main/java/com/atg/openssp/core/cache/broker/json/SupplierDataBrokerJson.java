@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import com.atg.openssp.common.core.broker.dto.SupplierDto;
 import com.atg.openssp.common.core.cache.type.ConnectorCache;
 import com.atg.openssp.common.core.exchange.channel.rtb.OpenRtbConnector;
+import com.atg.openssp.common.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.google.gson.GsonBuilder;
@@ -42,7 +43,10 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 		Supplier.populateTypeAdapters(builder);
 		final Gson gson = builder.create();
 		try {
-			final String content = new String(Files.readAllBytes(Paths.get("supplier_db.json")), StandardCharsets.UTF_8);
+			String environment = GlobalContextLoader.resolveEnvironment();
+			System.out.println("****** ENVIRONMENT ******* "+environment);
+			final String content = new String(Files.readAllBytes(Paths.get(environment+"supplier_db.json")), StandardCharsets.UTF_8);
+			System.out.println("looking up: "+content);
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();

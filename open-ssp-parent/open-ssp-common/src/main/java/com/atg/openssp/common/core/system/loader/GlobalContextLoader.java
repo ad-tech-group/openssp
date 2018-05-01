@@ -14,11 +14,21 @@ import java.util.concurrent.CountDownLatch;
 public class GlobalContextLoader extends AbstractConfigurationLoader {
 
 	public GlobalContextLoader() {
-		super(Context.RUNTIME_GLOBAL_XML);
+		super(resolveEnvironment()+Context.RUNTIME_GLOBAL_XML);
 	}
 
 	public GlobalContextLoader(final CountDownLatch cdl) {
-		super(Context.RUNTIME_GLOBAL_XML, cdl);
+		super(resolveEnvironment()+Context.RUNTIME_GLOBAL_XML, cdl);
+	}
+
+	public static String resolveEnvironment() {
+		String environment = System.getProperty("SSP_ENVIRONMENT");
+		System.out.println("****** ENVIRONMENT ******* "+environment);
+		if (environment != null) {
+			return environment+"/";
+		} else {
+			return "";
+		}
 	}
 
 	@Override

@@ -35,6 +35,7 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 	}
 
 	AbstractConfigurationLoader(final String propertiesFile, final CountDownLatch cdl) {
+	    log.info("using: "+propertiesFile);
 		this.propertiesFile = propertiesFile;
 		latch = cdl;
 	}
