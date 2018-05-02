@@ -38,9 +38,9 @@ public class MangoMediaFilter extends DemandBrokerFilter {
             JsonObject banner = (JsonObject) imp.get("banner");
             banner.remove("id");
 //            banner.remove("pos");
-//            banner.remove("btype");
-//            banner.remove("battr");
-//            banner.remove("mimes");
+            banner.remove("btype");
+            banner.remove("battr");
+            banner.remove("mimes");
             banner.remove("topframe");
             banner.remove("wmax");
             banner.remove("hmax");
@@ -52,12 +52,12 @@ public class MangoMediaFilter extends DemandBrokerFilter {
 //        device.remove("geo");
         device.remove("dnt");
         device.remove("lmt");
-//        device.remove("devicetype");
-//        device.remove("h");
-//        device.remove("w");
-//        device.remove("ppi");
-//        device.remove("pxratio");
-//        device.remove("js");
+        device.remove("devicetype");
+        device.remove("h");
+        device.remove("w");
+        device.remove("ppi");
+        device.remove("pxratio");
+        device.remove("js");
         device.remove("geofetch");
 //        device.remove("connectiontype");
 

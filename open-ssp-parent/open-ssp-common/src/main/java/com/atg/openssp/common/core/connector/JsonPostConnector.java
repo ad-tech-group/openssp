@@ -27,6 +27,7 @@ import com.atg.openssp.common.exception.BidProcessingException;
 public class JsonPostConnector extends DefaultConnector {
 
 	private static final Logger log = LoggerFactory.getLogger(JsonPostConnector.class);
+	public static final String NO_CONTENT = "NO-CONTENT";
 
 	public JsonPostConnector() {
 		super();
@@ -68,9 +69,10 @@ public class JsonPostConnector extends DefaultConnector {
 					log.debug("bad result: {}", statusCode);
 				}
 			} else if (HttpStatus.SC_NO_CONTENT == statusCode) {
-				return "";
+				return NO_CONTENT;
 			}
 		} catch (final IOException e) {
+			e.printStackTrace();
 			throw new BidProcessingException("IO " + e.getMessage());
 		} finally {
 			EntityUtils.consumeQuietly(respEntity);

@@ -82,7 +82,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 try {
                     Site s = SiteDataCache.instance.get(biddingRequest.getSite());
                     Site site = s.clone();
-                    site.setDomain(biddingRequest.getSite());
+//                    site.setDomain(biddingRequest.getSite());
                     String protocol = s.getPage()+"://";
                     site.setPage(protocol+site.getDomain() + biddingRequest.getPage());
                     site.setRef(request.getHeader("referer"));

@@ -1,6 +1,7 @@
 package com.atg.openssp.common.core.exchange.channel.rtb;
 
 import com.atg.openssp.common.core.broker.AbstractBroker;
+import com.atg.openssp.common.core.connector.JsonPostConnector;
 import com.atg.openssp.common.core.entry.BiddingServiceInfo;
 import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.ResponseContainer;
@@ -74,28 +75,34 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
 
 			log.debug("bidrequest: " + jsonBidrequest);
+            System.out.println("bidrequest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
 			if (!StringUtils.isEmpty(result)) {
-                log.debug("bidresponse: " + result);
-                RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
-                DemandBrokerFilter brokerFilter = info.getDemandBrokerFilter(supplier, gson, bidrequest);
-                final BidResponse bidResponse = brokerFilter.filterResponse(gson, result);
+				if (JsonPostConnector.NO_CONTENT.equals(result)) {
+					log.debug(supplier.getShortName()+" bidresponse: no content");
+					RtbResponseLogProcessor.instance.setLogData("no content", "bidresponse", supplier.getShortName());
+				} else {
+					log.debug("bidresponse: " + result);
+					RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
+					DemandBrokerFilter brokerFilter = info.getDemandBrokerFilter(supplier, gson, bidrequest);
+					final BidResponse bidResponse = brokerFilter.filterResponse(gson, result);
 
-				Supplier s = supplier.clone();
-				ResponseContainer container =  new ResponseContainer(s, bidResponse);
+					Supplier s = supplier.clone();
+					ResponseContainer container =  new ResponseContainer(s, bidResponse);
 
-				String cookieSync = s.getCookieSync();
-				if (!"".equals(cookieSync)) {
-                    StringBuilder sspRedirUrl = new StringBuilder();
-                    String uid = bidrequest.getUser().getId();
-                    String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
-                    String protocol = "https";
-                    sspRedirUrl.append(protocol+"://"+addr+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid={UID}");
-                    s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
-                }
-				return container;
+					String cookieSync = s.getCookieSync();
+					if (!"".equals(cookieSync)) {
+						StringBuilder sspRedirUrl = new StringBuilder();
+						String uid = bidrequest.getUser().getId();
+						String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
+						String protocol = "https";
+						sspRedirUrl.append(protocol+"://"+addr+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid={UID}");
+						s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
+					}
+					return container;
+				}
 			} else {
                 log.debug("bidresponse: is null");
                 RtbResponseLogProcessor.instance.setLogData("is null", "bidresponse", supplier.getShortName());
