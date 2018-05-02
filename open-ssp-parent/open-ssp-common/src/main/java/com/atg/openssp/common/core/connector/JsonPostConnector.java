@@ -53,8 +53,12 @@ public class JsonPostConnector extends DefaultConnector {
 		HttpEntity respEntity = null;
 		try {
 			httpPost.setEntity(entity);
+            log.debug("calling: "+httpPost.getURI().toASCIIString());
+            System.out.println("calling: "+httpPost.getURI().toASCIIString());
 			httpResponse = httpClient.execute(httpPost);
 			final int statusCode = httpResponse.getStatusLine().getStatusCode();
+            log.debug("status: "+statusCode);
+            System.out.println("status: "+statusCode);
 			if (HttpStatus.SC_OK == statusCode) {
 				respEntity = httpResponse.getEntity();
 				if (respEntity != null) {
@@ -72,6 +76,8 @@ public class JsonPostConnector extends DefaultConnector {
 				return NO_CONTENT;
 			}
 		} catch (final Exception e) {
+            System.err.println(e.getMessage());
+		    e.printStackTrace();
 			log.warn(e.getMessage(), e);
 			throw new BidProcessingException(e.getMessage());
 		} finally {
