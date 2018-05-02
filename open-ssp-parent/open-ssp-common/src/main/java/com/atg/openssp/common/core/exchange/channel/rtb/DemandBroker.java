@@ -92,20 +92,14 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 					Supplier s = supplier.clone();
 					ResponseContainer container =  new ResponseContainer(s, bidResponse);
 
-					try {
-                        String cookieSync = s.getCookieSync();
-                        if (!"".equals(cookieSync)) {
-                            StringBuilder sspRedirUrl = new StringBuilder();
-                            String uid = bidrequest.getUser().getId();
-                            String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
-                            String protocol = "https";
-                            sspRedirUrl.append(protocol + "://" + addr + "/open-ssp/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
-                            System.out.println("bks0 "+sspRedirUrl);
-                            System.out.println("bks1 "+cookieSync);
-                            s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
-                        }
-                    } catch(Exception ex) {
-					    ex.printStackTrace();
+                    String cookieSync = s.getCookieSync();
+                    if (cookieSync != null && !"".equals(cookieSync)) {
+                        StringBuilder sspRedirUrl = new StringBuilder();
+                        String uid = bidrequest.getUser().getId();
+                        String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
+                        String protocol = "https";
+                        sspRedirUrl.append(protocol + "://" + addr + "/open-ssp/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
+                        s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
                     }
 					return container;
 				}

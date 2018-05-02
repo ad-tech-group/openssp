@@ -9,7 +9,7 @@
       "contentType": "application/json",
       "supplierId": "1",
       "currency": "USD",
-      "tmax": 300,
+      "tmax": 1000,
       "allowedAdFormats": [
         "BANNER"
       ],
@@ -29,7 +29,7 @@
       "contentType": "application/json",
       "supplierId": "2",
       "currency": "USD",
-      "tmax": 300,
+      "tmax": 1000,
       "allowedAdFormats": [
         "BANNER"
       ],
