@@ -63,4 +63,16 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>freestar-snapshots</name>
+			<url>https://freestar.jfrog.io/freestar/libs-snapshot</url>
+		</snapshotRepository>
+		<repository>
+			<id>central</id>
+			<name>freestar-releases</name>
+			<url>https://freestar.jfrog.io/freestar/libs-release</url>
+		</repository>
+	</distributionManagement>
 </project>
