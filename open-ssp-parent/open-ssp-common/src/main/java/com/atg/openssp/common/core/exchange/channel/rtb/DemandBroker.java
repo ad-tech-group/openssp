@@ -79,48 +79,34 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
-			System.out.println("BKS1");
 			if (!StringUtils.isEmpty(result)) {
-                System.out.println("BKS2");
 				if (JsonPostConnector.NO_CONTENT.equals(result)) {
-                    System.out.println("BKS3");
 					log.debug(supplier.getShortName()+" bidresponse: no content");
-                    System.out.println("BKS4");
 					RtbResponseLogProcessor.instance.setLogData("no content", "bidresponse", supplier.getShortName());
-                    System.out.println("BKS5");
 				} else {
-                    System.out.println("BKS6");
 					log.debug("bidresponse: " + result);
 					RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
-                    System.out.println("BKS7");
 					DemandBrokerFilter brokerFilter = info.getDemandBrokerFilter(supplier, gson, bidrequest);
-                    System.out.println("BKS8");
 					final BidResponse bidResponse = brokerFilter.filterResponse(gson, result);
-                    System.out.println("BKS9");
 
 					Supplier s = supplier.clone();
-                    System.out.println("BKS10");
 					ResponseContainer container =  new ResponseContainer(s, bidResponse);
-                    System.out.println("BKS11");
 
-					String cookieSync = s.getCookieSync();
-                    System.out.println("BKS12");
-					if (!"".equals(cookieSync)) {
-                        System.out.println("BKS13");
-						StringBuilder sspRedirUrl = new StringBuilder();
-                        System.out.println("BKS14");
-						String uid = bidrequest.getUser().getId();
-                        System.out.println("BKS51");
-						String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
-                        System.out.println("BKS61");
-						String protocol = "https";
-                        System.out.println("BKS71");
-						sspRedirUrl.append(protocol+"://"+addr+"/open-ssp/cookiesync?fsuid="+uid+"&dsp="+s.getShortName()+"&dsp_uid={UID}");
-                        System.out.println("BKS81");
-						s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
-                        System.out.println("BKS19");
-					}
-                    System.out.println("BKS20");
+					try {
+                        String cookieSync = s.getCookieSync();
+                        if (!"".equals(cookieSync)) {
+                            StringBuilder sspRedirUrl = new StringBuilder();
+                            String uid = bidrequest.getUser().getId();
+                            String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
+                            String protocol = "https";
+                            sspRedirUrl.append(protocol + "://" + addr + "/open-ssp/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
+                            System.out.println("bks0 "+sspRedirUrl);
+                            System.out.println("bks1 "+cookieSync);
+                            s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
+                        }
+                    } catch(Exception ex) {
+					    ex.printStackTrace();
+                    }
 					return container;
 				}
 			} else {
