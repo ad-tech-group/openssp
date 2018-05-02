@@ -71,9 +71,9 @@ public class JsonPostConnector extends DefaultConnector {
 			} else if (HttpStatus.SC_NO_CONTENT == statusCode) {
 				return NO_CONTENT;
 			}
-		} catch (final IOException e) {
-			e.printStackTrace();
-			throw new BidProcessingException("IO " + e.getMessage());
+		} catch (final Exception e) {
+			log.warn(e.getMessage(), e);
+			throw new BidProcessingException(e.getMessage());
 		} finally {
 			EntityUtils.consumeQuietly(respEntity);
 			httpPost = null;
@@ -98,7 +98,7 @@ public class JsonPostConnector extends DefaultConnector {
 				stringBuilder.append(charBuffer, 0, bytesRead);
 			}
 		} catch (final IOException e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		}
 		return stringBuilder.toString();
 	}

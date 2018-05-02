@@ -3,7 +3,7 @@
     {
       "shortName": "MangoMedia-desktop",
       "rtName": "MangoMedia-desktop-test",
-      "endPoint": "https://rtb-useast.mangomediaads.com/rtb?zone=54049",
+      "endPoint": "http://rtb-useast.mangomediaads.com/rtb?zone=54049",
       "connectionKeepAlive": true,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
@@ -23,7 +23,7 @@
     },
     {
       "shortName": "MangoMedia-mobile",
-      "endPoint": "https://rtb-useast.mangomediaads.com/rtb?zone=54050",
+      "endPoint": "http://rtb-useast.mangomediaads.com/rtb?zone=54050",
       "connectionKeepAlive": true,
       "openRtbVersion": 2.4,
       "contentType": "application/json",
