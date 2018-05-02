@@ -39,11 +39,18 @@
 	<entry key="login-handler-class">com.atg.openssp.common.provider.LoginHandler</entry>
 
 	<!-- handler class to use service Pricelayer Data requests -->
+	<entry key="pricelayer-data-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataHandler</entry>
+
+	<!-- handler class to use service Site Data requests -->
+	<entry key="site-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataHandler</entry>
+
+	<!--
+	<!-- handler class to use service Pricelayer Data requests -->
 	<entry key="pricelayer-data-handler-class">io.freestar.openssp.siteinfo.PricelayerDataHandler</entry>
 
 	<!-- handler class to use service Site Data requests -->
 	<entry key="site-data-handler-class">io.freestar.openssp.siteinfo.SiteDataHandler</entry>
-
+	-->
 	<!-- handler class to use service Supplier Data requests -->
 	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
 
