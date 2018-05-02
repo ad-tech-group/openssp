@@ -4,7 +4,6 @@ import com.atg.openssp.common.core.broker.dto.CurrencyDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,20 +36,20 @@ public class CurrencyDataHandler extends DataHandler {
                     log.warn("property file not found.");
                     location="";
                 }
-                CurrencyDto data = DataStore.getInstance().lookupCurrency();
-                if (DataStore.getInstance().wasCurrencyCreated()) {
+                //CurrencyDto data = DataStore.getInstance().lookupCurrency();
+                //if (DataStore.getInstance().wasCurrencyCreated()) {
                     Gson gson = new Gson();
                     String content = new String(Files.readAllBytes(Paths.get(location+"currency_db.json")), StandardCharsets.UTF_8);
                     CurrencyDto dto = gson.fromJson(content, CurrencyDto.class);
-                    DataStore.getInstance().insert(dto);
-                    data = DataStore.getInstance().lookupCurrency();
-                }
+                //    DataStore.getInstance().insert(dto);
+                //    data = DataStore.getInstance().lookupCurrency();
+                //}
 
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
                 if (LoginHandler.TOKEN.equals(t)) {
-                    String result = new Gson().toJson(data);
+                    String result = content; //new Gson().toJson(data);
 
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");

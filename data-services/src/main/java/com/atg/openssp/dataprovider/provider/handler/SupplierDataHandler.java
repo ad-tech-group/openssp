@@ -6,7 +6,6 @@ import com.atg.openssp.common.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
@@ -43,26 +42,26 @@ public class SupplierDataHandler extends DataHandler {
                     log.warn("property file not found.");
                     location="";
                 }
-                SupplierDto data = DataStore.getInstance().lookupSuppliers();
-                if (DataStore.getInstance().wasSuppliersCreated()) {
+//                SupplierDto data = DataStore.getInstance().lookupSuppliers();
+//                if (DataStore.getInstance().wasSuppliersCreated()) {
                     GsonBuilder builder = new GsonBuilder();
                     Supplier.populateTypeAdapters(builder);
                     Gson gson = builder.create();
                     String content = new String(Files.readAllBytes(Paths.get(location+environment+"supplier_db.json")), StandardCharsets.UTF_8);
-                    SupplierDto newData = gson.fromJson(content, SupplierDto.class);
-                    for (Supplier s : newData.getSupplier()) {
-                        DataStore.getInstance().insert(s);
-                    }
-                    DataStore.getInstance().clearSuppliersCreatedFlag();
-                    data = DataStore.getInstance().lookupSuppliers();
-                }
+//                    SupplierDto newData = gson.fromJson(content, SupplierDto.class);
+//                    for (Supplier s : newData.getSupplier()) {
+//                        DataStore.getInstance().insert(s);
+//                    }
+//                    DataStore.getInstance().clearSuppliersCreatedFlag();
+//                    data = DataStore.getInstance().lookupSuppliers();
+//                }
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
                 if (LoginHandler.TOKEN.equals(t)) {
-                    GsonBuilder builder = new GsonBuilder();
+//                    GsonBuilder builder = new GsonBuilder();
                     Supplier.populateTypeAdapters(builder);
-                    String result = builder.create().toJson(data);
+                    String result = content; //builder.create().toJson(data);
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
                     OutputStream os = response.getOutputStream();

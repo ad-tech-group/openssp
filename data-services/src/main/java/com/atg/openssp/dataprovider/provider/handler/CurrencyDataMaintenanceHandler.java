@@ -4,7 +4,6 @@ import com.atg.openssp.common.core.broker.dto.CurrencyDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.atg.openssp.dataprovider.provider.dto.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -57,21 +56,21 @@ public class CurrencyDataMaintenanceHandler extends DataHandler {
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-                        result.setDto(DataStore.getInstance().lookupCurrency());
+//TODO:                        result.setDto(DataStore.getInstance().lookupCurrency());
                     } else if (dto.getCommand() == MaintenanceCommand.ADD) {
                         CurrencyDto s = dto.getDto();
-                        DataStore.getInstance().insert(s);
-                        result.setDto(DataStore.getInstance().lookupCurrency());
+//TODO:                        DataStore.getInstance().insert(s);
+//TODO:                        result.setDto(DataStore.getInstance().lookupCurrency());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
                         CurrencyDto s = dto.getDto();
-                        DataStore.getInstance().remove(s);
-                        result.setDto(DataStore.getInstance().lookupCurrency());
+//TODO:                        DataStore.getInstance().remove(s);
+//TODO:                        result.setDto(DataStore.getInstance().lookupCurrency());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         CurrencyDto s = dto.getDto();
-                        DataStore.getInstance().update(s);
-                        result.setDto(DataStore.getInstance().lookupCurrency());
+//TODO:                        DataStore.getInstance().update(s);
+//TODO:                        result.setDto(DataStore.getInstance().lookupCurrency());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

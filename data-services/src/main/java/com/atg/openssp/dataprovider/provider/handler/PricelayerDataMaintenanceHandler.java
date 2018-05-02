@@ -3,7 +3,6 @@ package com.atg.openssp.dataprovider.provider.handler;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
 import com.atg.openssp.dataprovider.provider.dto.PricelayerMaintenanceDto;
 import com.atg.openssp.dataprovider.provider.dto.PricelayerResponse;
@@ -57,21 +56,21 @@ public class PricelayerDataMaintenanceHandler extends DataHandler {
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
-                    } else if (dto.getCommand() == MaintenanceCommand.ADD) {
+//TODO:                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
+//TODO:                    } else if (dto.getCommand() == MaintenanceCommand.ADD) {
                         Pricelayer s = dto.getPricelayer();
-                        DataStore.getInstance().insert(s);
-                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
+//TODO:                        DataStore.getInstance().insert(s);
+//TODO:                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
                         Pricelayer s = dto.getPricelayer();
-                        DataStore.getInstance().remove(s);
-                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
+//TODO:                        DataStore.getInstance().remove(s);
+//TODO:                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         Pricelayer s = dto.getPricelayer();
-                        DataStore.getInstance().update(s);
-                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
+//TODO:                        DataStore.getInstance().update(s);
+//TODO:                        result.setPricelayers(DataStore.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

@@ -4,7 +4,6 @@ import com.atg.openssp.common.core.broker.dto.SiteDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
 import com.atg.openssp.dataprovider.provider.dto.ResponseStatus;
 import com.atg.openssp.dataprovider.provider.dto.SiteMaintenanceDto;
@@ -61,21 +60,21 @@ public class SiteDataMaintenanceHandler extends DataHandler {
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+//TODO:                        result.setSites(DataStore.getInstance().lookupSites().getSites());
                     } else if (dto.getCommand() == MaintenanceCommand.ADD) {
                         Site s = dto.getSite();
-                        DataStore.getInstance().insert(s);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+//TODO:                        DataStore.getInstance().insert(s);
+//TODO:                        result.setSites(DataStore.getInstance().lookupSites().getSites());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
                         Site s = dto.getSite();
-                        DataStore.getInstance().remove(s);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+//TODO:                        DataStore.getInstance().remove(s);
+//TODO:                        result.setSites(DataStore.getInstance().lookupSites().getSites());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         Site s = dto.getSite();
-                        DataStore.getInstance().update(s);
-                        result.setSites(DataStore.getInstance().lookupSites().getSites());
+//TODO:                        DataStore.getInstance().update(s);
+//TODO:                        result.setSites(DataStore.getInstance().lookupSites().getSites());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

@@ -4,7 +4,6 @@ import com.atg.openssp.common.core.broker.dto.SiteDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.Site;
@@ -38,25 +37,25 @@ public class SiteDataHandler extends DataHandler {
                     log.warn("property file not found.");
                     location="";
                 }
-                SiteDto data = DataStore.getInstance().lookupSites();
-                if (DataStore.getInstance().wasSitesCreated()) {
+//                SiteDto data = DataStore.getInstance().lookupSites();
+//                if (DataStore.getInstance().wasSitesCreated()) {
                     GsonBuilder builder = new GsonBuilder();
                     Site.populateTypeAdapters(builder);
                     Gson gson = builder.create();
                     String content = new String(Files.readAllBytes(Paths.get(location + "site_db.json")), StandardCharsets.UTF_8);
-                    SiteDto newData = gson.fromJson(content, SiteDto.class);
-                    for (Site s : newData.getSites()) {
-                        DataStore.getInstance().insert(s);
-                    }
-                    DataStore.getInstance().clearSitesCreatedFlag();
-                    data = DataStore.getInstance().lookupSites();
-                }
+//                    SiteDto newData = gson.fromJson(content, SiteDto.class);
+//                    for (Site s : newData.getSites()) {
+//                        DataStore.getInstance().insert(s);
+//                    }
+//                    DataStore.getInstance().clearSitesCreatedFlag();
+//                    data = DataStore.getInstance().lookupSites();
+//                }
 
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
                 if (LoginHandler.TOKEN.equals(t)) {
-                    String result = new Gson().toJson(data);
+                    String result = content; //new Gson().toJson(data);
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
                     OutputStream os = response.getOutputStream();

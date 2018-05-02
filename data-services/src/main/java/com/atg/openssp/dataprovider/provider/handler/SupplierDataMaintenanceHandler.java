@@ -4,7 +4,6 @@ import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
 import com.atg.openssp.dataprovider.provider.dto.ResponseStatus;
 import com.atg.openssp.dataprovider.provider.dto.SupplierMaintenanceDto;
@@ -56,21 +55,21 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
                     } else if (dto.getCommand() == MaintenanceCommand.ADD) {
                         Supplier s = dto.getSupplier();
-                        DataStore.getInstance().insert(s);
-                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+//TODO:                        DataStore.getInstance().insert(s);
+//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
                         Supplier s = dto.getSupplier();
-                        DataStore.getInstance().remove(s);
-                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+//TODO:                        DataStore.getInstance().remove(s);
+//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         Supplier s = dto.getSupplier();
-                        DataStore.getInstance().update(s);
-                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+//TODO:                        DataStore.getInstance().update(s);
+//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

@@ -4,7 +4,6 @@ import com.atg.openssp.common.core.broker.dto.PricelayerDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.DataStore;
 import com.google.gson.Gson;
 import openrtb.bidrequest.model.Pricelayer;
 import org.slf4j.Logger;
@@ -37,22 +36,22 @@ public class PricelayerDataHandler extends DataHandler {
                     log.warn("property file not found.");
                     location="";
                 }
-                PricelayerDto data = DataStore.getInstance().lookupPricelayers();
-                if (DataStore.getInstance().wasPricelayersCreated()) {
+//                PricelayerDto data = DataStore.getInstance().lookupPricelayers();
+//                if (DataStore.getInstance().wasPricelayersCreated()) {
                     Gson gson = new Gson();
                     String content = new String(Files.readAllBytes(Paths.get(location + "price_layer.json")), StandardCharsets.UTF_8);
-                    PricelayerDto newData = gson.fromJson(content, PricelayerDto.class);
-                    for (Pricelayer s : newData.getPricelayer()) {
-                        DataStore.getInstance().insert(s);
-                    }
-                    data = DataStore.getInstance().lookupPricelayers();
-                }
+//                    PricelayerDto newData = gson.fromJson(content, PricelayerDto.class);
+//                    for (Pricelayer s : newData.getPricelayer()) {
+//                        DataStore.getInstance().insert(s);
+//                    }
+//                    data = DataStore.getInstance().lookupPricelayers();
+//                }
 
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
                 if (LoginHandler.TOKEN.equals(t)) {
-                    String result = new Gson().toJson(data);
+                    String result = content; //new Gson().toJson(data);
 
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
