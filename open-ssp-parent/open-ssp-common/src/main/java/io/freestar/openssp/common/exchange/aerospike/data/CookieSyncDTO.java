@@ -1,4 +1,4 @@
-package io.freestar.ssp.aerospike.data;
+package io.freestar.openssp.common.exchange.aerospike.data;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,8 +17,8 @@ public class CookieSyncDTO {
         return fsuid;
     }
 
-    public DspCookieDto lookup(String name) {
-        return dsp_uids.get(name);
+    public DspCookieDto lookup(String dspName) {
+        return dsp_uids.get(dspName);
     }
 
     public void add(DspCookieDto dto) {

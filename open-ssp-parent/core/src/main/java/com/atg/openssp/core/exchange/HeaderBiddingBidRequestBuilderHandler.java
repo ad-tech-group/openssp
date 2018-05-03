@@ -3,7 +3,6 @@ package com.atg.openssp.core.exchange;
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.cache.type.PricelayerCache;
-import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
@@ -161,10 +160,12 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     private User createUser(HeaderBiddingParamValue pValues) {
+        String userId = pValues.getFsUid();
+
         return new User.Builder()
-                //.setBuyeruid()
+ //               .setBuyeruid()
                 //.setGender(pValues.getGender())
-                .setId(pValues.getFsUid())
+                .setId(userId)
                 //.setYob(pValues.getYearOfBirth())
                 //.setGeo(createUserGeo(pValues))
                 .build();

@@ -1,4 +1,4 @@
-package io.freestar.ssp.aerospike.data;
+package io.freestar.openssp.common.exchange.aerospike.data;
 
 public class DspCookieDto {
     private String uid;

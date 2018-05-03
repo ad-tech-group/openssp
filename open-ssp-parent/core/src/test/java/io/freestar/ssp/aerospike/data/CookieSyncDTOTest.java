@@ -1,6 +1,8 @@
 package io.freestar.ssp.aerospike.data;
 
 import com.google.gson.Gson;
+import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
+import io.freestar.openssp.common.exchange.aerospike.data.DspCookieDto;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

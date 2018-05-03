@@ -1,8 +1,9 @@
 package io.freestar.ssp.aerospike;
 
-import com.atg.openssp.core.entry.header.AerospikeService;
-import io.freestar.ssp.aerospike.data.CookieSyncDTO;
-import io.freestar.ssp.aerospike.data.DspCookieDto;
+import com.atg.openssp.common.logadapter.DspCookieSyncLogProcessor;
+import io.freestar.openssp.common.exchange.aerospike.AerospikeService;
+import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
+import io.freestar.openssp.common.exchange.aerospike.data.DspCookieDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -24,32 +24,10 @@ import java.util.*;
 public class HeaderCookieSyncService extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final Logger log = LoggerFactory.getLogger(HeaderCookieSyncService.class);
-    private final Properties properties = new Properties();
-    private final String set;
-    private final String bin;
-
-    private AerospikeService aerospikeService;
 
     public HeaderCookieSyncService()
     {
-        InputStream is = getClass().getClassLoader().getResourceAsStream(resolveEnvironment()+"aerospike.properties");
-        if (is != null) {
-            try {
-                properties.load(is);
-                is.close();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-        String host=properties.getProperty("host");
-        int port = Integer.parseInt(properties.getProperty("port"));
-        String user=properties.getProperty("user");
-        String pw=properties.getProperty("password");
-        String namespace=properties.getProperty("namespace");
-        int expiration=Integer.parseInt(properties.getProperty("expiration"));
-        set = properties.getProperty("set");
-        bin = properties.getProperty("bin");
-        aerospikeService = new AerospikeService(host, port, user, pw, namespace, expiration);
+        DspCookieSyncLogProcessor.instance.setLogData("cookie-sync", "update", "bks was here!");
     }
 
     @Override
@@ -70,7 +48,7 @@ public class HeaderCookieSyncService extends HttpServlet {
         String dspShortName = params.get("dsp");
         String dspUid = params.get("dsp_uid");
 
-        CookieSyncDTO result = aerospikeService.get(set, fsuid, bin);
+        CookieSyncDTO result = AerospikeService.getInstance().get(fsuid);
         if (result == null) {
             result = new CookieSyncDTO();
             result.setFsuid(fsuid);
@@ -91,7 +69,8 @@ public class HeaderCookieSyncService extends HttpServlet {
         }
 
         if (result.isDirty()) {
-            aerospikeService.set(set, fsuid, bin, result);
+            AerospikeService.getInstance().set(fsuid, result);
+            DspCookieSyncLogProcessor.instance.setLogData("cookie-sync", "update", fsuid, dspShortName, dspUid);
         }
 
 
@@ -113,15 +92,5 @@ public class HeaderCookieSyncService extends HttpServlet {
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
-    private String resolveEnvironment() {
-        String environment = System.getProperty("SSP_ENVIRONMENT");
-        log.info("Environment: "+environment);
-        if (environment != null) {
-            return environment+"_";
-        } else {
-            return "";
-        }
-    }
 
 }

@@ -14,6 +14,8 @@ import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
+import io.freestar.openssp.common.exchange.aerospike.AerospikeService;
+import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.GeoType;
 import openrtb.tables.ImpressionSecurity;
@@ -104,10 +106,14 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
     }
 
     private User createUser(BannerObjectParamValue pValues) {
+        String userId = pValues.getFsUid();
+        CookieSyncDTO result = AerospikeService.getInstance().get(userId);
+        if (result != null) {
+        }
         return new User.Builder()
-                //.setBuyeruid()
+//                .setBuyeruid()
                 //.setGender(pValues.getGender())
-                .setId(pValues.getFsUid())
+                .setId(userId)
                 //.setYob(pValues.getYearOfBirth())
                 //.setGeo(createUserGeo(pValues))
                 .build();
