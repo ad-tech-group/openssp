@@ -54,7 +54,7 @@
       "publisher": {
         "id": "303",
         "name": "Render Media",
-        "cat": null,
+        "cat": [],
         "domain": "rndr.com",
         "ext": null
       },
