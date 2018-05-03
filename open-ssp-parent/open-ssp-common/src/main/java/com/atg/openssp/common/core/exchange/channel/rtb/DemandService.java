@@ -157,9 +157,10 @@ public class DemandService implements Callable<AdProviderReader> {
                 String userId = user.getId();
                 CookieSyncDTO result = AerospikeService.getInstance().get(userId);
                 if (result != null) {
-                    DspCookieDto dspDto = result.lookup("dspName");
+                    DspCookieDto dspDto = result.lookup("MangoMedia-desktop-test");
                     if (dspDto != null) {
                         String buyerId = dspDto.getUid();
+                        System.out.println(buyerId);
                     }
                 }
 

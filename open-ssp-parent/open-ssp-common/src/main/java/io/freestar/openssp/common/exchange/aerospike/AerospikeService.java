@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,8 +22,18 @@ public class AerospikeService {
     private static AerospikeService singleton;
     private final Properties properties = new Properties();
     private AerospikeClient client;
-    private String namespace;
-    private Integer expiration;
+    @Value("${aerospike.host}")
+    String host;
+    @Value("${aerospike.port}")
+    Integer port;
+    @Value("${aerospike.user}")
+    String user;
+    @Value("${aerospike.password}")
+    String password;
+    //@Value("${aerospike.namespace}")
+    String namespace;
+    @Value("${aerospike.expiration}")
+    Integer expiration;
     private String set;
     private String bin;
 
@@ -35,16 +46,16 @@ public class AerospikeService {
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
-            String host=properties.getProperty("host");
+            host=properties.getProperty("host");
             int port = Integer.parseInt(properties.getProperty("port"));
-            String user=properties.getProperty("user");
-            String pw=properties.getProperty("password");
-            String namespace=properties.getProperty("namespace");
-            int expiration=Integer.parseInt(properties.getProperty("expiration"));
+            user=properties.getProperty("user");
+            password=properties.getProperty("password");
+            namespace=properties.getProperty("namespace");
+            expiration=Integer.parseInt(properties.getProperty("expiration"));
 
             final ClientPolicy clientPolicy = new ClientPolicy();
-            clientPolicy.user = user;
-            clientPolicy.password = pw;
+            //clientPolicy.user = user;
+            //clientPolicy.password = password;
 
             this.client = new AerospikeClient(clientPolicy, host, port);
             this.namespace = checkNotNull(namespace);
