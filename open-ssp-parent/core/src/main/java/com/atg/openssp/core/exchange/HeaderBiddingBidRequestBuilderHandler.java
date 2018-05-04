@@ -190,14 +190,18 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
 
     private Geo createSiteGeo(HeaderBiddingParamValue pValues) {
         Geo geo = new Geo.Builder().build();
-        StringTokenizer st = new StringTokenizer(pValues.getFsLoc(), "?&");
-        while(st.hasMoreTokens()) {
-            String t = st.nextToken();
-            if (t.startsWith("i=")) {
-                geo.setCountry(t.substring(2));
-            } else if (t.startsWith("c=")) {
-                geo.setCity(new String(decoder.decode(t.substring(2).getBytes())));
+        try {
+            StringTokenizer st = new StringTokenizer(pValues.getFsLoc(), "?&");
+            while(st.hasMoreTokens()) {
+                String t = st.nextToken();
+                if (t.startsWith("i=")) {
+                    geo.setCountry(t.substring(2));
+                } else if (t.startsWith("c=")) {
+                    geo.setCity(new String(decoder.decode(t.substring(2).getBytes())));
+                }
             }
+        } catch(Exception ex) {
+            log.error("missing geo code properties: "+pValues.getFsLoc());
         }
         String ipAddress = pValues.getIpAddress();
         if (ipAddress != null && !ipAddress.equalsIgnoreCase("localhost") && !ipAddress.equalsIgnoreCase("0:0:0:0:0:0:0:1") && !ipAddress.equalsIgnoreCase("127.0.0.1")) {
