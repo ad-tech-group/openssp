@@ -56,7 +56,7 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 			response.sendError(200, "exchange timeout");
 		} catch (final Exception e) {
             TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault");
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		} finally {
 			stopwatch.stop();
 			if (hasResult) {

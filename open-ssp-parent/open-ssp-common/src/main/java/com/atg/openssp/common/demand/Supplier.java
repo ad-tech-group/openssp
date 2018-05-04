@@ -155,15 +155,6 @@ public class Supplier implements Serializable, Cloneable {
         return tmax;
     }
 
-	/*
-    public void addAllowedMediaType(final SupplierAdFormat allowedMediaType) {
-	    this.allowedAdFormats.clear();
-        if (allowedMediaType != null) {
-            this.allowedAdFormats.add(allowedMediaType);
-        }
-    }
-    */
-
     public List<SupplierAdFormat> getAllowedAdFormats() {
         ArrayList<SupplierAdFormat> list = new ArrayList();
         for (String s : allowedAdFormats) {

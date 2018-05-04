@@ -53,7 +53,7 @@ public class AppDataHandler extends DataHandler {
                     os.write(result.getBytes());
                     os.flush();
                     os.close();
-                    log.info("<--"+result);
+                    log.info("<--"+result.replaceAll("\n", ""));
                 } else {
                     response.setStatus(401);
                 }

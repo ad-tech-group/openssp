@@ -33,8 +33,6 @@ public class SupplierDataHandler extends DataHandler {
             try {
                 String environment = resolveEnvironment();
                 log.info("Environment: "+environment);
-                System.out.println("Environment: "+environment);
-                System.err.println("Environment: "+environment);
                 String location;
                 try {
                     location = ProjectProperty.getPropertiesResourceLocation()+"/";
@@ -68,7 +66,7 @@ public class SupplierDataHandler extends DataHandler {
                     os.write(result.getBytes());
                     os.flush();
                     os.close();
-                    log.info("<--"+result);
+                    log.info("<--"+result.replaceAll("\n", ""));
                 } else {
                     response.setStatus(401);
                 }
@@ -89,8 +87,6 @@ public class SupplierDataHandler extends DataHandler {
     private String resolveEnvironment() {
         String environment = System.getProperty("SSP_ENVIRONMENT");
         log.info("Environment: "+environment);
-        System.out.println("Environment: "+environment);
-        System.err.println("Environment: "+environment);
         if (environment != null) {
             return environment+"/";
         } else {
