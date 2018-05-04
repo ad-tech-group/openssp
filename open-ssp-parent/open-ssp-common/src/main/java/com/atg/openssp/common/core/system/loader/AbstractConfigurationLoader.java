@@ -107,6 +107,7 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 			}
 		} catch (final PropertyException e) {
 			log.error(e.getMessage());
+			throw new RuntimeException("property file could not be found: "+propertiesFile);
 		}
 	}
 

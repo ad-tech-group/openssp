@@ -33,8 +33,6 @@ public class SupplierDataHandler extends DataHandler {
             try {
                 String environment = resolveEnvironment();
                 log.info("Environment: "+environment);
-                System.out.println("Environment: "+environment);
-                System.err.println("Environment: "+environment);
                 String location;
                 try {
                     location = ProjectProperty.getPropertiesResourceLocation()+"/";
