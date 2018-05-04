@@ -7,12 +7,17 @@ import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.BidProcessingException;
+import com.atg.openssp.common.logadapter.DspCookieSyncLogProcessor;
 import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
 import com.atg.openssp.common.logadapter.TimeInfoLogProcessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.freestar.openssp.common.exchange.aerospike.AerospikeService;
+import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
+import io.freestar.openssp.common.exchange.aerospike.data.DspCookieDto;
 import openrtb.bidrequest.model.BidRequest;
+import openrtb.bidrequest.model.User;
 import openrtb.bidresponse.model.BidResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -71,8 +76,22 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		}
 		long startTS = System.currentTimeMillis();
 
+        final BidRequest workingBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequestToBidRequest(gson, bidrequest);
+
 		try {
-			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
+            User user = workingBidrequest.getUser();
+            String userId = user.getId();
+            CookieSyncDTO cookieSyncDTO = AerospikeService.getInstance().get(userId);
+            if (cookieSyncDTO != null) {
+                DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
+                if (dspDto != null) {
+                    String buyerId = dspDto.getUid();
+                    user.setBuyeruid(buyerId);
+                    DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
+                }
+            }
+
+            final String jsonBidrequest = gson.toJson(workingBidrequest);
 
 			log.debug("bidrequest: " + jsonBidrequest);
             System.out.println("bidrequest: " + jsonBidrequest);

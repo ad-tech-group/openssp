@@ -11,12 +11,8 @@ import com.atg.openssp.common.demand.SupplierAdPlatform;
 import com.atg.openssp.common.exception.InvalidBidException;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.common.provider.AdProviderReader;
-import io.freestar.openssp.common.exchange.aerospike.AerospikeService;
-import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
-import io.freestar.openssp.common.exchange.aerospike.data.DspCookieDto;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.Impression;
-import openrtb.bidrequest.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -152,17 +148,6 @@ public class DemandService implements Callable<AdProviderReader> {
 					imp.setBidfloor(bidRequest.getImp().get(0).getBidfloor() * CurrencyCache.instance.get(connector.getSupplier().getCurrency()));
 					imp.setBidfloorcur(connector.getSupplier().getCurrency());
 				}
-
-				User user = bidRequest.getUser();
-                String userId = user.getId();
-                CookieSyncDTO result = AerospikeService.getInstance().get(userId);
-                if (result != null) {
-                    DspCookieDto dspDto = result.lookup("MangoMedia-desktop-test");
-                    if (dspDto != null) {
-                        String buyerId = dspDto.getUid();
-                        System.out.println(buyerId);
-                    }
-                }
 
 				bidRequest.setTest(connector.getSupplier().getUnderTest());
 				demandBroker.setBidRequest(bidRequest);

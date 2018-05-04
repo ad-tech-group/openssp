@@ -27,7 +27,6 @@ public class HeaderCookieSyncService extends HttpServlet {
 
     public HeaderCookieSyncService()
     {
-        DspCookieSyncLogProcessor.instance.setLogData("cookie-sync", "update", "bks was here!");
     }
 
     @Override

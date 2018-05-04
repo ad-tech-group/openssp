@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.atg.openssp.common.core.exchange.Auction;
+import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import com.atg.openssp.common.exception.ERROR_CODE;
 
 import com.atg.openssp.common.logadapter.TimeInfoLogProcessor;
@@ -50,7 +52,12 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 			hasResult = server.processExchange(agent);
 		} catch (final RequestException e) {
             TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault-401");
-			response.sendError(401, e.getMessage());
+            if (e.getCode() == ERROR_CODE.E906) {
+                initHeader(agent, request, response);
+				response.sendError(400, e.getMessage());
+			} else {
+				response.sendError(401, e.getMessage());
+			}
 		} catch (final CancellationException e) {
             TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault-200");
 			response.sendError(200, "exchange timeout");
@@ -71,7 +78,22 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 		}
 	}
 
-	@Override
+    private void initHeader(SessionAgent agent, HttpServletRequest request, HttpServletResponse response) {
+	    /*
+	    // what site do we set origin to?
+	    if (agent != null && agent instanceof RequestSessionAgent) {
+	        RequestSessionAgent rsa = (RequestSessionAgent) agent;
+            String scheme = request.getScheme();
+            String url = request.getRemoteAddr();
+            response.addHeader("Access-Control-Allow-Origin", scheme+"://" + url);
+            response.addHeader("Access-Control-Allow-Methods", "POST");
+            response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
+        }
+	     */
+    }
+
+    @Override
 	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

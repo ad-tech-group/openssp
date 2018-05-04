@@ -30,7 +30,7 @@ public class AerospikeService {
     String user;
     @Value("${aerospike.password}")
     String password;
-    //@Value("${aerospike.namespace}")
+    @Value("${aerospike.namespace}")
     String namespace;
     @Value("${aerospike.expiration}")
     Integer expiration;
@@ -46,16 +46,18 @@ public class AerospikeService {
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
+            /*
             host=properties.getProperty("host");
-            int port = Integer.parseInt(properties.getProperty("port"));
+            port = Integer.parseInt(properties.getProperty("port"));
             user=properties.getProperty("user");
             password=properties.getProperty("password");
             namespace=properties.getProperty("namespace");
             expiration=Integer.parseInt(properties.getProperty("expiration"));
+            */
 
             final ClientPolicy clientPolicy = new ClientPolicy();
-            //clientPolicy.user = user;
-            //clientPolicy.password = password;
+            clientPolicy.user = user;
+            clientPolicy.password = password;
 
             this.client = new AerospikeClient(clientPolicy, host, port);
             this.namespace = checkNotNull(namespace);
