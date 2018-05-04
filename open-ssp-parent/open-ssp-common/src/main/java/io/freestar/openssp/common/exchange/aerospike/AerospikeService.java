@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,30 +20,32 @@ public class AerospikeService {
     private static AerospikeService singleton;
     private final Properties properties = new Properties();
     private AerospikeClient client;
-    @Value("${aerospike.host}")
+    @Value("${aerospike.host:172.28.128.3}")
     String host;
-    @Value("${aerospike.port}")
+    @Value("${aerospike.port:3000}")
     Integer port;
     @Value("${aerospike.user}")
     String user;
     @Value("${aerospike.password}")
     String password;
-    @Value("${aerospike.namespace}")
+    @Value("${aerospike.namespace:ssp}")
     String namespace;
     @Value("${aerospike.expiration}")
     Integer expiration;
+    @Value("${aerospike.set:dev-gen}")
     private String set;
+    @Value("${aerospike.bin:json}")
     private String bin;
 
     private AerospikeService() {
-        InputStream is = getClass().getClassLoader().getResourceAsStream(resolveEnvironment()+"aerospike.properties");
-        if (is != null) {
-            try {
-                properties.load(is);
-                is.close();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
+//        InputStream is = getClass().getClassLoader().getResourceAsStream(resolveEnvironment()+"aerospike.properties");
+//        if (is != null) {
+//            try {
+//                properties.load(is);
+//                is.close();
+//            } catch (IOException e) {
+//                log.error(e.getMessage(), e);
+//            }
             /*
             host=properties.getProperty("host");
             port = Integer.parseInt(properties.getProperty("port"));
@@ -56,15 +56,19 @@ public class AerospikeService {
             */
 
             final ClientPolicy clientPolicy = new ClientPolicy();
-            clientPolicy.user = user;
-            clientPolicy.password = password;
+            if (user != null) {
+                clientPolicy.user = user;
+            }
+            if (password != null) {
+                clientPolicy.password = password;
+            }
 
+            this.host = checkNotNull(host);
+            this.port = checkNotNull(port);
             this.client = new AerospikeClient(clientPolicy, host, port);
             this.namespace = checkNotNull(namespace);
-            this.expiration = checkNotNull(expiration);
-            set = properties.getProperty("set");
-            bin = properties.getProperty("bin");
-        }
+            this.set = checkNotNull(set);
+            this.bin = checkNotNull(bin);
 
     }
 
@@ -84,7 +88,9 @@ public class AerospikeService {
 
     public void set(String key, CookieSyncDTO dto) {
         WritePolicy policy = new WritePolicy();
-        policy.expiration = this.expiration;
+        if (this.expiration != null) {
+            policy.expiration = this.expiration;
+        }
 
         final Key asKey = new Key(this.namespace, set, key);
         Gson gson = new Gson();
