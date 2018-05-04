@@ -51,6 +51,7 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 		for (final Object object : keys) {
 			final String key = (String) object;
 			String value = properties.getProperty(key);
+			log.info("BKS "+key+":"+value);
 			final ContextProperties contextProps = ContextProperties.get(key);
 			if (contextProps != null) {
 				try {
@@ -65,7 +66,7 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 				} catch (final NoSuchFieldException | SecurityException e) {
 					log.error(e.getMessage(), e);
 				} catch (final Exception e) {
-                    log.error(e.getMessage(), e);
+                   log.error(e.getMessage()+":"+key, e);
                 }
 				readSpecials(contextProps, value);
 			}
