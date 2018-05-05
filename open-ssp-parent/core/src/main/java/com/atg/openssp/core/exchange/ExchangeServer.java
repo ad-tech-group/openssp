@@ -7,6 +7,7 @@ import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.common.provider.AdProviderReader;
+import openrtb.bidrequest.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.math.FloatComparator;
@@ -111,6 +112,7 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 
 		if (info.isAccessAllowOriginActivated() && winner instanceof Auction.AuctionResult) {
             LOG.debug("is HeaderBid AuctionResult");
+            System.out.println("is HeaderBid AuctionResult");
 			if (((Auction.AuctionResult)winner).getBidRequest() != null) {
 				//TODO:  BKS need app
 				String protocol  = ((Auction.AuctionResult) winner).getBidRequest().getSite().getPage();
@@ -122,7 +124,15 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 			} else {
 			    // TODO:  need to add header origin, etc.  future story
             }
-		}
+		} else {
+		    Site site = agent.getBiddingServiceInfo().getSite();
+            String protocol  = site.getPage();
+            protocol = protocol.substring(0, protocol.indexOf(':'));
+            agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", protocol+"://" + site.getDomain());
+            agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
+            agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
+            agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
+        }
 		Map<String, String> headers = info.getHeaders();
 		for (Map.Entry<String, String> entry : headers.entrySet()) {
 			agent.getHttpResponse().addHeader(entry.getKey(), entry.getValue());
