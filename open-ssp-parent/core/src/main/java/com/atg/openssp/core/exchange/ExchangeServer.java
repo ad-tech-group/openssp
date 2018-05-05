@@ -1,14 +1,12 @@
 package com.atg.openssp.core.exchange;
 
 import com.atg.openssp.common.core.entry.BiddingServiceInfo;
-import com.atg.openssp.common.core.entry.SessionAgent;
 import com.atg.openssp.common.core.exchange.Auction;
 import com.atg.openssp.common.core.exchange.Exchange;
 import com.atg.openssp.common.core.exchange.ExchangeExecutorServiceFacade;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.common.provider.AdProviderReader;
-import openrtb.bidrequest.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.math.FloatComparator;
@@ -30,7 +28,7 @@ import java.util.concurrent.Future;
  */
 public class ExchangeServer implements Exchange<RequestSessionAgent> {
 
-	private static final Logger log = LoggerFactory.getLogger(ExchangeServer.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ExchangeServer.class);
 
 	/**
 	 * Starts the process to exchange and build a response if a {@code VideoResult} can be expected.
@@ -63,20 +61,20 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				try {
 					return winnerFuture.get();
 				} catch (ArrayIndexOutOfBoundsException ex) {
-					log.error("no winner detected (winnerFuture is empty)");
+					LOG.error("no winner detected (winnerFuture is empty)");
 				} catch (final ExecutionException e) {
 					if (e.getCause() instanceof RequestException) {
 						throw (RequestException) e.getCause();
 					} else {
-						log.error(e.getMessage(), e);
+                        LOG.error(e.getMessage(), e);
 					}
 					throw e;
 				}
 			} else {
-				log.error("no winner detected");
+                LOG.error("no winner detected");
 			}
 		} catch (final InterruptedException e) {
-			log.error(e.getMessage());
+            LOG.error(e.getMessage());
 		}
 		return null;
 	}
@@ -94,34 +92,26 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				return a;
 			}
 		} catch (final InterruptedException e) {
-			log.error(e.getMessage());
+            LOG.error(e.getMessage());
 		} catch (final CancellationException e) {
-			log.error(e.getMessage());
+            LOG.error(e.getMessage());
 		} catch (final ExecutionException e) {
-			log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
 		}
 
 		return b;
 	}
 
 	private boolean evaluateResponse(final RequestSessionAgent agent, final AdProviderReader winner) {
-log.info("evaluateResponse");
+        LOG.debug("evaluateResponse");
 		BiddingServiceInfo info = agent.getBiddingServiceInfo();
-		log.info("info "+info);
 
 		agent.getHttpResponse().setCharacterEncoding(info.getCharacterEncoding());
 		agent.getHttpResponse().setContentType("Content-Type: "+info.getContentType());
 
 		if (info.isAccessAllowOriginActivated() && winner instanceof Auction.AuctionResult) {
-			log.info("levelA");
+            LOG.debug("is HeaderBid AuctionResult");
 			if (((Auction.AuctionResult)winner).getBidRequest() != null) {
-				log.info("levelB");
-				log.info("w "+winner);
-				log.info("br "+((Auction.AuctionResult) winner).getBidRequest());
-				log.info("br "+((Auction.AuctionResult) winner).getBidRequest());
-				log.info("site "+((Auction.AuctionResult) winner).getBidRequest().getSite());
-				log.info("domain "+((Auction.AuctionResult) winner).getBidRequest().getSite().getDomain());
-
 				//TODO:  BKS need app
 				String protocol  = ((Auction.AuctionResult) winner).getBidRequest().getSite().getPage();
 				protocol = protocol.substring(0, protocol.indexOf(':'));
@@ -129,52 +119,42 @@ log.info("evaluateResponse");
 				agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
 				agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
 				agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
-			}
+			} else {
+			    // TODO:  need to add header origin, etc.  future story
+            }
 		}
-		log.info("levelC");
 		Map<String, String> headers = info.getHeaders();
 		for (Map.Entry<String, String> entry : headers.entrySet()) {
 			agent.getHttpResponse().addHeader(entry.getKey(), entry.getValue());
 		}
-		log.info("levelD");
 
 		try (Writer out = agent.getHttpResponse().getWriter()) {
-			log.info("levelE");
 			if (winner != null && winner.isValid()) {
-				log.info("levelF");
 
 				final String responseData;
 				if (winner instanceof Auction.AuctionResult) {
-					log.info("levelG");
 					if (((Auction.AuctionResult)winner).getBidRequest() != null) {
-						log.info("levelH");
 						responseData = ((Auction.AuctionResult) winner).buildHeaderBidResponse();
 					} else {
-						log.info("levelI");
 						responseData = "";
 					}
 				} else {
-					log.info("levelJ");
 					responseData = winner.buildResponse();
 				}
 				out.append(responseData);
-				log.info("levelK");
 
                 if (agent.getBiddingServiceInfo().sendNurlNotifications()) {
-					log.info("levelL");
+                    LOG.debug("send winning nurl notification");
                     winner.perform(agent);
+                } else {
+                    LOG.debug("skipping winning nurl notification on header bidding");
                 }
-
 				out.flush();
-
-				log.info("levelM");
 				return true;
 			}
 		} catch (final IOException e) {
-			log.info("levelN");
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
-		log.info("levelO");
 		return false;
 	}
 

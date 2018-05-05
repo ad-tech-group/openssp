@@ -31,7 +31,7 @@ import java.util.concurrent.Callable;
  */
 public final class DemandBroker extends AbstractBroker implements Callable<ResponseContainer> {
 
-	private static final Logger log = LoggerFactory.getLogger(DemandBroker.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DemandBroker.class);
 
 	private final BiddingServiceInfo info;
 
@@ -60,7 +60,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		try {
 			gson = new GsonBuilder().setVersion(Double.valueOf(supplier.getOpenRtbVersion())).create();
 		} catch (Throwable t) {
-			log.error(t.getMessage(), t);
+			LOG.error(t.getMessage(), t);
 		}
 	}
 
@@ -74,17 +74,19 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		try {
 			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
 
-			log.debug("bidrequest: " + jsonBidrequest);
+			LOG.debug("bidrequest: " + jsonBidrequest);
             System.out.println("bidrequest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
 			if (!StringUtils.isEmpty(result)) {
 				if (JsonPostConnector.NO_CONTENT.equals(result)) {
-					log.debug(supplier.getShortName()+" bidresponse: no content");
+                    LOG.debug(supplier.getShortName()+" bidresponse: no content");
+                    System.out.println(supplier.getShortName()+" bidresponse: no content");
 					RtbResponseLogProcessor.instance.setLogData("no content", "bidresponse", supplier.getShortName());
 				} else {
-					log.debug("bidresponse: " + result);
+					LOG.debug("bidresponse: " + result);
+                    System.out.println("bidresponse: " + result);
 					RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
 					DemandBrokerFilter brokerFilter = info.getDemandBrokerFilter(supplier, gson, bidrequest);
 					final BidResponse bidResponse = brokerFilter.filterResponse(gson, result);
@@ -94,6 +96,8 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
                     String cookieSync = s.getCookieSync();
                     if (cookieSync != null && !"".equals(cookieSync)) {
+                        LOG.debug("set cookie sync value");
+                        System.out.println("set cookie sync value");
                         StringBuilder sspRedirUrl = new StringBuilder();
                         String uid = bidrequest.getUser().getId();
                         String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
@@ -104,15 +108,16 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 					return container;
 				}
 			} else {
-                log.debug("bidresponse: is null");
+                LOG.debug("bidresponse: is null");
+                System.out.println("bidresponse: is null");
                 RtbResponseLogProcessor.instance.setLogData("is null", "bidresponse", supplier.getShortName());
             }
 		} catch (final BidProcessingException e) {
-			log.error(getClass().getSimpleName() + " " + ""+e.getMessage(), e);
+			LOG.error(getClass().getSimpleName() + " " + ""+e.getMessage(), e);
             TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), supplier.getSupplierId()+" fault ("+e.getMessage()+")");
 			throw e;
 		} catch (final Exception e) {
-			log.error(getClass().getSimpleName() + " " + e.getMessage(), e);
+			LOG.error(getClass().getSimpleName() + " " + e.getMessage(), e);
             TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), supplier.getSupplierId()+" fault ("+e.getMessage()+")");
 			//throw e;
 		} finally {

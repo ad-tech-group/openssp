@@ -27,7 +27,7 @@ import com.google.common.base.Stopwatch;
  */
 public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServlet {
 
-	private static final Logger log = LoggerFactory.getLogger(CoreSupplyServlet.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CoreSupplyServlet.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,6 +48,7 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 		try {
 			agent = getAgent(request, response);
 			hasResult = server.processExchange(agent);
+			System.out.println("exchange returned result");
 		} catch (final RequestException e) {
             TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault-401");
 			response.sendError(401, e.getMessage());
@@ -56,7 +57,7 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 			response.sendError(200, "exchange timeout");
 		} catch (final Exception e) {
             TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault");
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		} finally {
 			stopwatch.stop();
 			if (hasResult) {
