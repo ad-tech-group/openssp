@@ -1,33 +1,18 @@
 {
   "pricelayer": [
     {
-      "siteid": "1",
-      "bidfloor": 0.02,
+			"siteid": "131",
+			"bidfloor": 0.10,
       "currency": "USD"
     },
     {
-      "siteid": "www.albumoftheyear.org",
-      "bidfloor": 0.01,
+			"siteid": "128",
+			"bidfloor": 0.10,
       "currency": "USD"
     },
     {
-      "siteid": "webdesignledger.com",
-      "bidfloor": 0.01,
-      "currency": "USD"
-    },
-    {
-      "siteid": "testmango.com",
-      "bidfloor": 0.01,
-      "currency": "USD"
-    },
-    {
-      "siteid": "coindesk.com",
-      "bidfloor": 0.01,
-      "currency": "USD"
-    },
-    {
-      "siteid": "testsite.com",
-      "bidfloor": 0.02,
+      "siteid": "381",
+      "bidfloor": 0.10,
       "currency": "USD"
     }
   ]

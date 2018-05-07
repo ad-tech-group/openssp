@@ -63,8 +63,10 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 					}
 					ContextCache.instance.put(contextProps, value);
 				} catch (final NoSuchFieldException | SecurityException e) {
-					log.error(e.getMessage());
-				}
+					log.error(e.getMessage(), e);
+				} catch (final Exception e) {
+                   log.error(e.getMessage()+":"+key, e);
+                }
 				readSpecials(contextProps, value);
 			}
 		}
@@ -84,8 +86,8 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 	public String getResourceLocation() {
 		try {
 			return ProjectProperty.getPropertiesResourceLocation();
-		} catch (final PropertyException e) {
-			log.error(e.getMessage());
+		} catch (final Exception e) {
+			log.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -108,6 +110,9 @@ public abstract class AbstractConfigurationLoader implements DynamicLoadable {
 		} catch (final PropertyException e) {
 			log.error(e.getMessage());
 			throw new RuntimeException("property file could not be found: "+propertiesFile);
+		} catch (final Exception e) {
+			log.error(e.getMessage(), e);
+            throw new RuntimeException("property file could not be loaded: "+propertiesFile);
 		}
 	}
 

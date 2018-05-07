@@ -48,6 +48,7 @@ public class RequestSessionAgent extends SessionAgent {
 		List<ParamValue> pList = new EntryValidator(info.getType()).validateEntryParams(request);
 		for (ParamValue paramValue : pList) {
 			log.debug(paramValue.toString());
+            info.setParameter(paramValue);
 		}
 		return pList;
 	}

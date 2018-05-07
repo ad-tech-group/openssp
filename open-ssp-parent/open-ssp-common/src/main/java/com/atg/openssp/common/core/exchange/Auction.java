@@ -16,6 +16,8 @@ import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
 import openrtb.tables.AuctionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.math.FloatComparator;
 
 import java.util.*;
@@ -28,6 +30,7 @@ import java.util.Map.Entry;
  *
  */
 public class Auction {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Auction.class);
 
 	/**
 	 * Calculates the the winner of the RTB auction considering the behaviour of a private deal.
@@ -128,6 +131,9 @@ public class Auction {
 					logBidList);
 
 		}
+		LOGGER.info("got auction: "+dealBidListMap+"::"+nonDealBidListMap);
+
+
 
 		HashMap<String, RtbAdProvider> winningProviderMap = new HashMap<String, RtbAdProvider>();
 		for (Entry<String, List<Bidder>> e : dealBidListMap.entrySet()) {
@@ -138,6 +144,7 @@ public class Auction {
 				winningProviderMap.put(e.getKey(), evaluateWinner(info, dealBidList));
 			}
 		}
+		LOGGER.info("first run done");
 
 		for (Entry<String, List<Bidder>> e : nonDealBidListMap.entrySet()) {
 			RtbAdProvider winningProvider = winningProviderMap.get(e.getKey());
@@ -148,10 +155,12 @@ public class Auction {
 				winningProviderMap.put(e.getKey(), evaluateWinner(info, nonDealBidList));
 			}
 		}
+		LOGGER.info("second run done");
 
 		Set<Entry<String, RtbAdProvider>> winningProviderSet = winningProviderMap.entrySet();
 		AuctionResult dealWinner;
 		if (winningProviderSet.size() > 1) {
+			LOGGER.info("set>1");
 			dealWinner = new MultipleAuctionResult();
 			// just use the first one for the supplier
 			dealWinner.setBidRequest((BidRequest) bidExchange.getAllBidRequests().values().toArray()[0]);
@@ -162,6 +171,7 @@ public class Auction {
 			}
 
 		} else {
+			LOGGER.info("set <= 1");
 			dealWinner = new SingularAuctionResult();
 			String key = (String) winningProviderMap.keySet().toArray()[0];
 			RtbAdProvider winningProvider = winningProviderMap.get(key);
@@ -170,6 +180,7 @@ public class Auction {
 				((SingularAuctionResult)dealWinner).setWinningProvider(winningProvider);
 			}
 		}
+		LOGGER.info("return winner: "+dealWinner);
 
 		return dealWinner;
 	}

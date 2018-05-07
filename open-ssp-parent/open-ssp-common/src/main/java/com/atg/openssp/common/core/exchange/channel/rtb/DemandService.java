@@ -93,9 +93,9 @@ public class DemandService implements Callable<AdProviderReader> {
 			try {
 				adProvider = Auction.auctioneer(agent.getBiddingServiceInfo(), agent.getBidExchange());
 			} catch (final ArrayIndexOutOfBoundsException e) {
-				log.error("No DSP points available.", agent.getRequestid(), e.getMessage());
+				log.info("No DSP points available.", agent.getRequestid(), e.getMessage());
 			} catch (final InvalidBidException e) {
-				log.error("{} {}", agent.getRequestid(), e.getMessage());
+				log.info("{} {}", agent.getRequestid(), e.getMessage());
 			}
 		} catch (final InterruptedException e) {
 			log.error(" InterruptedException (outer) {} {}", agent.getRequestid(), e.getMessage());

@@ -36,6 +36,7 @@ COPY /properties/dev_global.runtime.xml /usr/local/tomcat/properties
 COPY /properties/prd_global.runtime.xml /usr/local/tomcat/properties
 COPY /properties/local.runtime.xml /usr/local/tomcat/properties
 COPY /properties/log4j2.xml /usr/local/tomcat/properties
+COPY /properties/log4j.properties /usr/local/tomcat/properties
 
 COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
 #RUN #sed -i -e 's/8080/8886/g' /usr/local/tomcat/conf/server.xml

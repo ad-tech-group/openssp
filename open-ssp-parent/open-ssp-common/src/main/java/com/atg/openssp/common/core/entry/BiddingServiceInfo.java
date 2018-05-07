@@ -2,16 +2,20 @@ package com.atg.openssp.common.core.entry;
 
 import com.atg.openssp.common.core.exchange.channel.rtb.DemandBrokerFilter;
 import com.atg.openssp.common.core.exchange.channel.rtb.PassthroughFilter;
+import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.demand.Supplier;
 import com.google.gson.Gson;
 import openrtb.bidrequest.model.BidRequest;
+import openrtb.bidrequest.model.Site;
 import openrtb.tables.AuctionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BiddingServiceInfo {
@@ -25,6 +29,8 @@ public class BiddingServiceInfo {
     private AuctionType auctionType = AuctionType.SECOND_PRICE;
     private boolean sendNurlNotifications = true;
     private String loggingId;
+    private List<ParamValue> parameters = new ArrayList<>();
+    private Site site;
 
     public void setType(SessionAgentType type) {
         this.type = type;
@@ -123,6 +129,15 @@ public class BiddingServiceInfo {
 
     public void setLoggingId(String logginId) {
         this.loggingId = logginId;
+    }
+
+    public void setParameter(ParamValue paramValue) {
+        site = paramValue.getSite();
+    }
+
+    public Site getSite()
+    {
+        return site;
     }
 }
 
