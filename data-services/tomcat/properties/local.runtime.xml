@@ -39,6 +39,11 @@
 	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
 	<entry key="supplier-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataMaintenanceHandler</entry>
 
+	<!--
+	<entry key="geo-ip-info-handler-class">com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler</entry>
+	<entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIpInfoHandler</entry>
+	-->
+
 	<!-- switch to enable/disable debugging -->
 	<entry key="debug">true</entry>
 	
