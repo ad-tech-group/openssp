@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,9 @@ public class AerospikeService {
         info = appContext.getBean(AerospikeInfo.class);
 
         System.out.println("BKS.first="+host);
-        System.out.println("BKS.ssecond="+info.host);
+        System.out.println("BKS.second="+info.host);
+        System.out.println("BKS.third="+System.getProperty("AEROSPIKE_HOST"));
+        System.out.println("BKS.user="+System.getProperty("AEROSPIKE_USER"));
 
         /*
             host=properties.getProperty("host");
