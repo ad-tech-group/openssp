@@ -1,9 +1,9 @@
 package io.freestar.ssp.aerospike;
 
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncDTO;
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncManager;
+import com.atg.openssp.common.core.exchange.cookiesync.DspCookieDto;
 import com.atg.openssp.common.logadapter.DspCookieSyncLogProcessor;
-import io.freestar.openssp.common.exchange.aerospike.AerospikeService;
-import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
-import io.freestar.openssp.common.exchange.aerospike.data.DspCookieDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,31 +47,32 @@ public class HeaderCookieSyncService extends HttpServlet {
         String dspShortName = params.get("dsp");
         String dspUid = params.get("dsp_uid");
 
-        CookieSyncDTO result = AerospikeService.getInstance().get(fsuid);
-        if (result == null) {
-            result = new CookieSyncDTO();
-            result.setFsuid(fsuid);
-        }
-        DspCookieDto dspResult = result.lookup(dspShortName);
-        if (dspResult == null) {
-            dspResult = new DspCookieDto();
-            dspResult.setShortName(dspShortName);
-            result.add(dspResult);
-        }
-        String checkUid = dspResult.getUid();
-        if (checkUid == null) {
-            dspResult.setUid(dspUid);
-        } else {
-            if (!checkUid.equals(dspUid)) {
+        if (CookieSyncManager.getInstance().supportsCookieSync()) {
+            CookieSyncDTO result = CookieSyncManager.getInstance().get(fsuid);
+            if (result == null) {
+                result = new CookieSyncDTO();
+                result.setFsuid(fsuid);
+            }
+            DspCookieDto dspResult = result.lookup(dspShortName);
+            if (dspResult == null) {
+                dspResult = new DspCookieDto();
+                dspResult.setShortName(dspShortName);
+                result.add(dspResult);
+            }
+            String checkUid = dspResult.getUid();
+            if (checkUid == null) {
                 dspResult.setUid(dspUid);
+            } else {
+                if (!checkUid.equals(dspUid)) {
+                    dspResult.setUid(dspUid);
+                }
+            }
+
+            if (result.isDirty()) {
+                CookieSyncManager.getInstance().set(fsuid, result);
+                DspCookieSyncLogProcessor.instance.setLogData("cookie-sync", "update", fsuid, dspShortName, dspUid);
             }
         }
-
-        if (result.isDirty()) {
-            AerospikeService.getInstance().set(fsuid, result);
-            DspCookieSyncLogProcessor.instance.setLogData("cookie-sync", "update", fsuid, dspShortName, dspUid);
-        }
-
 
         response.addHeader("Content-Type", "application/json");
 //        response.addHeader("Access-Control-Allow-Origin", "https://webdesignledger.com");

@@ -5,6 +5,8 @@ import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.cache.type.PricelayerCache;
 import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncDTO;
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncManager;
 import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
@@ -14,8 +16,6 @@ import com.atg.openssp.common.demand.VideoObjectParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
-import io.freestar.openssp.common.exchange.aerospike.AerospikeService;
-import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.GeoType;
 import openrtb.tables.ImpressionSecurity;
@@ -107,8 +107,10 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
 
     private User createUser(VideoObjectParamValue pValues) {
         String userId = pValues.getFsUid();
-        CookieSyncDTO result = AerospikeService.getInstance().get(userId);
-        if (result != null) {
+        if (CookieSyncManager.getInstance().supportsCookieSync()) {
+            CookieSyncDTO result = CookieSyncManager.getInstance().get(userId);
+            if (result != null) {
+            }
         }
         return new User.Builder()
 //                .setBuyeruid()

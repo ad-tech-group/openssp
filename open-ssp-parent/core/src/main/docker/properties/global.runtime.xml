@@ -40,4 +40,6 @@
 
 	<entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 
+	<entry key="cookie-sync-handler-class">io.freestar.openssp.common.exchange.aerospike.EnvironmentAerospikeCookieSyncHandler</entry>
+
 </properties>

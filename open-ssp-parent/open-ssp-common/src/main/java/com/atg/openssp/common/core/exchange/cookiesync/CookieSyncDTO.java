@@ -1,4 +1,4 @@
-package io.freestar.openssp.common.exchange.aerospike.data;
+package com.atg.openssp.common.core.exchange.cookiesync;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
