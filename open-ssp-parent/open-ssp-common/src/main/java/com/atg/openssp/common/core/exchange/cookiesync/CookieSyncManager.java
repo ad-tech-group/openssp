@@ -12,28 +12,19 @@ public class CookieSyncManager {
     private CookieSyncHandler handler;
 
     private CookieSyncManager() {
-        System.out.println("BKS-A");
         String handlerClassName = GlobalContext.getCookieSyncHandlerClass();
-        System.out.println("BKS-B "+handlerClassName);
         if (handlerClassName == null) {
-            System.out.println("BKS-C");
             handler = DefaultCookieSyncHandler.getInstance();
         } else {
             try {
-                System.out.println("BKS-D");
                 Class handlerClass = Class.forName(handlerClassName);
-                System.out.println("BKS-E");
                 Method m = handlerClass.getMethod("getInstance", new Class[]{});
-                System.out.println("BKS-F");
                 handler = (CookieSyncHandler) m.invoke(handlerClass, null);
             } catch (Exception e) {
-                System.out.println("BKS-G");
                 log.error(e.getMessage(), e);
                 handler = DefaultCookieSyncHandler.getInstance();
             }
-            System.out.println("BKS-H");
         }
-        System.out.println("BKS-I");
     }
 
     public CookieSyncDTO get(String uid) {
