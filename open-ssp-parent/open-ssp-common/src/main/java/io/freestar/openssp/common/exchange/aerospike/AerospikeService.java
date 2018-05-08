@@ -33,21 +33,6 @@ public class AerospikeService {
                 "classpath:/META-INF/config.xml");
         //info = appContext.getBean(AerospikeInfo.class);
 
-        System.out.println("BKS.first="+host);
-        //System.out.println("BKS.second="+info.host);
-        System.out.println("BKS.third="+System.getProperty("AEROSPIKE_HOST"));
-        System.out.println("BKS.user1="+System.getProperty("AEROSPIKE_USER"));
-        System.out.println("BKS.user2="+System.getenv("AEROSPIKE_USER"));
-
-        /*
-            host=properties.getProperty("host");
-            port = Integer.parseInt(properties.getProperty("port"));
-            user=properties.getProperty("user");
-            password=properties.getProperty("password");
-            namespace=properties.getProperty("namespace");
-            expiration=Integer.parseInt(properties.getProperty("expiration"));
-            */
-
             final ClientPolicy clientPolicy = new ClientPolicy();
             if (System.getenv("AEROSPIKE_USER") != null) {
                 clientPolicy.user = System.getenv("AEROSPIKE_USER");
@@ -56,15 +41,7 @@ public class AerospikeService {
                 clientPolicy.password = System.getenv("AEROSPIKE_PASSWORD");
             }
 
-            /*
-            this.host = checkNotNull(host);
-            this.port = checkNotNull(port);
-            this.client = new AerospikeClient(clientPolicy, host, Integer.parseInt(port));
-            this.namespace = checkNotNull(namespace);
-            this.set = checkNotNull(set);
-            this.bin = checkNotNull(bin);
-            */
-
+        this.client = new AerospikeClient(clientPolicy, System.getenv("AEROSPIKE_HOST"), 3000);
     }
 
     /**
