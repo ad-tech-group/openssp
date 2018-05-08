@@ -25,16 +25,16 @@ public class AerospikeService {
     @Value("${aerospike.host}")
     String host;
 
-    private final AerospikeInfo info;
     private AerospikeClient client;
+    //    private final AerospikeInfo info;
 
     private AerospikeService() {
         ApplicationContext appContext = new ClassPathXmlApplicationContext(
                 "classpath:/META-INF/config.xml");
-        info = appContext.getBean(AerospikeInfo.class);
+        //info = appContext.getBean(AerospikeInfo.class);
 
         System.out.println("BKS.first="+host);
-        System.out.println("BKS.second="+info.host);
+        //System.out.println("BKS.second="+info.host);
         System.out.println("BKS.third="+System.getProperty("AEROSPIKE_HOST"));
         System.out.println("BKS.user1="+System.getProperty("AEROSPIKE_USER"));
         System.out.println("BKS.user2="+System.getenv("AEROSPIKE_USER"));
@@ -49,14 +49,13 @@ public class AerospikeService {
             */
 
             final ClientPolicy clientPolicy = new ClientPolicy();
-            if (info.user != null) {
-                clientPolicy.user = info.user;
+            if (System.getenv("AEROSPIKE_USER") != null) {
+                clientPolicy.user = System.getenv("AEROSPIKE_USER");
             }
-            if (info.password != null) {
-                clientPolicy.password = info.password;
+            if (System.getenv("AEROSPIKE_PASSWORD") != null) {
+                clientPolicy.password = System.getenv("AEROSPIKE_PASSWORD");
             }
 
-            this.client = new AerospikeClient(clientPolicy, info.host, info.port);
             /*
             this.host = checkNotNull(host);
             this.port = checkNotNull(port);
@@ -76,19 +75,18 @@ public class AerospikeService {
      * @throws AerospikeException if there is an error reading from Aerospike
      */
     public CookieSyncDTO get(String key) {
-        final Key asKey = new Key(info.namespace, info.set, key);
+        final Key asKey = new Key(System.getenv("AEROSPIKE_NAMESPACE_SSP"), "cookie_sync", key);
         final Record record = client.get(null, asKey);
         Gson gson = new Gson();
-        return (record != null) ? gson.fromJson((String)record.getValue((info.bin != null) ? info.bin : "json"), CookieSyncDTO.class) : null;
+        return (record != null) ? gson.fromJson((String)record.getValue("json"), CookieSyncDTO.class) : null;
     }
 
     public void set(String key, CookieSyncDTO dto) {
         WritePolicy policy = new WritePolicy();
-        policy.expiration = info.expiration;
 
-        final Key asKey = new Key(info.namespace, info.set, key);
+        final Key asKey = new Key(System.getenv("AEROSPIKE_NAMESPACE_SSP"), "cookie_sync", key);
         Gson gson = new Gson();
-        final Bin asBin = new Bin(info.bin, gson.toJson(dto, CookieSyncDTO.class));
+        final Bin asBin = new Bin("json", gson.toJson(dto, CookieSyncDTO.class));
         client.put(policy, asKey, asBin);
     }
 
