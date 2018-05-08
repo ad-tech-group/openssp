@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class AerospikeService {
     private final static Logger log = LoggerFactory.getLogger(AerospikeService.class);
     private static AerospikeService singleton;
-    @Value("${aerospike.host:172.28.128.33}")
+    @Value("${aerospike.host}")
     String host;
 
     private final AerospikeInfo info;
@@ -36,7 +36,8 @@ public class AerospikeService {
         System.out.println("BKS.first="+host);
         System.out.println("BKS.second="+info.host);
         System.out.println("BKS.third="+System.getProperty("AEROSPIKE_HOST"));
-        System.out.println("BKS.user="+System.getProperty("AEROSPIKE_USER"));
+        System.out.println("BKS.user1="+System.getProperty("AEROSPIKE_USER"));
+        System.out.println("BKS.user2="+System.getenv("AEROSPIKE_USER"));
 
         /*
             host=properties.getProperty("host");
