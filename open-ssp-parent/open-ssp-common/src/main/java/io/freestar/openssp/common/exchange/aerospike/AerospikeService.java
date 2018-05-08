@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Properties;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -29,17 +30,21 @@ public class AerospikeService {
     //    private final AerospikeInfo info;
 
     private AerospikeService() {
-        ApplicationContext appContext = new ClassPathXmlApplicationContext(
-                "classpath:/META-INF/config.xml");
+//        ApplicationContext appContext = new ClassPathXmlApplicationContext(
+//                "classpath:/META-INF/config.xml");
         //info = appContext.getBean(AerospikeInfo.class);
+        Map<String, String> envMap = System.getenv();
+        for (Map.Entry<String, String> e : envMap.entrySet()) {
+            System.out.println("env: "+e.getKey()+":"+e.getValue());
+        }
 
-            final ClientPolicy clientPolicy = new ClientPolicy();
-            if (System.getenv("AEROSPIKE_USER") != null) {
-                clientPolicy.user = System.getenv("AEROSPIKE_USER");
-            }
-            if (System.getenv("AEROSPIKE_PASSWORD") != null) {
-                clientPolicy.password = System.getenv("AEROSPIKE_PASSWORD");
-            }
+        final ClientPolicy clientPolicy = new ClientPolicy();
+        if (System.getenv("AEROSPIKE_USER") != null) {
+            clientPolicy.user = System.getenv("AEROSPIKE_USER");
+        }
+        if (System.getenv("AEROSPIKE_PASSWORD") != null) {
+            clientPolicy.password = System.getenv("AEROSPIKE_PASSWORD");
+        }
 
         this.client = new AerospikeClient(clientPolicy, System.getenv("AEROSPIKE_HOST"), 3000);
     }
