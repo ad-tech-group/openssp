@@ -8,17 +8,21 @@ import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidresponse.model.Bid;
 import openrtb.bidresponse.model.BidResponse;
 import openrtb.bidresponse.model.SeatBid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MangoMediaFilter extends DemandBrokerFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(MangoMediaFilter.class);
     private final static String AUCTION_PRICE = "\\$\\{AUCTION_PRICE\\}";
     private final static Pattern auction_price = Pattern.compile(AUCTION_PRICE);
 
     @Override
     public String filterRequest(Gson gson, BidRequest bidrequest) {
+        LOG.info("filter: "+bidrequest);
         JsonObject req = gson.toJsonTree(bidrequest, BidRequest.class).getAsJsonObject();
         JsonObject site = (JsonObject) req.get("site");
         site.remove("id");
@@ -77,11 +81,13 @@ public class MangoMediaFilter extends DemandBrokerFilter {
             req.addProperty("test", true);
         }
 
+        LOG.info("filtered: "+req);
         return req.toString();
     }
 
     @Override
     public BidResponse filterResponse(Gson gson, String response) {
+        LOG.info("filter: "+response);
         BidResponse resp =  gson.fromJson(response, BidResponse.class);
         // The adm field needs the auction price substituted similar to the the nUrl.
         List<SeatBid> sbList = resp.getSeatbid();
@@ -96,6 +102,7 @@ public class MangoMediaFilter extends DemandBrokerFilter {
                 }
             }
         }
+        LOG.info("filtered: "+resp);
         return resp;
     }
 }
