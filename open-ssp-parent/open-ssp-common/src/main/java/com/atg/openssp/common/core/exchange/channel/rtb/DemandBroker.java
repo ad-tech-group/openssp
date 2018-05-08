@@ -81,14 +81,18 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		try {
             User user = workingBidrequest.getUser();
             String userId = user.getId();
-            CookieSyncDTO cookieSyncDTO = AerospikeService.getInstance().get(userId);
-            if (cookieSyncDTO != null) {
-                DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
-                if (dspDto != null) {
-                    String buyerId = dspDto.getUid();
-                    user.setBuyeruid(buyerId);
-                    DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
+            try {
+                CookieSyncDTO cookieSyncDTO = AerospikeService.getInstance().get(userId);
+                if (cookieSyncDTO != null) {
+                    DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
+                    if (dspDto != null) {
+                        String buyerId = dspDto.getUid();
+                        user.setBuyeruid(buyerId);
+                        DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
+                    }
                 }
+            } catch (Exception ex) {
+                LOG.error(ex.getMessage(), ex);
             }
 
             final String jsonBidrequest = gson.toJson(workingBidrequest);

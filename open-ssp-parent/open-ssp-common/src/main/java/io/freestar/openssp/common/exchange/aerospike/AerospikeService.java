@@ -7,7 +7,10 @@ import com.google.gson.Gson;
 import io.freestar.openssp.common.exchange.aerospike.data.CookieSyncDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.Properties;
@@ -18,35 +21,21 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class AerospikeService {
     private final static Logger log = LoggerFactory.getLogger(AerospikeService.class);
     private static AerospikeService singleton;
-    private final Properties properties = new Properties();
-    private AerospikeClient client;
-    @Value("${aerospike.host:172.28.128.3}")
+    @Value("${aerospike.host:172.28.128.33}")
     String host;
-    @Value("${aerospike.port:3000}")
-    Integer port;
-    @Value("${aerospike.user}")
-    String user;
-    @Value("${aerospike.password}")
-    String password;
-    @Value("${aerospike.namespace:ssp}")
-    String namespace;
-    @Value("${aerospike.expiration}")
-    Integer expiration;
-    @Value("${aerospike.set:dev-gen}")
-    private String set;
-    @Value("${aerospike.bin:json}")
-    private String bin;
+
+    private final AerospikeInfo info;
+    private AerospikeClient client;
 
     private AerospikeService() {
-//        InputStream is = getClass().getClassLoader().getResourceAsStream(resolveEnvironment()+"aerospike.properties");
-//        if (is != null) {
-//            try {
-//                properties.load(is);
-//                is.close();
-//            } catch (IOException e) {
-//                log.error(e.getMessage(), e);
-//            }
-            /*
+        ApplicationContext appContext = new ClassPathXmlApplicationContext(
+                "classpath:/META-INF/config.xml");
+        info = appContext.getBean(AerospikeInfo.class);
+
+        System.out.println("BKS.first="+host);
+        System.out.println("BKS.ssecond="+info.host);
+
+        /*
             host=properties.getProperty("host");
             port = Integer.parseInt(properties.getProperty("port"));
             user=properties.getProperty("user");
@@ -56,19 +45,22 @@ public class AerospikeService {
             */
 
             final ClientPolicy clientPolicy = new ClientPolicy();
-            if (user != null) {
-                clientPolicy.user = user;
+            if (info.user != null) {
+                clientPolicy.user = info.user;
             }
-            if (password != null) {
-                clientPolicy.password = password;
+            if (info.password != null) {
+                clientPolicy.password = info.password;
             }
 
+            this.client = new AerospikeClient(clientPolicy, info.host, info.port);
+            /*
             this.host = checkNotNull(host);
             this.port = checkNotNull(port);
-            this.client = new AerospikeClient(clientPolicy, host, port);
+            this.client = new AerospikeClient(clientPolicy, host, Integer.parseInt(port));
             this.namespace = checkNotNull(namespace);
             this.set = checkNotNull(set);
             this.bin = checkNotNull(bin);
+            */
 
     }
 
@@ -80,21 +72,19 @@ public class AerospikeService {
      * @throws AerospikeException if there is an error reading from Aerospike
      */
     public CookieSyncDTO get(String key) {
-        final Key asKey = new Key(this.namespace, set, key);
+        final Key asKey = new Key(info.namespace, info.set, key);
         final Record record = client.get(null, asKey);
         Gson gson = new Gson();
-        return (record != null) ? gson.fromJson((String)record.getValue((bin != null) ? bin : "json"), CookieSyncDTO.class) : null;
+        return (record != null) ? gson.fromJson((String)record.getValue((info.bin != null) ? info.bin : "json"), CookieSyncDTO.class) : null;
     }
 
     public void set(String key, CookieSyncDTO dto) {
         WritePolicy policy = new WritePolicy();
-        if (this.expiration != null) {
-            policy.expiration = this.expiration;
-        }
+        policy.expiration = info.expiration;
 
-        final Key asKey = new Key(this.namespace, set, key);
+        final Key asKey = new Key(info.namespace, info.set, key);
         Gson gson = new Gson();
-        final Bin asBin = new Bin(bin, gson.toJson(dto, CookieSyncDTO.class));
+        final Bin asBin = new Bin(info.bin, gson.toJson(dto, CookieSyncDTO.class));
         client.put(policy, asKey, asBin);
     }
 
