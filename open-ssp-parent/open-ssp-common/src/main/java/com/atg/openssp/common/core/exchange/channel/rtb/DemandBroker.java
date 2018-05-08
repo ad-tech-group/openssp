@@ -82,14 +82,23 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
             User user = workingBidrequest.getUser();
             String userId = user.getId();
             try {
+                System.out.println("BKS-A");
                 if (CookieSyncManager.getInstance().supportsCookieSync()) {
+                    System.out.println("BKS-B");
                     CookieSyncDTO cookieSyncDTO = CookieSyncManager.getInstance().get(userId);
+                    System.out.println("BKS-C");
                     if (cookieSyncDTO != null) {
+                        System.out.println("BKS-D");
                         DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
+                        System.out.println("BKS-E");
                         if (dspDto != null) {
+                            System.out.println("BKS-F");
                             String buyerId = dspDto.getUid();
+                            System.out.println("BKS-G");
                             user.setBuyeruid(buyerId);
+                            System.out.println("BKS-H");
                             DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
+                            System.out.println("BKS-I");
                         }
                     }
                 }

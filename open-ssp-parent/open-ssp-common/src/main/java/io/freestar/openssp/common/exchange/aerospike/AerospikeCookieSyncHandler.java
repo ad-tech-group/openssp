@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Type;
 
 public abstract class AerospikeCookieSyncHandler implements CookieSyncHandler {
-    private final static Logger log = LoggerFactory.getLogger(AerospikeCookieSyncHandler.class);
+    private final static Logger LOG = LoggerFactory.getLogger(AerospikeCookieSyncHandler.class);
 
     private AerospikeClient client;
 
@@ -40,27 +40,34 @@ public abstract class AerospikeCookieSyncHandler implements CookieSyncHandler {
 
     @Override
     public final CookieSyncDTO get(String key) {
-        final Key asKey = new Key(getNamespace(), getSetName(), key);
-        final Record record = client.get(null, asKey);
-        Gson gson = new Gson();
-        return (record != null) ? gson.fromJson((String)record.getValue("json"), (Type) getGsonConversionClass()) : null;
+        try {
+            final Key asKey = new Key(getNamespace(), getSetName(), key);
+            final Record record = client.get(null, asKey);
+            Gson gson = new Gson();
+            return (record != null) ? gson.fromJson((String)record.getValue("json"), (Type) CookieSyncDTO.class) : null;
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+            return null;
+        }
     }
 
     @Override
     public final void set(String key, CookieSyncDTO dto) {
-        WritePolicy policy = new WritePolicy();
+        try {
+            WritePolicy policy = new WritePolicy();
 
-        final Key asKey = new Key(getNamespace(), getSetName(), key);
-        Gson gson = new Gson();
-        final Bin asBin = new Bin("json", gson.toJson(dto, getGsonConversionClass()));
-        client.put(policy, asKey, asBin);
+            final Key asKey = new Key(getNamespace(), getSetName(), key);
+            Gson gson = new Gson();
+            final Bin asBin = new Bin("json", gson.toJson(dto, CookieSyncDTO.class));
+            client.put(policy, asKey, asBin);
+        } catch(Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
     }
 
     protected abstract String getNamespace();
 
     protected abstract String getSetName();
-
-    protected abstract Class getGsonConversionClass();
 
     @Override
     public final boolean supportsCookieSync() {

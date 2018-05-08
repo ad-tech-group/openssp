@@ -54,11 +54,6 @@ public class PropertiesAerospikeCookieSyncHandler extends AerospikeCookieSyncHan
         return "cookie_sync";
     }
 
-    @Override
-    protected Class getGsonConversionClass() {
-        return CookieSyncDTO.class;
-    }
-
     public synchronized static PropertiesAerospikeCookieSyncHandler getInstance() {
         if (singleton == null) {
             singleton = new PropertiesAerospikeCookieSyncHandler();
