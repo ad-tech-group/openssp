@@ -1,5 +1,6 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
+import com.atg.openssp.common.core.broker.dto.SiteDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
@@ -36,8 +37,11 @@ public class AerospikeSiteDataHandler extends DataHandler {
                 Map<String, String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
+                final SiteDto siteDto = new SiteDto();
+                siteDto.setSite(data);
+
                 if (LoginHandler.TOKEN.equals(t)) {
-                    String result = new Gson().toJson(data);
+                    String result = new Gson().toJson(siteDto);
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
                     OutputStream os = response.getOutputStream();
