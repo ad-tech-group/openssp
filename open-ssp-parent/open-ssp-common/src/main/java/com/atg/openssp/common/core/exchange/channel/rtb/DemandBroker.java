@@ -4,15 +4,20 @@ import com.atg.openssp.common.core.broker.AbstractBroker;
 import com.atg.openssp.common.core.connector.JsonPostConnector;
 import com.atg.openssp.common.core.entry.BiddingServiceInfo;
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncDTO;
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncManager;
+import com.atg.openssp.common.core.exchange.cookiesync.DspCookieDto;
 import com.atg.openssp.common.demand.ResponseContainer;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.BidProcessingException;
+import com.atg.openssp.common.logadapter.DspCookieSyncLogProcessor;
 import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
 import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
 import com.atg.openssp.common.logadapter.TimeInfoLogProcessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import openrtb.bidrequest.model.BidRequest;
+import openrtb.bidrequest.model.User;
 import openrtb.bidresponse.model.BidResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -71,8 +76,31 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		}
 		long startTS = System.currentTimeMillis();
 
+        final BidRequest workingBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequestToBidRequest(gson, bidrequest);
+
 		try {
-			final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
+            User user = workingBidrequest.getUser();
+            String userId = user.getId();
+            try {
+                long csBegin = System.currentTimeMillis();
+                if (CookieSyncManager.getInstance().supportsCookieSync()) {
+                    CookieSyncDTO cookieSyncDTO = CookieSyncManager.getInstance().get(userId);
+                    if (cookieSyncDTO != null) {
+                        DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
+                        if (dspDto != null) {
+                            String buyerId = dspDto.getUid();
+                            user.setBuyeruid(buyerId);
+                            DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
+                        }
+                    }
+                    long csEnd = System.currentTimeMillis();
+                    LOG.info("Cookie Sync Update time: "+(csEnd-csBegin));
+                }
+            } catch (Exception ex) {
+                LOG.error(ex.getMessage(), ex);
+            }
+
+            final String jsonBidrequest = gson.toJson(workingBidrequest);
 
 			LOG.debug("bidrequest: " + jsonBidrequest);
             System.out.println("bidrequest: " + jsonBidrequest);

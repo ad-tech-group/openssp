@@ -46,7 +46,6 @@ COPY /properties/dev_supplier_db.json /usr/local/tomcat/properties/dev/supplier_
 COPY /properties/prd_supplier_db.json /usr/local/tomcat/properties/prd/supplier_db.json
 
 COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
-#RUN #sed -i -e 's/8080/8886/g' /usr/local/tomcat/conf/server.xml
 
 RUN cat /usr/local/tomcat/properties/global.runtime.xml
 

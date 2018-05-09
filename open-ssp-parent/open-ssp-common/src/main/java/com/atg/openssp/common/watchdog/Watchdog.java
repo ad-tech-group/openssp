@@ -53,7 +53,7 @@ public class Watchdog implements Runnable {
 			log.info("INFO: Watchdog [{} {}]", path, resource);
 			Paths.get(path).register(watchService, ENTRY_MODIFY);
 		} catch (final IOException e) {
-			log.warn(e.getMessage());
+			log.warn(e.getMessage(), e);
 		}
 	}
 
@@ -106,9 +106,9 @@ public class Watchdog implements Runnable {
 				watchKey.reset();
 				modifyEventFired.set(false);
 			} catch (final InterruptedException e) {
-				log.warn(e.getMessage());
+				log.warn(e.getMessage(), e);
 			} catch (final ClosedWatchServiceException e) {
-				log.warn(e.getMessage());
+				log.warn(e.getMessage(), e);
 			}
 		}
 

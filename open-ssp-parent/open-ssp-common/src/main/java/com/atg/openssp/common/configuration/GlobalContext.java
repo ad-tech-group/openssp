@@ -15,6 +15,7 @@ public class GlobalContext extends Context {
     private static String bidRequestBuilderHandlerForVideoClass;
 	private static String bidRequestBuilderHandlerForBannerClass;
 	private static String bidRequestBuilderHandlerForHeaderClass;
+	private static String cookieSyncHandlerClass;
 	private static String geoIpInfoHandlerClass;
 
 	public static void refreshContext() {
@@ -33,6 +34,7 @@ public class GlobalContext extends Context {
         bidRequestBuilderHandlerForVideoClass = ContextCache.instance.get(ContextProperties.BUILD_REQUEST_BUILDER_HANDLER_FOR_VIDEO_CLASS);
 		bidRequestBuilderHandlerForBannerClass = ContextCache.instance.get(ContextProperties.BUILD_REQUEST_BUILDER_HANDLER_FOR_BANNER_CLASS);
 		bidRequestBuilderHandlerForHeaderClass = ContextCache.instance.get(ContextProperties.BUILD_REQUEST_BUILDER_HANDLER_FOR_HEADER_CLASS);
+		cookieSyncHandlerClass = ContextCache.instance.get(ContextProperties.COOKIE_SYNC_HANDLER_CLASS);
 		geoIpInfoHandlerClass = ContextCache.instance.get(ContextProperties.GEO_IP_INFO_HANDLER_CLASS);
 	}
 
@@ -84,6 +86,10 @@ public class GlobalContext extends Context {
 
 	public static String getBidRequestBuilderHandlerForHeaderBiddingClass() {
 		return bidRequestBuilderHandlerForHeaderClass;
+	}
+
+	public static String getCookieSyncHandlerClass() {
+		return cookieSyncHandlerClass;
 	}
 
 	public static String getGeoIpInfoHandlerClass() {

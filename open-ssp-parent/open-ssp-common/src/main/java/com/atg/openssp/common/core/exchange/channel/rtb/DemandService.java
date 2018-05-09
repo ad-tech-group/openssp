@@ -82,7 +82,7 @@ public class DemandService implements Callable<AdProviderReader> {
 						agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
 					}
 				} catch (final ExecutionException e) {
-					log.error("ExecutionException {} {}", agent.getRequestid(), e.getMessage());
+					log.error("ExecutionException {} {}", agent.getRequestid(), e);
 				} catch (final InterruptedException e) {
 					log.error("InterruptedException {} {}", agent.getRequestid(), e.getMessage());
 				} catch (final CancellationException e) {
@@ -93,9 +93,9 @@ public class DemandService implements Callable<AdProviderReader> {
 			try {
 				adProvider = Auction.auctioneer(agent.getBiddingServiceInfo(), agent.getBidExchange());
 			} catch (final ArrayIndexOutOfBoundsException e) {
-				log.error("No DSP points available.", agent.getRequestid(), e.getMessage());
+				log.info("No DSP points available.", agent.getRequestid(), e);
 			} catch (final InvalidBidException e) {
-				log.error("{} {}", agent.getRequestid(), e.getMessage());
+				log.info("{} {}", agent.getRequestid(), e.getMessage());
 			}
 		} catch (final InterruptedException e) {
 			log.error(" InterruptedException (outer) {} {}", agent.getRequestid(), e.getMessage());

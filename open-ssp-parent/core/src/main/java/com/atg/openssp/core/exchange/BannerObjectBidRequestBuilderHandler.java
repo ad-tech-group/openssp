@@ -5,6 +5,8 @@ import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.cache.type.PricelayerCache;
 import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncDTO;
+import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncManager;
 import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
@@ -104,10 +106,19 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
     }
 
     private User createUser(BannerObjectParamValue pValues) {
+        String userId = pValues.getFsUid();
+        long csBegin = System.currentTimeMillis();
+        if (CookieSyncManager.getInstance().supportsCookieSync()) {
+            CookieSyncDTO result = CookieSyncManager.getInstance().get(userId);
+            if (result != null) {
+            }
+            long csEnd = System.currentTimeMillis();
+            log.info("Cookie Sync Lookup time: "+(csEnd-csBegin));
+        }
         return new User.Builder()
-                //.setBuyeruid()
+//                .setBuyeruid()
                 //.setGender(pValues.getGender())
-                .setId(pValues.getFsUid())
+                .setId(userId)
                 //.setYob(pValues.getYearOfBirth())
                 //.setGeo(createUserGeo(pValues))
                 .build();

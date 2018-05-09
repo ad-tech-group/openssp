@@ -18,6 +18,7 @@ public class LogFacade {
 
 	private static Logger rtbResponseLogger;
 	private static Logger rtbRequestLogger;
+    private static Logger cookieSyncLogger;
 	private static Logger systemRequestLogger;
 	// private static Logger pidLogger;
 	private static Logger providerLogger;
@@ -34,6 +35,8 @@ public class LogFacade {
 
 	private static String BID_RESPONSE = "bid-response";
 	private static String BID_REQUEST = "bid-request";
+
+	private static String COOKIE_SYNC = "cookie-sync";
 
 	private static String TIME_INFO = "time-info";
 	private static String DATA_BROKER = "data-broker";
@@ -87,7 +90,16 @@ public class LogFacade {
         rtbRequestLogger.debug("{} {}", params, msg);
 	}
 
-	// public static void logAdservingRequest(final String msg, final String... params) {
+    public static void logCookieSync(final String msg, final String... params) {
+            if (cookieSyncLogger == null) {
+            synchronized (LogFacade.class) {
+                cookieSyncLogger = LogManager.getLogger(COOKIE_SYNC);
+            }
+        }
+        cookieSyncLogger.debug("{} {}", params, msg);
+    }
+
+    // public static void logAdservingRequest(final String msg, final String... params) {
 	// adservingRequestLogger.info("{} {}", msg, params);
 	// }
 

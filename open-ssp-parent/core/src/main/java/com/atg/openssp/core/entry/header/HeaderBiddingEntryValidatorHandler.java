@@ -52,10 +52,10 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
-                log.debug("<--"+json);
                 StringReader bais = new StringReader(json);
                 biddingRequest = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();
+                log.debug("headerBiddingRequest: "+json.replaceAll("\n", "").replaceAll("  ", ""));
 
             } catch (IOException e) {
                 // ?? 400
@@ -82,13 +82,11 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 try {
                     Site s = SiteDataCache.instance.get(biddingRequest.getSite());
                     Site site = s.clone();
-//                    site.setDomain(biddingRequest.getSite());
                     String protocol = s.getPage()+"://";
                     site.setPage(protocol+site.getDomain() + biddingRequest.getPage());
                     site.setRef(request.getHeader("referer"));
                     pm.setSite(site);
                 } catch (final EmptyCacheException e) {
-                    e.printStackTrace();
                     try {
                         String requestedApp = biddingRequest.getApp();
                         log.info("requested app: "+requestedApp);
