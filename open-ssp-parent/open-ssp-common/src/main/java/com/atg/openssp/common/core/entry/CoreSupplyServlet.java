@@ -84,12 +84,14 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 	    if (agent != null && agent instanceof RequestSessionAgent) {
 	        RequestSessionAgent rsa = (RequestSessionAgent) agent;
             Site site = rsa.getBiddingServiceInfo().getSite();
-            String protocol  = site.getPage();
-            protocol = protocol.substring(0, protocol.indexOf(':'));
-            agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", protocol+"://" + site.getDomain());
-            agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
-            agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
-            agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
+            if (site != null) {
+                String protocol  = site.getPage();
+                protocol = protocol.substring(0, protocol.indexOf(':'));
+                agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", protocol+"://" + site.getDomain());
+                agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
+                agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
+                agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");
+            }
         }
     }
 
