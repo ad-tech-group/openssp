@@ -1,6 +1,7 @@
 package com.atg.openssp.dspSimUi.supplier;
 
 import com.atg.openssp.common.demand.Supplier;
+import com.atg.openssp.common.provider.LoginHandler;
 import com.atg.openssp.dspSimUi.model.ModelException;
 import com.atg.openssp.dspSimUi.model.client.*;
 import com.atg.openssp.dspSimUi.model.supplier.SupplierModel;
@@ -83,7 +84,7 @@ public class SupplierServerHandler implements Runnable {
     private void sendCommand(SupplierCommandType type, Supplier sb) throws ModelException {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SUPPLIER_HOST, "localhost")+":"+model.lookupProperty(SUPPLIER_PORT, "9090")+"/ssp-services/maintain/supplier?t=liverworst-5");
+            HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SUPPLIER_HOST, "localhost")+":"+model.lookupProperty(SUPPLIER_PORT, "9090")+"/ssp-services/maintain/supplier?t="+ LoginHandler.TOKEN);
             SupplierCommand command = new SupplierCommand();
             command.setCommand(type);
             command.setSupplier(sb);
