@@ -66,7 +66,12 @@ public class MangoMediaFilter extends DemandBrokerFilter {
 //        device.remove("connectiontype");
 
         JsonObject user = (JsonObject) req.get("user");
-        req.remove("user");
+        user.remove("yob");
+        user.remove("gender");
+        user.remove("ext");
+        if (user.get("buyeruid").getAsString() == null) {
+            user.remove("buyeruid");
+        }
 
         req.remove("badv");
         req.remove("bcat");
