@@ -170,7 +170,7 @@ public class Auction {
 				}
 			}
 
-		} else {
+		} else if (winningProviderSet.size() == 1) {
 			LOGGER.info("set <= 1");
 			dealWinner = new SingularAuctionResult();
 			String key = (String) winningProviderMap.keySet().toArray()[0];
@@ -179,6 +179,10 @@ public class Auction {
 				dealWinner.setBidRequest(bidExchange.getBidRequest(winningProvider.getSupplier()));
 				((SingularAuctionResult)dealWinner).setWinningProvider(winningProvider);
 			}
+		}
+		else {
+			LOGGER.info("set == 0");
+			dealWinner = new SingularAuctionResult();
 		}
 		LOGGER.info("return winner: "+dealWinner);
 

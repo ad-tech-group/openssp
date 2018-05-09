@@ -65,7 +65,7 @@ public class MangoMediaFilter extends DemandBrokerFilter {
         user.remove("yob");
         user.remove("gender");
         user.remove("ext");
-        if (user.get("buyeruid").getAsString() == null) {
+        if (user.get("buyeruid") == null) {
             user.remove("buyeruid");
         }
 
