@@ -107,10 +107,13 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
 
     private User createUser(VideoObjectParamValue pValues) {
         String userId = pValues.getFsUid();
+        long csBegin = System.currentTimeMillis();
         if (CookieSyncManager.getInstance().supportsCookieSync()) {
             CookieSyncDTO result = CookieSyncManager.getInstance().get(userId);
             if (result != null) {
             }
+            long csEnd = System.currentTimeMillis();
+            log.info("Cookie Sync Lookup time: "+(csEnd-csBegin));
         }
         return new User.Builder()
 //                .setBuyeruid()

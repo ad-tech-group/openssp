@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 
-public class CookieSyncManager {
+/**
+ * This class is used to interact with the cookie sync persistence mechanism if it is supported
+ */
+public class CookieSyncManager implements CookieSyncHandler {
     private final static Logger LOG = LoggerFactory.getLogger(CookieSyncManager.class);
     private static CookieSyncManager singleton;
     private CookieSyncHandler handler;
@@ -27,17 +30,20 @@ public class CookieSyncManager {
         }
     }
 
+    @Override
     public CookieSyncDTO get(String uid) {
         CookieSyncDTO result = handler.get(uid);
         LOG.info("csm.get: "+uid+":"+result);
         return result;
     }
 
+    @Override
     public void set(String uid, CookieSyncDTO dto) {
         LOG.info("csm.set: "+uid+":"+dto);
         handler.set(uid, dto);
     }
 
+    @Override
     public boolean supportsCookieSync() {
         return handler.supportsCookieSync();
     }

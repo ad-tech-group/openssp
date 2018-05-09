@@ -4,6 +4,9 @@ package io.freestar.openssp.common.exchange.aerospike;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class is used to hold the interaction properties for an Aerospike interaction
+ */
 @Component
 public class CookieSyncInfo {
     @Value("${aerospike.host}")

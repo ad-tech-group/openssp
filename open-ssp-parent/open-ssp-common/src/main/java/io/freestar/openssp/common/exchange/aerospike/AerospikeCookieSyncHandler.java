@@ -14,8 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 
+/**
+ * This base class handles the interaction with Aerospikel
+ */
 public abstract class AerospikeCookieSyncHandler implements CookieSyncHandler {
     private final static Logger LOG = LoggerFactory.getLogger(AerospikeCookieSyncHandler.class);
+    public static final String SET_NAME = "cookie_sync";
 
     private AerospikeClient client;
 
@@ -32,10 +36,22 @@ public abstract class AerospikeCookieSyncHandler implements CookieSyncHandler {
         this.client = new AerospikeClient(clientPolicy, getHost(), 3000);
     }
 
+    /**
+     * get the Aerospike user id
+     * @return
+     */
     protected abstract String getUser();
 
+    /**
+     * get the Aerospike password credential
+     * @return
+     */
     protected abstract String getPassword();
 
+    /**
+     * get the Aerospike host name
+     * @return
+     */
     protected abstract String getHost();
 
     @Override
@@ -65,8 +81,16 @@ public abstract class AerospikeCookieSyncHandler implements CookieSyncHandler {
         }
     }
 
+    /**
+     * return the Aerospike namespace
+     * @return
+     */
     protected abstract String getNamespace();
 
+    /**
+     * return the Aerospike set name
+     * @return
+     */
     protected abstract String getSetName();
 
     @Override

@@ -29,17 +29,17 @@ public class CookieSyncDTOTest {
 
         CookieSyncDTO dto = new CookieSyncDTO();
         assertFalse(dto.isDirty());
-        dto.setFsuid("frogs-uid");
+        dto.setUid("frogs-uid");
         assertTrue(dto.isDirty());
         String json = gson.toJson(dto);
-        assertEquals("{\"dsp_uids\":{},\"fsuid\":\"frogs-uid\"}", json);
+        assertEquals("{\"dsp_uids\":{},\"uid\":\"frogs-uid\"}", json);
         CookieSyncDTO dto2 = gson.fromJson(json, CookieSyncDTO.class);
         assertFalse(dto2.isDirty());
 
         dto.clearDirty();
         assertFalse(dto.isDirty());
         json = gson.toJson(dto);
-        assertEquals("{\"dsp_uids\":{},\"fsuid\":\"frogs-uid\"}", json);
+        assertEquals("{\"dsp_uids\":{},\"uid\":\"frogs-uid\"}", json);
         dto2 = gson.fromJson(json, CookieSyncDTO.class);
         assertFalse(dto2.isDirty());
 

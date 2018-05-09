@@ -1,6 +1,5 @@
 package io.freestar.openssp.common.exchange.aerospike;
 
-import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,8 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * This handler uses cookie_sync.properties to obtain it's properties for Aerospike interaction
+ */
 public class PropertiesAerospikeCookieSyncHandler extends AerospikeCookieSyncHandler {
     private final static Logger LOG = LoggerFactory.getLogger(PropertiesAerospikeCookieSyncHandler.class);
+    public static final String USER = "aerospike.user";
+    public static final String PW = "aerospike.password";
+    public static final String HOST = "aerospike.host";
+    public static final String NAMESPACE = "aerospike.namespace";
     private static PropertiesAerospikeCookieSyncHandler singleton;
     private static Properties properties = new Properties();
     static {
@@ -31,27 +37,27 @@ public class PropertiesAerospikeCookieSyncHandler extends AerospikeCookieSyncHan
 
     @Override
     protected String getUser() {
-        return (String) properties.get("aerospike.user");
+        return (String) properties.get(USER);
     }
 
     @Override
     protected String getPassword() {
-        return (String) properties.get("aerospike.password");
+        return (String) properties.get(PW);
     }
 
     @Override
     protected String getHost() {
-        return (String) properties.get("aerospike.host");
+        return (String) properties.get(HOST);
     }
 
     @Override
     protected String getNamespace() {
-        return (String) properties.get("aerospike.namespace");
+        return (String) properties.get(NAMESPACE);
     }
 
     @Override
     protected String getSetName() {
-        return "cookie_sync";
+        return SET_NAME;
     }
 
     public synchronized static PropertiesAerospikeCookieSyncHandler getInstance() {

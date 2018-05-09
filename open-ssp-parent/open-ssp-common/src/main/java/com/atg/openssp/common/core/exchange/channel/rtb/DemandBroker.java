@@ -82,6 +82,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
             User user = workingBidrequest.getUser();
             String userId = user.getId();
             try {
+                long csBegin = System.currentTimeMillis();
                 if (CookieSyncManager.getInstance().supportsCookieSync()) {
                     CookieSyncDTO cookieSyncDTO = CookieSyncManager.getInstance().get(userId);
                     if (cookieSyncDTO != null) {
@@ -92,6 +93,8 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
                             DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
                         }
                     }
+                    long csEnd = System.currentTimeMillis();
+                    LOG.info("Cookie Sync Update time: "+(csEnd-csBegin));
                 }
             } catch (Exception ex) {
                 LOG.error(ex.getMessage(), ex);

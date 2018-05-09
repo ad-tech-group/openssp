@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
+/**
+ * The default handler returns false when asked if it supports cookie sync, but implement the behavior in
+ * a non-persistent map.
+ */
 public class DefaultCookieSyncHandler implements CookieSyncHandler {
     private final static Logger LOG = LoggerFactory.getLogger(DefaultCookieSyncHandler.class);
     private static DefaultCookieSyncHandler singleton;

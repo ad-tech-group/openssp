@@ -47,11 +47,12 @@ public class HeaderCookieSyncService extends HttpServlet {
         String dspShortName = params.get("dsp");
         String dspUid = params.get("dsp_uid");
 
+        long csBegin = System.currentTimeMillis();
         if (CookieSyncManager.getInstance().supportsCookieSync()) {
             CookieSyncDTO result = CookieSyncManager.getInstance().get(fsuid);
             if (result == null) {
                 result = new CookieSyncDTO();
-                result.setFsuid(fsuid);
+                result.setUid(fsuid);
             }
             DspCookieDto dspResult = result.lookup(dspShortName);
             if (dspResult == null) {
@@ -72,6 +73,8 @@ public class HeaderCookieSyncService extends HttpServlet {
                 CookieSyncManager.getInstance().set(fsuid, result);
                 DspCookieSyncLogProcessor.instance.setLogData("cookie-sync", "update", fsuid, dspShortName, dspUid);
             }
+            long csEnd = System.currentTimeMillis();
+            log.info("Cookie Sync Lookup time: "+(csEnd-csBegin));
         }
 
         response.addHeader("Content-Type", "application/json");
