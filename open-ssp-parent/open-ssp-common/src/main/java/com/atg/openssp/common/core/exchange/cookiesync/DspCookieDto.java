@@ -30,4 +30,9 @@ public class DspCookieDto {
     public void clearDirty() {
         dirty = false;
     }
+
+    @Override
+    public String toString() {
+        return uid+"::"+shortName;
+    }
 }

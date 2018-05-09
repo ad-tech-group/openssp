@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 
 public class CookieSyncManager {
-    private final static Logger log = LoggerFactory.getLogger(CookieSyncManager.class);
+    private final static Logger LOG = LoggerFactory.getLogger(CookieSyncManager.class);
     private static CookieSyncManager singleton;
     private CookieSyncHandler handler;
 
@@ -21,17 +21,20 @@ public class CookieSyncManager {
                 Method m = handlerClass.getMethod("getInstance", new Class[]{});
                 handler = (CookieSyncHandler) m.invoke(handlerClass, null);
             } catch (Exception e) {
-                log.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
                 handler = DefaultCookieSyncHandler.getInstance();
             }
         }
     }
 
     public CookieSyncDTO get(String uid) {
-        return handler.get(uid);
+        CookieSyncDTO result = handler.get(uid);
+        LOG.info("csm.get: "+uid+":"+result);
+        return result;
     }
 
     public void set(String uid, CookieSyncDTO dto) {
+        LOG.info("csm.set: "+uid+":"+dto);
         handler.set(uid, dto);
     }
 

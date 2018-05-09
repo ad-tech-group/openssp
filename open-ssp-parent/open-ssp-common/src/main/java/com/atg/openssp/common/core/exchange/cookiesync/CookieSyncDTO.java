@@ -39,4 +39,9 @@ public class CookieSyncDTO {
         }
         dirty = false;
     }
+
+    @Override
+    public String toString() {
+        return fsuid+"::"+dsp_uids;
+    }
 }
