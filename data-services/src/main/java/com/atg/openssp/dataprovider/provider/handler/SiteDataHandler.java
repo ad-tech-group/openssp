@@ -1,6 +1,5 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
-import com.atg.openssp.common.core.broker.dto.SiteDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
@@ -79,5 +78,4 @@ public class SiteDataHandler extends DataHandler {
     public void cleanUp() {
 
     }
-
 }

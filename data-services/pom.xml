@@ -168,6 +168,25 @@
             <artifactId>aerospike-client</artifactId>
             <version>4.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>io.freestar</groupId>
+            <artifactId>accounts-interfaces</artifactId>
+            <version>1.0.73</version>
+            <exclusions> <!-- Project won't build without the exclusions -->
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-messaging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-stream</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.netflix.hystrix</groupId>
+                    <artifactId>hystrix-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <distributionManagement>
         <snapshotRepository>
