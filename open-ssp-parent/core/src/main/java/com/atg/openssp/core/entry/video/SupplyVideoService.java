@@ -4,13 +4,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.atg.openssp.common.core.entry.BiddingServiceInfo;
 import com.atg.openssp.common.core.entry.CoreSupplyServlet;
+import com.atg.openssp.common.core.entry.SessionAgentType;
 import com.atg.openssp.common.core.exchange.Exchange;
+import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.entry.BiddingServiceInfo;
-import com.atg.openssp.core.entry.SessionAgentType;
 import com.atg.openssp.core.exchange.ExchangeServer;
-import com.atg.openssp.core.exchange.RequestSessionAgent;
 
 /**
  * Servlet implementation class SupplyVideoService
@@ -28,7 +28,9 @@ public class SupplyVideoService extends CoreSupplyServlet<RequestSessionAgent> {
 		info.setType(SessionAgentType.VIDEO);
 		info.setContentType("application/javascript");
 		info.setCharacterEncoding("UTF-8");
-		return new RequestSessionAgent(request, response, info);
+		RequestSessionAgent agent =  new RequestSessionAgent(request, response, info);
+		info.setLoggingId(agent.getRequestid());
+		return agent;
 	}
 
 	@Override

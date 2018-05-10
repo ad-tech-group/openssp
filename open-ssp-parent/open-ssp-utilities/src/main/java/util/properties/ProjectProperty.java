@@ -146,7 +146,7 @@ public class ProjectProperty {
 	private static String getResourceURL(final String type) throws PropertyException {
 		final String catalinaHome = System.getProperty("catalina.home", System.getProperty("user.dir"));
 		if (catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
-			return Thread.currentThread().getContextClassLoader().getResource("").getPath().replace("/C:", "C:");
+			return catalinaHome+"/properties".replace("/C:", "C:");
 		} else {
 			try {
 				return new URL(URLDecoder.decode("file://" + catalinaHome + "/" + type, "UTF-8")).getPath() + "/";

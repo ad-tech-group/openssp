@@ -1,0 +1,64 @@
+{
+  "sites": [
+    {
+      "id": "131",
+      "name": "WebDesign Ledger",
+      "domain": "webdesignledger.com",
+      "page": "https",
+      "cat": [
+        "IAB19",
+        "IAB19_20",
+        "IAB19_24",
+        "IAB19_34"
+      ],
+      "publisher": {
+      "id": "131",
+        "name": "WebDesign Ledger",
+        "cat": [
+          "IAB19"
+        ],
+      "domain": "webdesignledger.com",
+        "ext": null
+      },
+      "ext": null
+    },
+    {
+      "id": "128",
+      "name": "Headphone Review",
+      "domain": "headphonereview.com",
+      "page": "https",
+      "cat": [
+        "IAB6",
+        "IAB9",
+        "IAB9_1"
+      ],
+      "publisher": {
+        "id": "128",
+        "name": "Headphone Review",
+        "cat": [
+          "IAB6"
+        ],
+        "domain": "headphonereview.com",
+        "ext": null
+      },
+      "ext": null
+    },
+    {
+      "id": "381",
+      "name": "Cooking Panda",
+      "domain": "cookingpanda.com",
+      "page": "https",
+      "cat": [
+        "IAB8"
+      ],
+      "publisher": {
+        "id": "303",
+        "name": "Render Media",
+        "cat": [],
+        "domain": "rndr.com",
+        "ext": null
+      },
+      "ext": null
+    }
+  ]
+}

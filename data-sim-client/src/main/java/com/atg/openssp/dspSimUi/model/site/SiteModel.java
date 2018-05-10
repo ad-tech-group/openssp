@@ -12,21 +12,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author Brian Sorensen
  */
 public class SiteModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(SiteModel.class);
+    private final ResourceBundle bundle;
     private final Properties props = new Properties();
     private DefaultListModel<Site> mSites = new DefaultListModel<Site>();
     private final SiteServerHandler serverHandler;
 
     public SiteModel() throws ModelException {
+        bundle = ResourceBundle.getBundle("SiteDisplayTemplate");
         loadProperties();
         serverHandler = new SiteServerHandler(this);
     }
@@ -47,8 +46,7 @@ public class SiteModel extends BaseModel {
         }
     }
 
-    public Properties getProperties()
-    {
+    public Properties getProperties() {
         return props;
     }
 
@@ -67,7 +65,7 @@ public class SiteModel extends BaseModel {
 
     private HashMap<String, Site> getSites() {
         HashMap<String, Site> map = new HashMap<String, Site>();
-        for (int i=0; i<mSites.size(); i++) {
+        for (int i = 0; i < mSites.size(); i++) {
             map.put(mSites.get(i).getId(), mSites.get(i));
         }
         return map;
@@ -119,4 +117,7 @@ public class SiteModel extends BaseModel {
         serverHandler.sendRemoveCommand(id);
     }
 
+    public String getTemplateText(String tag) {
+        return bundle.getString(tag);
+    }
 }

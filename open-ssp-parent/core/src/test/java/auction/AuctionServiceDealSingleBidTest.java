@@ -3,7 +3,8 @@ package auction;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.atg.openssp.core.entry.BiddingServiceInfo;
+import com.atg.openssp.common.core.entry.BiddingServiceInfo;
+import com.atg.openssp.common.core.exchange.Auction;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.demand.BidExchange;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.exception.InvalidBidException;
-import com.atg.openssp.core.exchange.Auction;
 
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.DirectDeal;
@@ -118,7 +118,7 @@ public class AuctionServiceDealSingleBidTest {
 			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
 			final float currencyRate = CurrencyCache.instance.get(currency);
-			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertTrue(winner.isValid());
 		} catch (final InvalidBidException e) {
 			Assert.fail("Exception thrown: " + e.getMessage());
@@ -145,7 +145,7 @@ public class AuctionServiceDealSingleBidTest {
 			final Auction.AuctionResult winner = Auction.auctioneer(info, bidExchange);
 			final float currencyRate = CurrencyCache.instance.get(currency);
 			Assert.assertEquals(impFloor, winner.getPrice(), 0);
-			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getAdjustedCurrencyPrice(), 0);
+			Assert.assertEquals(FloatComparator.rr(impFloor / currencyRate), winner.getExchangedCurrencyPrice(), 0);
 			Assert.assertTrue(winner.isValid());
 		} catch (final InvalidBidException e) {
 			Assert.fail("Exception thrown: " + e.getMessage());

@@ -27,6 +27,18 @@ import com.atg.openssp.common.exception.BidProcessingException;
 public class JsonPostConnector extends DefaultConnector {
 
 	private static final Logger log = LoggerFactory.getLogger(JsonPostConnector.class);
+	public static final String NO_CONTENT = "NO-CONTENT";
+
+	public JsonPostConnector() {
+		super();
+	}
+
+	/**
+	 * @param keepAlive
+	 */
+	public JsonPostConnector(boolean keepAlive) {
+		super(keepAlive);
+	}
 
 	/**
 	 * Does a connection with POST method and sends the data in {@code entity}. Reads the response and returns it as string value.
@@ -41,8 +53,12 @@ public class JsonPostConnector extends DefaultConnector {
 		HttpEntity respEntity = null;
 		try {
 			httpPost.setEntity(entity);
+            log.debug("calling: "+httpPost.getURI().toASCIIString());
+            System.out.println("calling: "+httpPost.getURI().toASCIIString());
 			httpResponse = httpClient.execute(httpPost);
 			final int statusCode = httpResponse.getStatusLine().getStatusCode();
+            log.debug("status: "+statusCode);
+            System.out.println("status: "+statusCode);
 			if (HttpStatus.SC_OK == statusCode) {
 				respEntity = httpResponse.getEntity();
 				if (respEntity != null) {
@@ -56,9 +72,14 @@ public class JsonPostConnector extends DefaultConnector {
 				} else {
 					log.debug("bad result: {}", statusCode);
 				}
+			} else if (HttpStatus.SC_NO_CONTENT == statusCode) {
+				return NO_CONTENT;
 			}
-		} catch (final IOException e) {
-			throw new BidProcessingException("IO " + e.getMessage());
+		} catch (final Exception e) {
+            System.err.println(e.getMessage());
+		    e.printStackTrace();
+			log.warn(e.getMessage(), e);
+			throw new BidProcessingException(e.getMessage());
 		} finally {
 			EntityUtils.consumeQuietly(respEntity);
 			httpPost = null;
@@ -83,7 +104,7 @@ public class JsonPostConnector extends DefaultConnector {
 				stringBuilder.append(charBuffer, 0, bytesRead);
 			}
 		} catch (final IOException e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		}
 		return stringBuilder.toString();
 	}

@@ -47,7 +47,7 @@ public class SSPService implements Callable<AdProviderReader> {
 				final ResponseContainer resp = broker.call();
 				responseList.add(resp);
 			} catch (final Exception e) {
-				log.error(e.getMessage());
+				log.error(e.getMessage(), e);
 			}
 		});
 

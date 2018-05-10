@@ -1,8 +1,11 @@
 package com.atg.openssp.dspSimUi.model.dsp;
 
+import com.atg.openssp.common.cache.ListCache;
 import com.atg.openssp.dspSimUi.ServerHandler;
 import com.atg.openssp.dspSimUi.model.BaseModel;
 import com.atg.openssp.dspSimUi.model.ModelException;
+import com.atg.openssp.dspSimUi.model.client.ServerCommandType;
+import com.atg.openssp.dspSimUi.view.dsp.SimBidderPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,20 +21,21 @@ import java.util.*;
  */
 public class DspModel extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(DspModel.class);
+    private final ResourceBundle bundle;
+    private ArrayList<ModeChangeListener> modeChangeListeners = new ArrayList<ModeChangeListener>();
     private final Properties props = new Properties();
-    private final int index;
     private DefaultListModel<SimBidder> mBidders = new DefaultListModel<SimBidder>();
     private final ServerHandler serverHandler;
 
-    public DspModel(int index) throws ModelException {
-        this.index = index;
+    public DspModel() throws ModelException {
+        bundle = ResourceBundle.getBundle("DisplayTemplate");
         loadProperties();
         serverHandler = new ServerHandler(this);
     }
 
     private void loadProperties() {
         try {
-            File file = new File("DspSimClient_"+index+".properties");
+            File file = new File("dsp-sim-client.properties");
             InputStream is;
             if (file.exists()) {
                 is = new FileInputStream(file);
@@ -71,6 +75,13 @@ public class DspModel extends BaseModel {
         return map;
     }
 
+    private void setBidders(HashMap<String, SimBidder>  mBidders) {
+        this.mBidders.clear();
+        for (Map.Entry<String, SimBidder> e : mBidders.entrySet()) {
+            this.mBidders.addElement(e.getValue());
+        }
+    }
+
     public DefaultListModel<SimBidder> getBidderModel() {
         return mBidders;
     }
@@ -81,32 +92,30 @@ public class DspModel extends BaseModel {
 
     public void handleList(List<SimBidder> bidders) {
         HashMap<String, SimBidder> map = getBidders();
-        for (SimBidder bidder : bidders) {
-            SimBidder check = map.get(bidder.getId());
-            if (check == null) {
-                mBidders.addElement(bidder);
-            } else {
-                map.remove(bidder.getId());
-//                check.setImpId(bidder.getImpId());
-                check.setPrice(bidder.getPrice());
-                check.setAdId(bidder.getAdId());
-//                check.setNUrl(bidder.getNUrl());
-                check.setAdm(bidder.getAdm());
-                check.setAdomain(bidder.getAdomain());
-                check.setIUrl(bidder.getIUrl());
-                check.setCId(bidder.getCId());
-                check.setCrId(bidder.getCrId());
-                check.setCats(bidder.getCats());
+        if (bidders != null) {
+            for (SimBidder bidder : bidders) {
+                SimBidder check = map.get(bidder.getId());
+                if (check == null) {
+                    mBidders.addElement(bidder);
+                } else {
+                    map.remove(bidder.getId());
+                    check.setImpid(bidder.getImpid());
+                    check.setPrice(bidder.getPrice());
+                    check.setAdid(bidder.getAdid());
+                    check.setNurl(bidder.getNurl());
+                    check.setAdm(bidder.getAdm());
+                    check.setAdomain(bidder.getAdomain());
+                    check.setIurl(bidder.getIurl());
+                    check.setCid(bidder.getCid());
+                    check.setCrid(bidder.getCrid());
+                    check.setCats(bidder.getCats());
+                }
+            }
+            // if any are left, remove them as extras
+            for (Map.Entry<String, SimBidder> tBidder : map.entrySet()) {
+                mBidders.removeElement(tBidder.getValue());
             }
         }
-        // if any are left, remove them as extras
-        for (Map.Entry<String, SimBidder> tBidder : map.entrySet()) {
-            mBidders.removeElement(tBidder.getValue());
-        }
-    }
-
-    public void sendAddCommand(SimBidder sb) throws ModelException {
-        serverHandler.sendAddCommand(sb);
     }
 
     public void sendUpdateCommand(SimBidder sb) throws ModelException {
@@ -139,5 +148,19 @@ public class DspModel extends BaseModel {
 
     public void send500Command() throws ModelException {
         serverHandler.send500Command();
+    }
+
+    public void addModeChangeListener(ModeChangeListener lis) {
+        modeChangeListeners.add(lis);
+    }
+
+    public void handleMode(ServerCommandType mode) {
+        for (ModeChangeListener lis : modeChangeListeners) {
+            lis.updateMode(mode);
+        }
+    }
+
+    public String getTemplateText(String tag) {
+        return bundle.getString(tag);
     }
 }

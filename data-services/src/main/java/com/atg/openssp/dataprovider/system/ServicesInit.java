@@ -1,9 +1,11 @@
 package com.atg.openssp.dataprovider.system;
 
-import com.atg.openssp.core.system.job.WatchdogService;
-import com.atg.openssp.core.system.loader.ConfigLoader;
-import com.atg.openssp.core.system.loader.GlobalContextLoader;
-import com.atg.openssp.core.system.loader.LocalContextLoader;
+import com.atg.openssp.common.core.system.job.WatchdogService;
+import com.atg.openssp.common.core.system.loader.ConfigLoader;
+import com.atg.openssp.common.core.system.loader.GlobalContextLoader;
+import com.atg.openssp.common.core.system.loader.LocalContextLoader;
+import io.freestar.service.AerospikeSiteCacheTask;
+import openrtb.tables.ContentCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.util.Timer;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -35,12 +38,21 @@ public class ServicesInit extends GenericServlet {
         new ConfigLoader(cdl).readValues();
         // initing watchdogs for global.runtime.xml and local.runtime.xml
         WatchdogService.instance.initLoaderWatchdog(new LocalContextLoader(cdl), true).initLoaderWatchdog(new GlobalContextLoader(cdl), true).startWatchdogs();
+
+
+        AerospikeSiteCacheTask task = AerospikeSiteCacheTask.getInstance();
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(task, 0, 60 * 60 * 1000);
+
         try {
             cdl.await();
         } catch (final InterruptedException e) {
             log.error(e.getMessage());
         }
         super.init();
+        for (ContentCategory c: ContentCategory.values()) {
+            // do the add
+        }
     }
 
         @Override

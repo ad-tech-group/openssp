@@ -1,7 +1,7 @@
 package com.atg.openssp.dspSimUi.supplier;
 
 import com.atg.openssp.dspSimUi.model.ModelException;
-import com.atg.openssp.dspSimUi.model.dsp.SupplierModel;
+import com.atg.openssp.dspSimUi.model.supplier.SupplierModel;
 import com.atg.openssp.dspSimUi.view.supplier.SupplierView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

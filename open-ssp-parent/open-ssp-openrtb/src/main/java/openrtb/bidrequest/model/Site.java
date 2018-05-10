@@ -176,6 +176,12 @@ public final class Site implements Cloneable {
 		return null;
 	}
 
+	/**
+	 * This method is used to add type adapters for use in Gson.  If we want to have an enum index in the json but have the code use the enum, for example.
+	 * Currently we store the "String" value we want in the object, and the methods do the conversion, but when we change them to hold the enum instead, we need an adapter
+	 * to handle the conversion for us.
+	 * @param builder
+	 */
     public static void populateTypeAdapters(GsonBuilder builder) {
 //        builder.registerTypeAdapter(ContentCategory.class, (JsonDeserializer<ContentCategory>) (json, typeOfT, context) -> ContentCategory.valueOf(json.getAsString()));
 //TODO: BKS

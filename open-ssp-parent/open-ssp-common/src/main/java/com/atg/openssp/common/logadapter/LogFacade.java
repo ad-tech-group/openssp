@@ -1,5 +1,6 @@
 package com.atg.openssp.common.logadapter;
 
+import com.google.gson.Gson;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,11 +18,15 @@ public class LogFacade {
 
 	private static Logger rtbResponseLogger;
 	private static Logger rtbRequestLogger;
+    private static Logger cookieSyncLogger;
 	private static Logger systemRequestLogger;
 	// private static Logger pidLogger;
 	private static Logger providerLogger;
 	// private static Logger adservingRequestLogger;
 	// private static Logger adservingResponseLogger;
+    private static Logger timeInfoLogger;
+	private static Logger dataBrokerLogger;
+	private static Logger auctionLogger;
 
 	private static String REQUEST_INFO = "request";
 	// private static String DEBUGGING = "debugging";
@@ -30,6 +35,12 @@ public class LogFacade {
 
 	private static String BID_RESPONSE = "bid-response";
 	private static String BID_REQUEST = "bid-request";
+
+	private static String COOKIE_SYNC = "cookie-sync";
+
+	private static String TIME_INFO = "time-info";
+	private static String DATA_BROKER = "data-broker";
+	private static String AUCTION = "auction";
 
 	// private static String ADSERVING_REQUEST = "adserving-request";
 	// private static String ADSERVING_RESPONSE = "adserving-response";
@@ -67,7 +78,7 @@ public class LogFacade {
                 rtbResponseLogger = LogManager.getLogger(BID_RESPONSE);
             }
         }
-        rtbResponseLogger.info("{} {}", params, msg);
+        rtbResponseLogger.debug("{} {}", params, msg);
 	}
 
 	public static void logRtbRequest(final String msg, final String... params) {
@@ -76,10 +87,19 @@ public class LogFacade {
                 rtbRequestLogger = LogManager.getLogger(BID_REQUEST);
             }
         }
-        rtbRequestLogger.info("{} {}", params, msg);
+        rtbRequestLogger.debug("{} {}", params, msg);
 	}
 
-	// public static void logAdservingRequest(final String msg, final String... params) {
+    public static void logCookieSync(final String msg, final String... params) {
+            if (cookieSyncLogger == null) {
+            synchronized (LogFacade.class) {
+                cookieSyncLogger = LogManager.getLogger(COOKIE_SYNC);
+            }
+        }
+        cookieSyncLogger.debug("{} {}", params, msg);
+    }
+
+    // public static void logAdservingRequest(final String msg, final String... params) {
 	// adservingRequestLogger.info("{} {}", msg, params);
 	// }
 
@@ -103,6 +123,52 @@ public class LogFacade {
             }
         }
         providerLogger.info(msg);
+	}
+
+	public static void logTimeInfo(final String msg, final String... params) {
+		if (timeInfoLogger == null) {
+			synchronized (LogFacade.class) {
+                timeInfoLogger = LogManager.getLogger(TIME_INFO);
+			}
+		}
+        timeInfoLogger.info("{} {}", params, msg);
+	}
+
+	public static void logDataBroker(final String msg, final String... params) {
+		if (dataBrokerLogger == null) {
+			synchronized (LogFacade.class) {
+				dataBrokerLogger = LogManager.getLogger(DATA_BROKER);
+			}
+		}
+		dataBrokerLogger.info("{} {}", params, msg);
+	}
+
+	public static void logAuction(final AuctionLogEntry ale, final String... params) {
+		if (auctionLogger == null) {
+			synchronized (LogFacade.class) {
+				auctionLogger = LogManager.getLogger(AUCTION);
+			}
+		}
+		StringBuilder sb = new StringBuilder(ale.getLogginId());
+        sb.append("|");
+        sb.append(ale.getRequestId());
+        sb.append("|");
+        sb.append(ale.getUserId());
+        sb.append("|");
+        sb.append(ale.getSupplierId());
+        sb.append("|");
+        sb.append(ale.getSupplierName());
+        sb.append("|");
+        if (ale.getSite() == null) {
+			sb.append("UNKN");
+		} else {
+			sb.append(ale.getSite().getId());
+		}
+        sb.append("|");
+		sb.append(ale.getPage());
+        sb.append("|");
+		sb.append(new Gson().toJson(ale.getBids()));
+		auctionLogger.info("{} {}", params, sb.toString());
 	}
 
 	public static String getLogLevel() {

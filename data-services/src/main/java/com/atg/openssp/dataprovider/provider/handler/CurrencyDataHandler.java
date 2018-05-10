@@ -1,7 +1,9 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
-import com.atg.openssp.core.cache.broker.dto.CurrencyDto;
-import com.atg.openssp.core.system.LocalContext;
+import com.atg.openssp.common.core.broker.dto.CurrencyDto;
+import com.atg.openssp.common.core.system.LocalContext;
+import com.atg.openssp.common.provider.DataHandler;
+import com.atg.openssp.common.provider.LoginHandler;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,25 +36,31 @@ public class CurrencyDataHandler extends DataHandler {
                     log.warn("property file not found.");
                     location="";
                 }
-                Gson gson = new Gson();
-                String content = new String(Files.readAllBytes(Paths.get(location+"currency_db.json")), StandardCharsets.UTF_8);
-                CurrencyDto data = gson.fromJson(content, CurrencyDto.class);
+                //CurrencyDto data = DataStore.getInstance().lookupCurrency();
+                //if (DataStore.getInstance().wasCurrencyCreated()) {
+                    Gson gson = new Gson();
+                    String content = new String(Files.readAllBytes(Paths.get(location+"currency_db.json")), StandardCharsets.UTF_8);
+                    CurrencyDto dto = gson.fromJson(content, CurrencyDto.class);
+                //    DataStore.getInstance().insert(dto);
+                //    data = DataStore.getInstance().lookupCurrency();
+                //}
 
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
                 if (LoginHandler.TOKEN.equals(t)) {
-                    String result = new Gson().toJson(data);
+                    String result = content; //new Gson().toJson(data);
 
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
                     OutputStream os = response.getOutputStream();
                     os.write(result.getBytes());
                     os.close();
+                    log.info("<--"+result.replaceAll("\n", ""));
                 } else {
                     response.setStatus(401);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 response.setStatus(500);
                 log.error(e.getMessage(), e);
             }

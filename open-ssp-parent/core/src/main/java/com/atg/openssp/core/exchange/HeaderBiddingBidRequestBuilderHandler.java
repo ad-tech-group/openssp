@@ -2,15 +2,18 @@ package com.atg.openssp.core.exchange;
 
 import com.atg.openssp.common.cache.CurrencyCache;
 import com.atg.openssp.common.configuration.GlobalContext;
-import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.core.cache.type.PricelayerCache;
+import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
+import com.atg.openssp.common.core.exchange.RequestSessionAgent;
+import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
+import com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler;
+import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
+import com.atg.openssp.common.core.exchange.geo.UnavailableHandlerException;
 import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
+import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.exchange.geo.AddressNotFoundException;
-import com.atg.openssp.core.exchange.geo.FreeGeoIpInfoHandler;
-import com.atg.openssp.core.exchange.geo.GeoIpInfoHandler;
-import com.atg.openssp.core.exchange.geo.UnavailableHandlerException;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.*;
 import org.slf4j.Logger;
@@ -77,6 +80,36 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         dd.setUa(masterValues.getBrowserUserAgentString());
         dd.setIp(masterValues.getIpAddress());
 
+        /*
+        private int dnt = 1;// default, don't track
+        private int lmt = 1;// default, don't track
+        private String ipv6;
+        private int devicetype = DeviceType.CONNECTED_DEVICE.getValue();
+        private String language;
+        private String didsha1;
+        private String didmd5;
+        private String dpidsha1;
+        private String dpidmd5;
+        private String macsha1;
+        private String macmd5;
+        private String carrier;
+        private String make;
+        private String model;
+        private String os;
+        private String osv;
+        private String hwv;
+        private int h;
+        private int w;
+        private int ppi;
+        private float pxratio;
+        private int js = JavascriptSupport.YES.getValue();
+        private int geofetch;
+        private int connectiontype = NetworkConnectionType.UNKNOWN.getValue();
+        private String flashver;
+        private String ifa;
+        private Object ext;
+        */
+
         BidRequest bidRequest =  new BidRequest.Builder()
                 .setId(selectAppropriateId(requestId, agent.getRequestid()))
                 .setAt(agent.getBiddingServiceInfo().getAuctionType())
@@ -85,19 +118,39 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                 .setDevice(dd)
                 .setUser(createUser(masterValues))
                 .addCur(CurrencyCache.instance.getBaseCurrency())
+                //TODO: BKS
+                //.setBadv()
+                //.setBcat()
+                // set tmax temporarily - set in DemandService (supplier info)
+                .setTmax((int)GlobalContext.getExecutionTimeout())
+                // set test temporarily - set in DemandService (supplier info)
+                .setTest(BooleanInt.FALSE)
+//                .setExtension()
                 .build();
+
+        /*
+	private List<String> badv;
+	private List<String> bcat;
+	private Object ext;
+         */
 
         int idCount = 1;
         for (ParamValue pOrigin : pValueList) {
             HeaderBiddingParamValue pValues = (HeaderBiddingParamValue) pOrigin;
 
             Impression i = new Impression.Builder().build();
-            i.setId(Integer.toString(idCount++));
-            i.setVideo(createVideo(pValues));
+            i.setId(pValues.getId());
+            //i.setVideo(createVideo(pValues));
             i.setBanner(createBanner(pValues));
             //i.setNative(createNative(pValues));
-            //TODO: BKS
-            i.setBidfloor(0f);
+            try {
+                i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
+                i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
+            } catch (EmptyCacheException e) {
+                log.info("price floor does not exist for site: "+site.getId());
+                i.setBidfloor(0f);
+                i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+            }
             i.setSecure(ImpressionSecurity.NON_SECURE);
             bidRequest.addImp(i);
 
@@ -107,10 +160,12 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     private User createUser(HeaderBiddingParamValue pValues) {
+        String userId = pValues.getFsUid();
+
         return new User.Builder()
-                //.setBuyeruid()
+ //               .setBuyeruid()
                 //.setGender(pValues.getGender())
-                .setId(pValues.getFsUid())
+                .setId(userId)
                 //.setYob(pValues.getYearOfBirth())
                 //.setGeo(createUserGeo(pValues))
                 .build();
@@ -123,31 +178,31 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     private Video createVideo(HeaderBiddingParamValue pValues) {
-        return null;
-        // Video not implemeneted yet.  We need a way to specify type
-        /*
         return new Video.Builder()
-                .addMimeX("application/x-shockwave-flash")
-                .setHX(400)
-                .setWX(600)
-                .setMaxdurationX(100)
-                .setMindurationX(30)
-                .addProtocolX(VideoBidResponseProtocol.VAST_2_0)
-                .setStartdelayX(1)
+                .addMime("application/x-shockwave-flash")
+                .setH(400)
+                .setW(600)
+                .setMaxduration(100)
+                .setMinduration(30)
+                .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
+                .setStartdelay(1)
                 .build();
-                */
     }
 
     private Geo createSiteGeo(HeaderBiddingParamValue pValues) {
         Geo geo = new Geo.Builder().build();
-        StringTokenizer st = new StringTokenizer(pValues.getFsLoc(), "?&");
-        while(st.hasMoreTokens()) {
-            String t = st.nextToken();
-            if (t.startsWith("i=")) {
-                geo.setCountry(t.substring(2));
-            } else if (t.startsWith("c=")) {
-                geo.setCity(new String(decoder.decode(t.substring(2).getBytes())));
+        try {
+            StringTokenizer st = new StringTokenizer(pValues.getFsLoc(), "?&");
+            while(st.hasMoreTokens()) {
+                String t = st.nextToken();
+                if (t.startsWith("i=")) {
+                    geo.setCountry(t.substring(2));
+                } else if (t.startsWith("c=")) {
+                    geo.setCity(new String(decoder.decode(t.substring(2).getBytes())));
+                }
             }
+        } catch(Exception ex) {
+            log.error("missing geo code properties: "+pValues.getFsLoc());
         }
         String ipAddress = pValues.getIpAddress();
         if (ipAddress != null && !ipAddress.equalsIgnoreCase("localhost") && !ipAddress.equalsIgnoreCase("0:0:0:0:0:0:0:1") && !ipAddress.equalsIgnoreCase("127.0.0.1")) {
@@ -202,12 +257,12 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         b.setFormat(sizes.toArray());
 
         //TODO: BKS
-        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
+//        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
 //        b.setApi();
-        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
+//        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
 //        b.setExpdir();
         b.setMimes(new String[]{});
-        b.setPos(AddPosition.FOOTER);
+//        b.setPos(AddPosition.FOOTER);
 //        b.setTopframe();
 //        b.setExt();
         return b;

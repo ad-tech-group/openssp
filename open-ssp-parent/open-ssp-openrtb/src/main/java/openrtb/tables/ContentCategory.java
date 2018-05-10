@@ -1,5 +1,7 @@
 package openrtb.tables;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * @author Brian Sorensen
  */
@@ -37,13 +39,16 @@ public enum ContentCategory {
         this.value = this.name().replaceAll("_", "-");
     }
 
+    @JsonValue
     public String getValue() {
         return value;
     }
 
     public static ContentCategory convertValue(final String value) {
         for (final ContentCategory v : values()) {
-            if (value.equals(v.getValue())) {
+            if (value == null) {
+                return null;
+            } else if (value.equals(v.getValue())) {
                 return v;
             }
         }

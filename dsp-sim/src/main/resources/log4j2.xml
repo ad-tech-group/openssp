@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<Configuration status="warn" monitorInterval="30">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%level: %C{1} %msg%n" />
+        </Console>
+        <!-- exception.log -->
+        <RollingFile name="ErrorFile"
+                     fileName="logfiles/sim/exception/exception.log"
+                     filePattern="logfiles/sim/exception/exception-%d.log.gz"
+                     bufferedIO="true" append="true">
+            <PatternLayout>
+                <Pattern>[%d] %C{1.} %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>
+        <!-- debug.log -->
+        <RollingFile name="DebugFile"
+                     fileName="logfiles/sim/debug/debug.log"
+                     filePattern="logfiles/sim/debug/debug-%d.log.gz"
+                     bufferedIO="true" append="true">
+            <PatternLayout>
+                <Pattern>[%d] %C{1.} %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="console" additivity="false" level="info">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="error" additivity="false" level="error">
+            <AppenderRef ref="ErrorFile" />
+        </Logger>
+        <Logger name="debug" additivity="false" level="debug">
+            <AppenderRef ref="DebugFile" />
+        </Logger>
+        <Root level="all">
+            <AppenderRef ref="console" level="all"/>
+            <AppenderRef ref="ErrorFile" level="error"/>
+            <AppenderRef ref="DebugFile" level="debug"/>
+        </Root>
+    </Loggers>
+</Configuration>

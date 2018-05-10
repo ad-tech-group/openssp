@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+	<Appenders>
+
+		<!-- loglevel, Levels are organized from most specific to least: -->
+		<!-- - OFF (most specific, no logging) -->
+		<!-- - FATAL (most specific, little data) -->
+		<!-- - ERROR -->
+		<!-- - WARN -->
+		<!-- - INFO -->
+		<!-- - DEBUG -->
+		<!-- - TRACE (least specific, a lot of data) -->
+		<!-- - ALL (least specific, all data) -->
+
+		<RollingFile name="DebugFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/runtime/ssp-debug.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/runtime/ssp-debug-%d{yyyy-MM}-%i.log.gz"
+			bufferedIO="true" append="true">
+			<PatternLayout>
+				<Pattern>[%d] %m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="4" />
+		</RollingFile>
+
+		<RollingFile name="InfoFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/runtime/ssp-info.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/runtime/ssp-info-%d{yyyy-MM}-%i.log.gz"
+					 bufferedIO="true" append="true">
+			<PatternLayout>
+				<Pattern>[%d] %m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="4" />
+		</RollingFile>
+
+
+		<!-- adserving-request.log -->
+		<RollingFile name="AdservingRequestFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/runtime/adserving/adserving-request.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/runtime/adserving/adserving-request-%d.log.gz"
+			bufferedIO="true" append="true">
+
+			<PatternLayout>
+				<Pattern>[%d]%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
+
+		<!-- adserving-response.log -->
+		<RollingFile name="AdservingResponseFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/runtime/adserving/adserving-response.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/runtime/adserving/adserving-response-%d.log.gz"
+			bufferedIO="true" append="false">
+
+			<PatternLayout>
+				<Pattern>[%d]%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="3" />
+		</RollingFile>
+
+
+		<!-- bidresponse.log -->
+		<RollingFile name="BidResponseFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/runtime/rtb/bidresponse.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/runtime/rtb/bidresponse-%d{yyyy-MM-dd}-%i.log.gz"
+			bufferedIO="true" append="false">
+
+			<PatternLayout>
+				<Pattern>[%d]%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10000" />
+			</Policies>
+			<DefaultRolloverStrategy max="3" />
+		</RollingFile>
+
+		<!-- bidrequest.log -->
+		<RollingFile name="BidRequestFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/runtime/rtb/bidrequest.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/runtime/rtb/bidrequest-%d{yyyy-MM-dd}-%i.log.gz"
+			bufferedIO="true" append="true">
+
+			<PatternLayout>
+				<Pattern>[%d]%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10000" />
+			</Policies>
+			<DefaultRolloverStrategy max="3" />
+		</RollingFile>
+
+		<!-- cookiesync.log -->
+		<RollingFile name="CookieSyncFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/runtime/rtb/cookiesync.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/runtime/rtb/cookiesync-%d{yyyy-MM-dd}-%i.log.gz"
+					 bufferedIO="true" append="true">
+
+			<PatternLayout>
+				<Pattern>[%d]%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10000" />
+			</Policies>
+			<DefaultRolloverStrategy max="3" />
+		</RollingFile>
+
+		<!-- provider.log -->
+		<RollingFile name="ProviderFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/provider.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/provider-%d.log.gz"
+			bufferedIO="true" append="true">
+
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
+
+		<!-- exception.log -->
+		<RollingFile name="ErrorFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/exception/exception.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/exception/exception-%d.log.gz"
+			bufferedIO="true" append="true">
+			<PatternLayout>
+				<Pattern>[%d] %C{1.} %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+
+		<RollingFile name="RequestFile"
+			fileName="${sys:catalina.home}/logfiles/ssp/request.log"
+			filePattern="${sys:catalina.home}/logfiles/ssp/request-%d.log.gz"
+			append="true" bufferedIO="true">
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
+
+		<RollingFile name="TimeInfoFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/time-info.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/time-info-%d{yyyyMMdd-HHmm}.log.gz"
+					 append="false" bufferedIO="true">
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="5" modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
+
+		<RollingFile name="DataBrokerFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/data-broker.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/data-broker-%d{yyyyMMdd}.log.gz"
+					 append="false" bufferedIO="true">
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy max="30" />
+		</RollingFile>
+
+		<RollingFile name="AuctionFile"
+					 fileName="${sys:catalina.home}/logfiles/ssp/auction.log"
+					 filePattern="${sys:catalina.home}/logfiles/ssp/auction-%d{yyyyMMdd-HHmm}.log.gz"
+					 append="false" bufferedIO="true">
+			<PatternLayout>
+				<Pattern>[%d]#%m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="5" modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+
+		<!-- tomcat.pid -->
+		<File name="PIDFile" fileName="${sys:catalina.home}/logfiles/tomcat.pid"
+			append="false">
+			<PatternLayout>
+				<Pattern>%m%n</Pattern>
+			</PatternLayout>
+		</File>
+
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%level: %C{1} %msg%n" />
+		</Console>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="pid" additivity="false" level="info">
+			<AppenderRef ref="PIDFile" />
+		</Logger>
+
+		<Logger name="info" additivity="false" level="info">
+			<AppenderRef ref="InfoFile" />
+		</Logger>
+
+		<Logger name="adserving-response" additivity="false">
+			<AppenderRef ref="AdservingResponseFile" />
+		</Logger>
+
+		<Logger name="adserving-request" additivity="false">
+			<AppenderRef ref="AdservingRequestFile" />
+		</Logger>
+
+		<Logger name="bid-response" additivity="false">
+			<AppenderRef ref="BidResponseFile" />
+		</Logger>
+
+		<Logger name="bid-request" additivity="false">
+			<AppenderRef ref="BidRequestFile" />
+			<!-- <AppenderRef ref="console" /> -->
+		</Logger>
+
+		<Logger name="cookie-sync" additivity="false">
+			<AppenderRef ref="CookieSyncFile" />
+		</Logger>
+
+		<Logger name="provider" additivity="false">
+			<AppenderRef ref="ProviderFile" />
+		</Logger>
+
+		<Logger name="error" additivity="false" level="error">
+			<AppenderRef ref="ErrorFile" />
+		</Logger>
+
+		<Logger name="request" additivity="false">
+			<AppenderRef ref="RequestFile" />
+		</Logger>
+
+		<Logger name="time-info" additivity="false">
+			<AppenderRef ref="TimeInfoFile" />
+		</Logger>
+
+		<Logger name="data-broker" additivity="false">
+			<AppenderRef ref="DataBrokerFile" />
+		</Logger>
+
+		<Logger name="auction" additivity="false">
+			<AppenderRef ref="AuctionFile" />
+		</Logger>
+
+		<!-- <Root level="info" additivity="false">
+			<AppenderRef ref="console" />
+		</Root> -->
+		
+		<Root level="all">
+			<AppenderRef ref="InfoFile" level="info" />
+			<AppenderRef ref="console" level="all"/>
+			<AppenderRef ref="ErrorFile" level="error"/>
+			<AppenderRef ref="DebugFile" level="debug"/>
+		</Root>
+	</Loggers>
+</Configuration>
