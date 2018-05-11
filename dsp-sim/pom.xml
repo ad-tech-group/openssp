@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.atg.openssp</groupId>
 	<artifactId>open-ssp-dsp-sim</artifactId>
-	<version>1.0</version>
+	<version>0.4</version>
 	<name>open-ssp-dsp-sim</name>
 	<url>http://maven.apache.org</url>
     <packaging>jar</packaging>
@@ -123,6 +123,7 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -133,6 +134,7 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.8</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -143,7 +145,7 @@
         <dependency>
             <groupId>com.atg.openssp</groupId>
             <artifactId>open-ssp-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.4</version>
         </dependency>
     </dependencies>
 	<distributionManagement>

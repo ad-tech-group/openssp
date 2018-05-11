@@ -19,9 +19,9 @@
         <Connector port="3025" protocol="org.apache.coyote.http11.Http11NioProtocol"
                    maxThreads="150" SSLEnabled="true" defaultHost="sspservices.pub.network">
             <SSLHostConfig>
-                <Certificate certificateKeystoreFile="conf/certs/star.pub.network.jks"
-                             certificateKeyAlias="pub.network"
-                             certificateKeystorePassword="kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b"
+                <Certificate certificateKeystoreFile="conf/certs/openssp.jks"
+                             certificateKeyAlias="openssp"
+                             certificateKeystorePassword="changeit"
                              type="RSA"
                 />
             </SSLHostConfig>

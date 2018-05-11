@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.atg.openssp</groupId>
 		<artifactId>open-ssp-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.4</version>
 	</parent>
 	<artifactId>core</artifactId>
 	<name>core</name>
@@ -74,10 +74,12 @@
                     <systemProperties>
                         <JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
                     </systemProperties>
-                    <port>0</port>
+                    <port>8080</port>
+                    <!--
                     <httpsPort>8443</httpsPort>
-                    <keystoreFile>${basedir}/certificates/pub.network.jks</keystoreFile>
+                    <keystoreFile>${basedir}/certificates/openssp.jks</keystoreFile>
                     <keystorePass>kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b</keystorePass>
+                    -->
                     <configurationDir>tomcat</configurationDir>
                 </configuration>
             </plugin>

@@ -1,7 +1,7 @@
 package com.atg.openssp.common.core.exchange.model;
 
 import com.atg.openssp.common.cache.CurrencyCache;
-import com.atg.openssp.common.core.exchange.Auction2;
+import com.atg.openssp.common.core.exchange.Auction;
 import com.atg.openssp.common.exception.InvalidBidException;
 import util.math.FloatComparator;
 
@@ -20,7 +20,7 @@ public abstract class AuctionMethodHandler {
         final float exchangedFloorPrice = bestBidder.getBidFloorprice() / floorCurrencyRate;
         if (false == FloatComparator.greaterOrEqual(exchangedBestBidPrice, exchangedFloorPrice)) {
             //TODO: BKS output needs to be localized
-            throw new InvalidBidException(Auction2.class.getSimpleName() + ", winner invalid cause bid lower than floor [" + exchangedBestBidPrice + " EUR < " + exchangedFloorPrice + " EUR] "
+            throw new InvalidBidException(Auction.class.getSimpleName() + ", winner invalid cause bid lower than floor [" + exchangedBestBidPrice + " EUR < " + exchangedFloorPrice + " EUR] "
                     + bestBidder.getSupplier().getShortName() + " [" + floorCurrencyRate + "," + bestBidder.getBidFloorprice() + ", " + bestBidder.getBidfloorCurrency()
                     + "] DealID:" + bestBidder.getDealId());
         }

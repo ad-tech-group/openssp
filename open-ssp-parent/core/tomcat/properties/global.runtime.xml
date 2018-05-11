@@ -14,11 +14,11 @@
 	<entry key="cdl-timeout">1200</entry>
 
 	<!-- url of the data provider where the cache is updated from -->
-	<entry key="data-provider-scheme">https</entry>
+	<entry key="data-provider-scheme">http</entry>
 
-	<entry key="data-provider-host">Admins-MBP.pub.network</entry>
+	<entry key="data-provider-host">localhost</entry>
 
-	<entry key="data-provider-port">9443</entry>
+	<entry key="data-provider-port">9090</entry>
 
 	<!-- credential for remote access -->
 	<entry key="master_pw">frogs</entry>

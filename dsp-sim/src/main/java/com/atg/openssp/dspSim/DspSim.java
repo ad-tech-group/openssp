@@ -9,11 +9,10 @@ import com.sun.net.httpserver.HttpsParameters;
 import com.sun.net.httpserver.HttpsServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.net.ssl.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.security.KeyStore;
@@ -21,6 +20,8 @@ import java.security.KeyStore;
 /**
  * @author Brian Sorensen
  */
+@Configuration
+@PropertySource("application.properties")
 public class DspSim {
     private static final Logger log = LoggerFactory.getLogger(DspSim.class);
     private DspModel dspModel;
@@ -35,15 +36,17 @@ public class DspSim {
         try {
             int port = Integer.parseInt(dspModel.getProperty("server-port", "8081"));
             System.out.println("starting sim on port: "+port);
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+            /*
             HttpsServer server = HttpsServer.create(new InetSocketAddress(port), 0);
 
 
             SSLContext sslContext = SSLContext.getInstance("TLS");
 
             // initialise the keystore
-            char[] password = "kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b".toCharArray();
+            char[] password = "changeit".toCharArray();
             KeyStore ks = KeyStore.getInstance("JKS");
-            InputStream is = getClass().getClassLoader().getResourceAsStream("cert/pub.network.jks");
+            InputStream is = getClass().getClassLoader().getResourceAsStream("cert/openssp.jks");
             ks.load(is, password);
             is.close();
 
@@ -76,6 +79,8 @@ public class DspSim {
                     }
                 }
             });
+            */
+
 
 
             server.createContext("/dsp-sim/admin", new ClientHandler(dspModel));

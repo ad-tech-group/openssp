@@ -83,7 +83,8 @@ public class ServerHandler implements Runnable {
     private void sendCommand(ServerCommandType type, String id, SimBidder sb) throws ModelException {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
-            HttpPost httpPost = new HttpPost("https://"+model.lookupProperty(SERVER_HOST, "localhost")+":"+model.lookupProperty(SERVER_PORT, "8081")+"/dsp-sim/admin");
+//            HttpPost httpPost = new HttpPost("https://"+model.lookupProperty(SERVER_HOST, "localhost")+":"+model.lookupProperty(SERVER_PORT, "8081")+"/dsp-sim/admin");
+            HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SERVER_HOST, "localhost")+":"+model.lookupProperty(SERVER_PORT, "8081")+"/dsp-sim/admin");
             ServerCommand command = new ServerCommand();
             command.setType(type);
             command.setId(id);
