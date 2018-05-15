@@ -30,7 +30,7 @@ import java.util.concurrent.Future;
 public class ExchangeServer implements Exchange<RequestSessionAgent> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ExchangeServer.class);
-    private static final String SCHEME = "https";
+    public static final String SCHEME = "http";
 
 	/**
 	 * Starts the process to exchange and build a response if a {@code VideoResult} can be expected.

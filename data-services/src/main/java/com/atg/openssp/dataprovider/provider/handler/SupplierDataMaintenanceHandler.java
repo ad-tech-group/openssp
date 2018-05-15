@@ -8,20 +8,19 @@ import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
 import com.atg.openssp.dataprovider.provider.dto.ResponseStatus;
 import com.atg.openssp.dataprovider.provider.dto.SupplierMaintenanceDto;
 import com.atg.openssp.dataprovider.provider.dto.SupplierResponse;
+import com.atg.openssp.dataprovider.provider.model.SupplierModel;
 import com.google.gson.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.properties.ProjectProperty;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.PropertyException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
 /**
- * @author André Schmer
+ * @author Brian Sorensen
  */
 public class SupplierDataMaintenanceHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(SupplierDataMaintenanceHandler.class);
@@ -30,13 +29,6 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
     public SupplierDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isSiteDataServiceEnabled()) {
             try {
-                String location;
-                try {
-                    location = ProjectProperty.getPropertiesResourceLocation()+"/";
-                } catch (PropertyException e) {
-                    log.warn("property file not found.");
-                    location="";
-                }
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
@@ -55,21 +47,29 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
                     } else if (dto.getCommand() == MaintenanceCommand.ADD) {
                         Supplier s = dto.getSupplier();
-//TODO:                        DataStore.getInstance().insert(s);
-//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+                        SupplierModel.getInstance().insert(s);
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
                         Supplier s = dto.getSupplier();
-//TODO:                        DataStore.getInstance().remove(s);
-//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+                        SupplierModel.getInstance().remove(s);
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         Supplier s = dto.getSupplier();
-//TODO:                        DataStore.getInstance().update(s);
-//TODO:                        result.setSupplier(DataStore.getInstance().lookupSuppliers().getSupplier());
+                        SupplierModel.getInstance().update(s);
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.IMPORT) {
+                        SupplierModel.getInstance().importSuppliers();
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.CLEAR) {
+                        SupplierModel.getInstance().clear();
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

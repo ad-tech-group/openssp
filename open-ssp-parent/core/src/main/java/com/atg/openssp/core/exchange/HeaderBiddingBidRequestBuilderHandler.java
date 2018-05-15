@@ -80,36 +80,6 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         dd.setUa(masterValues.getBrowserUserAgentString());
         dd.setIp(masterValues.getIpAddress());
 
-        /*
-        private int dnt = 1;// default, don't track
-        private int lmt = 1;// default, don't track
-        private String ipv6;
-        private int devicetype = DeviceType.CONNECTED_DEVICE.getValue();
-        private String language;
-        private String didsha1;
-        private String didmd5;
-        private String dpidsha1;
-        private String dpidmd5;
-        private String macsha1;
-        private String macmd5;
-        private String carrier;
-        private String make;
-        private String model;
-        private String os;
-        private String osv;
-        private String hwv;
-        private int h;
-        private int w;
-        private int ppi;
-        private float pxratio;
-        private int js = JavascriptSupport.YES.getValue();
-        private int geofetch;
-        private int connectiontype = NetworkConnectionType.UNKNOWN.getValue();
-        private String flashver;
-        private String ifa;
-        private Object ext;
-        */
-
         BidRequest bidRequest =  new BidRequest.Builder()
                 .setId(selectAppropriateId(requestId, agent.getRequestid()))
                 .setAt(agent.getBiddingServiceInfo().getAuctionType())

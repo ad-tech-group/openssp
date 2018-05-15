@@ -38,6 +38,8 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
 	private static final Logger LOG = LoggerFactory.getLogger(DemandBroker.class);
 
+	private static final String SCHEME = "http";
+
 	private final BiddingServiceInfo info;
 
 	private final Supplier supplier;
@@ -76,14 +78,14 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		}
 		long startTS = System.currentTimeMillis();
 
-        final BidRequest workingBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequestToBidRequest(gson, bidrequest);
 
 		try {
-            User user = workingBidrequest.getUser();
-            String userId = user.getId();
+            User user = bidrequest.getUser();
             try {
+
                 long csBegin = System.currentTimeMillis();
                 if (CookieSyncManager.getInstance().supportsCookieSync()) {
+                    String userId = user.getId();
                     CookieSyncDTO cookieSyncDTO = CookieSyncManager.getInstance().get(userId);
                     if (cookieSyncDTO != null) {
                         DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
@@ -100,8 +102,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
                 LOG.error(ex.getMessage(), ex);
             }
 
-            final String jsonBidrequest = gson.toJson(workingBidrequest);
-
+            final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
 			LOG.debug("bidrequest: " + jsonBidrequest);
             System.out.println("bidrequest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
@@ -129,8 +130,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
                         StringBuilder sspRedirUrl = new StringBuilder();
                         String uid = bidrequest.getUser().getId();
                         String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
-                        String protocol = "https";
-                        sspRedirUrl.append(protocol + "://" + addr + "/open-ssp/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
+                        sspRedirUrl.append(SCHEME + "://" + addr + "/open-ssp/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
                         s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
                     }
 					return container;

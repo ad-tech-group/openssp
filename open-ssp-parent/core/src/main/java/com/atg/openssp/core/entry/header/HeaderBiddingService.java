@@ -14,9 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class SupplyBannerService
+ * Servlet implementation class HeaderBiddingService
+ * Header bidding allows for submission of a bid request to a set of DSPs, and derives a winner, but because the
+ * result may be party to additional autions, the normal notification of the winner is not made.  We also use
+ * first price bidding to ensure we give our best and final offer.
  * 
- * @author André Schmer
+ * @author Brian Sorensen
  */
 @WebServlet(value = "/HeaderBiddingService", asyncSupported = false, name = "HeaderBidding-Service")
 public class HeaderBiddingService extends CoreSupplyServlet<RequestSessionAgent> {

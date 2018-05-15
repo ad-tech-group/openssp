@@ -33,6 +33,8 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 
     private static final long serialVersionUID = 1L;
 
+    public static final String SCHEME = "http";
+
     private Exchange<T> server;
 
     @Override
@@ -85,9 +87,7 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
 	        RequestSessionAgent rsa = (RequestSessionAgent) agent;
             Site site = rsa.getBiddingServiceInfo().getSite();
             if (site != null) {
-                String protocol  = site.getPage();
-                protocol = protocol.substring(0, protocol.indexOf(':'));
-                agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", protocol+"://" + site.getDomain());
+                agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", SCHEME+"://" + site.getDomain());
                 agent.getHttpResponse().addHeader("Access-Control-Allow-Methods", "POST");
                 agent.getHttpResponse().addHeader("Access-Control-Allow-Headers", "Content-Type");
                 agent.getHttpResponse().addHeader("Access-Control-Allow-Credentials", "true");

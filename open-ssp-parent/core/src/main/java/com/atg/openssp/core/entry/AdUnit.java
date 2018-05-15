@@ -1,4 +1,4 @@
-package com.atg.openssp.core.entry.header;
+package com.atg.openssp.core.entry;
 
 public class AdUnit {
     private String id;

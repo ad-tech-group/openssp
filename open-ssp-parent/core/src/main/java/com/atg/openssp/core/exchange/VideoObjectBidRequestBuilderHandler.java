@@ -17,6 +17,7 @@ import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
 import openrtb.bidrequest.model.*;
+import openrtb.tables.BooleanInt;
 import openrtb.tables.GeoType;
 import openrtb.tables.ImpressionSecurity;
 import openrtb.tables.VideoBidResponseProtocol;
@@ -65,22 +66,48 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
         }
         VideoObjectParamValue masterValues = (VideoObjectParamValue) pValueList.get(0);
 
-        Site site = masterValues.getSite().clone();
+        Site site;
+        if (masterValues.getSite() != null) {
+            site = masterValues.getSite().clone();
+        } else {
+            site = null;
+        }
+        App app;
+        if (masterValues.getApp() != null) {
+            app = masterValues.getApp().clone();
+        } else {
+            app = null;
+        }
         String requestId = masterValues.getRequestId();
 
         Device dd = new Device.Builder().build();
         dd.setGeo(createSiteGeo(masterValues));
         dd.setUa(masterValues.getBrowserUserAgentString());
+        dd.setIp(masterValues.getIpAddress());
 
         BidRequest bidRequest =  new BidRequest.Builder()
                 .setId(selectAppropriateId(requestId, agent.getRequestid()))
                 .setAt(agent.getBiddingServiceInfo().getAuctionType())
                 .setSite(site)
+                .setApp(app)
                 .setDevice(dd)
                 .setUser(createUser(masterValues))
                 .addCur(CurrencyCache.instance.getBaseCurrency())
+                //TODO: BKS
+                //.setBadv()
+                //.setBcat()
+                // set tmax temporarily - set in DemandService (supplier info)
                 .setTmax((int)GlobalContext.getExecutionTimeout())
+                // set test temporarily - set in DemandService (supplier info)
+                .setTest(BooleanInt.FALSE)
+//                .setExtension()
                 .build();
+
+        /*
+	private List<String> badv;
+	private List<String> bcat;
+	private Object ext;
+         */
 
         int idCount = 1;
         for (ParamValue pOrigin : pValueList) {
@@ -125,6 +152,18 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
 
     }
 
+    private Video createVideo(VideoObjectParamValue pValues) {
+        return new Video.Builder()
+                .addMime("application/x-shockwave-flash")
+                .setH(400)
+                .setW(600)
+                .setMaxduration(100)
+                .setMinduration(30)
+                .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
+                .setStartdelay(1)
+                .build();
+    }
+
     private Geo createSiteGeo(ParamValue pValues) {
         Geo geo = new Geo.Builder().build();
         String ipAddress = pValues.getIpAddress();
@@ -144,28 +183,18 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
                 //geo.setExt(?)
             } catch (IOException e) {
                 log.warn("could not obtain geo code: "+e.getMessage(), e);
-                return null;
+                // no new address offerings to help
+                // keep what we have and move on
             } catch (UnavailableHandlerException e) {
                 log.warn("could not obtain geo code: "+e.getMessage());
-                return null;
+                // no new address offerings to help
+                // keep what we have and move on
             } catch (AddressNotFoundException e) {
-                log.warn("could not find ip address");
-                return null;
+                // no new address offerings to help
+                // keep what we have and move on
             }
         }
         return geo;
-    }
-
-    private Video createVideo(VideoObjectParamValue pValues) {
-        return new Video.Builder()
-                .addMime("application/x-shockwave-flash")
-                .setH(400)
-                .setW(600)
-                .setMaxduration(100)
-                .setMinduration(30)
-                .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
-                .setStartdelay(1)
-                .build();
     }
 
     private String selectAppropriateId(String requestId, String agentRequestid) {

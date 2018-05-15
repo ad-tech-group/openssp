@@ -1,61 +1,58 @@
 {
   "sites": [
     {
-      "id": "131",
-      "name": "WebDesign Ledger",
-      "domain": "webdesignledger.com",
-      "page": "https",
+      "id": "1",
+      "name": "Site One",
+      "domain": "site1.com",
+      "page": "http://site1.com/page.html",
       "cat": [
         "IAB19",
-        "IAB19_20",
-        "IAB19_24",
-        "IAB19_34"
+        "IAB19_20"
       ],
       "publisher": {
-      "id": "131",
-        "name": "WebDesign Ledger",
+        "id": "1",
+        "name": "Pub One",
         "cat": [
           "IAB19"
         ],
-      "domain": "webdesignledger.com",
+        "domain": "pub1.com",
         "ext": null
       },
       "ext": null
     },
     {
-      "id": "128",
-      "name": "Headphone Review",
-      "domain": "headphonereview.com",
-      "page": "https",
+      "id": "2",
+      "name": "Site Two",
+      "domain": "site2.com",
+      "page": "http://site2.com/page.html",
       "cat": [
         "IAB6",
-        "IAB9",
-        "IAB9_1"
+        "IAB9"
       ],
       "publisher": {
-        "id": "128",
-        "name": "Headphone Review",
+        "id": "2",
+        "name": "Pub Two",
         "cat": [
           "IAB6"
         ],
-        "domain": "headphonereview.com",
+        "domain": "pub2.com",
         "ext": null
       },
       "ext": null
     },
     {
-      "id": "381",
-      "name": "Cooking Panda",
-      "domain": "cookingpanda.com",
-      "page": "https",
+      "id": "3",
+      "name": "Site Three",
+      "domain": "site3.com",
+      "page": "http://site3.com/page.html",
       "cat": [
         "IAB8"
       ],
       "publisher": {
-        "id": "303",
-        "name": "Render Media",
+        "id": "1",
+        "name": "Pub One",
         "cat": [],
-        "domain": "rndr.com",
+        "domain": "pub1.com",
         "ext": null
       },
       "ext": null

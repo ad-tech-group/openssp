@@ -17,7 +17,6 @@
         "DESKTOP",
         "MOBILE"
       ],
-      "demandBrokerFilterClassName": "io.freestar.ssp.channel.rtb.ArTeeBeeFilter",
       "cookieSync": "<img src='//localhost:8082/user-sync?t=image&r={SSP_REDIR_URL}' style ='display:none' width='0' height='0'></img>",
       "underTest": 1,
       "active": 1

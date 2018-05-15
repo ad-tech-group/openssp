@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<!-- switch to enable/disable rtb support (dsp channel) -->
-	<entry key="rtb">true</entry>
-	
-	<!-- switch to enable/disable ssp support (ssp channel)-->
-	<entry key="ssp">false</entry>
-	
-	<!-- switch to enable/disable adserving support -->
-	<entry key="adserving">false</entry>
-
-	<!-- services -->
 	<!-- switch to enable/disable app data service support -->
 	<entry key="app-data-service-enabled">true</entry>
 
@@ -34,22 +24,26 @@
 
 	<!-- handler class to use service Curreny Data requests -->
 	<entry key="currency-data-handler-class">com.atg.openssp.dataprovider.provider.handler.CurrencyDataHandler</entry>
+	<entry key="currency-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.CurrencyDataMaintenanceHandler</entry>
 
 	<!-- handler class to use for service authorization grant requests -->
 	<entry key="login-handler-class">com.atg.openssp.common.provider.LoginHandler</entry>
 
 	<!-- handler class to use service Pricelayer Data requests -->
 	<entry key="pricelayer-data-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataHandler</entry>
+	<entry key="pricelayer-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataMaintenanceHandler</entry>
 
 	<!-- handler class to use service Site Data requests -->
-	<entry key="site-data-handler-class">com.atg.openssp.dataprovider.provider.handler.AerospikeSiteDataHandler</entry>
+	<entry key="site-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataHandler</entry>
 	<entry key="site-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataMaintenanceHandler</entry>
 
 	<!-- handler class to use service Supplier Data requests -->
 	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
 	<entry key="supplier-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataMaintenanceHandler</entry>
 
-	<!-- switch to enable/disable debugging -->	
+	<entry key="geo-ip-info-handler-class">com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler</entry>
+
+	<!-- switch to enable/disable debugging -->
 	<entry key="debug">true</entry>
 	
 	<!-- switch to enable/disable verbose output -->

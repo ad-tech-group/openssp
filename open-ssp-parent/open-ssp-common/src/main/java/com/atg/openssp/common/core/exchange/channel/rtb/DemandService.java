@@ -82,6 +82,7 @@ public class DemandService implements Callable<AdProviderReader> {
 						agent.getBidExchange().setBidResponse(responseContainer.getSupplier(), responseContainer.getBidResponse());
 					}
 				} catch (final ExecutionException e) {
+				    e.printStackTrace();
 					log.error("ExecutionException {} {}", agent.getRequestid(), e);
 				} catch (final InterruptedException e) {
 					log.error("InterruptedException {} {}", agent.getRequestid(), e.getMessage());

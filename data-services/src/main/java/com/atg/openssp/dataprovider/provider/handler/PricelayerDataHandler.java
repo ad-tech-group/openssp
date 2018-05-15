@@ -4,6 +4,7 @@ import com.atg.openssp.common.core.broker.dto.PricelayerDto;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
+import com.atg.openssp.dataprovider.provider.model.PricelayerModel;
 import com.google.gson.Gson;
 import openrtb.bidrequest.model.Pricelayer;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 /**
- * @author André Schmer
+ * @author Brian Sorensen
  */
 public class PricelayerDataHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(PricelayerDataHandler.class);
@@ -29,35 +30,19 @@ public class PricelayerDataHandler extends DataHandler {
     public PricelayerDataHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isPricelayerDataServiceEnabled()) {
             try {
-                String location;
-                try {
-                    location = ProjectProperty.getPropertiesResourceLocation()+"/";
-                } catch (PropertyException e) {
-                    log.warn("property file not found.");
-                    location="";
-                }
-//                PricelayerDto data = DataStore.getInstance().lookupPricelayers();
-//                if (DataStore.getInstance().wasPricelayersCreated()) {
-                    Gson gson = new Gson();
-                    String content = new String(Files.readAllBytes(Paths.get(location + "price_layer.json")), StandardCharsets.UTF_8);
-//                    PricelayerDto newData = gson.fromJson(content, PricelayerDto.class);
-//                    for (Pricelayer s : newData.getPricelayer()) {
-//                        DataStore.getInstance().insert(s);
-//                    }
-//                    data = DataStore.getInstance().lookupPricelayers();
-//                }
-
+                PricelayerDto data = PricelayerModel.getInstance().lookupPricelayers();
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 
                 if (LoginHandler.TOKEN.equals(t)) {
-                    String result = content; //new Gson().toJson(data);
-
+                    String result = new Gson().toJson(data);
                     response.setStatus(200);
                     response.setContentType("application/json; charset=UTF8");
                     OutputStream os = response.getOutputStream();
                     os.write(result.getBytes());
+                    os.flush();
                     os.close();
+                    log.info("<--"+result.replaceAll("\n", ""));
                 } else {
                     response.setStatus(401);
                 }
@@ -74,5 +59,4 @@ public class PricelayerDataHandler extends DataHandler {
     public void cleanUp() {
 
     }
-
 }

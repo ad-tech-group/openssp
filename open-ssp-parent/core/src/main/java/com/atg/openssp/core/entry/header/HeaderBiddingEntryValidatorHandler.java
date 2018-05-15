@@ -8,6 +8,8 @@ import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.entry.AdUnit;
+import com.atg.openssp.core.exchange.ExchangeServer;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import openrtb.bidrequest.model.Site;
@@ -39,10 +41,10 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
         Cookie[] cList = request.getCookies();
         if (cList != null) {
             for (Cookie c : cList) {
-                log.info("cookie: " + c.getName());
+                log.debug("cookie: "+c.getName());
             }
         } else {
-            log.info("no cookies");
+            log.debug("no cookies");
         }
 
         HeaderBiddingRequest biddingRequest = null;
@@ -55,7 +57,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 StringReader bais = new StringReader(json);
                 biddingRequest = gson.fromJson(bais, HeaderBiddingRequest.class);
                 bais.close();
-                log.debug("headerBiddingRequest: "+json.replaceAll("\n", "").replaceAll("  ", ""));
+                log.debug("headerBiddingRequest: " + json.replaceAll("\n", "").replaceAll("  ", ""));
 
             } catch (IOException e) {
                 // ?? 400
@@ -68,8 +70,10 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 log.warn("returned E906 " + e.getMessage(), e);
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
+        } else if (request.getMethod().equalsIgnoreCase("get") && request.getContentLength() > 0) {
+
         } else {
-            log.warn("No Content or not Post");
+            log.warn("No Content");
             log.warn(request.getHeader("User-Agent"));
         }
 
@@ -81,9 +85,9 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
 
                 try {
                     Site s = SiteDataCache.instance.get(biddingRequest.getSite());
+                    // We need to clone the site to support the cookie sync - buyerid addition in the user object
                     Site site = s.clone();
-                    String protocol = s.getPage()+"://";
-                    site.setPage(protocol+site.getDomain() + biddingRequest.getPage());
+                    site.setPage(ExchangeServer.SCHEME+"://"+site.getDomain() + biddingRequest.getPage());
                     site.setRef(request.getHeader("referer"));
                     pm.setSite(site);
                 } catch (final EmptyCacheException e) {
@@ -121,7 +125,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
 
         } else {
             final HeaderBiddingParamValue pm = new HeaderBiddingParamValue();
-            HashMap<String, String> params = new LinkedHashMap();
+            HashMap<String, String> params = new LinkedHashMap<>();
             Enumeration<String> penum = request.getParameterNames();
             while (penum.hasMoreElements()) {
                 String key = penum.nextElement();
@@ -133,12 +137,15 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
             }
 
             try {
-                String requestedSite = params.get("site");
+                final String requestedSite = params.get("site");
                 log.info("requested site: "+requestedSite);
-                Site site = SiteDataCache.instance.get(requestedSite);
-                site.setDomain(params.get("site"));
-                site.setPage(site.getDomain() + params.get("page"));
+                Site s = SiteDataCache.instance.get(requestedSite);
+
+                // We need to clone the site to support the cookie sync - buyerid addition in the user object
+                Site site = s.clone();
+                site.setPage(ExchangeServer.SCHEME+"://"+site.getDomain() + biddingRequest.getPage());
                 site.setRef(request.getHeader("referer"));
+                //TODO: BKS fix and resolve referer
                 pm.setSite(site);
             } catch (final EmptyCacheException e) {
                 try {
@@ -150,21 +157,24 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 }
             }
             pm.setRequestId(params.get("id"));
-            pm.setCallback(params.get("callback"));
-            pm.setCallbackUid(params.get("callback_uid"));
-            pm.setPsa(params.get("psa"));
-            pm.setId(params.get("id"));
-            pm.setFsHash(params.get("_fshash"));
             pm.setFsSid(params.get("_fssid"));
             pm.setFsLoc(params.get("_fsloc"));
             pm.setFsUid(params.get("_fsuid"));
+            pm.setFsHash(biddingRequest.getFsHash());
+            pm.setPsa("0");
+//            pm.setPsa(params.get("psa"));
+
+            pm.setId(params.get("id"));
             pm.setSize(params.get("size"));
             pm.setPromoSizes(params.get("promo_sizes"));
+//            pm.setCallback(params.get("callback"));
+//            pm.setCallbackUid(params.get("callback_uid"));
+//            pm.setFsHash(params.get("_fshash"));
+
             pm.setIpAddress(request.getRemoteAddr());
             pm.setBrowserUserAgentString(request.getHeader("User-Agent"));
             pmList.add(pm);
         }
-
 
         // pm.setDomain(checkValue(request.getParameter("domain"), ERROR_CODE.E906, "Domain"));
         // pm.setH(checkValue(request.getParameter("h"), ERROR_CODE.E906, "Height"));

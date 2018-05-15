@@ -24,12 +24,14 @@
 
 	<!-- handler class to use service Curreny Data requests -->
 	<entry key="currency-data-handler-class">com.atg.openssp.dataprovider.provider.handler.CurrencyDataHandler</entry>
+	<entry key="currency-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.CurrencyDataMaintenanceHandler</entry>
 
 	<!-- handler class to use for service authorization grant requests -->
 	<entry key="login-handler-class">com.atg.openssp.common.provider.LoginHandler</entry>
 
 	<!-- handler class to use service Pricelayer Data requests -->
 	<entry key="pricelayer-data-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataHandler</entry>
+	<entry key="pricelayer-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataMaintenanceHandler</entry>
 
 	<!-- handler class to use service Site Data requests -->
 	<entry key="site-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataHandler</entry>
@@ -40,9 +42,6 @@
 	<entry key="supplier-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataMaintenanceHandler</entry>
 
 	<entry key="geo-ip-info-handler-class">com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler</entry>
-	<!--
-	<entry key="geo-ip-info-handler-class">io.freestar.ssp.exchange.geo.GeoIpInfoHandler</entry>
-	-->
 
 	<!-- switch to enable/disable debugging -->
 	<entry key="debug">true</entry>

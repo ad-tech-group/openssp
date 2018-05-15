@@ -11,6 +11,7 @@ import com.atg.openssp.common.core.exchange.Exchange;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.core.exchange.ExchangeServer;
+import openrtb.tables.AuctionType;
 
 /**
  * Servlet implementation class SupplyVideoService
@@ -28,6 +29,7 @@ public class SupplyVideoService extends CoreSupplyServlet<RequestSessionAgent> {
 		info.setType(SessionAgentType.VIDEO);
 		info.setContentType("application/javascript");
 		info.setCharacterEncoding("UTF-8");
+		info.setAuctionType(AuctionType.SECOND_PRICE);
 		RequestSessionAgent agent =  new RequestSessionAgent(request, response, info);
 		info.setLoggingId(agent.getRequestid());
 		return agent;

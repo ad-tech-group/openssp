@@ -1,11 +1,11 @@
-package com.atg.openssp.core.entry.header;
+package com.atg.openssp.core.entry.banner;
 
 import com.atg.openssp.core.entry.AdUnit;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeaderBiddingRequest {
+public class BannerBiddingRequest {
     private ArrayList<AdUnit> adUnitsToBidUpon = new ArrayList<AdUnit>();
     private String id;
     private String site;

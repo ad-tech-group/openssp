@@ -40,19 +40,10 @@ public class SupplierDataHandler extends DataHandler {
                     log.warn("property file not found.");
                     location="";
                 }
-//                SupplierDto data = DataStore.getInstance().lookupSuppliers();
-//                if (DataStore.getInstance().wasSuppliersCreated()) {
                     GsonBuilder builder = new GsonBuilder();
                     Supplier.populateTypeAdapters(builder);
                     Gson gson = builder.create();
                     String content = new String(Files.readAllBytes(Paths.get(location+environment+"supplier_db.json")), StandardCharsets.UTF_8);
-//                    SupplierDto newData = gson.fromJson(content, SupplierDto.class);
-//                    for (Supplier s : newData.getSupplier()) {
-//                        DataStore.getInstance().insert(s);
-//                    }
-//                    DataStore.getInstance().clearSuppliersCreatedFlag();
-//                    data = DataStore.getInstance().lookupSuppliers();
-//                }
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
 

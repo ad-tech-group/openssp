@@ -163,7 +163,10 @@ public enum ContextProperties {
 	@RuntimeMeta(type = Scope.LOCAL)
 	CURRENCY_DATA_HANDLER_CLASS("currency-data-handler-class"),
 
-    /**
+	@RuntimeMeta(type = Scope.LOCAL)
+	CURRENCY_DATA_MAINTENANCE_HANDLER_CLASS("currency-data-maintenance-handler-class"),
+
+	/**
      * login service
      */
     @RuntimeMeta(type = Scope.LOCAL)
@@ -180,6 +183,9 @@ public enum ContextProperties {
 
 	@RuntimeMeta(type = Scope.LOCAL)
 	PRICELAYER_DATA_HANDLER_CLASS("pricelayer-data-handler-class"),
+
+	@RuntimeMeta(type = Scope.LOCAL)
+	PRICELAYER_DATA_MAINTENANCE_HANDLER_CLASS("pricelayer-data-maintenance-handler-class"),
 
 	/**
      * site data service

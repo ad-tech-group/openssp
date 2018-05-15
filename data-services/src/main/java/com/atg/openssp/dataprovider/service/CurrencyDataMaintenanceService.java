@@ -3,7 +3,7 @@ package com.atg.openssp.dataprovider.service;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.exception.RequestException;
 import com.atg.openssp.common.provider.DataHandler;
-import com.atg.openssp.dataprovider.provider.handler.SiteDataMaintenanceHandler;
+import com.atg.openssp.dataprovider.provider.handler.CurrencyDataMaintenanceHandler;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,20 +12,20 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Servlet implementation class SiteDataMaintenanceHandler
+ * Servlet implementation class CurrencyDataMaintenanceHandler
  *
  * @author Brian Sorensen
  */
-@WebServlet(value = SiteDataMaintenanceHandler.CONTEXT, asyncSupported = false, name = "SiteMaintenanceData-Service")
-public class SiteDataMaintenanceService extends CoreDataServlet<DataHandler> {
+@WebServlet(value = CurrencyDataMaintenanceHandler.CONTEXT, asyncSupported = false, name = "CurrencyMaintenanceData-Service")
+public class CurrencyDataMaintenanceService extends CoreDataServlet<DataHandler> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected DataHandler getHandler(final HttpServletRequest request, final HttpServletResponse response) throws RequestException {
-		String handlerClassName = LocalContext.getSiteDataMaintenanceHandlerClass();
+		String handlerClassName = LocalContext.getCurrencyDataMaintenanceHandlerClass();
 		if (handlerClassName == null) {
-			return new SiteDataMaintenanceHandler(request, response);
+			return new CurrencyDataMaintenanceHandler(request, response);
 		} else {
 			try {
 				Class handlerClass = Class.forName(handlerClassName);

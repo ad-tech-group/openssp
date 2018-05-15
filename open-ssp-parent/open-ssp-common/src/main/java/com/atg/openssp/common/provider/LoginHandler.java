@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public class LoginHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(LoginHandler.class);
-    public static final String TOKEN = "60aa4471-4219-483d-bc56-7b2ff581638b";
+    public static final String TOKEN = "Kermit-Says-Yes";
     public static final String CONTEXT = "/login/token";
     private final String user;
     private final String pw;

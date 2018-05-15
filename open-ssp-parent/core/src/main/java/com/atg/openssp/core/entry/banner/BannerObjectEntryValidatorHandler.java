@@ -4,9 +4,16 @@ import com.atg.openssp.common.core.cache.type.AppDataCache;
 import com.atg.openssp.common.core.cache.type.SiteDataCache;
 import com.atg.openssp.common.core.entry.EntryValidatorHandler;
 import com.atg.openssp.common.demand.BannerObjectParamValue;
+import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.core.entry.AdUnit;
+import com.atg.openssp.core.exchange.ExchangeServer;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import openrtb.bidrequest.model.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,99 +21,170 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
+/**
+ * @author bsorensen
+ */
 public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
     private final Logger log = LoggerFactory.getLogger(BannerObjectEntryValidatorHandler.class);
+    private final Gson gson;
 
-    public BannerObjectEntryValidatorHandler()
-    {
-
+    public BannerObjectEntryValidatorHandler() {
+        gson = new Gson();
     }
 
     @Override
     public List<ParamValue> validateEntryParams(HttpServletRequest request) throws RequestException {
         final ArrayList<ParamValue> pmList = new ArrayList<ParamValue>();
-        final BannerObjectParamValue pm = new BannerObjectParamValue();
 
         Cookie[] cList = request.getCookies();
         if (cList != null) {
             for (Cookie c : cList) {
-                log.info("cookie: "+c.getName());
+                log.debug("cookie: "+c.getName());
             }
         } else {
-            log.info("no cookies");
+            log.debug("no cookies");
         }
 
-        // Note:
-        // You may define your individual parameter or payloadto work with.
-        // Neither the "ParamValue" - object nor the list of params may fit to your requirements out of the box.
-
-        // geo data could be solved by a geo lookup service and ipaddress
-
-        if (request.getContentLength() > 0) {
+        BannerBiddingRequest biddingRequest = null;
+        if (request.getMethod().equalsIgnoreCase("post") && request.getContentLength() > 0) {
             byte[] buffer = new byte[request.getContentLength()];
             try {
                 ServletInputStream is = request.getInputStream();
                 is.read(buffer);
                 String json = new String(buffer);
-                log.info("I got content!!! : "+json);
+                StringReader bais = new StringReader(json);
+                biddingRequest = gson.fromJson(bais, BannerBiddingRequest.class);
+                bais.close();
+                log.debug("headerBiddingRequest: " + json.replaceAll("\n", "").replaceAll("  ", ""));
+
             } catch (IOException e) {
-                e.printStackTrace();
+                // ?? 400
+                log.warn("returned E906 " + e.getMessage(), e);
+                throw new RequestException(ERROR_CODE.E906, "could not read json input");
+            } catch (JsonSyntaxException e) {
+                log.warn("returned E906 " + e.getMessage());
+                throw new RequestException(ERROR_CODE.E906, "could not read json input");
+            } catch (Exception e) {
+                log.warn("returned E906 " + e.getMessage(), e);
+                throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
+        } else if (request.getMethod().equalsIgnoreCase("get") && request.getContentLength() > 0) {
+
+        } else {
+            log.warn("No Content");
+            log.warn(request.getHeader("User-Agent"));
         }
 
-        HashMap<String, List<String>> params = new LinkedHashMap();
-        Enumeration<String> penum = request.getParameterNames();
-        while(penum.hasMoreElements()) {
-            String key = penum.nextElement();
-            List<String> values = Arrays.asList(request.getParameterValues(key));
-            params.put(key, values);
-            log.info("param: "+key+" : "+values);
-        }
+        if (biddingRequest != null) {
 
-        /*
-        {
-        site=[Ljava.lang.String;@1d9a3344,
-        callback=[Ljava.lang.String;@b1dbe05,
-        callback_uid=[Ljava.lang.String;@4047a76c,
-        psa=[Ljava.lang.String;@78ba2df4,
-        id=[Ljava.lang.String;@347621b4,
-        size=[Ljava.lang.String;@527d5ca9,
-        promo_sizes=[Ljava.lang.String;@2ffcfd4d,
-        referrer=[Ljava.lang.String;@600a0cb}
+            List<AdUnit> adList = biddingRequest.getAdUnitsToBidUpon();
+            for (AdUnit a : adList) {
+                final HeaderBiddingParamValue pm = new HeaderBiddingParamValue();
 
-         */
-        final String siteId = request.getParameter("site");
-        final String appid = request.getParameter("app");
+                try {
+                    Site s = SiteDataCache.instance.get(biddingRequest.getSite());
+                    // We need to clone the site to support the cookie sync - buyerid addition in the user object
+                    Site site = s.clone();
+                    site.setPage(ExchangeServer.SCHEME+"://"+site.getDomain() + biddingRequest.getPage());
+                    site.setRef(request.getHeader("referer"));
+                    pm.setSite(site);
+                } catch (final EmptyCacheException e) {
+                    try {
+                        String requestedApp = biddingRequest.getApp();
+                        log.info("requested app: "+requestedApp);
+                        pm.setApp(AppDataCache.instance.get(requestedApp));
+                    } catch (final EmptyCacheException e1) {
+                        throw new RequestException(ERROR_CODE.E906, "missing site or app (1)");
+                    }
+                }
 
-        final String callback = request.getParameter("callback");
-        final String callbackUid = request.getParameter("callback_uid");
-        final String psa = request.getParameter("psa");
-        final String id = request.getParameter("id");
-        final String size = request.getParameter("size");
-        final String promoSizes = request.getParameter("promo_sizes");
-        final String referrer = request.getParameter("referrer");
+                pm.setRequestId(biddingRequest.getId());
+                pm.setFsSid(biddingRequest.getFsSid());
+                pm.setFsLoc(biddingRequest.getFsLoc());
+                pm.setFsUid(biddingRequest.getFsUid());
+                pm.setFsHash(biddingRequest.getFsHash());
+                pm.setPsa("0");
 
+                pm.setId(a.getId());
+                pm.setSize(a.getSize());
+                pm.setPromoSizes(a.getPromoSizes());
+
+                pm.setIpAddress(request.getRemoteAddr());
+                Enumeration<String> headerNames = request.getHeaderNames();
+                while(headerNames.hasMoreElements()) {
+                    String name = headerNames.nextElement();
+                    if ("user-agent".equalsIgnoreCase(name)) {
+                        pm.setBrowserUserAgentString(request.getHeader(name));
+                    }
+                }
+                pmList.add(pm);
+            }
+
+
+        } else {
+            final BannerObjectParamValue pm = new BannerObjectParamValue();
+            HashMap<String, String> params = new LinkedHashMap<>();
+            Enumeration<String> penum = request.getParameterNames();
+            while(penum.hasMoreElements()) {
+                String key = penum.nextElement();
+                List<String> values = Arrays.asList(request.getParameterValues(key));
+                if (values.size() > 0) {
+                    params.put(key, values.get(0));
+                }
+                log.debug("param: " + key + " : " + values);
+            }
 
         try {
-            pm.setSite(SiteDataCache.instance.get(siteId));
+            final String requestedSite = request.getParameter("site");
+            log.info("requested site: "+requestedSite);
+            Site s = SiteDataCache.instance.get(requestedSite);
+
+                // We need to clone the site to support the cookie sync - buyerid addition in the user object
+                Site site = s.clone();
+                site.setPage(ExchangeServer.SCHEME+"://"+site.getDomain() + biddingRequest.getPage());
+                site.setRef(request.getHeader("referer"));
+                pm.setSite(site);
         } catch (final EmptyCacheException e) {
             try {
-                pm.setApp(AppDataCache.instance.get(appid));
+                    String requestedApp = params.get("app");
+                    log.info("requested app: "+requestedApp);
+                    pm.setApp(AppDataCache.instance.get(requestedApp));
             } catch (final EmptyCacheException e1) {
-                throw new RequestException(e1.getMessage());
+                    throw new RequestException(ERROR_CODE.E906, "missing site or app (2)");
             }
         }
-        pm.setCallback(callback);
-        pm.setCallbackUid(callbackUid);
-        pm.setPsa(psa);
-        pm.setId(id);
-        pm.setSize(size);
-        pm.setPromoSizes(promoSizes);
-        pm.setReferrer(referrer);
+            pm.setRequestId(params.get("id"));
+            pm.setFsSid(params.get("_fssid"));
+            pm.setFsLoc(params.get("_fsloc"));
+            pm.setFsUid(params.get("_fsuid"));
+            pm.setFsHash(biddingRequest.getFsHash());
+            pm.setPsa("0");
+//            pm.setPsa(params.get("psa"));
 
+            pm.setId(params.get("id"));
+            pm.setSize(params.get("size"));
+            pm.setPromoSizes(params.get("promo_sizes"));
+//            pm.setCallback(params.get("callback"));
+//            pm.setCallbackUid(params.get("callback_uid"));
+//            pm.setFsHash(params.get("_fshash"));
+
+            pm.setIpAddress(request.getRemoteAddr());
+            pm.setBrowserUserAgentString(request.getHeader("User-Agent"));
         pmList.add(pm);
+        }
+
+        // pm.setDomain(checkValue(request.getParameter("domain"), ERROR_CODE.E906, "Domain"));
+        // pm.setH(checkValue(request.getParameter("h"), ERROR_CODE.E906, "Height"));
+        // pm.setW(checkValue(request.getParameter("w"), ERROR_CODE.E906, "Width"));
+        // pm.setMimes(convertMimes(request.getParameter("mimes")));
+        // pm.setPage(checkValue(request.getParameter("page"), pm.getDomain()));
+        // pm.setStartdelay(Integer.valueOf(checkValue(request.getParameter("sd"), "0")));
+        // pm.setProtocols(convertProtocolValues(request.getParameter("prot")));
+
+
         return pmList;
     }
 }

@@ -7,7 +7,7 @@ import openrtb.bidrequest.model.App;
  * 
  * Use this class as data holder for the request params. Change the fields as you require.
  * 
- * @author André Schmer
+ * @author Brian Sorensen
  *
  */
 public class BannerObjectParamValue extends ParamValue {

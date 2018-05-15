@@ -11,7 +11,7 @@
 	
 	<!-- the timeout in ms for execution the executor service -->
 	<!-- default is 500ms --> 
-	<entry key="cdl-timeout">1200</entry>
+	<entry key="cdl-timeout">1000</entry>
 
 	<!-- credential for remote access -->
 	<entry key="master_pw">frogs</entry>
