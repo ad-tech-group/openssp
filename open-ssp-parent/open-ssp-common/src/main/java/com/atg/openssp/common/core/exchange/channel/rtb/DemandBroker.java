@@ -76,35 +76,41 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		if (bidrequest == null) {
 			return null;
 		}
+		BidRequest workingBidRequest = bidrequest.clone();
 		long startTS = System.currentTimeMillis();
 
 
 		try {
-            User user = bidrequest.getUser();
+            User user = workingBidRequest.getUser();
             try {
 
                 long csBegin = System.currentTimeMillis();
                 if (CookieSyncManager.getInstance().supportsCookieSync()) {
                     String userId = user.getId();
-                    CookieSyncDTO cookieSyncDTO = CookieSyncManager.getInstance().get(userId);
-                    if (cookieSyncDTO != null) {
-                        DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
-                        if (dspDto != null) {
-                            String buyerId = dspDto.getUid();
-                            user.setBuyeruid(buyerId);
-                            DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
+                    if (userId != null && !"".equals(userId)) {
+                        CookieSyncDTO cookieSyncDTO = CookieSyncManager.getInstance().get(userId);
+                        if (cookieSyncDTO != null) {
+                            DspCookieDto dspDto = cookieSyncDTO.lookup(supplier.getShortName());
+                            if (dspDto != null) {
+                                String buyerId = dspDto.getUid();
+                                user.setBuyeruid(buyerId);
+                                DspCookieSyncLogProcessor.instance.setLogData("include-buyer-id", userId, Long.toString(supplier.getSupplierId()), supplier.getShortName(), buyerId);
+                            }
                         }
+                        long csEnd = System.currentTimeMillis();
+                        LOG.info(supplier.getShortName()+" Cookie Sync Update time: "+(csEnd-csBegin));
                     }
-                    long csEnd = System.currentTimeMillis();
-                    LOG.info("Cookie Sync Update time: "+(csEnd-csBegin));
                 }
             } catch (Exception ex) {
-                LOG.error(ex.getMessage(), ex);
+                LOG.error("Error on cookie sync lookup", ex);
             }
 
-            final String jsonBidrequest = info.getDemandBrokerFilter(supplier, gson, bidrequest).filterRequest(gson, bidrequest);
-			LOG.debug("bidrequest: " + jsonBidrequest);
-            System.out.println("bidrequest: " + jsonBidrequest);
+			DemandBrokerFilter brokerFilter = info.getDemandBrokerFilter(supplier, gson, workingBidRequest);
+
+            final String jsonBidrequest = brokerFilter.filterRequest(gson, workingBidRequest);
+
+			LOG.debug(supplier.getShortName()+" bidrequest: " + jsonBidrequest);
+            System.out.println(supplier.getShortName()+" bidrequest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
@@ -114,10 +120,9 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
                     System.out.println(supplier.getShortName()+" bidresponse: no content");
 					RtbResponseLogProcessor.instance.setLogData("no content", "bidresponse", supplier.getShortName());
 				} else {
-					LOG.debug("bidresponse: " + result);
-                    System.out.println("bidresponse: " + result);
+					LOG.debug(supplier.getShortName()+" bidresponse: " + result);
+                    System.out.println(supplier.getShortName()+" bidresponse: " + result);
 					RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
-					DemandBrokerFilter brokerFilter = info.getDemandBrokerFilter(supplier, gson, bidrequest);
 					final BidResponse bidResponse = brokerFilter.filterResponse(gson, result);
 
 					Supplier s = supplier.clone();
@@ -125,19 +130,22 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
                     String cookieSync = s.getCookieSync();
                     if (cookieSync != null && !"".equals(cookieSync)) {
-                        LOG.debug("set cookie sync value");
-                        System.out.println("set cookie sync value");
+                        LOG.debug(supplier.getShortName()+" set cookie sync value");
+                        System.out.println(supplier.getShortName()+".. set cookie sync value");
                         StringBuilder sspRedirUrl = new StringBuilder();
-                        String uid = bidrequest.getUser().getId();
-                        String addr = "openssp.pub.network";//getSessionAgent().getHttpRequest().getLocalAddr();
-                        sspRedirUrl.append(SCHEME + "://" + addr + "/open-ssp/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
+                        String uid = workingBidRequest.getUser().getId();
+                        //TODO: BKS
+                        String addr = "openssp.pub.network";
+                        System.out.println("forgetmenot: "+getSessionAgent().getHttpRequest().getLocalName());
+						String context = getSessionAgent().getHttpRequest().getContextPath();
+                        sspRedirUrl.append(SCHEME + "://" + addr + "/"+context+"/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
                         s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
                     }
 					return container;
 				}
 			} else {
-                LOG.debug("bidresponse: is null");
-                System.out.println("bidresponse: is null");
+                LOG.debug(supplier.getShortName()+" bidresponse: is null");
+                System.out.println(supplier.getShortName()+" bidresponse: is null");
                 RtbResponseLogProcessor.instance.setLogData("is null", "bidresponse", supplier.getShortName());
             }
 		} catch (final BidProcessingException e) {
@@ -151,7 +159,7 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 		} finally {
             long endTS = System.currentTimeMillis();
 
-            TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), bidrequest.getId(), bidrequest.getUser().getId(), supplier.getSupplierId(), supplier.getShortName(), startTS, endTS, endTS-startTS);
+            TimeInfoLogProcessor.instance.setLogData(info.getLoggingId(), workingBidRequest.getId(), workingBidRequest.getUser().getId(), supplier.getSupplierId(), supplier.getShortName(), startTS, endTS, endTS-startTS);
 		}
 		return null;
 	}

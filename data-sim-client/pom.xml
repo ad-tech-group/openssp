@@ -12,37 +12,47 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-	
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.6.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.6.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>2.8</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.2</version>
-		</dependency>
 		<dependency>
 			<groupId>com.atg.openssp</groupId>
 			<artifactId>open-ssp-common</artifactId>
 			<version>0.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.atg.openssp</groupId>
+					<artifactId>open-ssp-restful-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.atg.openssp</groupId>
+					<artifactId>open-ssp-utilities</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.quartz-scheduler</groupId>
+					<artifactId>quartz</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.quartz-scheduler</groupId>
+					<artifactId>quartz-jobs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.codahale.metrics</groupId>
+					<artifactId>metrics-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.5</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
     </dependencies>
 	<build>
@@ -92,16 +102,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<distributionManagement>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>freestar-snapshots</name>
-			<url>https://freestar.jfrog.io/freestar/libs-snapshot</url>
-		</snapshotRepository>
-		<repository>
-			<id>central</id>
-			<name>freestar-releases</name>
-			<url>https://freestar.jfrog.io/freestar/libs-release</url>
-		</repository>
-	</distributionManagement>
 </project>

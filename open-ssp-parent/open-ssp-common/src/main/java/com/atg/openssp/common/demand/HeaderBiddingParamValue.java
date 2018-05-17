@@ -45,6 +45,7 @@ public class HeaderBiddingParamValue extends ParamValue {
     private String fsUid;
     private String size;
     private String promoSizes;
+    private Double overrideBidFloor;
 
     public void setRequestId(String requestId) {
         this.requestId = requestId;
@@ -123,4 +124,11 @@ public class HeaderBiddingParamValue extends ParamValue {
         return promoSizes;
     }
 
+    public void setOverrideBidFloor(Double overrideBidFloor) {
+        this.overrideBidFloor = overrideBidFloor;
+    }
+
+    public Double getOverrideBidFloor() {
+        return overrideBidFloor;
+    }
 }

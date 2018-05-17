@@ -113,13 +113,25 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
             //i.setVideo(createVideo(pValues));
             i.setBanner(createBanner(pValues));
             //i.setNative(createNative(pValues));
-            try {
-                i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
-                i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
-            } catch (EmptyCacheException e) {
-                log.info("price floor does not exist for site: "+site.getId());
-                i.setBidfloor(0f);
-                i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+
+            Double overrideBidFloor = pValues.getOverrideBidFloor();
+            if (overrideBidFloor != null) {
+                i.setBidfloor(overrideBidFloor.floatValue());
+                try {
+                    i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
+                } catch (EmptyCacheException e) {
+                    log.info("price floor does not exist for site: "+site.getId());
+                    i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+                }
+            } else {
+                try {
+                    i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
+                    i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
+                } catch (EmptyCacheException e) {
+                    log.info("price floor does not exist for site: "+site.getId());
+                    i.setBidfloor(0f);
+                    i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+                }
             }
             i.setSecure(ImpressionSecurity.NON_SECURE);
             bidRequest.addImp(i);
@@ -213,11 +225,14 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         b.setH(size.getH());
         sizes.add(size);
 
-        StringTokenizer st = new StringTokenizer(pValues.getPromoSizes(), ",");
-        while(st.hasMoreTokens()) {
-            String token = st.nextToken();
-            Banner.BannerSize ts = new Banner.BannerSize(token);
-            sizes.add(ts);
+        String promoSizesString = pValues.getPromoSizes();
+        if (promoSizesString != null) {
+            StringTokenizer st = new StringTokenizer(promoSizesString, ",");
+            while(st.hasMoreTokens()) {
+                String token = st.nextToken();
+                Banner.BannerSize ts = new Banner.BannerSize(token);
+                sizes.add(ts);
+            }
         }
         Collections.sort(sizes);
         b.setWmin(sizes.get(0).getW());

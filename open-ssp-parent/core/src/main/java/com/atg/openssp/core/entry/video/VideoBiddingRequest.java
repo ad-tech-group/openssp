@@ -16,6 +16,41 @@ public class VideoBiddingRequest {
     private String _fsuid;
     private String _fssid;
 
+    /*
+	private List<String> mimes;
+	// required
+	private Integer minduration;
+	// required
+	private Integer maxduration;
+	// required
+	private int w;
+	// required
+	private int h;
+	// required
+	private int startdelay = 0;
+
+	// required
+    @Until(2.2)
+	private int protocol;
+
+	@Since(2.2)
+	private List<Integer> protocols;
+
+	private List<Integer> battr;
+
+	// required
+	private Integer linearity;
+
+	private List<Banner> companionad;
+
+	// required
+	private List<Integer> api;
+
+	private Object ext;
+     */
+
+
+
     public void setId(String id) {
         this.id = id;
     }

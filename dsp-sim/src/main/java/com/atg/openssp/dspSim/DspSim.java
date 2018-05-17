@@ -4,24 +4,14 @@ import com.atg.openssp.dspSim.model.ModelException;
 import com.atg.openssp.dspSim.model.ad.AdModel;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpsConfigurator;
-import com.sun.net.httpserver.HttpsParameters;
-import com.sun.net.httpserver.HttpsServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
-import javax.net.ssl.*;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
-import java.security.KeyStore;
 
 /**
  * @author Brian Sorensen
  */
-@Configuration
-@PropertySource("application.properties")
 public class DspSim {
     private static final Logger log = LoggerFactory.getLogger(DspSim.class);
     private DspModel dspModel;

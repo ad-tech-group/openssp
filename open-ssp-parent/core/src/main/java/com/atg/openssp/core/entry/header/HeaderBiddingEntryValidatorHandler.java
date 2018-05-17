@@ -87,7 +87,10 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                     Site s = SiteDataCache.instance.get(biddingRequest.getSite());
                     // We need to clone the site to support the cookie sync - buyerid addition in the user object
                     Site site = s.clone();
-                    site.setPage(ExchangeServer.SCHEME+"://"+site.getDomain() + biddingRequest.getPage());
+                    String overridePage = biddingRequest.getPage();
+                    if (overridePage != null) {
+                        site.setPage(ExchangeServer.SCHEME+"://"+site.getDomain() + biddingRequest.getPage());
+                    }
                     site.setRef(request.getHeader("referer"));
                     pm.setSite(site);
                 } catch (final EmptyCacheException e) {
@@ -110,6 +113,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 pm.setId(a.getId());
                 pm.setSize(a.getSize());
                 pm.setPromoSizes(a.getPromoSizes());
+                pm.setOverrideBidFloor(a.getBidFloor());
 
                 pm.setIpAddress(request.getRemoteAddr());
                 Enumeration<String> headerNames = request.getHeaderNames();

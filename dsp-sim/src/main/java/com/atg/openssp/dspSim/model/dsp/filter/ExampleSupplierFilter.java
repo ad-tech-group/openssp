@@ -1,4 +1,4 @@
-package io.freestar.ssp.dspSim.filter;
+package com.atg.openssp.dspSim.model.dsp.filter;
 
 import com.atg.openssp.dspSim.model.dsp.filter.DspReturnFilter;
 import com.google.gson.Gson;
@@ -6,7 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import openrtb.bidresponse.model.BidResponse;
 
-public class MangoMediaFilter extends DspReturnFilter {
+/**
+ * Some DSPs may have a subset of the spec that they return.
+ */
+public class ExampleSupplierFilter extends DspReturnFilter {
     @Override
     public String filterResult(BidResponse brsp) {
         JsonObject filter = new Gson().toJsonTree(brsp).getAsJsonObject();

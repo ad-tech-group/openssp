@@ -1,11 +1,12 @@
 package com.atg.openssp.core.entry;
 
-public class AdUnit {
+public abstract class AdUnit {
     private String id;
     private String adUnitCode;
     private String size;
     private String promo_sizes;
     private String placementId;
+    private Double bidFloor;
 
     public void setId(String id) {
         this.id = id;
@@ -45,5 +46,13 @@ public class AdUnit {
 
     public String getPlacementId() {
         return placementId;
+    }
+
+    public Double getBidFloor() {
+        return bidFloor;
+    }
+
+    public void setBidFloor(Double bidFloor) {
+        this.bidFloor = bidFloor;
     }
 }

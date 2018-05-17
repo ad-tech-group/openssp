@@ -16,6 +16,35 @@ public class BannerBiddingRequest {
     private String _fsuid;
     private String _fssid;
 
+    /*
+	private int w;
+	private int h;
+
+	private String id;
+	// optional
+	private Integer pos;
+	private List<Integer> btype;// blocked creative types
+	private List<Integer> battr;
+	private String[] mimes;// commaseparated list
+	private int topframe = 0;
+	private int[] expdir; // expandable directions 1-6
+	private int[] api;
+	private Object ext;
+
+	@Since(2.2)
+	private int wmax;
+
+	@Since(2.2)
+	private int hmax;
+
+	@Since(2.2)
+	private int wmin;
+
+	@Since(2.2)
+	private int hmin;
+	private Object[] format;
+     */
+
     public void setId(String id) {
         this.id = id;
     }

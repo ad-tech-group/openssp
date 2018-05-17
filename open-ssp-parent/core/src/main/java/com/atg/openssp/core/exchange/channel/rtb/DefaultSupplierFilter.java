@@ -1,4 +1,4 @@
-package io.freestar.ssp.channel.rtb;
+package com.atg.openssp.core.exchange.channel.rtb;
 
 import com.atg.openssp.common.core.exchange.channel.rtb.DemandBrokerFilter;
 import com.google.gson.Gson;
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ArTeeBeeFilter extends DemandBrokerFilter {
-    private static final Logger LOG = LoggerFactory.getLogger(ArTeeBeeFilter.class);
+public class DefaultSupplierFilter extends DemandBrokerFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultSupplierFilter.class);
     private final static String AUCTION_PRICE = "\\$\\{AUCTION_PRICE\\}";
     private final static Pattern auction_price = Pattern.compile(AUCTION_PRICE);
 

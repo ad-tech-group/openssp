@@ -162,11 +162,9 @@ public class SimBidderPanel extends JPanel implements ListSelectionListener, Act
         pMiddle.setLayout(new BoxLayout(pMiddle, BoxLayout.Y_AXIS));
         addItem(pMiddle, model.getTemplateText("BIDDER_ID"), lbId);
         addItem(pMiddle, model.getTemplateText("IMPRESSION_ID"), tfImpId);
-        tfImpId.setEditable(false);
         addItem(pMiddle, model.getTemplateText("PRICE"), tfPrice);
         addItem(pMiddle, model.getTemplateText("AD_ID"), tfAdId);
         addItem(pMiddle, model.getTemplateText("N_URL"),  tfNUrl);
-        tfNUrl.setEditable(false);
         addItem(pMiddle, model.getTemplateText("ADM"), tfAdm);
         addItem(pMiddle, model.getTemplateText("A_DOMAIN"), new JScrollPane(lADomain));
         lADomain.setVisibleRowCount(3);
