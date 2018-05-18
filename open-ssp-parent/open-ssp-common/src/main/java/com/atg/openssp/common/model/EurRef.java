@@ -40,4 +40,10 @@ public class EurRef implements Serializable {
 
 	public static void populateTypeAdapters(GsonBuilder builder) {
 	}
+
+	@Override
+	public String toString()
+	{
+		return currency+":"+rate;
+	}
 }

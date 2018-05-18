@@ -32,7 +32,7 @@ public class SupplierModel extends BaseModel {
 
     private void loadProperties() {
         try {
-            File file = new File("SupplierSimClient.properties");
+            File file = new File("supplier-client.properties");
             InputStream is;
             if (file.exists()) {
                 is = new FileInputStream(file);
@@ -46,8 +46,7 @@ public class SupplierModel extends BaseModel {
         }
     }
 
-    public Properties getProperties()
-    {
+    public Properties getProperties() {
         return props;
     }
 
@@ -123,6 +122,22 @@ public class SupplierModel extends BaseModel {
 
     public void sendListCommand() throws ModelException {
         supplierHandler.sendListCommand();
+    }
+
+    public void sendLoadCommand() throws ModelException {
+        supplierHandler.sendLoadCommand();
+    }
+
+    public void sendExportCommand() throws ModelException {
+        supplierHandler.sendExportCommand();
+    }
+
+    public void sendImportCommand() throws ModelException {
+        supplierHandler.sendImportCommand();
+    }
+
+    public void sendClearCommand() throws ModelException {
+        supplierHandler.sendClearCommand();
     }
 
     public String getTemplateText(String tag) {

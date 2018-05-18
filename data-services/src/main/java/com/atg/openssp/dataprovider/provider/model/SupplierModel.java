@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import util.properties.ProjectProperty;
 
 import javax.xml.bind.PropertyException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,11 +32,60 @@ public class SupplierModel {
         }
     }
 
-    public void exportSuppliers() {
+    public void exportSuppliers(String exportName) {
+        if (LocalContext.isSiteDataServiceEnabled()) {
+            synchronized (supplierDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location="";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    Site.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
 
+                    PrintWriter pw = new PrintWriter(new FileWriter(location+exportName+".json"));
+                    pw.println(gson.toJson(supplierDto));
+                    pw.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
     }
 
-    public void importSuppliers() {
+    public void importSuppliers(String importName) {
+        if (LocalContext.isSupplierDataServiceEnabled()) {
+            synchronized (supplierDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location="";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    Supplier.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
+                    String content = new String(Files.readAllBytes(Paths.get(location + importName+".json")), StandardCharsets.UTF_8);
+                    SupplierDto newData = gson.fromJson(content, SupplierDto.class);
+                    DataStore.getInstance().clearSupplier();
+                    for (Supplier s : newData.getSupplier()) {
+                        DataStore.getInstance().insert(s);
+                    }
+                    initSuppliers();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    public void loadSuppliers() {
         if (LocalContext.isSupplierDataServiceEnabled()) {
             synchronized (supplierDto) {
                 try {
@@ -68,7 +119,7 @@ public class SupplierModel {
             for (Supplier s : suppliers) {
                 DataStore.getInstance().insert(s);
             }
-            importSuppliers();
+            initSuppliers();
         }
     }
 
@@ -83,28 +134,35 @@ public class SupplierModel {
     public void insert(Supplier s) {
         synchronized (supplierDto) {
             DataStore.getInstance().insert(s);
-            importSuppliers();
+            initSuppliers();
         }
     }
 
     public void remove(Supplier s) {
         synchronized (supplierDto) {
             DataStore.getInstance().remove(s);
-            importSuppliers();
+            initSuppliers();
         }
     }
 
     public void update(Supplier s) {
         synchronized (supplierDto) {
             DataStore.getInstance().update(s);
-            importSuppliers();
+            initSuppliers();
+        }
+    }
+
+    public void load() {
+        synchronized (supplierDto) {
+            DataStore.getInstance().clearSupplier();
+            initSuppliers();
         }
     }
 
     public void clear() {
         synchronized (supplierDto) {
             DataStore.getInstance().clearSupplier();
-            importSuppliers();
+            initSuppliers();
         }
     }
 

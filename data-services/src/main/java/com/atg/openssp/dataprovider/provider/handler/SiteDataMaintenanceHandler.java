@@ -67,7 +67,15 @@ public class SiteDataMaintenanceHandler extends DataHandler {
                         result.setSites(SiteModel.getInstance().lookupSites().getSites());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.IMPORT) {
-                        SiteModel.getInstance().importSites();
+                        SiteModel.getInstance().importSites("site_export_db");
+                        result.setSites(SiteModel.getInstance().lookupSites().getSites());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.EXPORT) {
+                        SiteModel.getInstance().exportSites("site_export_db");
+                        result.setSites(SiteModel.getInstance().lookupSites().getSites());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.LOAD) {
+                        SiteModel.getInstance().loadSites();
                         result.setSites(SiteModel.getInstance().lookupSites().getSites());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.CLEAR) {

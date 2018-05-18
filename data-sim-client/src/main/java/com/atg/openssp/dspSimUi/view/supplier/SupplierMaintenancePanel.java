@@ -69,6 +69,10 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
     private final JButton bRemove;
     private final JButton bAdd;
     private final JButton bRefresh;
+    private final JButton bLoad;
+    private final JButton bImport;
+    private final JButton bExport;
+    private final JButton bClear;
     private Supplier active;
 
     public SupplierMaintenancePanel(SupplierModel model) {
@@ -108,6 +112,10 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
         bRemove = new JButton(model.getTemplateText("SUPPLIER_REMOVE"));
         bAdd = new JButton(model.getTemplateText("SUPPLIER_INIT"));
         bRefresh = new JButton(model.getTemplateText("SUPPLIER_LIST_REFRESH"));
+        bLoad = new JButton(model.getTemplateText("SUPPLIER_LOAD"));
+        bImport = new JButton(model.getTemplateText("SUPPLIER_IMPORT"));
+        bExport = new JButton(model.getTemplateText("SUPPLIER_EXPORT"));
+        bClear = new JButton(model.getTemplateText("SUPPLIER_CLEAR"));
 
         JPanel pTop = new JPanel();
         add(pTop, BorderLayout.NORTH);
@@ -139,6 +147,14 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
         bRemove.setEnabled(false);
         bRemove.addActionListener(this);
         addItem(pRight, "", bRemove);
+        bLoad.addActionListener(this);
+        addItem(pRight, "", bLoad);
+        bImport.addActionListener(this);
+        addItem(pRight, "", bImport);
+        bExport.addActionListener(this);
+        addItem(pRight, "", bExport);
+        bClear.addActionListener(this);
+        addItem(pRight, "", bClear);
 
         pMiddle.setBorder(new TitledBorder(model.getTemplateText("ACTIVE_SUPPLIER")));
         pMiddle.setLayout(new BoxLayout(pMiddle, BoxLayout.Y_AXIS));
@@ -355,6 +371,34 @@ public class SupplierMaintenancePanel extends JPanel implements ListSelectionLis
                 }
             } else {
                 model.setMessageAsWarning("No Supplier selected.");
+            }
+            repaint();
+        } else if (ev.getSource() == bLoad) {
+            try {
+                model.sendLoadCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+            repaint();
+        } else if (ev.getSource() == bExport) {
+            try {
+                model.sendExportCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+            repaint();
+        } else if (ev.getSource() == bImport) {
+            try {
+                model.sendImportCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+            repaint();
+        } else if (ev.getSource() == bClear) {
+            try {
+                model.sendClearCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
             }
             repaint();
         } else if (ev.getSource() == bAddAllowedAdFormat) {

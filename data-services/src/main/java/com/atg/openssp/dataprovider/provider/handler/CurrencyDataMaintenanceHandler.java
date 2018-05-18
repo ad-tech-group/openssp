@@ -25,7 +25,7 @@ public class CurrencyDataMaintenanceHandler extends DataHandler {
     public static final String CONTEXT = "/maintain/eurref";
 
     public CurrencyDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
-        if (LocalContext.isSiteDataServiceEnabled()) {
+        if (LocalContext.isCurrencyDataServiceEnabled()) {
             try {
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
@@ -62,7 +62,15 @@ public class CurrencyDataMaintenanceHandler extends DataHandler {
                         result.setDto(CurrencyModel.getInstance().lookupCurrency());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.IMPORT) {
-                        CurrencyModel.getInstance().importCurrency();
+                        CurrencyModel.getInstance().importCurrency("currency_export_db");
+                        result.setDto(CurrencyModel.getInstance().lookupCurrency());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.EXPORT) {
+                        CurrencyModel.getInstance().exportCurrency("currency_export_db");
+                        result.setDto(CurrencyModel.getInstance().lookupCurrency());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.LOAD) {
+                        CurrencyModel.getInstance().loadCurrency();
                         result.setDto(CurrencyModel.getInstance().lookupCurrency());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.CLEAR) {

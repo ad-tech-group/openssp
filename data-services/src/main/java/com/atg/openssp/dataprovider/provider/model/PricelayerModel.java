@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import util.properties.ProjectProperty;
 
 import javax.xml.bind.PropertyException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,11 +32,60 @@ public class PricelayerModel {
         }
     }
 
-    public void exportPricelayers() {
+    public void exportPricelayers(String exportName) {
+        if (LocalContext.isSiteDataServiceEnabled()) {
+            synchronized (pricelayerDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location="";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    Site.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
 
+                    PrintWriter pw = new PrintWriter(new FileWriter(location+exportName+".json"));
+                    pw.println(gson.toJson(pricelayerDto));
+                    pw.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
     }
 
-    public void importPricelayers() {
+    public void importPricelayers(String importName) {
+        if (LocalContext.isPricelayerDataServiceEnabled()) {
+            synchronized (pricelayerDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location="";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    Pricelayer.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
+                    String content = new String(Files.readAllBytes(Paths.get(location + importName+".json")), StandardCharsets.UTF_8);
+                    PricelayerDto newData = gson.fromJson(content, PricelayerDto.class);
+                    DataStore.getInstance().clearPricelayer();
+                    for (Pricelayer s : newData.getPricelayer()) {
+                        DataStore.getInstance().insert(s);
+                    }
+                    initPricelayers();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    public void loadPricelayers() {
         if (LocalContext.isPricelayerDataServiceEnabled()) {
             synchronized (pricelayerDto) {
                 try {
@@ -68,7 +119,7 @@ public class PricelayerModel {
             for (Pricelayer s : pricelayers) {
                 DataStore.getInstance().insert(s);
             }
-            importPricelayers();
+            initPricelayers();
         }
     }
 
@@ -83,28 +134,35 @@ public class PricelayerModel {
     public void insert(Pricelayer s) {
         synchronized (pricelayerDto) {
             DataStore.getInstance().insert(s);
-            importPricelayers();
+            initPricelayers();
         }
     }
 
     public void remove(Pricelayer s) {
         synchronized (pricelayerDto) {
             DataStore.getInstance().remove(s);
-            importPricelayers();
+            initPricelayers();
         }
     }
 
     public void update(Pricelayer s) {
         synchronized (pricelayerDto) {
             DataStore.getInstance().update(s);
-            importPricelayers();
+            initPricelayers();
+        }
+    }
+
+    public void load() {
+        synchronized (pricelayerDto) {
+            DataStore.getInstance().clearPricelayer();
+            initPricelayers();
         }
     }
 
     public void clear() {
         synchronized (pricelayerDto) {
             DataStore.getInstance().clearPricelayer();
-            importPricelayers();
+            initPricelayers();
         }
     }
 

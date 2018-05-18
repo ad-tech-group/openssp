@@ -28,7 +28,7 @@ public class PricelayerDataMaintenanceHandler extends DataHandler {
     public static final String CONTEXT = "/maintain/pricelayer";
 
     public PricelayerDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
-        if (LocalContext.isSiteDataServiceEnabled()) {
+        if (LocalContext.isPricelayerDataServiceEnabled()) {
             try {
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
@@ -67,7 +67,15 @@ public class PricelayerDataMaintenanceHandler extends DataHandler {
                         result.setPricelayers(PricelayerModel.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.IMPORT) {
-                        PricelayerModel.getInstance().importPricelayers();
+                        PricelayerModel.getInstance().importPricelayers("price_layer_export");
+                        result.setPricelayers(PricelayerModel.getInstance().lookupPricelayers().getPricelayer());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.EXPORT) {
+                        PricelayerModel.getInstance().exportPricelayers("price_layer_export");
+                        result.setPricelayers(PricelayerModel.getInstance().lookupPricelayers().getPricelayer());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.LOAD) {
+                        PricelayerModel.getInstance().loadPricelayers();
                         result.setPricelayers(PricelayerModel.getInstance().lookupPricelayers().getPricelayer());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.CLEAR) {

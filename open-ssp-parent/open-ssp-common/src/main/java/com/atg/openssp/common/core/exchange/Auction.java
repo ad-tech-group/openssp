@@ -131,7 +131,7 @@ public class Auction {
 					logBidList);
 
 		}
-		LOGGER.info("got auction: "+dealBidListMap+"::"+nonDealBidListMap);
+		LOGGER.debug("got auction: "+dealBidListMap+"::"+nonDealBidListMap);
 
 
 
@@ -144,7 +144,7 @@ public class Auction {
 				winningProviderMap.put(e.getKey(), evaluateWinner(info, dealBidList));
 			}
 		}
-		LOGGER.info("first run done");
+		LOGGER.debug("first run done");
 
 		for (Entry<String, List<Bidder>> e : nonDealBidListMap.entrySet()) {
 			RtbAdProvider winningProvider = winningProviderMap.get(e.getKey());
@@ -155,12 +155,12 @@ public class Auction {
 				winningProviderMap.put(e.getKey(), evaluateWinner(info, nonDealBidList));
 			}
 		}
-		LOGGER.info("second run done");
+		LOGGER.debug("second run done");
 
 		Set<Entry<String, RtbAdProvider>> winningProviderSet = winningProviderMap.entrySet();
 		AuctionResult dealWinner;
 		if (winningProviderSet.size() > 1) {
-			LOGGER.info("set>1");
+			LOGGER.debug("set>1");
 			dealWinner = new MultipleAuctionResult();
 			// just use the first one for the supplier
 			dealWinner.setBidRequest((BidRequest) bidExchange.getAllBidRequests().values().toArray()[0]);
@@ -171,7 +171,7 @@ public class Auction {
 			}
 
 		} else if (winningProviderSet.size() == 1) {
-			LOGGER.info("set <= 1");
+			LOGGER.debug("set <= 1");
 			dealWinner = new SingularAuctionResult();
 			String key = (String) winningProviderMap.keySet().toArray()[0];
 			RtbAdProvider winningProvider = winningProviderMap.get(key);
@@ -181,10 +181,10 @@ public class Auction {
 			}
 		}
 		else {
-			LOGGER.info("set == 0");
+			LOGGER.debug("set == 0");
 			dealWinner = new SingularAuctionResult();
 		}
-		LOGGER.info("return winner: "+dealWinner);
+		LOGGER.debug("return winner: "+dealWinner);
 
 		return dealWinner;
 	}

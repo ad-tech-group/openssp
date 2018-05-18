@@ -27,7 +27,7 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
     public static final String CONTEXT = "/maintain/supplier";
 
     public SupplierDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
-        if (LocalContext.isSiteDataServiceEnabled()) {
+        if (LocalContext.isSupplierDataServiceEnabled()) {
             try {
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
@@ -64,7 +64,15 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
                         result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.IMPORT) {
-                        SupplierModel.getInstance().importSuppliers();
+                        SupplierModel.getInstance().importSuppliers("supplier_export_db");
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.EXPORT) {
+                        SupplierModel.getInstance().exportSuppliers("supplier_export_db");
+                        result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
+                        result.setStatus(ResponseStatus.SUCCESS);
+                    } else if (dto.getCommand() == MaintenanceCommand.LOAD) {
+                        SupplierModel.getInstance().loadSuppliers();
                         result.setSupplier(SupplierModel.getInstance().lookupSuppliers().getSupplier());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.CLEAR) {
@@ -83,7 +91,7 @@ public class SupplierDataMaintenanceHandler extends DataHandler {
                 } else {
                     response.setStatus(401);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 response.setStatus(400);
                 log.error(e.getMessage(), e);
             }

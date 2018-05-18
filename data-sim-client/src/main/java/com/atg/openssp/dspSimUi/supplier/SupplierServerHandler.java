@@ -77,6 +77,22 @@ public class SupplierServerHandler implements Runnable {
         sendCommand(SupplierCommandType.REMOVE, s);
     }
 
+    public void sendLoadCommand() throws ModelException {
+        sendCommand(SupplierCommandType.LOAD);
+    }
+
+    public void sendImportCommand() throws ModelException {
+        sendCommand(SupplierCommandType.IMPORT);
+    }
+
+    public void sendExportCommand() throws ModelException {
+        sendCommand(SupplierCommandType.EXPORT);
+    }
+
+    public void sendClearCommand() throws ModelException {
+        sendCommand(SupplierCommandType.CLEAR);
+    }
+
     private void sendCommand(SupplierCommandType type) throws ModelException {
         sendCommand(type, null);
     }

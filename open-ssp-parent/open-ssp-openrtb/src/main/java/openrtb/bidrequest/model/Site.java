@@ -88,6 +88,9 @@ public final class Site implements Cloneable {
 		this.cat.clear();
 		if (cat != null) {
 			for (ContentCategory c : cat) {
+				if (c == null) {
+					continue;
+				}
 				this.cat.add(c.getValue());
 			}
 		}
@@ -97,6 +100,9 @@ public final class Site implements Cloneable {
         this.pagecat.clear();
         if (pagecat != null) {
             for (ContentCategory c : pagecat) {
+				if (c == null) {
+					continue;
+				}
                 this.pagecat.add(c.getValue());
             }
         }
@@ -106,6 +112,9 @@ public final class Site implements Cloneable {
         this.sectioncat.clear();
         if (sectioncat != null) {
             for (ContentCategory c : sectioncat) {
+				if (c == null) {
+					continue;
+				}
                 this.sectioncat.add(c.getValue());
             }
         }

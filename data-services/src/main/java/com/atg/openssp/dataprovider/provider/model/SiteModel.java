@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import util.properties.ProjectProperty;
 
 import javax.xml.bind.PropertyException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -62,11 +64,60 @@ public class SiteModel {
         }
     }
 
-    public void exportSites() {
+    public void exportSites(String exportName) {
+        if (LocalContext.isSiteDataServiceEnabled()) {
+            synchronized (siteDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location="";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    Site.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
 
+                    PrintWriter pw = new PrintWriter(new FileWriter(location+exportName+".json"));
+                    pw.println(gson.toJson(siteDto));
+                    pw.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
     }
 
-    public void importSites() {
+    public void importSites(String importName) {
+        if (LocalContext.isSiteDataServiceEnabled()) {
+            synchronized (siteDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location="";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    Site.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
+                    String content = new String(Files.readAllBytes(Paths.get(location + importName+".json")), StandardCharsets.UTF_8);
+                    SiteDto newData = gson.fromJson(content, SiteDto.class);
+                    DataStore.getInstance().clearSites();
+                    for (Site s : newData.getSites()) {
+                        DataStore.getInstance().insert(s);
+                    }
+                    initSites();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    public void loadSites() {
         if (LocalContext.isSiteDataServiceEnabled()) {
             synchronized (siteDto) {
                 try {
@@ -100,7 +151,7 @@ public class SiteModel {
             for (Site s : sites) {
                 DataStore.getInstance().insert(s);
             }
-            importSites();
+            initSites();
         }
     }
 
@@ -115,28 +166,35 @@ public class SiteModel {
     public void insert(Site s) {
         synchronized (siteDto) {
             DataStore.getInstance().insert(s);
-            importSites();
+            initSites();
         }
     }
 
     public void remove(Site s) {
         synchronized (siteDto) {
             DataStore.getInstance().remove(s);
-            importSites();
+            initSites();
         }
     }
 
     public void update(Site s) {
         synchronized (siteDto) {
             DataStore.getInstance().update(s);
-            importSites();
+            initSites();
+        }
+    }
+
+    public void load() {
+        synchronized (siteDto) {
+            DataStore.getInstance().clearSites();
+            initSites();
         }
     }
 
     public void clear() {
         synchronized (siteDto) {
             DataStore.getInstance().clearSites();
-            importSites();
+            initSites();
         }
     }
 

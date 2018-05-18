@@ -1,6 +1,8 @@
 package openrtb.bidrequest.model;
 
-import com.google.gson.GsonBuilder; /**
+import com.google.gson.GsonBuilder;
+
+/**
  * @author André Schmer
  *
  */
@@ -38,4 +40,9 @@ public class Pricelayer {
 
 	public static void populateTypeAdapters(GsonBuilder builder) {
 	}
+
+	@Override
+    public String toString() {
+	    return siteid+"-"+currency+":"+bidfloor;
+    }
 }

@@ -76,6 +76,22 @@ public class SiteServerHandler implements Runnable {
         sendCommand(SiteCommandType.REMOVE, s);
     }
 
+    public void sendLoadCommand() throws ModelException {
+        sendCommand(SiteCommandType.LOAD);
+    }
+
+    public void sendImportCommand() throws ModelException {
+        sendCommand(SiteCommandType.IMPORT);
+    }
+
+    public void sendExportCommand() throws ModelException {
+        sendCommand(SiteCommandType.EXPORT);
+    }
+
+    public void sendClearCommand() throws ModelException {
+        sendCommand(SiteCommandType.CLEAR);
+    }
+
     private void sendCommand(SiteCommandType type) throws ModelException {
         sendCommand(type, null);
     }

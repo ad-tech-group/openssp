@@ -24,16 +24,11 @@ RUN mkdir -p /usr/local/tomcat/properties/prd
 RUN mkdir -p /usr/local/tomcat/conf/certs
 RUN mkdir -p /root
 
-COPY cert/pub.network.jks conf/certs/star.pub.network.jks
-COPY cert/pub.network.jks /root/.keystore
-
-RUN keytool -storepasswd -new changeit -storepass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -keystore /root/.keystore
-RUN keytool -keypasswd -alias pub.network -new changeit -storepass changeit -keypass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -keystore /root/.keystore
+COPY cert/openssp.jks conf/certs/openssp.jks
+COPY cert/openssp.jks /root/.keystore
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
-COPY /properties/global.runtime.xml /usr/local/tomcat/properties/dev_global.runtime.xml
-COPY /properties/global.runtime.xml /usr/local/tomcat/properties/prd_global.runtime.xml
 COPY /properties/local.runtime.xml /usr/local/tomcat/properties
 COPY /properties/log4j2.xml /usr/local/tomcat/properties
 
@@ -42,13 +37,9 @@ COPY /properties/currency_db.json /usr/local/tomcat/properties
 COPY /properties/price_layer.json /usr/local/tomcat/properties
 COPY /properties/site_db.json /usr/local/tomcat/properties
 COPY /properties/supplier_db.json /usr/local/tomcat/properties
-COPY /properties/dev_supplier_db.json /usr/local/tomcat/properties/dev/supplier_db.json
-COPY /properties/prd_supplier_db.json /usr/local/tomcat/properties/prd/supplier_db.json
 
 COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
 
-RUN cat /usr/local/tomcat/properties/global.runtime.xml
-
-EXPOSE 3024
+EXPOSE 9090
 CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
 

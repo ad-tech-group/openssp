@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.surefire.plugin.version>2.16</maven.surefire.plugin.version>
         <my.dev.catalina.home>unit-test-logs</my.dev.catalina.home>
-        <docker.image.prefix>us.gcr.io/freestar-157323</docker.image.prefix>
+        <docker.image.prefix>bombholt</docker.image.prefix>
         <docker.image.version>latest</docker.image.version>
     </properties>
 
@@ -70,11 +70,6 @@
                         <JAVA_OPTS>-Xms512m -Xmx1024m</JAVA_OPTS>
                     </systemProperties>
                     <port>9090</port>
-                    <!--
-                    <httpsPort>9443</httpsPort>
-                    <keystoreFile>${basedir}/certificates/openssp.jks</keystoreFile>
-                    <keystorePass>changeit</keystorePass>
-                    -->
                     <configurationDir>tomcat</configurationDir>
                 </configuration>
             </plugin>
@@ -138,7 +133,55 @@
                     <groupId>com.atg.openssp</groupId>
                     <artifactId>open-ssp-restful-client</artifactId>
                 </exclusion>
+                <!--
+                <exclusion>
+                    <groupId>com.atg.openssp</groupId>
+                    <artifactId>open-ssp-utilities</artifactId>
+                </exclusion>
+                -->
+                <exclusion>
+                    <groupId>org.quartz-scheduler</groupId>
+                    <artifactId>quartz</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.quartz-scheduler</groupId>
+                    <artifactId>quartz-jobs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.codahale.metrics</groupId>
+                    <artifactId>metrics-core</artifactId>
+                </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.freestar</groupId>
+            <artifactId>accounts-interfaces</artifactId>
+            <version>1.0.73</version>
+            <exclusions> <!-- Project won't build without the exclusions -->
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-messaging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-stream</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.netflix.hystrix</groupId>
+                    <artifactId>hystrix-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.freestar</groupId>
+                    <artifactId>service-interfaces-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -146,28 +189,19 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.6.2</version>
-        </dependency>
         <!--
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
         </dependency>
 -->
-
-        <!--
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.6.2</version>
-        </dependency>
-        -->
-<!--
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
@@ -179,6 +213,10 @@
             <artifactId>derby</artifactId>
             <version>10.14.2.0</version>
         </dependency>
-        -->
+        <dependency>
+            <groupId>com.aerospike</groupId>
+            <artifactId>aerospike-client</artifactId>
+            <version>4.1.2</version>
+        </dependency>
     </dependencies>
 </project>

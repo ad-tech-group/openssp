@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -57,21 +58,21 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
     private final JTextField tfName = new JTextField(12);
     private final JTextField tfDomain = new JTextField(50);
     private final JTextField tfPage = new JTextField(60);
-    private final DefaultListModel<ContentCategory> mCat = new DefaultListModel<ContentCategory>();
+    private final DefaultListModel<ContentCategory> mCat = new DefaultListModel<>();
     private final JList<ContentCategory> lCat = new JList<ContentCategory>(mCat);
-    private final DefaultListModel<ContentCategory> mPageCat = new DefaultListModel<ContentCategory>();
+    private final DefaultListModel<ContentCategory> mPageCat = new DefaultListModel<>();
     private final JList<ContentCategory> lPageCat = new JList<ContentCategory>(mPageCat);
-    private final DefaultListModel<ContentCategory> mSectionCat = new DefaultListModel<ContentCategory>();
+    private final DefaultListModel<ContentCategory> mSectionCat = new DefaultListModel<>();
     private final JList<ContentCategory> lSectionCat = new JList<ContentCategory>(mSectionCat);
     private final JTextField tfRef = new JTextField(20);
     
     private final JTextField tfPubId = new JTextField(25);
     private final JTextField tfPubName = new JTextField(25);
-    private final DefaultListModel<ContentCategory> mPubCat = new DefaultListModel<ContentCategory>();
+    private final DefaultListModel<ContentCategory> mPubCat = new DefaultListModel<>();
     private final JList<ContentCategory> lPubCat = new JList<ContentCategory>(mPubCat);
     private final JTextField tfPubDomain = new JTextField(25);
 
-    private final DefaultComboBoxModel<ContentCategory> mAddCat = new DefaultComboBoxModel<ContentCategory>();
+    private final DefaultComboBoxModel<ContentCategory> mAddCat = new DefaultComboBoxModel<>();
     private final JComboBox<ContentCategory> cbAddCat = new JComboBox<ContentCategory>(mAddCat);
 
     private final JTextField tfMemo = new JTextField(20);
@@ -87,6 +88,10 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
     private final JButton bUpdate;
     private final JButton bRemove;
     private final JButton bAdd;
+    private final JButton bLoad;
+    private final JButton bImport;
+    private final JButton bExport;
+    private final JButton bClear;
     private Site active;
 
     public SiteMaintenancePanel(SiteModel model) {
@@ -111,6 +116,10 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
         bUpdate = new JButton(model.getTemplateText("SITE_UPDATE"));
         bRemove = new JButton(model.getTemplateText("SITE_REMOVE"));
         bAdd = new JButton(model.getTemplateText("SITE_INIT"));
+        bLoad = new JButton(model.getTemplateText("SITE_LOAD"));
+        bImport = new JButton(model.getTemplateText("SITE_IMPORT"));
+        bExport = new JButton(model.getTemplateText("SITE_EXPORT"));
+        bClear = new JButton(model.getTemplateText("SITE_CLEAR"));
 
         JPanel pTop = new JPanel();
         add(pTop, BorderLayout.NORTH);
@@ -151,6 +160,14 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
         bRemove.setEnabled(false);
         bRemove.addActionListener(this);
         addItem(pRight, "", bRemove);
+        bLoad.addActionListener(this);
+        addItem(pRight, "", bLoad);
+        bImport.addActionListener(this);
+        addItem(pRight, "", bImport);
+        bExport.addActionListener(this);
+        addItem(pRight, "", bExport);
+        bClear.addActionListener(this);
+        addItem(pRight, "", bClear);
 
         pSite.setBorder(new TitledBorder(model.getTemplateText("ACTIVE_SITE")));
         pSite.setLayout(new BoxLayout(pSite, BoxLayout.Y_AXIS));
@@ -158,11 +175,16 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
         addItem(pSite, model.getTemplateText("NAME"), tfName);
         addItem(pSite, model.getTemplateText("DOMAIN"), tfDomain);
         addItem(pSite, model.getTemplateText("PAGE"), tfPage);
-        addItem(pSite, model.getTemplateText("CAT"), new JScrollPane(lCat));
+
+        JPanel pCats = new JPanel();
+        pCats.setLayout(new BoxLayout(pCats, BoxLayout.X_AXIS));
+        addItem(pSite, "", pCats);
+
+        addItem(pCats, model.getTemplateText("CAT"), new JScrollPane(lCat));
         lCat.setVisibleRowCount(3);
-        addItem(pSite, model.getTemplateText("PAGECAT"), new JScrollPane(lPageCat));
+        addItem(pCats, model.getTemplateText("PAGECAT"), new JScrollPane(lPageCat));
         lPageCat.setVisibleRowCount(3);
-        addItem(pSite, model.getTemplateText("SECTIONCAT"), new JScrollPane(lSectionCat));
+        addItem(pCats, model.getTemplateText("SECTIONCAT"), new JScrollPane(lSectionCat));
         lSectionCat.setVisibleRowCount(3);
         addItem(pSite, model.getTemplateText("REF"),  tfRef);
 
@@ -180,33 +202,50 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
         addItem(pMiddle, model.getTemplateText("CATATORIES"), p);
         p.add(cbAddCat);
 
+        JPanel p1  = new JPanel();
+        p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
+        p1.setBorder(new TitledBorder(model.getTemplateText("CAT")));
+        addItem(p, "", p1);
+        JPanel p2  = new JPanel();
+        p2.setBorder(new TitledBorder(model.getTemplateText("PAGECAT")));
+        p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
+        addItem(p, "", p2);
+        JPanel p3  = new JPanel();
+        p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
+        p3.setBorder(new TitledBorder(model.getTemplateText("SECTIONCAT")));
+        addItem(p, "", p3);
+        JPanel p4  = new JPanel();
+        p4.setLayout(new BoxLayout(p4, BoxLayout.Y_AXIS));
+        p4.setBorder(new TitledBorder(model.getTemplateText("PUBCAT")));
+        addItem(p, "", p4);
+
         bAddCat.addActionListener(this);
         bAddCat.setEnabled(false);
-        addItem(p, "", bAddCat);
+        addItem(p1, "", bAddCat);
         bRemoveCat.addActionListener(this);
         bRemoveCat.setEnabled(false);
-        addItem(p, "", bRemoveCat);
+        addItem(p1, "", bRemoveCat);
 
         bAddPageCat.addActionListener(this);
         bAddPageCat.setEnabled(false);
-        addItem(p, "", bAddPageCat);
+        addItem(p2, "", bAddPageCat);
         bRemovePageCat.addActionListener(this);
         bRemovePageCat.setEnabled(false);
-        addItem(p, "", bRemovePageCat);
+        addItem(p2, "", bRemovePageCat);
 
         bAddSectionCat.addActionListener(this);
         bAddSectionCat.setEnabled(false);
-        addItem(p, "", bAddSectionCat);
+        addItem(p3, "", bAddSectionCat);
         bRemoveSectionCat.addActionListener(this);
         bRemoveSectionCat.setEnabled(false);
-        addItem(p, "", bRemoveSectionCat);
+        addItem(p3, "", bRemoveSectionCat);
 
         bAddPubCat.addActionListener(this);
         bAddPubCat.setEnabled(false);
-        addItem(p, "", bAddPubCat);
+        addItem(p4, "", bAddPubCat);
         bRemovePubCat.addActionListener(this);
         bRemovePubCat.setEnabled(false);
-        addItem(p, "", bRemovePubCat);
+        addItem(p4, "", bRemovePubCat);
 
         tfMemo.setEditable(false);
         tfMemo.setBackground(Color.GREEN);
@@ -352,7 +391,7 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
                     sbN.setId(active.getId());
                     populate(sbN);
                     model.sendUpdateCommand(sbN);
-                    model.setMessage("Bidder saved.");
+                    model.setMessage("Site saved.");
                     active = null;
                     setStateForActive();
                 } catch (ModelException e) {
@@ -360,10 +399,10 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     e.printStackTrace();
-                    model.setMessageAsFault("Could not save Bidder due to invalid price.");
+                    model.setMessageAsFault("Could not save Site due to invalid price.");
                 }
             } else {
-                model.setMessageAsWarning("No Bidder selected.");
+                model.setMessageAsWarning("No Site selected.");
             }
             repaint();
         } else if (ev.getSource() == bAdd) {
@@ -381,7 +420,35 @@ public class SiteMaintenancePanel extends JPanel implements ListSelectionListene
                     model.setMessageAsFault(e.getMessage());
                 }
             } else {
-                model.setMessageAsWarning("No Bidder selected.");
+                model.setMessageAsWarning("No Site selected.");
+            }
+            repaint();
+        } else if (ev.getSource() == bLoad) {
+            try {
+                model.sendLoadCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+            repaint();
+        } else if (ev.getSource() == bExport) {
+            try {
+                model.sendExportCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+            repaint();
+        } else if (ev.getSource() == bImport) {
+            try {
+                model.sendImportCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
+            }
+            repaint();
+        } else if (ev.getSource() == bClear) {
+            try {
+                model.sendClearCommand();
+            } catch (ModelException e) {
+                model.setMessageAsFault(e.getMessage());
             }
             repaint();
         } else if (ev.getSource() == bAddCat) {

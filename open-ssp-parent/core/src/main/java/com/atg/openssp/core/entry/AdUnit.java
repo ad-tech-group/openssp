@@ -1,6 +1,6 @@
 package com.atg.openssp.core.entry;
 
-public abstract class AdUnit {
+public final class AdUnit {
     private String id;
     private String adUnitCode;
     private String size;

@@ -32,7 +32,7 @@ public class SiteModel extends BaseModel {
 
     private void loadProperties() {
         try {
-            File file = new File("SiteSimClient.properties");
+            File file = new File("site-client.properties");
             InputStream is;
             if (file.exists()) {
                 is = new FileInputStream(file);
@@ -115,6 +115,22 @@ public class SiteModel extends BaseModel {
 
     public void sendRemoveCommand(String id) throws ModelException {
         serverHandler.sendRemoveCommand(id);
+    }
+
+    public void sendLoadCommand() throws ModelException {
+        serverHandler.sendLoadCommand();
+    }
+
+    public void sendExportCommand() throws ModelException {
+        serverHandler.sendExportCommand();
+    }
+
+    public void sendImportCommand() throws ModelException {
+        serverHandler.sendImportCommand();
+    }
+
+    public void sendClearCommand() throws ModelException {
+        serverHandler.sendClearCommand();
     }
 
     public String getTemplateText(String tag) {

@@ -46,8 +46,6 @@ public class DspHandler implements HttpHandler {
             BidRequest brq = new Gson().fromJson(rawRequest.toString(), BidRequest.class);
             BidResponse brsp = model.createBidResponse(httpExchange.getLocalAddress().getHostName(), httpExchange.getLocalAddress().getPort(), brq);
             if (brsp.getSeatbid().size() > 0 || true) {
-
-
                 String result = model.filterResult(brsp);
                 RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", httpExchange.getRemoteAddress().getHostName());
                 log.info("<--"+result);

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import util.properties.ProjectProperty;
 
 import javax.xml.bind.PropertyException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -59,11 +61,58 @@ public class CurrencyModel {
         }
     }
 
-    public void exportCurrencys() {
+    public void exportCurrency(String exportName) {
+        if (LocalContext.isCurrencyDataServiceEnabled()) {
+            synchronized (currencyDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation()+"/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location="";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    Site.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
 
+                    PrintWriter pw = new PrintWriter(new FileWriter(location+exportName+".json"));
+                    pw.println(gson.toJson(currencyDto));
+                    pw.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
     }
 
-    public void importCurrency() {
+    public void importCurrency(String importName) {
+        if (LocalContext.isCurrencyDataServiceEnabled()) {
+            synchronized (currencyDto) {
+                try {
+                    String location;
+                    try {
+                        location = ProjectProperty.getPropertiesResourceLocation() + "/";
+                    } catch (PropertyException e) {
+                        log.warn("property file not found.");
+                        location = "";
+                    }
+                    GsonBuilder builder = new GsonBuilder();
+                    EurRef.populateTypeAdapters(builder);
+                    Gson gson = builder.create();
+                    String content = new String(Files.readAllBytes(Paths.get(location + importName+".json")), StandardCharsets.UTF_8);
+                    CurrencyDto newData = gson.fromJson(content, CurrencyDto.class);
+                    DataStore.getInstance().clearCurrency();
+                    DataStore.getInstance().insert(newData);
+                    initCurrency();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    public void loadCurrency() {
         if (LocalContext.isCurrencyDataServiceEnabled()) {
             synchronized (currencyDto) {
                 try {
@@ -95,7 +144,7 @@ public class CurrencyModel {
             for (CurrencyDto s : currencies) {
                 DataStore.getInstance().insert(s);
             }
-            importCurrency();
+            initCurrency();
         }
     }
 
@@ -111,28 +160,35 @@ public class CurrencyModel {
     public void insert(CurrencyDto s) {
         synchronized (currencyDto) {
             DataStore.getInstance().insert(s);
-            importCurrency();
+            initCurrency();
         }
     }
 
     public void remove(CurrencyDto s) {
         synchronized (currencyDto) {
             DataStore.getInstance().remove(s);
-            importCurrency();
+            initCurrency();
         }
     }
 
     public void update(CurrencyDto s) {
         synchronized (currencyDto) {
             DataStore.getInstance().update(s);
-            importCurrency();
+            initCurrency();
+        }
+    }
+
+    public void load() {
+        synchronized (currencyDto) {
+            DataStore.getInstance().clearCurrency();
+            initCurrency();
         }
     }
 
     public void clear() {
         synchronized (currencyDto) {
             DataStore.getInstance().clearCurrency();
-            importCurrency();
+            initCurrency();
         }
     }
 

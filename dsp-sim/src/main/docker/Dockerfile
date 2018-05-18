@@ -5,9 +5,10 @@ VOLUME /tmp
 #RUN mkdir -p /usr/local/open-ssp/sim/logfiles
 #RUN mkdir -p /usr/local/open-ssp/sim/properties
 COPY /properties/dsp-sim.properties .
-COPY  run_sim.sh run.sh
 
 ADD open-ssp-dsp-sim.jar app.jar
 RUN sh -c 'touch /app.jar'
+EXPOSE 8081
 ENV JAVA_OPTS=""
-ENTRYPOINT exec run.sh
+ENTRYPOINT exec java $JAVA_OPTS -server -XX:+AlwaysPreTouch -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+
