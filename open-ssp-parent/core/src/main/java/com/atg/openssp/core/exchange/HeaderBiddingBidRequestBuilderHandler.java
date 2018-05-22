@@ -1,6 +1,8 @@
 package com.atg.openssp.core.exchange;
 
 import com.atg.openssp.common.cache.CurrencyCache;
+import com.atg.openssp.common.cache.dto.BannerAd;
+import com.atg.openssp.common.cache.dto.VideoAd;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.cache.type.PricelayerCache;
 import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
@@ -9,8 +11,10 @@ import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.UnavailableHandlerException;
+import com.atg.openssp.common.demand.BannerObjectParamValue;
 import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
+import com.atg.openssp.common.demand.VideoObjectParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
@@ -23,6 +27,9 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
+/**
+ * @author bsorensen
+ */
 public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHandler {
     private final Logger log = LoggerFactory.getLogger(HeaderBiddingBidRequestBuilderHandler.class);
     private final Base64.Decoder decoder;
@@ -80,7 +87,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         dd.setUa(masterValues.getBrowserUserAgentString());
         dd.setIp(masterValues.getIpAddress());
 
-        BidRequest bidRequest =  new BidRequest.Builder()
+        BidRequest bidRequest = new BidRequest.Builder()
                 .setId(selectAppropriateId(requestId, agent.getRequestid()))
                 .setAt(agent.getBiddingServiceInfo().getAuctionType())
                 .setSite(site)
@@ -92,7 +99,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                 //.setBadv()
                 //.setBcat()
                 // set tmax temporarily - set in DemandService (supplier info)
-                .setTmax((int)GlobalContext.getExecutionTimeout())
+                .setTmax((int) GlobalContext.getExecutionTimeout())
                 // set test temporarily - set in DemandService (supplier info)
                 .setTest(BooleanInt.FALSE)
 //                .setExtension()
@@ -114,13 +121,13 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
             i.setBanner(createBanner(pValues));
             //i.setNative(createNative(pValues));
 
-            Double overrideBidFloor = pValues.getOverrideBidFloor();
+            Float overrideBidFloor = pValues.getOverrideBidFloor();
             if (overrideBidFloor != null) {
                 i.setBidfloor(overrideBidFloor.floatValue());
                 try {
                     i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
                 } catch (EmptyCacheException e) {
-                    log.info("price floor does not exist for site: "+site.getId());
+                    log.info("price floor does not exist for site: " + site.getId());
                     i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
                 }
             } else {
@@ -128,7 +135,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                     i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
                     i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
                 } catch (EmptyCacheException e) {
-                    log.info("price floor does not exist for site: "+site.getId());
+                    log.info("price floor does not exist for site: " + site.getId());
                     i.setBidfloor(0f);
                     i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
                 }
@@ -142,10 +149,10 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     private User createUser(HeaderBiddingParamValue pValues) {
-        String userId = pValues.getFsUid();
+        String userId = pValues.getUid();
 
         return new User.Builder()
- //               .setBuyeruid()
+                //               .setBuyeruid()
                 //.setGender(pValues.getGender())
                 .setId(userId)
                 //.setYob(pValues.getYearOfBirth())
@@ -159,23 +166,112 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         // Native not implemeneted yet.  We need a way to specify type
     }
 
-    private Video createVideo(HeaderBiddingParamValue pValues) {
-        return new Video.Builder()
-                .addMime("application/x-shockwave-flash")
-                .setH(400)
-                .setW(600)
-                .setMaxduration(100)
-                .setMinduration(30)
-                .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
-                .setStartdelay(1)
-                .build();
+    private Video createVideo(HeaderBiddingParamValue hValues) {
+        VideoObjectParamValue vValues = hValues.getVideo();
+        VideoAd ad = vValues.getVideoad();
+        Video v = new Video();
+        List<String> mimes = ad.getMimes();
+        if (mimes != null) {
+            v.setMimes(mimes);
+        }
+        Integer minduration = ad.getMinDuration();
+        if (minduration != null) {
+            v.setMinduration(minduration);
+        }
+        Integer maxduration = ad.getMaxDuration();
+        if (maxduration != null) {
+            v.setMaxduration(maxduration);
+        }
+        Integer w = ad.getW();
+        if (w != null) {
+            v.setW(w);
+        }
+        Integer h = ad.getH();
+        if (h != null) {
+            v.setH(h);
+        }
+        Integer startdelay = ad.getStartDelay();
+        if (startdelay != null) {
+            v.setStartdelay(startdelay);
+        }
+        List<Integer> protocols = ad.getProtocols();
+        if (protocols != null) {
+            for (Integer i : protocols) {
+                v.addToProtocols(VideoBidResponseProtocol.convert(i));
+            }
+        }
+        List<Integer> battr = ad.getBattr();
+        if (battr != null) {
+            for (int i : battr) {
+                v.addBattr(CreativeAttribute.convertValue(i));
+            }
+        }
+        Integer linearity = ad.getLinearity();
+        if (linearity != null) {
+            v.setLinearity(VideoLinearity.convertValue(linearity));
+        }
+        List<Banner> companionad = ad.getCompanionad();
+        if (companionad != null) {
+            for (Banner i : companionad) {
+                v.addCompanionad(i);
+            }
+        }
+        List<Integer> api = ad.getApi();
+        if (api != null) {
+            for (int i : api) {
+                v.addApi(VideoApiFramework.convertValue(i));
+            }
+        }
+        Object ext = ad.getExt();
+        if (ext != null) {
+            v.setExt(ext);
+        }
+        return v;
+    }
+
+    private Banner createBanner(HeaderBiddingParamValue hValues) {
+        BannerObjectParamValue bValues = hValues.getBanner();
+        BannerAd ad = bValues.getBannerad();
+        Banner b = new Banner.Builder().setId(ad.getPlacementId()).build();
+        ArrayList<Banner.BannerSize> sizes = new ArrayList();
+        Banner.BannerSize size = new Banner.BannerSize(ad.getSize().toLowerCase());
+        b.setW(size.getW());
+        b.setH(size.getH());
+        sizes.add(size);
+
+        String promoSizesString = ad.getPromoSizes();
+        if (promoSizesString != null) {
+            StringTokenizer st = new StringTokenizer(promoSizesString, ",");
+            while (st.hasMoreTokens()) {
+                String token = st.nextToken();
+                Banner.BannerSize ts = new Banner.BannerSize(token);
+                sizes.add(ts);
+            }
+        }
+        Collections.sort(sizes);
+        b.setWmin(sizes.get(0).getW());
+        b.setHmin(sizes.get(0).getH());
+        b.setWmax(sizes.get(sizes.size() - 1).getW());
+        b.setHmax(sizes.get(sizes.size() - 1).getH());
+        b.setFormat(sizes.toArray());
+
+        //TODO: BKS
+//        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
+//        b.setApi();
+//        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
+//        b.setExpdir();
+        b.setMimes(new String[]{});
+//        b.setPos(AddPosition.FOOTER);
+//        b.setTopframe();
+//        b.setExt();
+        return b;
     }
 
     private Geo createSiteGeo(HeaderBiddingParamValue pValues) {
         Geo geo = new Geo.Builder().build();
         try {
-            StringTokenizer st = new StringTokenizer(pValues.getFsLoc(), "?&");
-            while(st.hasMoreTokens()) {
+            StringTokenizer st = new StringTokenizer(pValues.getLoc(), "?&");
+            while (st.hasMoreTokens()) {
                 String t = st.nextToken();
                 if (t.startsWith("i=")) {
                     geo.setCountry(t.substring(2));
@@ -183,8 +279,8 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                     geo.setCity(new String(decoder.decode(t.substring(2).getBytes())));
                 }
             }
-        } catch(Exception ex) {
-            log.error("missing geo code properties: "+pValues.getFsLoc());
+        } catch (Exception ex) {
+            log.error("missing geo code properties: " + pValues.getLoc());
         }
         String ipAddress = pValues.getIpAddress();
         if (ipAddress != null && !ipAddress.equalsIgnoreCase("localhost") && !ipAddress.equalsIgnoreCase("0:0:0:0:0:0:0:1") && !ipAddress.equalsIgnoreCase("127.0.0.1")) {
@@ -202,11 +298,11 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                 geo.setIpServiceType(geoInfo.getIpServiceType());
                 //geo.setExt(?)
             } catch (IOException e) {
-                log.warn("could not obtain geo code: "+e.getMessage(), e);
+                log.warn("could not obtain geo code: " + e.getMessage(), e);
                 // no new address offerings to help
                 // keep what we have and move on
             } catch (UnavailableHandlerException e) {
-                log.warn("could not obtain geo code: "+e.getMessage());
+                log.warn("could not obtain geo code: " + e.getMessage());
                 // no new address offerings to help
                 // keep what we have and move on
             } catch (AddressNotFoundException e) {
@@ -217,44 +313,8 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         return geo;
     }
 
-    private Banner createBanner(HeaderBiddingParamValue pValues) {
-        Banner b = new Banner.Builder().setId(pValues.getId()).build();
-        ArrayList<Banner.BannerSize> sizes = new ArrayList();
-        Banner.BannerSize size = new Banner.BannerSize(pValues.getSize().toLowerCase());
-        b.setW(size.getW());
-        b.setH(size.getH());
-        sizes.add(size);
-
-        String promoSizesString = pValues.getPromoSizes();
-        if (promoSizesString != null) {
-            StringTokenizer st = new StringTokenizer(promoSizesString, ",");
-            while(st.hasMoreTokens()) {
-                String token = st.nextToken();
-                Banner.BannerSize ts = new Banner.BannerSize(token);
-                sizes.add(ts);
-            }
-        }
-        Collections.sort(sizes);
-        b.setWmin(sizes.get(0).getW());
-        b.setHmin(sizes.get(0).getH());
-        b.setWmax(sizes.get(sizes.size()-1).getW());
-        b.setHmax(sizes.get(sizes.size()-1).getH());
-        b.setFormat(sizes.toArray());
-
-        //TODO: BKS
-//        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
-//        b.setApi();
-//        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
-//        b.setExpdir();
-        b.setMimes(new String[]{});
-//        b.setPos(AddPosition.FOOTER);
-//        b.setTopframe();
-//        b.setExt();
-        return b;
-    }
-
     private String selectAppropriateId(String requestId, String agentRequestid) {
-        if (requestId !=null) {
+        if (requestId != null) {
             return requestId;
         } else {
             return agentRequestid;

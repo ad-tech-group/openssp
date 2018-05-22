@@ -1,6 +1,7 @@
 package com.atg.openssp.core.exchange;
 
 import com.atg.openssp.common.cache.CurrencyCache;
+import com.atg.openssp.common.cache.dto.VideoAd;
 import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.cache.type.PricelayerCache;
 import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
@@ -17,10 +18,7 @@ import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
 import openrtb.bidrequest.model.*;
-import openrtb.tables.BooleanInt;
-import openrtb.tables.GeoType;
-import openrtb.tables.ImpressionSecurity;
-import openrtb.tables.VideoBidResponseProtocol;
+import openrtb.tables.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +83,7 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
         dd.setUa(masterValues.getBrowserUserAgentString());
         dd.setIp(masterValues.getIpAddress());
 
-        BidRequest bidRequest =  new BidRequest.Builder()
+        BidRequest bidRequest = new BidRequest.Builder()
                 .setId(selectAppropriateId(requestId, agent.getRequestid()))
                 .setAt(agent.getBiddingServiceInfo().getAuctionType())
                 .setSite(site)
@@ -97,7 +95,7 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
                 //.setBadv()
                 //.setBcat()
                 // set tmax temporarily - set in DemandService (supplier info)
-                .setTmax((int)GlobalContext.getExecutionTimeout())
+                .setTmax((int) GlobalContext.getExecutionTimeout())
                 // set test temporarily - set in DemandService (supplier info)
                 .setTest(BooleanInt.FALSE)
 //                .setExtension()
@@ -116,13 +114,25 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
             Impression i = new Impression.Builder().build();
             i.setId(Integer.toString(idCount++));
             i.setVideo(createVideo(pValues));
-            try {
-                i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
-                i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
-            } catch (EmptyCacheException e) {
-                log.info("price floor does not exist for site: "+site.getId());
-                i.setBidfloor(0f);
-                i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+
+            Float overrideBidFloor = pValues.getOverrideBidFloor();
+            if (overrideBidFloor != null) {
+                i.setBidfloor(overrideBidFloor.floatValue());
+                try {
+                    i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
+                } catch (EmptyCacheException e) {
+                    log.info("price floor does not exist for site: " + site.getId());
+                    i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+                }
+            } else {
+                try {
+                    i.setBidfloor(PricelayerCache.instance.get(site.getId()).getBidfloor());
+                    i.setBidfloorcur(PricelayerCache.instance.get(site.getId()).getCurrency());
+                } catch (EmptyCacheException e) {
+                    log.info("price floor does not exist for site: " + site.getId());
+                    i.setBidfloor(0f);
+                    i.setBidfloorcur(CurrencyCache.instance.getBaseCurrency());
+                }
             }
             i.setSecure(ImpressionSecurity.NON_SECURE);
             bidRequest.addImp(i);
@@ -133,15 +143,8 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
     }
 
     private User createUser(VideoObjectParamValue pValues) {
-        String userId = pValues.getFsUid();
-        long csBegin = System.currentTimeMillis();
-        if (CookieSyncManager.getInstance().supportsCookieSync()) {
-            CookieSyncDTO result = CookieSyncManager.getInstance().get(userId);
-            if (result != null) {
-            }
-            long csEnd = System.currentTimeMillis();
-            log.info("Cookie Sync Lookup time: "+(csEnd-csBegin));
-        }
+        String userId = pValues.getUid();
+
         return new User.Builder()
 //                .setBuyeruid()
                 //.setGender(pValues.getGender())
@@ -152,16 +155,66 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
 
     }
 
-    private Video createVideo(VideoObjectParamValue pValues) {
-        return new Video.Builder()
-                .addMime("application/x-shockwave-flash")
-                .setH(400)
-                .setW(600)
-                .setMaxduration(100)
-                .setMinduration(30)
-                .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
-                .setStartdelay(1)
-                .build();
+    private Video createVideo(VideoObjectParamValue vValues) {
+        VideoAd ad = vValues.getVideoad();
+        Video v = new Video();
+        List<String> mimes = ad.getMimes();
+        if (mimes != null) {
+            v.setMimes(mimes);
+        }
+        Integer minduration = ad.getMinDuration();
+        if (minduration != null) {
+            v.setMinduration(minduration);
+        }
+        Integer maxduration = ad.getMaxDuration();
+        if (maxduration != null) {
+            v.setMaxduration(maxduration);
+        }
+        Integer w = ad.getW();
+        if (w != null) {
+            v.setW(w);
+        }
+        Integer h = ad.getH();
+        if (h != null) {
+            v.setH(h);
+        }
+        Integer startdelay = ad.getStartDelay();
+        if (startdelay != null) {
+            v.setStartdelay(startdelay);
+        }
+        List<Integer> protocols = ad.getProtocols();
+        if (protocols != null) {
+            for (Integer i : protocols) {
+                v.addToProtocols(VideoBidResponseProtocol.convert(i));
+            }
+        }
+        List<Integer> battr = ad.getBattr();
+        if (battr != null) {
+            for (int i : battr) {
+                v.addBattr(CreativeAttribute.convertValue(i));
+            }
+        }
+        Integer linearity = ad.getLinearity();
+        if (linearity != null) {
+            v.setLinearity(VideoLinearity.convertValue(linearity));
+        }
+        List<Banner> companionad = ad.getCompanionad();
+        if (companionad != null) {
+            for (Banner i : companionad) {
+                v.addCompanionad(i);
+            }
+        }
+        List<Integer> api = ad.getApi();
+        if (api != null) {
+            for (int i : api) {
+                v.addApi(VideoApiFramework.convertValue(i));
+            }
+        }
+        Object ext = ad.getExt();
+        if (ext != null) {
+            v.setExt(ext);
+        }
+        return v;
     }
 
     private Geo createSiteGeo(ParamValue pValues) {
@@ -182,11 +235,11 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
                 geo.setIpServiceType(geoInfo.getIpServiceType());
                 //geo.setExt(?)
             } catch (IOException e) {
-                log.warn("could not obtain geo code: "+e.getMessage(), e);
+                log.warn("could not obtain geo code: " + e.getMessage(), e);
                 // no new address offerings to help
                 // keep what we have and move on
             } catch (UnavailableHandlerException e) {
-                log.warn("could not obtain geo code: "+e.getMessage());
+                log.warn("could not obtain geo code: " + e.getMessage());
                 // no new address offerings to help
                 // keep what we have and move on
             } catch (AddressNotFoundException e) {
@@ -198,7 +251,7 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
     }
 
     private String selectAppropriateId(String requestId, String agentRequestid) {
-        if (requestId !=null) {
+        if (requestId != null) {
             return requestId;
         } else {
             return agentRequestid;

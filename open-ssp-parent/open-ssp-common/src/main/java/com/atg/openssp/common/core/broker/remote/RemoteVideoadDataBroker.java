@@ -42,7 +42,7 @@ public final class RemoteVideoadDataBroker extends AbstractRemoteDataProvider {
 				long endTS = System.currentTimeMillis();
 				DataBrokerLogProcessor.instance.setLogData("VideoAdData", data.length, startTS, endTS, endTS-startTS);
 				log.debug(this.getClass().getSimpleName() + " sizeof VideoAd data=" + data.length);
-				Arrays.stream(data).forEach(c -> VideoAdDataCache.instance.put(c.getVideoadId(), c));
+				Arrays.stream(data).forEach(c -> VideoAdDataCache.instance.put(c.getVidId(), c));
 				return true;
 			}
 			log.error("no VideoAd data");

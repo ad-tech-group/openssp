@@ -9,6 +9,7 @@ import com.google.gson.annotations.Since;
 import openrtb.tables.AddPosition;
 import openrtb.tables.BannerAdType;
 import openrtb.tables.CreativeAttribute;
+import openrtb.tables.ExpandableDirectionType;
 
 /**
  * @author André Schmer
@@ -27,7 +28,7 @@ public final class Banner implements Cloneable {
 	private List<Integer> battr;
 	private String[] mimes;// commaseparated list
 	private int topframe = 0;
-	private int[] expdir; // expandable directions 1-6
+	private List<Integer> expdir; // expandable directions 1-6
 	private int[] api;
 	private Object ext;
 
@@ -47,6 +48,7 @@ public final class Banner implements Cloneable {
 	public Banner() {
 		btype = new ArrayList<Integer>();
 		battr = new ArrayList<Integer>();
+		expdir = new ArrayList<Integer>();
 	}
 
 	public String getId() {
@@ -81,12 +83,28 @@ public final class Banner implements Cloneable {
 		this.id = id;
 	}
 
-	public int[] getExpdir() {
-		return expdir;
+	public void addExpdir(final ExpandableDirectionType expdir) {
+		if (expdir != null) {
+			this.expdir.add(expdir.getValue());
+		}
 	}
 
-	public void setExpdir(final int[] expdir) {
-		this.expdir = expdir;
+	public void setAllExpdir(final ExpandableDirectionType[] expdir) {
+		this.expdir.clear();
+		if (expdir != null) {
+			for (ExpandableDirectionType t : expdir) {
+				this.expdir.add(t.getValue());
+			}
+		}
+	}
+
+	public void setAllExpdir(final List<ExpandableDirectionType> expdir) {
+		this.expdir.clear();
+		if (expdir != null) {
+			for (ExpandableDirectionType t : expdir) {
+				this.expdir.add(t.getValue());
+			}
+		}
 	}
 
 	public AddPosition getPos() {

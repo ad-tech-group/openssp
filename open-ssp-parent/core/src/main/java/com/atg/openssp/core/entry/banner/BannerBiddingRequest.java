@@ -1,20 +1,21 @@
 package com.atg.openssp.core.entry.banner;
 
-import com.atg.openssp.core.entry.AdUnit;
+import com.atg.openssp.common.cache.dto.BannerAd;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BannerBiddingRequest {
-    private ArrayList<AdUnit> adUnitsToBidUpon = new ArrayList<AdUnit>();
+    private ArrayList<BannerAd> adUnitsToBidUpon = new ArrayList<>();
     private String id;
     private String site;
     private String app;
     private String page;
-    private String _fshash;
-    private String _fsloc;
-    private String _fsuid;
-    private String _fssid;
+    private String hash;
+    private String loc;
+    private String uid;
+    private String sid;
+
 
     /*
 	private int w;
@@ -45,76 +46,84 @@ public class BannerBiddingRequest {
 	private Object[] format;
      */
 
-    public void setId(String id) {
+    public final void setId(String id) {
         this.id = id;
     }
 
-    public String getId() {
+    public final String getId() {
         return id;
     }
 
-    public void setSite(String site) {
+    public final void setSite(String site) {
         this.site = site;
     }
 
-    public String getSite() {
+    public final String getSite() {
         return site;
     }
 
-    public void setApp(String app) {
+    public final void setApp(String app) {
         this.app = app;
     }
 
-    public String getApp() {
+    public final String getApp() {
         return app;
     }
 
-    public void setPage(String page) {
+    public final void setPage(String page) {
         this.page = page;
     }
 
-    public String getPage() {
+    public final String getPage() {
         return page;
     }
 
-    public void setFsHash(String fsHash) {
-        this._fshash = fsHash;
+    public final void setHash(String hash) {
+        this.hash = hash;
     }
 
-    public String getFsHash() {
-        return _fshash;
+    public final String getHash() {
+        return hash;
     }
 
-    public void setFsLoc(String fsLoc) {
-        this._fsloc = fsLoc;
+    public final void setLoc(String loc) {
+        this.loc = loc;
     }
 
-    public String getFsLoc() {
-        return _fsloc;
+    public final String getLoc() {
+        return loc;
     }
 
-    public void setFsUid(String fsUid) {
-        this._fsuid = fsUid;
+    public final void setUid(String uid) {
+        this.uid = uid;
     }
 
-    public String getFsUid() {
-        return _fsuid;
+    public final String getUid() {
+        return uid;
     }
 
-    public void setFsSid(String fsSid) {
-        this._fssid = fsSid;
+    public final void setSid(String sid) {
+        this.sid = sid;
     }
 
-    public String getFsSid() {
-        return _fssid;
+    public final String getSid() {
+        return sid;
     }
 
-    public void setAdUnitsToBidUpon(List<AdUnit> adUnitsToBidUpon) {
+    public void setBannerAdsToBidUpon(List<BannerAd> adUnitsToBidUpon) {
         this.adUnitsToBidUpon.clear();
-        this.adUnitsToBidUpon.addAll(adUnitsToBidUpon);
+        if (adUnitsToBidUpon != null) {
+            this.adUnitsToBidUpon.addAll(adUnitsToBidUpon);
+        }
     }
 
-    public List<AdUnit> getAdUnitsToBidUpon() {
-        return adUnitsToBidUpon;
+    public List<BannerAd> getBannerAdsToBidUpon() {
+        ArrayList<BannerAd> list = new ArrayList();
+        list.addAll(adUnitsToBidUpon);
+        return list;
+    }
+
+    public void addBannerAdToBidUpon(BannerAd ba) {
+        adUnitsToBidUpon.add(ba);
     }
 }

@@ -19,11 +19,11 @@
         <component.name>openrtb-validator</component.name>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <cucumber.version>1.2.4</cucumber.version>
+        <json.simple.version>1.1.1</json.simple.version>
         <!--
        <spring.version>4.1.7.RELEASE</spring.version>
        <jackson.version>2.6.2</jackson.version>
        <resty.version>0.3.2</resty.version>
-       <json.simple.version>1.1.1</json.simple.version>
        <commons.codec.version>1.10</commons.codec.version>
        <mysqlConnector.version>5.1.38</mysqlConnector.version>
        <commons.dbcp.version>1.4</commons.dbcp.version>
@@ -68,6 +68,12 @@
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-junit</artifactId>
             <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>${json.simple.version}</version>
             <scope>test</scope>
         </dependency>
         <!--

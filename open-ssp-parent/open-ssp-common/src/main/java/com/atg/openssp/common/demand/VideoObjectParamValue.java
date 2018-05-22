@@ -1,6 +1,10 @@
 package com.atg.openssp.common.demand;
 
+import com.atg.openssp.common.cache.dto.VideoAd;
 import openrtb.bidrequest.model.App;
+import openrtb.bidrequest.model.Banner;
+
+import java.util.List;
 
 /**
  * Optimized for handling VideoAd impressions with the behaviour of very individual requirements of the tag handler which binds to the SSP.
@@ -12,127 +16,125 @@ import openrtb.bidrequest.model.App;
  */
 public class VideoObjectParamValue extends ParamValue {
 
-//	private Publisher publisher;
-    private String requestId;
-    private String callback;
-    private String callbackUid;
-    private String psa;
-    private String id;
-    private String fsHash;
-    private String fsSid;
-    private String fsLoc;
-    private String fsUid;
-    private String size;
-    private String promoSizes;
-    private String referrer;
+    private VideoAd videoad;
+    /*
+    private List<String> mimes;
+    private Integer w;
+    private Integer h;
+    private Integer minDuration;
+    private Integer maxDuration;
+    private Integer startDelay;
+    private List<Integer> protocols;
+    private List<Integer> battr;
+    private Integer linearity;
+    private List<Banner> companionad;
+    private List<Integer> api;
+    private Object ext;
+    */
 
-//    public Publisher getPublisher() {
-//		return publisher;
-//	}
-
-//	public void setPublisher(final Publisher publisher) {
-//		this.publisher = publisher;
-//	}
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public VideoAd getVideoad() {
+        return videoad;
     }
 
-    public String getRequestId() {
-        return requestId;
+    public void setVideoad(VideoAd videoad) {
+        this.videoad = videoad;
     }
 
-	@Override
-	public String toString() {
-        return super.toString()+String.format("[requestId=%s id=%s]", requestId, id);
-	}
-
-    public void setCallback(String callback) {
-        this.callback = callback;
+    /*
+    public void setMimes(List<String> mimes) {
+        this.mimes = mimes;
     }
 
-    public String getCallback() {
-        return callback;
+    public List<String> getMimes() {
+        return mimes;
     }
 
-    public void setCallbackUid(String callbackUid) {
-        this.callbackUid = callbackUid;
+    public Integer getW() {
+        return w;
     }
 
-    public String getCallbackUid() {
-        return callbackUid;
+    public void setW(int w) {
+        this.w = w;
     }
 
-    public void setPsa(String psa) {
-        this.psa = psa;
+    public Integer getH() {
+        return h;
     }
 
-    public String getPsa() {
-        return psa;
+    public void setH(int h) {
+        this.h = h;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Integer getMinDuration() {
+        return minDuration;
     }
 
-    public String getId() {
-        return id;
+    public void setMinDuration(Integer minDuration) {
+        this.minDuration = minDuration;
     }
 
-    public void setFsHash(String fsHash) {
-        this.fsHash = fsHash;
+    public Integer getMaxDuration() {
+        return maxDuration;
     }
 
-    public String getFsHash() {
-        return fsHash;
+    public void setMaxDuration(Integer maxDuration) {
+        this.maxDuration = maxDuration;
     }
 
-    public void setFsSid(String fsSid) {
-        this.fsSid = fsSid;
+    public Integer getStartDelay() {
+        return startDelay;
     }
 
-    public String getFsSid() {
-        return fsSid;
+    public void setStartDelay(int startDelay) {
+        this.startDelay = startDelay;
     }
 
-    public void setFsLoc(String fsLoc) {
-        this.fsLoc = fsLoc;
+    public List<Integer> getProtocols() {
+        return protocols;
     }
 
-    public String getFsLoc() {
-        return fsLoc;
+    public void setProtocols(List<Integer> protocols) {
+        this.protocols = protocols;
     }
 
-    public void setFsUid(String fsUid) {
-        this.fsUid = fsUid;
+    public List<Integer> getBattr() {
+        return battr;
     }
 
-    public String getFsUid() {
-        return fsUid;
+    public void setBattr(List<Integer> battr) {
+        this.battr = battr;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public Integer getLinearity() {
+        return linearity;
     }
 
-    public String getSize() {
-        return size;
+    public void setLinearity(Integer linearity) {
+        this.linearity = linearity;
     }
 
-    public void setPromoSizes(String promoSizes) {
-        this.promoSizes = promoSizes;
+    public List<Banner> getCompanionad() {
+        return companionad;
     }
 
-    public String getPromoSizes() {
-        return promoSizes;
+    public void setCompanionad(List<Banner> companionad) {
+        this.companionad = companionad;
     }
 
-    public void setReferrer(String referrer) {
-        this.referrer = referrer;
+    public List<Integer> getApi() {
+        return api;
     }
 
-    public String getReferrer() {
-        return referrer;
+    public void setApi(List<Integer> api) {
+        this.api = api;
     }
 
+    public Object getExt() {
+        return ext;
+    }
+
+    public void setExt(Object ext) {
+        this.ext = ext;
+    }
+    */
 }
