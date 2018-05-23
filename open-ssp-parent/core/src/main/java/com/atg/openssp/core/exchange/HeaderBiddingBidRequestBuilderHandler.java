@@ -167,8 +167,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     private Video createVideo(HeaderBiddingParamValue hValues) {
-        VideoObjectParamValue vValues = hValues.getVideo();
-        VideoAd ad = vValues.getVideoad();
+        VideoAd ad = hValues.getVideoad();
         Video v = new Video();
         List<String> mimes = ad.getMimes();
         if (mimes != null) {
@@ -230,8 +229,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
     }
 
     private Banner createBanner(HeaderBiddingParamValue hValues) {
-        BannerObjectParamValue bValues = hValues.getBanner();
-        BannerAd ad = bValues.getBannerad();
+        BannerAd ad = hValues.getBannerad();
         Banner b = new Banner.Builder().setId(ad.getPlacementId()).build();
         ArrayList<Banner.BannerSize> sizes = new ArrayList();
         Banner.BannerSize size = new Banner.BannerSize(ad.getSize().toLowerCase());
@@ -245,7 +243,9 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
             while (st.hasMoreTokens()) {
                 String token = st.nextToken();
                 Banner.BannerSize ts = new Banner.BannerSize(token);
-                sizes.add(ts);
+                if (!sizes.contains(ts)) {
+                    sizes.add(ts);
+                }
             }
         }
         Collections.sort(sizes);
@@ -255,15 +255,16 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         b.setHmax(sizes.get(sizes.size() - 1).getH());
         b.setFormat(sizes.toArray());
 
-        //TODO: BKS
-//        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
-//        b.setApi();
-//        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
-//        b.setExpdir();
-        b.setMimes(new String[]{});
+        b.setAllBtype(ad.getBtypes());
+        b.setAllBattr(ad.getBattrs());
+        b.setApi(ad.getApi());
+        b.setAllExpdir(ad.getExpdir());
+        b.setMimes(ad.getMimes());
+        //BKS TODO:
 //        b.setPos(AddPosition.FOOTER);
-//        b.setTopframe();
-//        b.setExt();
+        b.setTopframe(ad.getTopframe());
+        b.setExt(ad.getExt());
+
         return b;
     }
 

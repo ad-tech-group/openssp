@@ -88,10 +88,17 @@ public enum ContextProperties {
 	ADSERVER_PROVIDER_PORT("adserver-provider-port"),
 
 	/**
-	 * data-privder-path
+	 * data-privder-paths
 	 */
 	@RuntimeMeta(type = Scope.GLOBAL)
-	ADSERVER_PROVIDER_PATH("adserver-provider-path"),
+	ADSERVER_PROVIDER_BANNER_PATH("adserver-provider-banner-path"),
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_VIDEO_PATH("adserver-provider-video-path"),
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_WEBSITE_PATH("adserver-provider-website-path"),
+	@RuntimeMeta(type = Scope.GLOBAL)
+	ADSERVER_PROVIDER_NATIVE_PATH("adserver-provider-native-path"),
+
 
 	/**
 	 * adserving

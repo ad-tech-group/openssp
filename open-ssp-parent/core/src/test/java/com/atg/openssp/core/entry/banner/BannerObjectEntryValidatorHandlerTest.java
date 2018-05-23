@@ -58,7 +58,6 @@ public class BannerObjectEntryValidatorHandlerTest {
         ban.setWmin(31);
         ban.setHmax(34);
         ban.setHmin(33);
-        ban.addFormat("format");
 
 //        ban.setPsa("psa");
 
@@ -122,9 +121,6 @@ public class BannerObjectEntryValidatorHandlerTest {
         ban.put("wmin", 31);
         ban.put("hmax", 34);
         ban.put("hmin", 33);
-        JSONArray format = new JSONArray();
-        ban.put("format", format);
-        format.add(0, "format");
 
 //        ban.put("psa", "psa");
 
@@ -198,7 +194,6 @@ public class BannerObjectEntryValidatorHandlerTest {
         assertEquals(31, va.getWmin());
         assertEquals(34, va.getHmax());
         assertEquals(33, va.getHmin());
-        assertEquals("[format]", va.getFormat().toString());
 
 //        assertEquals("psa", va.getPsa());
     }

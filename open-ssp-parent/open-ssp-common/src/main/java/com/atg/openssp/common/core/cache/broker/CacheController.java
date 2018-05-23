@@ -55,7 +55,10 @@ public class CacheController extends Observable {
 		// addObserver(new RemoteWebsiteDataBroker());
 
 		// loads videoad data from webservice into the cache
-		// addObserver(new RemoteVideoadDataBroker());
+		 addObserver(new RemoteVideoadDataBroker());
+
+		// loads videoad data from webservice into the cache
+		addObserver(new RemoteBanneradDataBroker());
 
 		// loads supplier data from webservice into the cache
 		 addObserver(new RemoteSupplierDataBroker());

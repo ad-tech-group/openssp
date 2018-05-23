@@ -43,12 +43,12 @@ public final class Banner implements Cloneable {
 
 	@Since(2.2)
 	private int hmin;
-	private Object[] format;
+	private List<Object> format;
 
 	public Banner() {
-		btype = new ArrayList<Integer>();
-		battr = new ArrayList<Integer>();
-		expdir = new ArrayList<Integer>();
+		btype = new ArrayList<>();
+		battr = new ArrayList<>();
+		expdir = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -79,7 +79,14 @@ public final class Banner implements Cloneable {
 		this.mimes = mimes;
 	}
 
-	public void setId(final String id) {
+    public void setMimes(final List<String> mimes) {
+        this.mimes = new String[mimes.size()];
+        for (int i=0; i<mimes.size(); i++) {
+            this.mimes[i] = mimes.get(i);
+        }
+    }
+
+    public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -179,7 +186,14 @@ public final class Banner implements Cloneable {
 		this.api = api;
 	}
 
-	public Object getExt() {
+    public void setApi(final List<Integer> api) {
+	    this.api = new int[api.size()];
+	    for (int i=0; i<api.size(); i++) {
+	        this.api[i] = api.get(i);
+        }
+    }
+
+    public Object getExt() {
 		return ext;
 	}
 
@@ -230,12 +244,47 @@ public final class Banner implements Cloneable {
 		return null;
 	}
 
-	public void setFormat(Object[] format) {
-		this.format = format;
+	public void addFormat(final Object format) {
+		if (format != null) {
+		    if (this.format == null) {
+		        this.format = new ArrayList();
+            }
+			this.format.add(format);
+		}
 	}
 
-	public Object[] getFormat() {
-		return format;
+	public void setFormat(final Object[] format) {
+	    if (this.format == null) {
+	        this.format = new ArrayList();
+        } else {
+            this.format.clear();
+        }
+		if (format != null) {
+			for (Object a : format) {
+				this.format.add(a);
+			}
+		}
+	}
+
+	public void setFormat(final List<Object> format) {
+        if (this.format == null) {
+            this.format = new ArrayList();
+        } else {
+            this.format.clear();
+        }
+		if (format != null) {
+			this.format.addAll(format);
+		}
+	}
+
+	public List<Object> getFormat() {
+	    if (format.size() == 0) {
+	        return null;
+        } else {
+            ArrayList<Object> list = new ArrayList();
+            list.addAll(format);
+            return list;
+        }
 	}
 
     public static class Builder {

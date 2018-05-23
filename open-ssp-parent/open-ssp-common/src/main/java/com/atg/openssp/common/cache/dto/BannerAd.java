@@ -48,7 +48,6 @@ public class BannerAd implements Serializable {
     private int hmax;
     private int wmin;
     private int hmin;
-    private List<Object> format;
 
     // ?Public Service Ad (unpaid);
 //    private String psa;
@@ -59,7 +58,6 @@ public class BannerAd implements Serializable {
         battrs = new ArrayList<>();
         expdir = new ArrayList<>();
         api = new ArrayList<>();
-        format = new ArrayList<>();
     }
 
     public final String getId() {
@@ -275,24 +273,6 @@ public class BannerAd implements Serializable {
     public int getHmin() {
         return hmin;
     }
-
-    public void addFormat(Object format) {
-        if (format != null) {
-            this.format.add(format);
-        }
-    }
-
-    public void setFormat(List<Object> format) {
-        this.format.clear();
-        if (format!= null) {
-            this.format.addAll(format);
-        }
-    }
-
-    public List<Object> getFormat() {
-        return format;
-    }
-
 
 //    public void setPsa(String psa) {
 //        this.psa = psa;

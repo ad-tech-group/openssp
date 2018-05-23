@@ -17,7 +17,7 @@ public abstract class AdserverBrokerHandler {
         String scheme = ContextCache.instance.get(ContextProperties.ADSERVER_PROVIDER_SCHEME);
         String host = ContextCache.instance.get(ContextProperties.ADSERVER_PROVIDER_HOST);
         int port = Integer.parseInt(ContextCache.instance.get(ContextProperties.ADSERVER_PROVIDER_PORT));
-        String path = ContextCache.instance.get(ContextProperties.ADSERVER_PROVIDER_PATH);
+        String path = ContextCache.instance.get(ContextProperties.ADSERVER_PROVIDER_VIDEO_PATH);
         uriBuilder = new URIBuilder().setCharset(StandardCharsets.UTF_8).setScheme(scheme).setHost(host).setPort(port).setPath(path);
 
         jsonGetConnector = new JsonGetConnector();

@@ -6,8 +6,6 @@ import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.cache.type.PricelayerCache;
 import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
-import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncDTO;
-import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncManager;
 import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
@@ -172,7 +170,9 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
             while (st.hasMoreTokens()) {
                 String token = st.nextToken();
                 Banner.BannerSize ts = new Banner.BannerSize(token);
-                sizes.add(ts);
+                if (!sizes.contains(ts)) {
+                    sizes.add(ts);
+                }
             }
         }
         Collections.sort(sizes);
@@ -182,15 +182,16 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
         b.setHmax(sizes.get(sizes.size() - 1).getH());
         b.setFormat(sizes.toArray());
 
-        //TODO: BKS
-//        b.setAllBattr(new CreativeAttribute[]{CreativeAttribute.PROVOCATIVE_OR_SUGGESTIVE_IMAGERY});
-//        b.setApi();
-//        b.setAllBtype(new BannerAdType[]{BannerAdType.IFRAME});
-//        b.setExpdir();
-        b.setMimes(new String[]{});
+        b.setAllBtype(ad.getBtypes());
+        b.setAllBattr(ad.getBattrs());
+        b.setApi(ad.getApi());
+        b.setAllExpdir(ad.getExpdir());
+        b.setMimes(ad.getMimes());
+        //BKS TODO:
 //        b.setPos(AddPosition.FOOTER);
-//        b.setTopframe();
-//        b.setExt();
+        b.setTopframe(ad.getTopframe());
+        b.setExt(ad.getExt());
+
         return b;
     }
 
