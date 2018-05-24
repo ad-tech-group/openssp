@@ -99,15 +99,6 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 				winner.perform(agent);
 				out.flush();
 				return true;
-			} else {
-				// remove this in production environmant
-				if (agent.getParamValues().getIsTest().equals("1")) {
-					agent.getHttpResponse().setContentType("application/json");
-					final String responseData = "{\"result\":\"Success\", \"message\":\"OpenSSP is working.\"}";
-					out.append(responseData);
-					out.flush();
-					return true;
-				}
 			}
 		} catch (final IOException e) {
 			log.error(e.getMessage());

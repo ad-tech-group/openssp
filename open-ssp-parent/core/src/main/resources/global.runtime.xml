@@ -18,10 +18,10 @@
 
 	<entry key="data-provider-host">localhost</entry>
 
-	<entry key="data-provider-port">9090</entry>
+	<entry key="data-provider-port">8000</entry>
 	
 	<!-- credential for remote access -->
-	<entry key="master_pw">frogs</entry>
+	<entry key="master_pw">frogs!</entry>
 	
 	<!-- credential for remote access -->
 	<entry key="master_user">izod</entry>
@@ -35,11 +35,11 @@
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
 
-    <entry key="validator-handler-for-video-class">io.freestar.ssp.entry.FreestarEntryValidatorForVideoHandler</entry>
+        <entry key="validator-handler-for-video-class">io.freestar.ssp.entry.FreestarEntryValidatorForVideoHandler</entry>
 
 	<entry key="validator-handler-for-banner-class">io.freestar.ssp.entry.FreestarEntryValidatorForBannerHandler</entry>
 
-    <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
+        <entry key="adserver-broker-handler-class">io.freestar.ssp.channel.adserving.FreestarAdserverBrokerHandler</entry>
 
 	<entry key="bid-request-builder-handler-class">io.freestar.ssp.exchange.FreestarBidRequestBuilderHandler</entry>
 </properties>
