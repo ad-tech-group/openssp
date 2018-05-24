@@ -19,29 +19,22 @@ COPY /ssp-server.war /usr/local/tomcat/webapps
 
 #set-up config
 RUN mkdir -p /usr/local/tomcat/logfiles
-RUN mkdir -p /usr/local/tomcat/properties/dev
-RUN mkdir -p /usr/local/tomcat/properties/prd
-RUN mkdir -p /usr/local/tomcat/conf/certs
+#RUN mkdir -p /usr/local/tomcat/conf/certs
 RUN mkdir -p /root
 
-COPY cert/pub.network.jks conf/certs/star.pub.network.jks
-COPY cert/pub.network.jks /root/.keystore
+#COPY cert/pub.network.jks conf/certs/star.pub.network.jks
+#COPY cert/pub.network.jks /root/.keystore
 
-RUN keytool -storepasswd -new changeit -storepass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -keystore /root/.keystore
-RUN keytool -keypasswd -alias pub.network -new changeit -storepass changeit -keypass kDKmHY8ecT9nY3WAwWhqk5ZnF4eTYX2b -keystore /root/.keystore
+#RUN keytool -storepasswd -new changeit -storepass xxx -keystore /root/.keystore
+#RUN keytool -keypasswd -alias pub.network -new changeit -storepass changeit -keypass xxx -keystore /root/.keystore
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
-COPY /properties/dev_global.runtime.xml /usr/local/tomcat/properties
-COPY /properties/prd_global.runtime.xml /usr/local/tomcat/properties
 COPY /properties/local.runtime.xml /usr/local/tomcat/properties
 COPY /properties/log4j2.xml /usr/local/tomcat/properties
 COPY /properties/log4j.properties /usr/local/tomcat/properties
 
 COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
-#RUN #sed -i -e 's/8080/8886/g' /usr/local/tomcat/conf/server.xml
-
-RUN cat /usr/local/tomcat/properties/global.runtime.xml
 
 EXPOSE 3025
 CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]

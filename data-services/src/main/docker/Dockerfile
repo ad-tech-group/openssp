@@ -19,13 +19,11 @@ COPY /ssp-services.war /usr/local/tomcat/webapps
 
 #set-up config
 RUN mkdir -p /usr/local/tomcat/logfiles
-RUN mkdir -p /usr/local/tomcat/properties/dev
-RUN mkdir -p /usr/local/tomcat/properties/prd
 RUN mkdir -p /usr/local/tomcat/conf/certs
 RUN mkdir -p /root
 
-COPY cert/openssp.jks conf/certs/openssp.jks
-COPY cert/openssp.jks /root/.keystore
+#COPY cert/openssp.jks conf/certs/openssp.jks
+#COPY cert/openssp.jks /root/.keystore
 
 COPY /properties/config.xml /usr/local/tomcat/properties
 COPY /properties/global.runtime.xml /usr/local/tomcat/properties
