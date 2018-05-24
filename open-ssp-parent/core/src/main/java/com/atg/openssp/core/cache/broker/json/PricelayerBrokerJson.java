@@ -7,11 +7,14 @@ import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.properties.ProjectProperty;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import javax.xml.bind.PropertyException;
 
 /**
  * @author André Schmer
@@ -28,7 +31,8 @@ public class PricelayerBrokerJson extends DataBrokerObserver {
 		long startTS = System.currentTimeMillis();
 		final Gson gson = new Gson();
 		try {
-			final String content = new String(Files.readAllBytes(Paths.get("price_layer.json")), StandardCharsets.UTF_8);
+			final String path = ProjectProperty.readFile("price_layer.json").getAbsolutePath();
+			final String content = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			final PricelayerDto dto = gson.fromJson(content, PricelayerDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
@@ -42,7 +46,7 @@ public class PricelayerBrokerJson extends DataBrokerObserver {
 
 			log.error("no price data");
 			return false;
-		} catch (final IOException e) {
+		} catch (final IOException | PropertyException e) {
 			log.error(getClass() + ", " + e.getMessage());
 		}
 		return true;

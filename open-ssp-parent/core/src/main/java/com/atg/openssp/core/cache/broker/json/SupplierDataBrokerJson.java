@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import com.atg.openssp.common.core.broker.dto.SupplierDto;
 import com.atg.openssp.common.core.cache.type.ConnectorCache;
 import com.atg.openssp.common.core.exchange.channel.rtb.OpenRtbConnector;
-import com.atg.openssp.common.core.system.loader.GlobalContextLoader;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
 import com.google.gson.GsonBuilder;
@@ -17,6 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.broker.DataBrokerObserver;
 import com.google.gson.Gson;
+import util.properties.ProjectProperty;
+
+import javax.xml.bind.PropertyException;
 
 /**
  * 
@@ -43,10 +45,8 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 		Supplier.populateTypeAdapters(builder);
 		final Gson gson = builder.create();
 		try {
-			String environment = GlobalContextLoader.resolveEnvironment();
-			log.info("Environment: "+environment);
-			final String content = new String(Files.readAllBytes(Paths.get(environment+"supplier_db.json")), StandardCharsets.UTF_8);
-			log.info("using: "+content);
+			final String path = ProjectProperty.readFile("supplier_db.json").getAbsolutePath();
+			final String content = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
@@ -61,7 +61,7 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 
 			log.error("no Supplier data");
 			return false;
-		} catch (final IOException e) {
+		} catch (final IOException | PropertyException e) {
 			log.error(getClass() + ", " + e.getMessage());
 		}
 

@@ -13,6 +13,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.xml.bind.PropertyException;
+
+import util.properties.ProjectProperty;
+
 /**
  * @author André Schmer
  *
@@ -28,7 +32,8 @@ public class SiteDataBrokerJson extends DataBrokerObserver {
 		long startTS = System.currentTimeMillis();
 		final Gson gson = new Gson();
 		try {
-			final String content = new String(Files.readAllBytes(Paths.get("site_db.json")), StandardCharsets.UTF_8);
+			final String path = ProjectProperty.readFile("site_db.json").getAbsolutePath();
+			final String content = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			final SiteDto dto = gson.fromJson(content, SiteDto.class);
 			if (dto != null) {
 				long endTS = System.currentTimeMillis();
@@ -39,10 +44,9 @@ public class SiteDataBrokerJson extends DataBrokerObserver {
 				});
 				return true;
 			}
-
 			log.error("no Site data");
 			return false;
-		} catch (final IOException e) {
+		} catch (final PropertyException | IOException e) {
 			log.error(getClass() + ", " + e.getMessage());
 		}
 
