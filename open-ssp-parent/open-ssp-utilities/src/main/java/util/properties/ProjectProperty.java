@@ -14,18 +14,18 @@ import javax.xml.bind.PropertyException;
 
 /**
  * @author André Schmer
- * 
+ *
  */
 public class ProjectProperty {
 
 	/**
 	 * Returns user properties from path under ${catalina.home}. The user Properties must comply with standard properties rules.
-	 * 
+	 *
 	 * @param propertiesPath
 	 *            the path to user property
 	 * @return Properties {@Link Properties}
 	 * @throws PropertyException
-	 * 
+	 *
 	 */
 	// TODO: resolve dependencies to catalina.home - make more generic
 	public static Properties loadProperties(final String propertiesPath) throws PropertyException {
@@ -51,7 +51,7 @@ public class ProjectProperty {
 	/**
 	 * Return runtime properties of given {@code runtimeProperties}. Looks first, if application is running on a dev machine and returns in this case the
 	 * properties from the resource context. Otherwise a lookup in properties folder in webapps context is fullfilled.
-	 * 
+	 *
 	 * @param runtimeProperties
 	 * @return properties {@link Properties}
 	 * @throws PropertyException
@@ -76,7 +76,7 @@ public class ProjectProperty {
 		return properties;
 	}
 
-	private static File readFile(final String file) throws PropertyException {
+	public static File readFile(final String file) throws PropertyException {
 		File propFile = null;
 		try {
 			String propPath = file.replace("\\", "/").replaceAll("/+", "/");
@@ -126,7 +126,7 @@ public class ProjectProperty {
 	// }
 
 	/**
-	 * 
+	 *
 	 * @return Location of the application properties resource repository as URL
 	 * @throws PropertyException
 	 */
@@ -135,7 +135,7 @@ public class ProjectProperty {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return Location of the application security resource repository as URL
 	 * @throws PropertyException
 	 */
@@ -157,7 +157,7 @@ public class ProjectProperty {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param property
 	 * @return
 	 * @throws PropertyException
