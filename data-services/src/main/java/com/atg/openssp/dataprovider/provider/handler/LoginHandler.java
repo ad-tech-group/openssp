@@ -1,7 +1,5 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
-import com.atg.openssp.common.configuration.ContextCache;
-import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.core.system.LocalContext;
 import com.atg.openssp.dataprovider.provider.dto.TokenWrapper;
 import com.google.gson.Gson;
@@ -23,7 +21,6 @@ public class LoginHandler extends DataHandler {
     public static final String CONTEXT = "/login/token";
 
     public LoginHandler(HttpServletRequest request, HttpServletResponse response) {
-    	System.out.println("LoginHandler");
         if (LocalContext.isLoginServiceEnabled()) {
             try {
                 Map<String,String> parms;
@@ -64,10 +61,7 @@ public class LoginHandler extends DataHandler {
     }
 
     private boolean isAuthorized(String user, String pw) {
-        return user != null && 
-        		ContextCache.instance.get(ContextProperties.MASTER_USER).equals(user) && 
-        		pw != null && 
-        		ContextCache.instance.get(ContextProperties.MASTER_PW).equals(pw);
+        return user != null && "izod".equals(user) && pw != null && "frogs".equals(pw);
     }
 
 }
