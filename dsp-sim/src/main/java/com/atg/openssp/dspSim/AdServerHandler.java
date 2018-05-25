@@ -4,11 +4,15 @@ import com.atg.openssp.dspSim.model.ad.AdModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+
 import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.*;
 
 /**
  * @author Brian Sorensen
@@ -39,7 +43,7 @@ public class AdServerHandler implements HttpHandler {
         AdservingCampaignProvider p = new AdservingCampaignProvider();
         p.setIsValid(true);
         p.setPrice(40f);
-        p.setPriceEur(30f);
+        p.setAdjustedCurrencyPrice(30f);
 
         String result = new Gson().toJson(p);
         log.info("<--"+result);

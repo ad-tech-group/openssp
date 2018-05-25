@@ -1,5 +1,7 @@
 package openrtb.bidrequest.model;
 
+import openrtb.tables.ContentCategory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,12 +58,25 @@ public class Publisher implements Cloneable {
 		this.ext = ext;
 	}
 
-	public List<String> getCat() {
-		return cat;
+	public List<ContentCategory> getCat() {
+        ArrayList<ContentCategory> list = new ArrayList();
+        for (String c : cat) {
+            list.add(ContentCategory.convertValue(c));
+        }
+        return list;
 	}
 
-	public void addCat(final String cat) {
-		this.cat.add(cat);
+	public void setCat(final List<ContentCategory> cat) {
+		this.cat.clear();
+		if (cat != null) {
+			for (ContentCategory c : cat) {
+				this.cat.add(c.getValue());
+			}
+		}
+	}
+
+	public void addCat(final ContentCategory cat) {
+		this.cat.add(cat.getValue());
 	}
 
 	public static class Builder {
@@ -87,8 +102,8 @@ public class Publisher implements Cloneable {
 			return this;
 		}
 
-		public Builder addCats(final List<Integer> cats) {
-			cats.forEach(c -> publisher.addCat(String.valueOf(c)));
+		public Builder addCats(final List<ContentCategory> cats) {
+            cats.forEach(c -> publisher.addCat(c));
 			return this;
 		}
 

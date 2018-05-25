@@ -11,6 +11,7 @@ public class ClientResponse {
     private ClientResponseStatus status;
     private String reason="";
     private List<SimBidder> bidders;
+    private ClientCommandType mode;
 
     public void setStatus(ClientResponseStatus status) {
         this.status = status;
@@ -36,4 +37,11 @@ public class ClientResponse {
         return bidders;
     }
 
+    public void setMode(ClientCommandType mode) {
+        this.mode = mode;
+    }
+
+    public ClientCommandType getMode() {
+        return mode;
+    }
 }

@@ -1,0 +1,19 @@
+{
+	"pricelayer": [
+		{
+			"siteid": "1",
+			"bidfloor": 0.00,
+			"currency": "USD"
+		},
+		{
+			"siteid": "2",
+			"bidfloor": 0.01,
+			"currency": "USD"
+		},
+		{
+      "siteid": "3",
+      "bidfloor": 0.02,
+			"currency": "USD"
+		}
+	]
+}

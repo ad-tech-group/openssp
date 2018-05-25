@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<!-- switch to enable/disable rtb support (dsp channel) -->
+	<entry key="rtb">true</entry>
+	
+	<!-- switch to enable/disable ssp support (ssp channel)-->
+	<entry key="ssp">false</entry>
+	
+	<!-- switch to enable/disable adserving support -->
+	<entry key="adserving">false</entry>
+
+	<!-- services -->
+	<!-- switch to enable/disable app data service support -->
+	<entry key="app-data-service-enabled">true</entry>
+
+	<!-- switch to enable/disable currency data service support -->
+	<entry key="currency-data-service-enabled">true</entry>
+
+	<!-- switch to enable/disable login service support -->
+	<entry key="login-service-enabled">true</entry>
+
+	<!-- switch to enable/disable pricelayer data service support -->
+	<entry key="pricelayer-data-service-enabled">true</entry>
+
+	<!-- switch to enable/disable site data service support -->
+	<entry key="site-data-service-enabled">true</entry>
+
+	<!-- switch to enable/disable supplier data service support -->
+	<entry key="supplier-data-service-enabled">true</entry>
+
+	<!-- handler class to use service App Data requests -->
+	<entry key="app-data-handler-class">com.atg.openssp.dataprovider.provider.handler.AppDataHandler</entry>
+
+	<!-- handler class to use service Curreny Data requests -->
+	<entry key="currency-data-handler-class">com.atg.openssp.dataprovider.provider.handler.CurrencyDataHandler</entry>
+
+	<!-- handler class to use for service authorization grant requests -->
+	<entry key="login-handler-class">com.atg.openssp.common.provider.LoginHandler</entry>
+
+	<!-- handler class to use service Pricelayer Data requests -->
+	<entry key="pricelayer-data-handler-class">com.atg.openssp.dataprovider.provider.handler.PricelayerDataHandler</entry>
+
+	<!-- handler class to use service Site Data requests -->
+	<entry key="site-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SiteDataHandler</entry>
+
+	<!-- handler class to use service Supplier Data requests -->
+	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
+
+	<!-- switch to enable/disable debugging -->	
+	<entry key="debug">false</entry>
+	
+	<!-- switch to enable/disable verbose output -->
+	<entry key="verbose">false</entry>
+
+</properties>

@@ -1,9 +1,9 @@
 package com.atg.openssp.dataprovider.service;
 
+import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.system.LocalContext;
+import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.dataprovider.provider.handler.AppDataHandler;
-import com.atg.openssp.dataprovider.provider.handler.DataHandler;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * Servlet implementation class AppDataService
- * 
+ *
  * @author Brian Sorensen
  */
 @WebServlet(value = AppDataHandler.CONTEXT, asyncSupported = false, name = "AppData-Service")

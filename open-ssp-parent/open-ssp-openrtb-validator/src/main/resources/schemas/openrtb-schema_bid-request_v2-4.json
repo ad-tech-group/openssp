@@ -1184,7 +1184,7 @@
 		},
 		"ip_location_services": {
 			"type": "integer",
-			"minimum": 1,
+			"minimum": 0,
 			"maximum": 4
 		},
 		"volume_normalization_mode": {

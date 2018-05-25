@@ -1,4 +1,7 @@
 /target/
+/tomcat/conf
+/tomcat/logs
 /.classpath
 /.project
 /.settings/
+/bks_target

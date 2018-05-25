@@ -12,22 +12,20 @@ import java.util.Properties;
 
 import javax.xml.bind.PropertyException;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author André Schmer
- * 
+ *
  */
 public class ProjectProperty {
 
 	/**
 	 * Returns user properties from path under ${catalina.home}. The user Properties must comply with standard properties rules.
-	 * 
+	 *
 	 * @param propertiesPath
 	 *            the path to user property
 	 * @return Properties {@Link Properties}
 	 * @throws PropertyException
-	 * 
+	 *
 	 */
 	// TODO: resolve dependencies to catalina.home - make more generic
 	public static Properties loadProperties(final String propertiesPath) throws PropertyException {
@@ -53,7 +51,7 @@ public class ProjectProperty {
 	/**
 	 * Return runtime properties of given {@code runtimeProperties}. Looks first, if application is running on a dev machine and returns in this case the
 	 * properties from the resource context. Otherwise a lookup in properties folder in webapps context is fullfilled.
-	 * 
+	 *
 	 * @param runtimeProperties
 	 * @return properties {@link Properties}
 	 * @throws PropertyException
@@ -86,9 +84,13 @@ public class ProjectProperty {
 				propPath = "/" + propPath;
 			}
 			String toDecode = null;
+
 			final String catalinaHome = System.getProperty("catalina.home", System.getProperty("user.dir"));
-			if (StringUtils.isEmpty(catalinaHome) || catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
+			final File f = new File(catalinaHome + "/properties" + propPath);
+			if (!f.exists()) {
 				toDecode = Thread.currentThread().getContextClassLoader().getResource("").getFile() + propPath;
+				// if (StringUtils.isEmpty(catalinaHome) || catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
+
 			} else {
 				toDecode = catalinaHome + "/properties" + propPath;
 			}
@@ -124,7 +126,7 @@ public class ProjectProperty {
 	// }
 
 	/**
-	 * 
+	 *
 	 * @return Location of the application properties resource repository as URL
 	 * @throws PropertyException
 	 */
@@ -133,7 +135,7 @@ public class ProjectProperty {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return Location of the application security resource repository as URL
 	 * @throws PropertyException
 	 */
@@ -144,7 +146,7 @@ public class ProjectProperty {
 	private static String getResourceURL(final String type) throws PropertyException {
 		final String catalinaHome = System.getProperty("catalina.home", System.getProperty("user.dir"));
 		if (catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
-			return Thread.currentThread().getContextClassLoader().getResource("").getPath().replace("/C:", "C:");
+			return catalinaHome+"/properties".replace("/C:", "C:");
 		} else {
 			try {
 				return new URL(URLDecoder.decode("file://" + catalinaHome + "/" + type, "UTF-8")).getPath() + "/";
@@ -155,7 +157,7 @@ public class ProjectProperty {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param property
 	 * @return
 	 * @throws PropertyException

@@ -13,7 +13,7 @@ import restful.context.PathBuilder;
 import restful.exception.RestException;
 
 /**
- * Generic approach to connect to the ssp-data-provider and load cache specific data transfer objects.
+ * Generic approach to connect to the ssp-services and load cache specific data transfer objects.
  * 
  * @author André Schmer
  *

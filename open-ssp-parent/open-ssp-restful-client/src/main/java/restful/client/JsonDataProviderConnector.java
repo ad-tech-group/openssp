@@ -1,15 +1,24 @@
 package restful.client;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.TrustStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -23,6 +32,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import restful.context.PathBuilder;
 import restful.context.RestfulContext;
 import restful.exception.RestException;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * Generic approach to connect a remote data provider and load specific data transfer objects.
@@ -48,7 +59,8 @@ public class JsonDataProviderConnector<T> implements DataProviderConnector<T> {
 		// create message converters list
 		httpMessageConverters = new ArrayList<>();
 		httpMessageConverters.add(mappingJacksonHttpMessageConverter);
-	}
+
+    }
 
 	@Override
 	public T connectDataProvider(final PathBuilder config) throws RestException {
@@ -85,11 +97,40 @@ public class JsonDataProviderConnector<T> implements DataProviderConnector<T> {
 	}
 
 	private T connect(final PathBuilder config) throws RestClientException {
-		final RestTemplate restTemplate = new RestTemplate(httpMessageConverters);
-		final SimpleClientHttpRequestFactory rf = (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
-		rf.setReadTimeout(2000);
-		rf.setConnectTimeout(2000);
-		config.addParam("t", RestfulContext.getToken());
+		final RestTemplate restTemplate;
+        config.addParam("t", RestfulContext.getToken());
+		if ("HTTPS".equalsIgnoreCase(config.getScheme())) {
+			TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+
+			try {
+				SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
+						.loadTrustMaterial(null, acceptingTrustStrategy)
+						.build();
+				SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
+
+				CloseableHttpClient httpClient = HttpClients.custom()
+						.setSSLSocketFactory(csf)
+						.build();
+
+				HttpComponentsClientHttpRequestFactory requestFactory =
+						new HttpComponentsClientHttpRequestFactory();
+
+				requestFactory.setHttpClient(httpClient);
+				restTemplate = new RestTemplate(requestFactory);
+				restTemplate.setMessageConverters(httpMessageConverters);
+                final HttpComponentsClientHttpRequestFactory rf = (HttpComponentsClientHttpRequestFactory) restTemplate.getRequestFactory();
+                rf.setReadTimeout(2000);
+                rf.setConnectTimeout(2000);
+			} catch (Exception e) {
+				throw new RestClientException(e.getMessage());
+			}
+		} else {
+			restTemplate = new RestTemplate(httpMessageConverters);
+            final SimpleClientHttpRequestFactory rf = (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
+            rf.setReadTimeout(2000);
+            rf.setConnectTimeout(2000);
+		}
+
 		final ResponseEntity<T> re = restTemplate.getForEntity(config.buildEndpointURI(), dtoType);
 		return re.getBody();
 	}

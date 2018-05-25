@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
+import openrtb.tables.AuctionType;
+import openrtb.tables.BooleanInt;
+import openrtb.tables.ContentCategory;
 
 /**
  * 
@@ -11,11 +14,12 @@ import com.google.gson.annotations.Since;
  *
  */
 public final class BidRequest implements Cloneable {
-
 	// required fields
 	private String id;
 
 	private Site site;
+
+	private App app;
 
 	private List<Impression> imp;
 
@@ -23,20 +27,23 @@ public final class BidRequest implements Cloneable {
 
 	private User user;
 
+	private List<String> cur;
+
 	private List<String> badv;
 
 	private List<String> bcat;
 
 	@Since(2.3)
-	private int test = 0;// default
+	private int test = BooleanInt.FALSE.getValue(); // default
 
-	private int at = 2;// default
+	private int at = AuctionType.SECOND_PRICE.getValue(); // default
 
 	private Integer tmax;
 
 	private Object ext;
 
 	public BidRequest() {
+        cur = new ArrayList<>();
 		imp = new ArrayList<>();
 		badv = new ArrayList<>();
 		bcat = new ArrayList<>();
@@ -58,12 +65,23 @@ public final class BidRequest implements Cloneable {
 		this.site = site;
 	}
 
+	public App getApp() {
+		return app;
+	}
+
+	public void setApp(final App app) {
+		this.app = app;
+	}
+
 	public List<Impression> getImp() {
 		return imp;
 	}
 
 	public void setImp(final List<Impression> imp) {
-		this.imp = imp;
+	    this.imp.clear();
+	    if (imp != null) {
+            imp.forEach(i -> this.imp.add(i));
+        }
 	}
 
 	public void addImp(final Impression impression) {
@@ -86,45 +104,66 @@ public final class BidRequest implements Cloneable {
 		this.user = user;
 	}
 
-	public void setBadv(final List<String> badv) {
-		this.badv = badv;
+	public List<String> getCur() {
+		return cur;
 	}
 
-	public void addBadv(final String bad) {
+	public void setCur(final List<String> cur) {
+	    this.cur.clear();
+	    if (cur != null) {
+	        cur.forEach(c -> this.cur.add(c));
+        }
+	}
+
+    public void addCur(final String cur) {
+        this.cur.add(cur);
+    }
+
+    public void setBadv(final List<String> badv) {
+	    this.badv.clear();
+	    if (badv != null) {
+	        badv.forEach(b -> this.badv.add(b));
+        }
+	}
+
+    public List<String> getBadv() {
+        return badv;
+    }
+
+    public void addBadv(final String bad) {
 		badv.add(bad);
 	}
 
-	public void setBcat(final List<String> bcat) {
-		this.bcat = bcat;
+	public void setBcat(final List<ContentCategory> bcat) {
+		this.bcat.clear();
+		bcat.forEach(c -> this.bcat.add(c.getValue()));
 	}
 
-	public void addBcat(final String bcat) {
-		this.bcat.add(bcat);
-	}
-
-	public List<String> getBadv() {
-		return badv;
+	public void addBcat(final ContentCategory bcat) {
+		this.bcat.add(bcat.getValue());
 	}
 
 	// see product taxonomy -> "http://www.google.com/basepages/producttype/taxonomy.en-US.txt"
-	public List<String> getBcat() {
-		return bcat;
+	public List<ContentCategory> getBcat() {
+		ArrayList<ContentCategory> list = new ArrayList();
+		bcat.forEach(c -> list.add(ContentCategory.convertValue(c)));
+		return list;
 	}
 
-	public int getTest() {
-		return test;
+	public BooleanInt getTest() {
+		return BooleanInt.convertValue(test);
 	}
 
-	public void setTest(final int test) {
-		this.test = test;
+	public void setTest(final BooleanInt test) {
+		this.test = test.getValue();
 	}
 
-	public int getAt() {
-		return at;
+	public AuctionType getAt() {
+		return AuctionType.convertValue(at);
 	}
 
-	public void setAt(final int at) {
-		this.at = at;
+	public void setAt(final AuctionType at) {
+		this.at = at.getValue();
 	}
 
 	public int getTmax() {
@@ -155,9 +194,23 @@ public final class BidRequest implements Cloneable {
 				final List<Impression> cloneImpList = new ArrayList<>(imp);
 				clone.setImp(cloneImpList);
 			}
+            if (cur != null) {
+                final List<String> cloneCurList = new ArrayList<>(cur);
+                clone.setCur(cloneCurList);
+            }
+            if (badv != null) {
+                final List<String> cloneBadvList = new ArrayList<>(badv);
+                clone.setBadv(cloneBadvList);
+            }
+            if (bcat != null) {
+                clone.bcat = new ArrayList<>(bcat);
+            }
 
-			if (site != null) {
+			if (site!= null) {
 				clone.setSite(site.clone());
+			}
+			if (app != null) {
+				clone.setApp(app.clone());
 			}
 			if (device != null) {
 				clone.setDevice(device.clone());
@@ -178,7 +231,19 @@ public final class BidRequest implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "BidRequest [id=" + id + ", site=" + site + ", imp=" + imp + ", device=" + device + ", user=" + user + ", badv=" + badv + ", bcat=" + bcat + ", test=" + test
+		String siteString;
+		if (site != null) {
+			siteString = ", site="+site;
+		} else {
+			siteString = "";
+		}
+		String appString;
+		if (app != null) {
+			appString = ", app="+app;
+		} else {
+			appString = "";
+		}
+		return "BidRequest [id=" + id + siteString + appString + ", imp=" + imp + ", device=" + device + ", user=" + user + ", cur=" + cur + ", badv=" + badv + ", bcat=" + bcat + ", test=" + test
 		        + ", at=" + at + ", tmax=" + tmax + ", ext=" + ext + "]";
 	}
 
@@ -201,6 +266,11 @@ public final class BidRequest implements Cloneable {
 
 		public Builder setSite(final Site site) {
 			bidRequest.setSite(site);
+			return this;
+		}
+
+		public Builder setApp(final App app) {
+			bidRequest.setApp(app);
 			return this;
 		}
 
@@ -229,8 +299,13 @@ public final class BidRequest implements Cloneable {
 			return this;
 		}
 
-		public Builder setTest(final int test) {
+		public Builder setTest(final BooleanInt test) {
 			bidRequest.setTest(test);
+			return this;
+		}
+
+		public Builder addCur(final String cur) {
+			bidRequest.addCur(cur);
 			return this;
 		}
 
@@ -239,7 +314,7 @@ public final class BidRequest implements Cloneable {
 			return this;
 		}
 
-		public Builder setAt(final int at) {
+		public Builder setAt(final AuctionType at) {
 			bidRequest.setAt(at);
 			return this;
 		}
@@ -249,12 +324,12 @@ public final class BidRequest implements Cloneable {
 			return this;
 		}
 
-		public Builder addAllBcat(final List<String> allBcat) {
+		public Builder addAllBcat(final List<ContentCategory> allBcat) {
 			bidRequest.setBcat(allBcat);
 			return this;
 		}
 
-		public Builder addBcat(final String bcat) {
+		public Builder addBcat(final ContentCategory bcat) {
 			bidRequest.addBcat(bcat);
 			return this;
 		}

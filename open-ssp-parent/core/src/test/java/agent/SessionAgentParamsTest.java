@@ -1,16 +1,20 @@
 package agent;
 
+import com.atg.openssp.common.core.cache.type.SiteDataCache;
+import com.atg.openssp.common.core.entry.BiddingServiceInfo;
+import com.atg.openssp.common.core.entry.SessionAgentType;
+import com.atg.openssp.common.core.exchange.RequestSessionAgent;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.atg.openssp.common.exception.RequestException;
-import com.atg.openssp.core.cache.type.SiteDataCache;
-import com.atg.openssp.core.exchange.RequestSessionAgent;
 
 import junit.framework.Assert;
 import openrtb.bidrequest.model.Site;
+
+import static org.junit.Assert.fail;
 
 /**
  * 
@@ -41,12 +45,20 @@ public class SessionAgentParamsTest {
 
 		RequestSessionAgent agent = null;
 		try {
-			agent = new RequestSessionAgent(request, response);
+			BiddingServiceInfo info = new BiddingServiceInfo();
+			info.setType(SessionAgentType.VIDEO);
+			info.setContentType("application/javascript");
+			agent = new RequestSessionAgent(request, response, info);
 		} catch (final RequestException e) {
 			Assert.fail(e.getMessage());
 		}
 
-		Assert.assertEquals("1", agent.getParamValues().getSite().getId());
+		try {
+			Assert.assertEquals("1", agent.getParamValues().get(0).getSite().getId());
+		} catch (RequestException e) {
+			e.printStackTrace();
+			fail("problem");
+		}
 	}
 
 	// @Test
@@ -61,7 +73,7 @@ public class SessionAgentParamsTest {
 	//
 	// RequestSessionAgent agent = null;
 	// try {
-	// agent = new RequestSessionAgent(request, response);
+	// agent = new RequestSessionAgent(request, response, SessionAgentType.BANNER);
 	// } catch (final RequestException e) {
 	// Assert.fail(e.getMessage());
 	// }

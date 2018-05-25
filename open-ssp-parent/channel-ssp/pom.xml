@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.atg.openssp</groupId>
 		<artifactId>open-ssp-parent</artifactId>
-		<version>0.3</version>
+		<version>0.4</version>
 	</parent>
 	<artifactId>channel-ssp</artifactId>
 

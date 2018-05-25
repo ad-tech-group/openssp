@@ -1,1 +1,5 @@
+Target/
 DSP_SIM_MODEL.json
+site_export_db.json
+currency_export_db.json
+data-services/tomcat/logs

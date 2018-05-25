@@ -5,18 +5,20 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import javax.xml.bind.PropertyException;
-
+import com.atg.openssp.common.core.broker.dto.SupplierDto;
+import com.atg.openssp.common.core.cache.type.ConnectorCache;
+import com.atg.openssp.common.core.exchange.channel.rtb.OpenRtbConnector;
+import com.atg.openssp.common.demand.Supplier;
+import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
+import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atg.openssp.common.cache.broker.DataBrokerObserver;
-import com.atg.openssp.core.cache.broker.dto.SupplierDto;
-import com.atg.openssp.core.cache.type.ConnectorCache;
-import com.atg.openssp.core.exchange.channel.rtb.OpenRtbConnector;
 import com.google.gson.Gson;
-
 import util.properties.ProjectProperty;
+
+import javax.xml.bind.PropertyException;
 
 /**
  * 
@@ -38,12 +40,17 @@ public final class SupplierDataBrokerJson extends DataBrokerObserver {
 	 */
 	@Override
 	public boolean doCaching() {
-		final Gson gson = new Gson();
+		long startTS = System.currentTimeMillis();
+		GsonBuilder builder = new GsonBuilder();
+		Supplier.populateTypeAdapters(builder);
+		final Gson gson = builder.create();
 		try {
 			final String path = ProjectProperty.readFile("supplier_db.json").getAbsolutePath();
 			final String content = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
 			final SupplierDto dto = gson.fromJson(content, SupplierDto.class);
 			if (dto != null) {
+				long endTS = System.currentTimeMillis();
+				DataBrokerLogProcessor.instance.setLogData("SupplierData", dto.getSupplier().size(), startTS, endTS, endTS-startTS);
 				log.info("sizeof supplier data=" + dto.getSupplier().size());
 				dto.getSupplier().forEach(supplier -> {
 					final OpenRtbConnector openRtbConnector = new OpenRtbConnector(supplier);

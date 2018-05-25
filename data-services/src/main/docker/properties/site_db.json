@@ -1,0 +1,61 @@
+{
+  "sites": [
+    {
+      "id": "1",
+      "name": "Site One",
+      "domain": "site1.com",
+      "page": "http://site1.com/page.html",
+      "cat": [
+        "IAB19",
+        "IAB19_20"
+      ],
+      "publisher": {
+        "id": "1",
+        "name": "Pub One",
+        "cat": [
+          "IAB19"
+        ],
+        "domain": "pub1.com",
+        "ext": null
+      },
+      "ext": null
+    },
+    {
+      "id": "2",
+      "name": "Site Two",
+      "domain": "site2.com",
+      "page": "http://site2.com/page.html",
+      "cat": [
+        "IAB6",
+        "IAB9"
+      ],
+      "publisher": {
+        "id": "2",
+        "name": "Pub Two",
+        "cat": [
+          "IAB6"
+        ],
+        "domain": "pub2.com",
+        "ext": null
+      },
+      "ext": null
+    },
+    {
+      "id": "3",
+      "name": "Site Three",
+      "domain": "site3.com",
+      "page": "http://site3.com/page.html",
+      "cat": [
+        "IAB8"
+      ],
+      "publisher": {
+        "id": "1",
+        "name": "Pub One",
+        "cat": [],
+        "domain": "pub1.com",
+        "ext": null
+      },
+      "ext": null
+    }
+  ]
+}

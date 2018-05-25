@@ -2,8 +2,8 @@ package com.atg.openssp.dataprovider.service;
 
 import com.atg.openssp.common.buffer.SSPLatencyBuffer;
 import com.atg.openssp.common.exception.RequestException;
+import com.atg.openssp.common.provider.DataHandler;
 import com.google.common.base.Stopwatch;
-import com.atg.openssp.dataprovider.provider.handler.DataHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

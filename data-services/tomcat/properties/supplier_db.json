@@ -1,0 +1,25 @@
+{
+  "supplier": [
+    {
+      "shortName": "dsp",
+      "endPoint": "http://localhost:8081/dsp-sim/DemandService",
+      "connectionKeepAlive": false,
+      "openRtbVersion": 2.4,
+      "contentType": "application/json",
+      "supplierId": "100000",
+      "currency": "USD",
+      "tmax": 300,
+      "allowedAdFormats": [
+        "BANNER",
+        "VIDEO"
+      ],
+      "allowedAdPlatforms": [
+        "DESKTOP",
+        "MOBILE"
+      ],
+      "cookieSync": "<img src='//localhost:8082/user-sync?t=image&r={SSP_REDIR_URL}' style ='display:none' width='0' height='0'></img>",
+      "underTest": 1,
+      "active": 1
+    }
+  ]
+}

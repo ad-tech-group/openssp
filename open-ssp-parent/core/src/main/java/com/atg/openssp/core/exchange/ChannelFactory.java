@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.atg.openssp.common.core.entry.SessionAgent;
+import com.atg.openssp.common.core.exchange.RequestSessionAgent;
+import com.atg.openssp.common.core.exchange.channel.rtb.DemandService;
+import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.AdProviderReader;
-import com.atg.openssp.core.exchange.channel.rtb.DemandService;
-import com.atg.openssp.core.system.LocalContext;
 
 import channel.adserving.AdservingService;
 
@@ -31,7 +32,7 @@ class ChannelFactory {
 	 * @see AdservingService
 	 * @see AdProviderReader
 	 */
-	static List<Callable<AdProviderReader>> createListOfChannels(final SessionAgent agent) {
+	static List<Callable<AdProviderReader>> createListOfChannels(final RequestSessionAgent agent) {
 		final List<Callable<AdProviderReader>> callables = new ArrayList<>();
 
 		/*
@@ -46,17 +47,17 @@ class ChannelFactory {
 		 * activate if corresponding jar is imported and marker in properties file local.runtime.xml is set to true
 		 * 
 		 */
-		// if (LocalContext.isAdservingChannelEnabled()) {
-		// callables.add(new AdservingService(agent));
-		// }
+		 if (LocalContext.isAdservingChannelEnabled()) {
+		 	callables.add(new AdservingService(agent));
+		 }
 
 		/*
 		 * activate if corresponding jar is imported and marker in properties file local.runtime.xml is set to true
 		 * 
 		 */
-		// if (LocalContext.isSSPChannelEnabled()) {
-		// callables.add(new SSPService(agent));
-		// }
+		 if (LocalContext.isSSPChannelEnabled()) {
+//		     callables.add(new SSPService(agent));
+		 }
 
 		return callables;
 	}

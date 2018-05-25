@@ -8,7 +8,7 @@ public interface AdProviderWriter {
 
 	void setPrice(float price);
 
-	void setPriceEur(float priceEur);
+	void setExchangedCurrencyPrice(float price);
 
 	void setIsValid(boolean valid);
 

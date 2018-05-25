@@ -1,5 +1,7 @@
 package com.atg.openssp.common.model;
 
+import com.google.gson.GsonBuilder;
+
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,4 +38,12 @@ public class EurRef implements Serializable {
 		this.rate = rate;
 	}
 
+	public static void populateTypeAdapters(GsonBuilder builder) {
+	}
+
+	@Override
+	public String toString()
+	{
+		return currency+":"+rate;
+	}
 }

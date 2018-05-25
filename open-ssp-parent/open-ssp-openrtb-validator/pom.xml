@@ -1,26 +1,29 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.atg.openssp</groupId>
-    <artifactId>open-ssp-parent</artifactId>
-    <version>0.3</version>
-  </parent>
-  <artifactId>open-ssp-openrtb-validator</artifactId>
-  
-  <name>openrtb-validator</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.atg.openssp</groupId>
+        <artifactId>open-ssp-parent</artifactId>
+        <version>0.4</version>
+    </parent>
+    <artifactId>open-ssp-openrtb-validator</artifactId>
+
+    <name>openrtb-validator</name>
     <url>http://maven.apache.org</url>
-    <description>Provides a simple API that can be used to validate JSON bid requests and responses according to OpenRTB specifications. OpenRTB versions 1.0, 2.0, 2.1, 2.2, 2.3 and 2.4 are fully supported.</description>
-	
+    <description>Provides a simple API that can be used to validate JSON bid requests and responses according to OpenRTB
+        specifications. OpenRTB versions 1.0, 2.0, 2.1, 2.2, 2.3 and 2.4 are fully supported.
+    </description>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <component.name>openrtb-validator</component.name>
-       <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-       <cucumber.version>1.2.4</cucumber.version>
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <cucumber.version>1.2.4</cucumber.version>
+        <json.simple.version>1.1.1</json.simple.version>
+        <!--
        <spring.version>4.1.7.RELEASE</spring.version>
        <jackson.version>2.6.2</jackson.version>
        <resty.version>0.3.2</resty.version>
-       <junit.version>4.12</junit.version>
-       <json.simple.version>1.1.1</json.simple.version>
        <commons.codec.version>1.10</commons.codec.version>
        <mysqlConnector.version>5.1.38</mysqlConnector.version>
        <commons.dbcp.version>1.4</commons.dbcp.version>
@@ -30,7 +33,8 @@
        <surefire.version>2.19.1</surefire.version>
        <vertica.version>7.1.2-0</vertica.version>
        <opencsv.version>2.3</opencsv.version>
-   </properties>
+       -->
+    </properties>
     <licenses>
         <license>
             <name>New BSD License</name>
@@ -47,26 +51,8 @@
             <organizationUrl>https://github.com/openrtb/openrtb2x</organizationUrl>
         </developer>
     </developers>
-    	
+
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.2</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>com.github.fge</groupId>
             <artifactId>json-schema-validator</artifactId>
@@ -84,6 +70,31 @@
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>${json.simple.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.7.3</version>
+        </dependency>
+        -->
     </dependencies>
 
     <build>
@@ -94,7 +105,7 @@
                     <exclude>specifications/</exclude>
                 </excludes>
             </resource>
-        </resources>	
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -111,12 +122,14 @@
         </plugins>
     </build>
 
+    <!--
     <distributionManagement>
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
-    </distributionManagement> 
+    </distributionManagement>
+    -->
 
     <scm>
         <url>https://github.com/openrtb/openrtb2x/tree/2.0/openrtb-validator</url>

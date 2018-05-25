@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
+import openrtb.tables.ContentCategory;
 
 /**
  * @author André Schmer
- * @see OpenRTB-API-Specification #section Bid Object
+ * @see //OpenRTB-API-Specification #section Bid Object
  * @version 2.1, 2.2, 2.3, 2.4
  * 
  */
@@ -28,6 +29,7 @@ public final class Bid implements Comparable<Bid> {
 	private String iurl;
 	private String cid;
 	private String crid;
+
 	private List<Integer> attr;
 
 	private int api;
@@ -35,17 +37,19 @@ public final class Bid implements Comparable<Bid> {
 
 	@Since(2.2)
 	private String dealid;
-	private int h;
 	private int w;
+	private int h;
 
 	@Since(2.3)
 	// private String bundle;
 	private List<String> cat;
 
+
 	private Object ext;
 
 	public Bid() {
 		adomain = new ArrayList<>();
+		cat = new ArrayList<>();
 		attr = new ArrayList<>();
 	}
 
@@ -138,7 +142,8 @@ public final class Bid implements Comparable<Bid> {
 	}
 
 	public void setAttr(final List<Integer> attr) {
-		this.attr = attr;
+		this.attr.clear();
+		this.attr.addAll(attr);
 	}
 
 	public void addAttr(final Integer attr) {
@@ -169,12 +174,27 @@ public final class Bid implements Comparable<Bid> {
 		this.w = w;
 	}
 
-	public List<String> getCat() {
-		return cat;
+	public List<ContentCategory> getCat() {
+		ArrayList<ContentCategory> list = new ArrayList();
+		cat.forEach(c -> list.add(ContentCategory.convertValue(c)));
+		return list;
 	}
 
-	public void setCat(final List<String> list) {
-		cat = list;
+	public void addAllCats(List<ContentCategory> cat) {
+		cat.forEach(c -> addCat(c));
+	}
+
+	public void setCat(final List<ContentCategory> cat) {
+		this.cat.clear();
+		if (cat != null) {
+			cat.forEach(c -> this.cat.add(c.getValue()));
+		}
+	}
+
+	public void addCat(final ContentCategory cat) {
+		if (cat != null) {
+			this.cat.add(cat.getValue());
+		}
 	}
 
 	public int getApi() {
@@ -203,6 +223,12 @@ public final class Bid implements Comparable<Bid> {
 
 	public List<String> getAdomainList() {
 		return adomain;
+	}
+
+	public List<ContentCategory> getCatList() {
+		ArrayList<ContentCategory> list = new ArrayList();
+		cat.forEach(c -> list.add(ContentCategory.convertValue(c)));
+		return list;
 	}
 
 	public List<Integer> getAttrList() {
@@ -282,8 +308,13 @@ public final class Bid implements Comparable<Bid> {
 			return this;
 		}
 
-		public Builder setCats(final List<String> list) {
-			bid.setCat(list);
+		public Builder addAllCat(final List<ContentCategory> allCat) {
+			bid.setCat(allCat);
+			return this;
+		}
+
+		public Builder addCat(final ContentCategory cat) {
+			bid.addCat(cat);
 			return this;
 		}
 
@@ -307,6 +338,10 @@ public final class Bid implements Comparable<Bid> {
 
 		public List<String> getAdomainList() {
 			return bid.getAdomainList();
+		}
+
+		public List<ContentCategory> getCatList() {
+			return bid.getCatList();
 		}
 
 		public List<Integer> getAttrList() {

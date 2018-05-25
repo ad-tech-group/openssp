@@ -11,7 +11,7 @@ public interface AdProviderReader {
 
 	float getPrice();
 
-	float getPriceEur();
+	float getExchangedCurrencyPrice();
 
 	String getCurrrency();
 

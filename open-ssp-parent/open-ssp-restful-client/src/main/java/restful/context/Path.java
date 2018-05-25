@@ -7,9 +7,9 @@ package restful.context;
 public enum Path {
 
 	/**
-	 * ssp-data-provider
+	 * ssp-services
 	 */
-	CORE("ssp-data-provider/lookup"),
+	CORE("ssp-services/lookup"),
 
 	/**
 	 * supplier
@@ -29,7 +29,22 @@ public enum Path {
 	/**
 	 * ?website=1
 	 */
-	WEBSITE("?website=1");
+	WEBSITE("?website=1"),
+
+	/**
+	 * pricelayer
+	 */
+	PRICELAYER("pricelayer"),
+
+	/**
+	 * site
+	 */
+	SITE("site"),
+
+	/**
+	 * app
+	 */
+	APP("app");
 
 	private String value;
 

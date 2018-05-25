@@ -1,8 +1,15 @@
 package openrtb.bidrequest.model;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import com.google.gson.annotations.Since;
+import openrtb.tables.AddPosition;
+import openrtb.tables.BannerAdType;
+import openrtb.tables.CreativeAttribute;
+import openrtb.tables.ExpandableDirectionType;
 
 /**
  * @author André Schmer
@@ -10,19 +17,18 @@ import com.google.gson.annotations.Since;
  * @version 2.1, 2.2, 2.3
  */
 public final class Banner implements Cloneable {
-
 	// required
 	private int w;
 	private int h;
 
 	private String id;
 	// optional
-	private int pos;
+	private Integer pos;
 	private List<Integer> btype;// blocked creative types
 	private List<Integer> battr;
 	private String[] mimes;// commaseparated list
 	private int topframe = 0;
-	private int[] expdir; // expandable directions 1-6
+	private List<Integer> expdir; // expandable directions 1-6
 	private int[] api;
 	private Object ext;
 
@@ -37,8 +43,13 @@ public final class Banner implements Cloneable {
 
 	@Since(2.2)
 	private int hmin;
+	private List<Object> format;
 
-	public Banner() {}
+	public Banner() {
+		btype = new ArrayList<>();
+		battr = new ArrayList<>();
+		expdir = new ArrayList<>();
+	}
 
 	public String getId() {
 		return id;
@@ -68,43 +79,98 @@ public final class Banner implements Cloneable {
 		this.mimes = mimes;
 	}
 
-	public void setId(final String id) {
+    public void setMimes(final List<String> mimes) {
+        this.mimes = new String[mimes.size()];
+        for (int i=0; i<mimes.size(); i++) {
+            this.mimes[i] = mimes.get(i);
+        }
+    }
+
+    public void setId(final String id) {
 		this.id = id;
 	}
 
-	public int[] getExpdir() {
-		return expdir;
+	public void addExpdir(final ExpandableDirectionType expdir) {
+		if (expdir != null) {
+			this.expdir.add(expdir.getValue());
+		}
 	}
 
-	public void setExpdir(final int[] expdir) {
-		this.expdir = expdir;
+	public void setAllExpdir(final ExpandableDirectionType[] expdir) {
+		this.expdir.clear();
+		if (expdir != null) {
+			for (ExpandableDirectionType t : expdir) {
+				this.expdir.add(t.getValue());
+			}
+		}
 	}
 
-	public int getPos() {
-		return pos;
+	public void setAllExpdir(final List<ExpandableDirectionType> expdir) {
+		this.expdir.clear();
+		if (expdir != null) {
+			for (ExpandableDirectionType t : expdir) {
+				this.expdir.add(t.getValue());
+			}
+		}
 	}
 
-	public void setPos(final int pos) {
-		this.pos = pos;
+	public AddPosition getPos() {
+		return AddPosition.convertValue(pos);
 	}
 
-	public List<Integer> getBtype() {
-		return btype;
+	public void setPos(final AddPosition pos) {
+		this.pos = pos.getValue();
 	}
 
-	public void setBtype(final List<Integer> btype) {
-		this.btype = btype;
+	public void addBtype(final BannerAdType btype) {
+        if (btype != null) {
+            this.btype.add(btype.getValue());
+        }
 	}
 
-	public List<Integer> getBattr() {
-		return battr;
+    public void setAllBtype(final BannerAdType[] btype) {
+        this.btype.clear();
+        if (btype != null) {
+            for (BannerAdType t : btype) {
+                this.btype.add(t.getValue());
+            }
+        }
+    }
+
+    public void setAllBtype(final List<BannerAdType> btype) {
+        this.btype.clear();
+        if (btype != null) {
+            for (BannerAdType t : btype) {
+                this.btype.add(t.getValue());
+            }
+        }
+    }
+
+    public void addBattr(final CreativeAttribute battr) {
+	    if (battr != null) {
+	        this.battr.add(battr.getValue());
+        }
 	}
 
-	public void setBattr(final List<Integer> battr) {
-		this.battr = battr;
-	}
+    public void setAllBattr(final CreativeAttribute[] battr) {
+        this.battr.clear();
+        if (battr != null) {
+            for (CreativeAttribute a : battr) {
+                this.battr.add(a.getValue());
+            }
+        }
+    }
 
-	public int getTopframe() {
+    public void setAllBattr(final List<CreativeAttribute> battr) {
+        this.battr.clear();
+        if (battr != null) {
+            for (CreativeAttribute a : battr) {
+                this.battr.add(a.getValue());
+            }
+        }
+    }
+
+    public int getTopframe() {
 		return topframe;
 	}
 
@@ -120,7 +186,14 @@ public final class Banner implements Cloneable {
 		this.api = api;
 	}
 
-	public Object getExt() {
+    public void setApi(final List<Integer> api) {
+	    this.api = new int[api.size()];
+	    for (int i=0; i<api.size(); i++) {
+	        this.api[i] = api.get(i);
+        }
+    }
+
+    public Object getExt() {
 		return ext;
 	}
 
@@ -171,7 +244,50 @@ public final class Banner implements Cloneable {
 		return null;
 	}
 
-	public static class Builder {
+	public void addFormat(final Object format) {
+		if (format != null) {
+		    if (this.format == null) {
+		        this.format = new ArrayList();
+            }
+			this.format.add(format);
+		}
+	}
+
+	public void setFormat(final Object[] format) {
+	    if (this.format == null) {
+	        this.format = new ArrayList();
+        } else {
+            this.format.clear();
+        }
+		if (format != null) {
+			for (Object a : format) {
+				this.format.add(a);
+			}
+		}
+	}
+
+	public void setFormat(final List<Object> format) {
+        if (this.format == null) {
+            this.format = new ArrayList();
+        } else {
+            this.format.clear();
+        }
+		if (format != null) {
+			this.format.addAll(format);
+		}
+	}
+
+	public List<Object> getFormat() {
+	    if (format.size() == 0) {
+	        return null;
+        } else {
+            ArrayList<Object> list = new ArrayList();
+            list.addAll(format);
+            return list;
+        }
+	}
+
+    public static class Builder {
 
 		private final Banner banner;
 
@@ -184,13 +300,80 @@ public final class Banner implements Cloneable {
 			return this;
 		}
 
-		public Builder addAllBattr(final List<Integer> allBattr) {
-			banner.setBattr(allBattr);
+		public Builder setW(int w) {
+			banner.setW(w);
 			return this;
 		}
 
-		public Banner build() {
+		public Builder setH(int h) {
+			banner.setH(h);
+			return this;
+		}
+
+        public Builder addBtype(final BannerAdType btype) {
+            banner.addBtype(btype);
+            return this;
+        }
+
+        public Builder addBattr(final CreativeAttribute battr) {
+            banner.addBattr(battr);
+            return this;
+        }
+
+        public Builder setPos(final AddPosition pos) {
+            banner.setPos(pos);
+            return this;
+        }
+
+        public Builder setMimes(final String[] mimes) {
+            banner.setMimes(mimes);
+            return this;
+        }
+
+        public Banner build() {
 			return banner;
+		}
+
+    }
+
+	public static class BannerSize implements Comparable<BannerSize> {
+		private int w;
+		private int h;
+
+		public BannerSize(String constructString) {
+			int index = constructString.indexOf('x');
+			w = Integer.parseInt(constructString.substring(0, index));
+			h = Integer.parseInt(constructString.substring(index+1));
+
+		}
+
+		public int getW() {
+			return w;
+		}
+
+		public void setW(int w) {
+			this.w = w;
+		}
+
+		public int getH() {
+			return h;
+		}
+
+		public void setH(int h) {
+			this.h = h;
+		}
+
+		@Override
+		public String toString()
+		{
+			return w+"x"+h;
+		}
+
+		@Override
+		public int compareTo(BannerSize o) {
+			return Comparator.comparing(BannerSize::getW)
+					.thenComparing(BannerSize::getH)
+					.compare(this, o);
 		}
 	}
 }

@@ -1,5 +1,8 @@
 package com.atg.openssp.dspSim;
 
+import com.atg.openssp.common.logadapter.RtbRequestLogProcessor;
+import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
+import com.atg.openssp.dspSim.model.client.ClientCommandType;
 import com.atg.openssp.dspSim.model.dsp.DspModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
@@ -9,9 +12,7 @@ import openrtb.bidresponse.model.BidResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * @author Brian Sorensen
@@ -26,36 +27,40 @@ public class DspHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        // method: post
-        // writeFinished: false
-        // uri: /dsp-sim/DemandService
-        // reqContentLen: 724
-
-        // _REQ_HEADERS_
-        // Accept-encoding: gzip,deflate
-        // Connection: Keep-Alive
-        // Host: localhost:8082
-        // User-agent: Apache-HttpClient/4.5.2 (Java/1.8.0_161)
-        // Content-type: application/json; charset=UTF-8
-        // Contenttype: application/json
-        // X-openrtb-version: 2.2
-        // Content-length: 724
-
-        BidRequest brq = new Gson().fromJson(new InputStreamReader(httpExchange.getRequestBody()), BidRequest.class);
-        log.info("-->"+new Gson().toJson(brq));
-
-        BidResponse brsp = model.createBidResponse(brq);
-
-        if (brsp.getSeatbid().size() > 0 || true) {
-            String result = new Gson().toJson(brsp);
-            log.info("<--"+result);
-            httpExchange.sendResponseHeaders(200, result.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(result.getBytes());
-            os.close();
-        } else {
-            httpExchange.sendResponseHeaders(201, 0);
+        BufferedReader br = new BufferedReader(new InputStreamReader(httpExchange.getRequestBody()));
+        String line;
+        StringBuilder rawRequest = new StringBuilder();
+        while((line = br.readLine()) != null) {
+            rawRequest.append(line+"\n");
         }
+        RtbRequestLogProcessor.instance.setLogData(rawRequest.toString(), "bidrequest", httpExchange.getRemoteAddress().getHostName());
+        log.info("-->"+rawRequest);
+        if (model.getMode() == ClientCommandType.RETURN_NONE) {
+            httpExchange.sendResponseHeaders(200, 0);
+        } else if (model.getMode() == ClientCommandType.ONLY_400) {
+            httpExchange.sendResponseHeaders(400, 0);
+        } else if (model.getMode() == ClientCommandType.ONLY_500) {
+            httpExchange.sendResponseHeaders(500, 0);
+        }
+        try {
+            BidRequest brq = new Gson().fromJson(rawRequest.toString(), BidRequest.class);
+            BidResponse brsp = model.createBidResponse(httpExchange.getLocalAddress().getHostName(), httpExchange.getLocalAddress().getPort(), brq);
+            if (brsp.getSeatbid().size() > 0 || true) {
+                String result = model.filterResult(brsp);
+                RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", httpExchange.getRemoteAddress().getHostName());
+                log.info("<--"+result);
+                httpExchange.sendResponseHeaders(200, result.length());
+                OutputStream os = httpExchange.getResponseBody();
+                os.write(result.getBytes());
+                os.close();
+            } else {
+                httpExchange.sendResponseHeaders(201, 0);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            httpExchange.sendResponseHeaders(405, 0);
+        }
+
 
 
     }
