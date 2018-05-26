@@ -18,6 +18,7 @@ RUN cat /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml
 COPY /ssp-server.war /usr/local/tomcat/webapps
 
 #set-up config
+RUN mkdir -p /usr/local/tomcat/properties
 RUN mkdir -p /usr/local/tomcat/logfiles
 #RUN mkdir -p /usr/local/tomcat/conf/certs
 RUN mkdir -p /root

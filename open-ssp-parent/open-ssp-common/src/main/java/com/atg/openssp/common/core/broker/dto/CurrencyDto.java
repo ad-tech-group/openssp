@@ -38,7 +38,7 @@ public class CurrencyDto implements Serializable {
 
     @Override
 	public String toString() {
-		return String.format("CurrencyDto [currency, data=%s]", data);
+		return String.format("CurrencyDto [currency=%s, data=%s]", currency, data);
 	}
 
 }
