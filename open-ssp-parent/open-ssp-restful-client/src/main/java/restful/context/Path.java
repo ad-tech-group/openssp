@@ -44,7 +44,22 @@ public enum Path {
 	/**
 	 * app
 	 */
-	APP("app");
+	APP("app"),
+
+	/**
+	 * ssp-services
+	 */
+	ADS_CORE("ssp-services/ads"),
+
+	/**
+	 * banner
+	 */
+	BANNER_ADS("banner"),
+
+	/**
+	 * video
+	 */
+	VIDEO_ADS("video");
 
 	private String value;
 

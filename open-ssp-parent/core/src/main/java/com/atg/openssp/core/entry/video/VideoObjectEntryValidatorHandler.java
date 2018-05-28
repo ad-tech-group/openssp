@@ -35,7 +35,6 @@ public class VideoObjectEntryValidatorHandler extends EntryValidatorHandler {
 
     public VideoObjectEntryValidatorHandler() {
         GsonBuilder builder = new GsonBuilder();
-        VideoAd.populateTypeAdapters(builder);
         gson = builder.create();
     }
 

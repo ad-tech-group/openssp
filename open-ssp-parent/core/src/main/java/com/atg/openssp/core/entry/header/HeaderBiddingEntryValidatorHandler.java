@@ -40,8 +40,6 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
 
     public HeaderBiddingEntryValidatorHandler() {
         GsonBuilder builder = new GsonBuilder();
-        BannerAd.populateTypeAdapters(builder);
-        VideoAd.populateTypeAdapters(builder);
         gson = builder.create();
     }
 

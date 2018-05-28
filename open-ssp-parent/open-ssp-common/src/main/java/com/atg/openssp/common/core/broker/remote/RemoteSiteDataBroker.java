@@ -43,7 +43,7 @@ public final class RemoteSiteDataBroker extends AbstractDataBroker<SiteDto> {
 
 			log.error("no Site data");
 		} catch (final RestException | EmptyHostException e) {
-			log.error(getClass() + ", " + e.getMessage());
+			log.error(getClass() + ", " + e.getMessage(), e);
 		}
 		return false;
 	}

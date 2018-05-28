@@ -35,7 +35,6 @@ public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
 
     public BannerObjectEntryValidatorHandler() {
         GsonBuilder builder = new GsonBuilder();
-        BannerAd.populateTypeAdapters(builder);
         gson = builder.create();
     }
 

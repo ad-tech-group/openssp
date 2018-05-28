@@ -1,12 +1,15 @@
 package com.atg.openssp.common.cache.dto;
 
+import com.google.gson.annotations.SerializedName;
+import openrtb.bidrequest.model.Banner;
+import openrtb.tables.CreativeAttribute;
+import openrtb.tables.ApiFramework;
+import openrtb.tables.VideoBidResponseProtocol;
+import openrtb.tables.VideoLinearity;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
-import openrtb.bidrequest.model.Banner;
 
 /**
  * @author André Schmer
@@ -46,7 +49,11 @@ public class VideoAd implements Serializable {
     private String vidId;
 
     public VideoAd() {
-        mimes = new ArrayList<String>();
+        mimes = new ArrayList<>();
+        protocols = new ArrayList<>();
+        battr = new ArrayList<>();
+        companionad = new ArrayList<>();
+        api = new ArrayList<>();
     }
 
     public final String getId() {
@@ -126,44 +133,94 @@ public class VideoAd implements Serializable {
         this.startDelay = startDelay;
     }
 
-    public List<Integer> getProtocols() {
-        return protocols;
+    public List<VideoBidResponseProtocol> getProtocols() {
+        ArrayList<VideoBidResponseProtocol> list = new ArrayList();
+        for (int p : protocols) {
+            list.add(VideoBidResponseProtocol.convert(p));
+        }
+        return list;
     }
 
-    public void setProtocols(List<Integer> protocols) {
-        this.protocols = protocols;
+    public void setProtocols(List<VideoBidResponseProtocol> protocols) {
+        this.protocols.clear();
+        if (protocols != null) {
+            for (VideoBidResponseProtocol p : protocols) {
+                this.protocols.add(p.getValue());
+            }
+        }
     }
 
-    public List<Integer> getBattr() {
-        return battr;
+    public List<CreativeAttribute> getBattr() {
+        ArrayList<CreativeAttribute> list = new ArrayList();
+        for (int p : battr) {
+            list.add(CreativeAttribute.convertValue(p));
+        }
+        return list;
     }
 
-    public void setBattr(List<Integer> battr) {
-        this.battr = battr;
+    public void setBattr(List<CreativeAttribute> battr) {
+        this.battr.clear();
+        if (battr != null) {
+            for (CreativeAttribute p : battr) {
+                this.battr.add(p.getValue());
+            }
+        }
     }
 
-    public Integer getLinearity() {
-        return linearity;
+    public VideoLinearity getLinearity() {
+        if (linearity == null) {
+            return null;
+        } else {
+            return VideoLinearity.convertValue(linearity);
+        }
     }
 
-    public void setLinearity(Integer linearity) {
-        this.linearity = linearity;
+    public void setLinearity(VideoLinearity linearity) {
+        if (linearity == null) {
+            this.linearity = null;
+        } else {
+            this.linearity = linearity.getValue();
+        }
     }
 
     public List<Banner> getCompanionad() {
-        return companionad;
+        if (companionad.size() == 0) {
+            return null;
+        } else {
+            ArrayList<Banner> list = new ArrayList();
+            list.addAll(companionad);
+            return list;
+        }
     }
 
     public void setCompanionad(List<Banner> companionad) {
-        this.companionad = companionad;
+        this.companionad.clear();
+        if (companionad != null) {
+            this.companionad.addAll(companionad);
+        }
     }
 
-    public List<Integer> getApi() {
-        return api;
+    public void addApi(ApiFramework api) {
+        if (api != null) {
+            this.api.add(api.getValue());
+        }
     }
 
-    public void setApi(List<Integer> api) {
-        this.api = api;
+    public List<ApiFramework> getApi() {
+        ArrayList<ApiFramework> list = new ArrayList<>();
+        for (int p : api) {
+            list.add(ApiFramework.convertValue(p));
+        }
+        return list;
+    }
+
+    public void setApi(List<ApiFramework> api) {
+        this.api.clear();
+        if (api != null) {
+            for (ApiFramework p : api) {
+                this.api.add(p.getValue());
+            }
+        }
     }
 
     public Object getExt() {
@@ -187,15 +244,5 @@ public class VideoAd implements Serializable {
 		return String.format("VideoAd [id=%s, videoadId=%s, bidfloorCurrency=%s, bidfloorPrice=%s, minDuration=%s, maxDuration=%s]", id, vidId, bidfloorCurrency, bidfloorPrice,
 		        minDuration, maxDuration);
 	}
-
-    /**
-     * This method is used to add type adapters for use in Gson.  If we want to have an enum index in the json but have the code use the enum, for example.
-     * Currently we store the "String" value we want in the object, and the methods do the conversion, but when we change them to hold the enum instead, we need an adapter
-     * to handle the conversion for us.
-     * @param builder
-     */
-    public static void populateTypeAdapters(GsonBuilder builder) {
-//        builder.registerTypeAdapter(ContentCategory.class, (JsonDeserializer<ContentCategory>) (json, typeOfT, context) -> ContentCategory.valueOf(json.getAsString()));
-    }
 
 }

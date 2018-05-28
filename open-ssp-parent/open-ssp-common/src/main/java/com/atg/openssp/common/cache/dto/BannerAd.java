@@ -3,6 +3,7 @@ package com.atg.openssp.common.cache.dto;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.annotations.SerializedName;
+import openrtb.tables.ApiFramework;
 import openrtb.tables.BannerAdType;
 import openrtb.tables.CreativeAttribute;
 import openrtb.tables.ExpandableDirectionType;
@@ -212,30 +213,35 @@ public class BannerAd implements Serializable {
     }
 
 
-    public void addApi(Integer api) {
+    public void addApi(ApiFramework api) {
         if (api != null) {
-            this.api.add(api);
+            this.api.add(api.getValue());
         }
     }
 
-    public void setApi(List<Integer> api) {
+    public List<ApiFramework> getApi() {
+        ArrayList<ApiFramework> list = new ArrayList<>();
+        for (int p : api) {
+            list.add(ApiFramework.convertValue(p));
+        }
+        return list;
+    }
+
+    public void setApi(List<ApiFramework> api) {
         this.api.clear();
         if (api!= null) {
-            this.api.addAll(api);
+            for (ApiFramework p : api) {
+                this.api.add(p.getValue());
+            }
         }
-    }
-
-    public List<Integer> getApi() {
-        return api;
-    }
-
-
-    public void setExt(Object ext) {
-        this.ext = ext;
     }
 
     public Object getExt() {
         return ext;
+    }
+
+    public void setExt(Object ext) {
+        this.ext = ext;
     }
 
 
@@ -286,18 +292,6 @@ public class BannerAd implements Serializable {
     public String toString() {
         return String.format("BannerAd [id=%s, placementId=%s, bidfloorCurrency=%s, bidfloorPrice=%s, adUnitCode=%s, size=%s, promoSizes=%s]", id, placementId, bidfloorCurrency, bidfloorPrice,
                 adUnitCode, size, promo_sizes);
-    }
-
-    /**
-     * This method is used to add type adapters for use in Gson.  If we want to have an enum index in the json but have the code use the enum, for example.
-     * Currently we store the "String" value we want in the object, and the methods do the conversion, but when we change them to hold the enum instead, we need an adapter
-     * to handle the conversion for us.
-     * @param builder
-     */
-    public static void populateTypeAdapters(GsonBuilder builder) {
-        builder.registerTypeAdapter(BannerAdType.class, (JsonDeserializer<BannerAdType>) (json, typeOfT, context) -> BannerAdType.convertValue(json.getAsInt()));
-        builder.registerTypeAdapter(CreativeAttribute.class, (JsonDeserializer<CreativeAttribute>) (json, typeOfT, context) -> CreativeAttribute.convertValue(json.getAsInt()));
-        builder.registerTypeAdapter(ExpandableDirectionType.class, (JsonDeserializer<ExpandableDirectionType>) (json, typeOfT, context) -> ExpandableDirectionType.convertValue(json.getAsInt()));
     }
 
 }

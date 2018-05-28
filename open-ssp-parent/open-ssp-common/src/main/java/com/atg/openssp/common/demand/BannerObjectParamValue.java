@@ -1,8 +1,6 @@
 package com.atg.openssp.common.demand;
 
 import com.atg.openssp.common.cache.dto.BannerAd;
-import com.atg.openssp.common.cache.dto.VideoAd;
-import openrtb.bidrequest.model.App;
 
 /**
  * Optimized for handling Banner impressions with the behaviour of very individual requirements of the tag handler which binds to the SSP.

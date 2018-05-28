@@ -6,8 +6,6 @@ import com.atg.openssp.common.configuration.GlobalContext;
 import com.atg.openssp.common.core.cache.type.PricelayerCache;
 import com.atg.openssp.common.core.exchange.BidRequestBuilderHandler;
 import com.atg.openssp.common.core.exchange.RequestSessionAgent;
-import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncDTO;
-import com.atg.openssp.common.core.exchange.cookiesync.CookieSyncManager;
 import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
@@ -182,21 +180,21 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
         if (startdelay != null) {
             v.setStartdelay(startdelay);
         }
-        List<Integer> protocols = ad.getProtocols();
+        List<VideoBidResponseProtocol> protocols = ad.getProtocols();
         if (protocols != null) {
-            for (Integer i : protocols) {
-                v.addToProtocols(VideoBidResponseProtocol.convert(i));
+            for (VideoBidResponseProtocol i : protocols) {
+                v.addToProtocols(i);
             }
         }
-        List<Integer> battr = ad.getBattr();
+        List<CreativeAttribute> battr = ad.getBattr();
         if (battr != null) {
-            for (int i : battr) {
-                v.addBattr(CreativeAttribute.convertValue(i));
+            for (CreativeAttribute i : battr) {
+                v.addBattr(i);
             }
         }
-        Integer linearity = ad.getLinearity();
+        VideoLinearity linearity = ad.getLinearity();
         if (linearity != null) {
-            v.setLinearity(VideoLinearity.convertValue(linearity));
+            v.setLinearity(linearity);
         }
         List<Banner> companionad = ad.getCompanionad();
         if (companionad != null) {
@@ -204,10 +202,10 @@ public class VideoObjectBidRequestBuilderHandler extends BidRequestBuilderHandle
                 v.addCompanionad(i);
             }
         }
-        List<Integer> api = ad.getApi();
+        List<ApiFramework> api = ad.getApi();
         if (api != null) {
-            for (int i : api) {
-                v.addApi(VideoApiFramework.convertValue(i));
+            for (ApiFramework i : api) {
+                v.addApi(i);
             }
         }
         Object ext = ad.getExt();

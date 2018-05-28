@@ -184,7 +184,7 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
 
         b.setAllBtype(ad.getBtypes());
         b.setAllBattr(ad.getBattrs());
-        b.setApi(ad.getApi());
+        b.setApis(ad.getApi());
         b.setAllExpdir(ad.getExpdir());
         b.setMimes(ad.getMimes());
         //BKS TODO:

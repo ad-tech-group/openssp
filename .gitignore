@@ -4,3 +4,5 @@ site_export_db.json
 currency_export_db.json
 data-services/tomcat/logs
 ssp-services.war
+open-ssp-dsp-sim.jar
+ssp-server.war

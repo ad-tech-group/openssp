@@ -72,7 +72,7 @@ public class SSPService implements Callable<AdProviderReader> {
 		//
 		// // log.info("eval bidrequest: " + new
 		// // Gson().toJson(bidRequest));
-		// // TODO: wehre to store???
+		// // TODO: were to store???
 		// // this.agent.getBidExchange().setBidRequest(broker.getSupplier(),
 		// // bidRequest.getBuilder());
 		// });

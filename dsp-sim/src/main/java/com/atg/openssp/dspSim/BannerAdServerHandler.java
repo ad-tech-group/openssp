@@ -1,27 +1,26 @@
 package com.atg.openssp.dspSim;
 
+import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
 import com.atg.openssp.dspSim.model.ad.AdModel;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-import com.atg.openssp.dspSim.channel.adserving.AdservingCampaignProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author Brian Sorensen
  */
-public class AdServerHandler implements HttpHandler {
-    private static final Logger log = LoggerFactory.getLogger(AdServerHandler.class);
+public class BannerAdServerHandler implements HttpHandler {
+    private static final Logger log = LoggerFactory.getLogger(BannerAdServerHandler.class);
     private final AdModel model;
 
-    public AdServerHandler(AdModel model) {
+    public BannerAdServerHandler(AdModel model) {
         this.model = model;
     }
 

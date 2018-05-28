@@ -1,6 +1,9 @@
 package com.atg.openssp.common.core.broker.remote;
 
-import com.atg.openssp.common.cache.dto.VideoAd;
+import com.atg.openssp.common.cache.broker.AbstractAdDataBroker;
+import com.atg.openssp.common.configuration.ContextCache;
+import com.atg.openssp.common.configuration.ContextProperties;
+import com.atg.openssp.common.core.broker.dto.VideoAdDto;
 import com.atg.openssp.common.core.cache.type.VideoAdDataCache;
 import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
@@ -8,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import restful.context.Path;
 import restful.context.PathBuilder;
 import restful.exception.RestException;
 
@@ -22,32 +26,37 @@ import java.util.Arrays;
  * @author André Schmer
  *
  */
-public final class RemoteVideoadDataBroker extends AbstractRemoteDataProvider {
+public final class RemoteVideoadDataBroker extends AbstractAdDataBroker<VideoAdDto> {
 
 	private static final Logger log = LoggerFactory.getLogger(RemoteVideoadDataBroker.class);
 
-	final private Gson gson;
+	public RemoteVideoadDataBroker() {}
 
-	public RemoteVideoadDataBroker() {
-		gson = new Gson();
-	}
+    @Override
+    protected PathBuilder getDefaulPathBuilder() {
+        final PathBuilder pathBuilder = super.getDefaulPathBuilder();
+        pathBuilder.addPath(Path.ADS_CORE);
+        pathBuilder.addPath(Path.VIDEO_ADS);
+        return pathBuilder;
+    }
 
 	@Override
 	public boolean doCaching() {
 		long startTS = System.currentTimeMillis();
 		try {
-			final String jsonString = super.connect();
-			final VideoAd[] data = gson.fromJson(jsonString, VideoAd[].class);
-			if (data != null && data.length > 0) {
+			final VideoAdDto dto = super.connect(VideoAdDto.class);
+            if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("VideoAdData", data.length, startTS, endTS, endTS-startTS);
-				log.debug(this.getClass().getSimpleName() + " sizeof VideoAd data=" + data.length);
-				Arrays.stream(data).forEach(c -> VideoAdDataCache.instance.put(c.getVidId(), c));
+				DataBrokerLogProcessor.instance.setLogData("VideoAdData", dto.getVideoAds().size(), startTS, endTS, endTS-startTS);
+				log.debug("sizeof VideoAd data=" + dto.getVideoAds().size());
+				dto.getVideoAds().forEach(ad -> {
+					VideoAdDataCache.instance.put(ad.getId(), ad);
+				});
 				return true;
 			}
 			log.error("no VideoAd data");
 		} catch (final JsonSyntaxException | RestException | EmptyHostException e) {
-			log.error(e.getMessage());
+            log.error(getClass() + ", " + e.getMessage(), e);
 		}
 		return false;
 	}
