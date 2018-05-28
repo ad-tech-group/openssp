@@ -17,21 +17,11 @@ public class GlobalContextLoader extends AbstractConfigurationLoader {
 	private static final Logger log = LoggerFactory.getLogger(GlobalContextLoader.class);
 
 	public GlobalContextLoader() {
-		super(resolveEnvironment()+Context.RUNTIME_GLOBAL_XML);
+		super(Context.RUNTIME_GLOBAL_XML);
 	}
 
 	public GlobalContextLoader(final CountDownLatch cdl) {
-		super(resolveEnvironment()+Context.RUNTIME_GLOBAL_XML, cdl);
-	}
-
-	public static String resolveEnvironment() {
-		String environment = System.getProperty("SSP_ENVIRONMENT");
-		log.info("Environment: "+environment);
-		if (environment != null) {
-			return environment+"_";
-		} else {
-			return "";
-		}
+		super(Context.RUNTIME_GLOBAL_XML, cdl);
 	}
 
 	@Override

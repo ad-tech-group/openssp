@@ -49,8 +49,8 @@ public final class Video implements Cloneable {
 		mimes = new ArrayList<>();
 		battr = new ArrayList<>();
 		companionad = new ArrayList<>();
-		api = new ArrayList<>();
         protocols = new ArrayList<>();
+		api = new ArrayList<>();
 	}
 
 	public List<String> getMimes() {
@@ -130,23 +130,6 @@ public final class Video implements Cloneable {
         this.protocols.add(protocol.getValue());
     }
 
-    public List<VideoApiFramework> getApis() {
-	    ArrayList<VideoApiFramework> list = new ArrayList();
-	    this.api.forEach(a -> list.add(VideoApiFramework.convertValue(a)));
-        return list;
-    }
-
-    public void setApi(final List<VideoApiFramework> apis) {
-        this.api.clear();
-        if (apis != null) {
-            apis.forEach(a -> this.api.add(a.getValue()));
-        }
-    }
-
-    public void addApi(final VideoApiFramework api) {
-        this.api.add(api.getValue());
-    }
-
     public void setBattr(final List<CreativeAttribute> battr) {
         this.battr.clear();
         if (battr != null) {
@@ -182,6 +165,23 @@ public final class Video implements Cloneable {
     public void addCompanionad(final Banner companionad) {
         this.companionad.add(companionad);
     }
+
+	public List<ApiFramework> getApis() {
+		ArrayList<ApiFramework> list = new ArrayList();
+		this.api.forEach(a -> list.add(ApiFramework.convertValue(a)));
+		return list;
+	}
+
+	public void setApi(final List<ApiFramework> apis) {
+		this.api.clear();
+		if (apis != null) {
+			apis.forEach(a -> this.api.add(a.getValue()));
+		}
+	}
+
+	public void addApi(final ApiFramework api) {
+		this.api.add(api.getValue());
+	}
 
 	public Object getExt() {
 		return ext;
@@ -254,11 +254,6 @@ public final class Video implements Cloneable {
 			return this;
 		}
 
-		public Builder addApi(final VideoApiFramework api) {
-			video.addApi(api);
-			return this;
-		}
-
 		public Builder addBattr(final CreativeAttribute battr) {
 			video.addBattr(battr);
 			return this;
@@ -285,7 +280,12 @@ public final class Video implements Cloneable {
 			return this;
 		}
 
-        public Video build() {
+		public Builder addApi(final ApiFramework api) {
+			video.addApi(api);
+			return this;
+		}
+
+		public Video build() {
             return video;
         }
 

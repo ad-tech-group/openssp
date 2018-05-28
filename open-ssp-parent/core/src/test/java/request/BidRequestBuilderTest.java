@@ -2,7 +2,6 @@ package request;
 
 import java.io.IOException;
 
-import com.google.gson.JsonObject;
 import openrtb.bidrequest.model.*;
 import openrtb.tables.*;
 import org.junit.Assert;
@@ -181,7 +180,7 @@ public class BidRequestBuilderTest {
                                 .setMinduration(30)
                                 .setProtocol(VideoBidResponseProtocol.VAST_2_0)
                                 .addToProtocols(VideoBidResponseProtocol.VAST_2_0)
-                                .addApi(VideoApiFramework.MRAID_1)
+                                .addApi(ApiFramework.MRAID_1)
                                 .setLinearity(VideoLinearity.LINEAR)
                                 // start delay has a maximum of 0 until 2.3
                                 .setStartdelay(-1)

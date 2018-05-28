@@ -11,10 +11,8 @@ import com.atg.openssp.common.core.exchange.geo.AddressNotFoundException;
 import com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.GeoIpInfoHandler;
 import com.atg.openssp.common.core.exchange.geo.UnavailableHandlerException;
-import com.atg.openssp.common.demand.BannerObjectParamValue;
 import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.demand.ParamValue;
-import com.atg.openssp.common.demand.VideoObjectParamValue;
 import com.atg.openssp.common.exception.ERROR_CODE;
 import com.atg.openssp.common.exception.EmptyCacheException;
 import com.atg.openssp.common.exception.RequestException;
@@ -193,21 +191,21 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
         if (startdelay != null) {
             v.setStartdelay(startdelay);
         }
-        List<Integer> protocols = ad.getProtocols();
+        List<VideoBidResponseProtocol> protocols = ad.getProtocols();
         if (protocols != null) {
-            for (Integer i : protocols) {
-                v.addToProtocols(VideoBidResponseProtocol.convert(i));
+            for (VideoBidResponseProtocol i : protocols) {
+                v.addToProtocols(i);
             }
         }
-        List<Integer> battr = ad.getBattr();
+        List<CreativeAttribute> battr = ad.getBattr();
         if (battr != null) {
-            for (int i : battr) {
-                v.addBattr(CreativeAttribute.convertValue(i));
+            for (CreativeAttribute i : battr) {
+                v.addBattr(i);
             }
         }
-        Integer linearity = ad.getLinearity();
+        VideoLinearity linearity = ad.getLinearity();
         if (linearity != null) {
-            v.setLinearity(VideoLinearity.convertValue(linearity));
+            v.setLinearity(linearity);
         }
         List<Banner> companionad = ad.getCompanionad();
         if (companionad != null) {
@@ -215,10 +213,10 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
                 v.addCompanionad(i);
             }
         }
-        List<Integer> api = ad.getApi();
+        List<ApiFramework> api = ad.getApi();
         if (api != null) {
-            for (int i : api) {
-                v.addApi(VideoApiFramework.convertValue(i));
+            for (ApiFramework i : api) {
+                v.addApi(i);
             }
         }
         Object ext = ad.getExt();
@@ -257,7 +255,7 @@ public class HeaderBiddingBidRequestBuilderHandler extends BidRequestBuilderHand
 
         b.setAllBtype(ad.getBtypes());
         b.setAllBattr(ad.getBattrs());
-        b.setApi(ad.getApi());
+        b.setApis(ad.getApi());
         b.setAllExpdir(ad.getExpdir());
         b.setMimes(ad.getMimes());
         //BKS TODO:

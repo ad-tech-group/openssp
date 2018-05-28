@@ -40,8 +40,6 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
 
     public HeaderBiddingEntryValidatorHandler() {
         GsonBuilder builder = new GsonBuilder();
-        BannerAd.populateTypeAdapters(builder);
-        VideoAd.populateTypeAdapters(builder);
         gson = builder.create();
     }
 
@@ -78,7 +76,7 @@ public class HeaderBiddingEntryValidatorHandler extends EntryValidatorHandler {
                 log.warn("returned E906 " + e.getMessage(), e);
                 throw new RequestException(ERROR_CODE.E906, "could not read json input");
             }
-        } else if (request.getMethod().equalsIgnoreCase("get") && request.getContentLength() > 0) {
+        } else if (request.getMethod().equalsIgnoreCase("get")) {
             HashMap<String, String> params = new LinkedHashMap<>();
             Enumeration<String> penum = request.getParameterNames();
             while (penum.hasMoreElements()) {

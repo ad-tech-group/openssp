@@ -1,9 +1,8 @@
 package com.atg.openssp.dataprovider.provider.model;
 
-import com.atg.openssp.common.core.broker.dto.CurrencyDto;
-import com.atg.openssp.common.core.broker.dto.PricelayerDto;
-import com.atg.openssp.common.core.broker.dto.SiteDto;
-import com.atg.openssp.common.core.broker.dto.SupplierDto;
+import com.atg.openssp.common.cache.dto.BannerAd;
+import com.atg.openssp.common.cache.dto.VideoAd;
+import com.atg.openssp.common.core.broker.dto.*;
 import com.atg.openssp.common.demand.Supplier;
 import com.atg.openssp.common.model.EurRef;
 import com.google.gson.Gson;
@@ -26,6 +25,8 @@ public class DataStore {
     private static final String TABLE_PRICELAYERS = "PRICELAYERS";
     private static final String TABLE_SUPPLIERS = "SUPPLIERS";
     private static final String TABLE_CURRENCY = "CURRENCY";
+    private static final String TABLE_VIDEO_ADS = "VIDEO_ADS";
+    private static final String TABLE_BANNER_ADS = "BANNER_ADS";
     private final GsonBuilder builder;
     private static DataStore singleton;
 
@@ -83,7 +84,10 @@ public class DataStore {
 
     public void update(CurrencyDto currency) {
         Gson gson = builder.create();
-        update(TABLE_CURRENCY, currency.getCurrency(), gson.toJson(currency));
+        int count = update(TABLE_CURRENCY, currency.getCurrency(), gson.toJson(currency));
+        if (count == 0) {
+            insert(currency);
+        }
     }
 
     public void remove(CurrencyDto currency) {
@@ -130,7 +134,10 @@ public class DataStore {
 
     public void update(Site site) {
         Gson gson = builder.create();
-        update(TABLE_SITES, site.getId(), gson.toJson(site));
+        int count = update(TABLE_SITES, site.getId(), gson.toJson(site));
+        if (count == 0) {
+            insert(site);
+        }
     }
 
     public void remove(Site site) {
@@ -177,7 +184,10 @@ public class DataStore {
 
     public void update(Pricelayer pricelayer) {
         Gson gson = builder.create();
-        update(TABLE_PRICELAYERS, pricelayer.getSiteid(), gson.toJson(pricelayer));
+        int count = update(TABLE_PRICELAYERS, pricelayer.getSiteid(), gson.toJson(pricelayer));
+        if (count == 0) {
+            insert(pricelayer);
+        }
     }
 
     public void remove(Pricelayer pricelayer) {
@@ -224,7 +234,10 @@ public class DataStore {
 
     public void update(Supplier supplier) {
         Gson gson = builder.create();
-        update(TABLE_SUPPLIERS, Long.toString(supplier.getSupplierId()), gson.toJson(supplier));
+        int count = update(TABLE_SUPPLIERS, Long.toString(supplier.getSupplierId()), gson.toJson(supplier));
+        if (count == 0) {
+            insert(supplier);
+        }
     }
 
     public void remove(Supplier supplier) {
@@ -286,7 +299,7 @@ public class DataStore {
         }
     }
 
-    private void update(String table, String externalId, String json) {
+    private int update(String table, String externalId, String json) {
         try {
             Connection c = null;
             Statement stmt = null;
@@ -294,7 +307,7 @@ public class DataStore {
             {
                 c = getConnection();
                 stmt = getConnection().createStatement();
-                int i = stmt.executeUpdate("update " + table + " set JSON='" + json + "' where XID='" + externalId + "'");
+                return stmt.executeUpdate("update " + table + " set JSON='" + json + "' where XID='" + externalId + "'");
             }
             finally {
                 close(c, stmt);
@@ -311,6 +324,7 @@ public class DataStore {
                 throw new RuntimeException(e);
             }
         }
+        return 0;
     }
 
     private void remove(String table, String externalId) {
@@ -430,6 +444,106 @@ public class DataStore {
                 throw ex;
             }
         }
+    }
+
+    public VideoAdDto lookupVideoAds() {
+        VideoAdDto dto = new VideoAdDto();
+        dto.setVideoAds(lookupAllVideoAds());
+        return dto;
+    }
+
+    private List<VideoAd> lookupAllVideoAds() {
+        List<VideoAd> list = new ArrayList<>();
+        try {
+            List<String> working = lookupQuerry(TABLE_VIDEO_ADS);
+            Gson gson = builder.create();
+            for (String json : working) {
+                list.add(gson.fromJson(json, VideoAd.class));
+            }
+            return list;
+        } catch (SQLException e) {
+            if (("Table/View '"+TABLE_VIDEO_ADS+"' does not exist.").equals(e.getMessage())) {
+                try {
+                    createTable(TABLE_VIDEO_ADS);
+                } catch (SQLException e1) {
+                    throw new RuntimeException(e1);
+                }
+                return lookupAllVideoAds();
+            } else {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void insert(VideoAd videoAd) {
+        Gson gson = builder.create();
+        insert(TABLE_VIDEO_ADS, videoAd.getId(), gson.toJson(videoAd));
+    }
+
+    public void update(VideoAd videoAd) {
+        Gson gson = builder.create();
+        int count = update(TABLE_VIDEO_ADS, videoAd.getId(), gson.toJson(videoAd));
+        if (count == 0) {
+            insert(videoAd);
+        }
+    }
+
+    public void remove(VideoAd videoAd) {
+        remove(TABLE_VIDEO_ADS, videoAd.getId());
+    }
+
+    public void clearVideoAds() {
+        clear(TABLE_VIDEO_ADS);
+    }
+
+    public BannerAdDto lookupBannerAds() {
+        BannerAdDto dto = new BannerAdDto();
+        dto.setBannerAds(lookupAllBannerAds());
+        return dto;
+    }
+
+    private List<BannerAd> lookupAllBannerAds() {
+        List<BannerAd> list = new ArrayList<>();
+        try {
+            List<String> working = lookupQuerry(TABLE_BANNER_ADS);
+            Gson gson = builder.create();
+            for (String json : working) {
+                list.add(gson.fromJson(json, BannerAd.class));
+            }
+            return list;
+        } catch (SQLException e) {
+            if (("Table/View '"+TABLE_BANNER_ADS+"' does not exist.").equals(e.getMessage())) {
+                try {
+                    createTable(TABLE_BANNER_ADS);
+                } catch (SQLException e1) {
+                    throw new RuntimeException(e1);
+                }
+                return lookupAllBannerAds();
+            } else {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void insert(BannerAd bannerAd) {
+        Gson gson = builder.create();
+        insert(TABLE_BANNER_ADS, bannerAd.getId(), gson.toJson(bannerAd));
+    }
+
+    public void update(BannerAd bannerAd) {
+        Gson gson = builder.create();
+        int count = update(TABLE_BANNER_ADS, bannerAd.getId(), gson.toJson(bannerAd));
+        if (count == 0) {
+            insert(bannerAd);
+        }
+    }
+
+    public void remove(BannerAd bannerAd) {
+        remove(TABLE_BANNER_ADS, bannerAd.getId());
+    }
+
+    public void clearBannerAds() {
+        clear(TABLE_BANNER_ADS);
     }
 
 }

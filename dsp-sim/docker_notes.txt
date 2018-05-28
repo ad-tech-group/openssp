@@ -1,0 +1,5 @@
+
+docker network create --subnet=192.18.0.0/16 open-ssp-net       
+
+#docker run --net open-ssp-net -h myhostname --ip 192.18.0.22 -it ubuntu bash
+

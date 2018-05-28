@@ -27,7 +27,6 @@
 	<entry key="master_user">izod</entry>
 
 	<!-- url of the adserver provider where the cache is updated from -->
-	<!--
 	<entry key="adserver-provider-scheme">http</entry>
 
 	<entry key="adserver-provider-host">localhost</entry>
@@ -35,7 +34,6 @@
 	<entry key="adserver-provider-port">8081</entry>
 
 	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
-	-->
 
     <entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
 

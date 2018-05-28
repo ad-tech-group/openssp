@@ -17,7 +17,7 @@
         "DESKTOP",
         "MOBILE"
       ],
-      "demandBrokerFilterClassName": "com.atg.openssp.core.exchange.channel.rtb.DemandBrokerFilter",
+      "demandBrokerFilterClassName": "com.atg.openssp.core.exchange.channel.rtb.DefaultSupplierFilter",
       "cookieSync": "<img src='//localhost:8082/user-sync?t=image&r={SSP_REDIR_URL}' style ='display:none' width='0' height='0'></img>",
       "underTest": 1,
       "active": 1

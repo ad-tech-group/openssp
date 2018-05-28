@@ -16,7 +16,7 @@
 	<!-- url of the data provider where the cache is updated from -->
 	<entry key="data-provider-scheme">http</entry>
 
-	<entry key="data-provider-host">localhost</entry>
+	<entry key="data-provider-host">192.18.0.11</entry>
 
 	<entry key="data-provider-port">9090</entry>
 

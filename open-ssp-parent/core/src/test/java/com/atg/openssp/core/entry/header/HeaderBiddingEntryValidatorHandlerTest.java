@@ -7,6 +7,7 @@ import com.atg.openssp.common.demand.ParamValue;
 import com.atg.openssp.common.demand.HeaderBiddingParamValue;
 import com.atg.openssp.common.exception.RequestException;
 import openrtb.bidrequest.model.Site;
+import openrtb.tables.ApiFramework;
 import openrtb.tables.BannerAdType;
 import openrtb.tables.CreativeAttribute;
 import openrtb.tables.ExpandableDirectionType;
@@ -51,7 +52,7 @@ public class HeaderBiddingEntryValidatorHandlerTest {
         ban.addBattr(CreativeAttribute.AUDIO_AD_AUTO_PLAY);
         ban.setTopframe(99);
         ban.addExpdir(ExpandableDirectionType.Right);
-        ban.addApi(3);
+        ban.addApi(ApiFramework.MRAID_1);
         ban.setExt(null);
         ban.setWmax(32);
         ban.setWmin(31);
@@ -98,17 +99,17 @@ public class HeaderBiddingEntryValidatorHandlerTest {
 
         JSONArray btypes = new JSONArray();
         ban.put("btypes", btypes);
-        btypes.add(0, BannerAdType.XHTML_TEXT_AD.getValue());
+        btypes.add(0, BannerAdType.XHTML_TEXT_AD);
 
         JSONArray battrs = new JSONArray();
         ban.put("battrs", battrs);
-        battrs.add(0, CreativeAttribute.AUDIO_AD_AUTO_PLAY.getValue());
+        battrs.add(0, CreativeAttribute.AUDIO_AD_AUTO_PLAY);
 
         ban.put("topframe", 99);
 
         JSONArray expdir = new JSONArray();
         ban.put("expdir", expdir);
-        expdir.add(0, ExpandableDirectionType.Right.getValue());
+        expdir.add(0, ExpandableDirectionType.Right);
 
         JSONArray api = new JSONArray();
         ban.put("api", api);
@@ -187,7 +188,7 @@ public class HeaderBiddingEntryValidatorHandlerTest {
 
         assertEquals(99, va.getTopframe());
         assertEquals("[Right]", va.getExpdir().toString());
-        assertEquals("[3]", va.getApi().toString());
+        assertEquals("[MRAID_1]", va.getApi().toString());
         assertEquals(null, va.getExt());
         assertEquals(32, va.getWmax());
         assertEquals(31, va.getWmin());

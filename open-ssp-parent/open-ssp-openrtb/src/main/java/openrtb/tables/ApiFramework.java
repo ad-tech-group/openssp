@@ -4,7 +4,7 @@ package openrtb.tables;
  * @author Brian Sorensen
  *
  */
-public enum VideoApiFramework {
+public enum ApiFramework {
 
 	VPAID_1_0(1),
 	VPAID_2_0(2),
@@ -14,7 +14,7 @@ public enum VideoApiFramework {
 
 	private int value;
 
-	VideoApiFramework(int value) {
+	ApiFramework(int value) {
 		this.value = value;
 	}
 
@@ -23,8 +23,8 @@ public enum VideoApiFramework {
 		return value;
 	}
 
-	public static VideoApiFramework convertValue(final int value) {
-		for (final VideoApiFramework v : values()) {
+	public static ApiFramework convertValue(final int value) {
+		for (final ApiFramework v : values()) {
 			if (v.getValue() == value) {
 				return v;
 			}

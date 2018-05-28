@@ -47,6 +47,10 @@ public class LocalContext extends Context {
 
     private static boolean isSupplierDataServiceEnabled = false;
 
+	private static boolean isBannerAdDataServiceEnabled = false;
+
+	private static boolean isVideoAdDataServiceEnabled = false;
+
 	private static String appDataHandlerClass;
 
 	private static String currencyDataHandlerClass;
@@ -66,7 +70,16 @@ public class LocalContext extends Context {
 	private static String supplierDataHandlerClass;
 
 	private static String supplierDataMaintenanceHandlerClass;
-    //#######################################
+
+	private static String bannerAdDataHandlerClass;
+
+	private static String bannerAdDataMaintenanceHandlerClass;
+
+	private static String videoAdDataHandlerClass;
+
+	private static String videoAdDataMaintenanceHandlerClass;
+
+	//#######################################
 
 	static {
 		initData();
@@ -86,6 +99,8 @@ public class LocalContext extends Context {
 		isPricelayerDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.PRICELAYER_DATA_SERVICE_ENABLED));
 		isSiteDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.SITE_DATA_SERVICE_ENABLED));
 		isSupplierDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_SERVICE_ENABLED));
+		isBannerAdDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.BANNER_AD_DATA_SERVICE_ENABLED));
+		isVideoAdDataServiceEnabled = Boolean.parseBoolean(ContextCache.instance.get(ContextProperties.VIDEO_AD_DATA_SERVICE_ENABLED));
 
 		appDataHandlerClass = ContextCache.instance.get(ContextProperties.APP_DATA_HANDLER_CLASS);
 		currencyDataHandlerClass = ContextCache.instance.get(ContextProperties.CURRENCY_DATA_HANDLER_CLASS);
@@ -93,11 +108,15 @@ public class LocalContext extends Context {
 		pricelayerDataHandlerClass = ContextCache.instance.get(ContextProperties.PRICELAYER_DATA_HANDLER_CLASS);
 		siteDataHandlerClass = ContextCache.instance.get(ContextProperties.SITE_DATA_HANDLER_CLASS);
 		supplierDataHandlerClass = ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_HANDLER_CLASS);
+		bannerAdDataHandlerClass = ContextCache.instance.get(ContextProperties.BANNER_AD_DATA_HANDLER_CLASS);
+		videoAdDataHandlerClass = ContextCache.instance.get(ContextProperties.VIDEO_AD_DATA_HANDLER_CLASS);
 
 		currencyDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.CURRENCY_DATA_MAINTENANCE_HANDLER_CLASS);
 		pricelayerDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.PRICELAYER_DATA_MAINTENANCE_HANDLER_CLASS);
 		siteDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.SITE_DATA_MAINTENANCE_HANDLER_CLASS);
 		supplierDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.SUPPLIER_DATA_MAINTENANCE_HANDLER_CLASS);
+		bannerAdDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.BANNER_AD_DATA_MAINTENANCE_HANDLER_CLASS);
+		videoAdDataMaintenanceHandlerClass = ContextCache.instance.get(ContextProperties.VIDEO_AD_DATA_MAINTENANCE_HANDLER_CLASS);
 	}
 
 	private static void initData() {
@@ -167,9 +186,15 @@ public class LocalContext extends Context {
 		return isSupplierDataServiceEnabled;
 	}
 
-	public static String getAppDataHandlerClass() {
-		return appDataHandlerClass;
+	public static boolean isBannerAdDataServiceEnabled() {
+		return isBannerAdDataServiceEnabled;
 	}
+
+	public static boolean isVideoAdDataServiceEnabled() {
+		return isVideoAdDataServiceEnabled;
+	}
+
+	public static String getAppDataHandlerClass() { return appDataHandlerClass; }
 
 	public static String getCurrencyDataHandlerClass() {
 		return currencyDataHandlerClass;
@@ -191,6 +216,14 @@ public class LocalContext extends Context {
 		return supplierDataHandlerClass;
 	}
 
+	public static String getBannerAdDataHandlerClass() {
+		return bannerAdDataHandlerClass;
+	}
+
+	public static String getVideoAdDataHandlerClass() {
+		return videoAdDataHandlerClass;
+	}
+
 	public static String getCurrencyDataMaintenanceHandlerClass() {
 		return currencyDataMaintenanceHandlerClass;
 	}
@@ -205,6 +238,14 @@ public class LocalContext extends Context {
 
 	public static String getSupplierDataMaintenanceHandlerClass() {
 		return supplierDataMaintenanceHandlerClass;
+	}
+
+	public static String getBannerAdDataMaintenanceHandlerClass() {
+		return bannerAdDataMaintenanceHandlerClass;
+	}
+
+	public static String getVideoAdDataMaintenanceHandlerClass() {
+		return videoAdDataMaintenanceHandlerClass;
 	}
 
 }

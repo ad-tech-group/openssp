@@ -6,18 +6,12 @@ import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
 import com.atg.openssp.dataprovider.provider.model.PricelayerModel;
 import com.google.gson.Gson;
-import openrtb.bidrequest.model.Pricelayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.properties.ProjectProperty;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.PropertyException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 /**

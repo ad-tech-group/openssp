@@ -216,8 +216,23 @@ public enum ContextProperties {
 	SUPPLIER_DATA_HANDLER_CLASS("supplier-data-handler-class"),
 
 	@RuntimeMeta(type = Scope.LOCAL)
-	SUPPLIER_DATA_MAINTENANCE_HANDLER_CLASS("supplier-data-maintenance-handler-class");
+	SUPPLIER_DATA_MAINTENANCE_HANDLER_CLASS("supplier-data-maintenance-handler-class"),
 
+	/**
+	 * ad data service
+	 */
+	@RuntimeMeta(type = Scope.LOCAL)
+	BANNER_AD_DATA_SERVICE_ENABLED("banner-ad-data-service-enabled"),
+	@RuntimeMeta(type = Scope.LOCAL)
+	BANNER_AD_DATA_HANDLER_CLASS("banner-ad-data-handler-class"),
+	@RuntimeMeta(type = Scope.LOCAL)
+	BANNER_AD_DATA_MAINTENANCE_HANDLER_CLASS("banner-ad-data-maintenance-handler-class"),
+	@RuntimeMeta(type = Scope.LOCAL)
+	VIDEO_AD_DATA_SERVICE_ENABLED("video-ad-data-service-enabled"),
+	@RuntimeMeta(type = Scope.LOCAL)
+	VIDEO_AD_DATA_HANDLER_CLASS("video-ad-data-handler-class"),
+	@RuntimeMeta(type = Scope.LOCAL)
+	VIDEO_AD_DATA_MAINTENANCE_HANDLER_CLASS("video-ad-data-maintenance-handler-class");
 
 	//###########################################################
 

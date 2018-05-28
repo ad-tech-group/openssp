@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.zip.CRC32;
 
 import com.google.gson.annotations.Since;
-import openrtb.tables.AddPosition;
-import openrtb.tables.BannerAdType;
-import openrtb.tables.CreativeAttribute;
-import openrtb.tables.ExpandableDirectionType;
+import openrtb.tables.*;
 
 /**
  * @author André Schmer
@@ -29,7 +26,7 @@ public final class Banner implements Cloneable {
 	private String[] mimes;// commaseparated list
 	private int topframe = 0;
 	private List<Integer> expdir; // expandable directions 1-6
-	private int[] api;
+	private List<Integer> api;
 	private Object ext;
 
 	@Since(2.2)
@@ -49,6 +46,7 @@ public final class Banner implements Cloneable {
 		btype = new ArrayList<>();
 		battr = new ArrayList<>();
 		expdir = new ArrayList<>();
+		api = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -178,29 +176,6 @@ public final class Banner implements Cloneable {
 		this.topframe = topframe;
 	}
 
-	public int[] getApi() {
-		return api;
-	}
-
-	public void setApi(final int[] api) {
-		this.api = api;
-	}
-
-    public void setApi(final List<Integer> api) {
-	    this.api = new int[api.size()];
-	    for (int i=0; i<api.size(); i++) {
-	        this.api[i] = api.get(i);
-        }
-    }
-
-    public Object getExt() {
-		return ext;
-	}
-
-	public void setExt(final Object ext) {
-		this.ext = ext;
-	}
-
 	public int getWmax() {
 		return wmax;
 	}
@@ -231,6 +206,37 @@ public final class Banner implements Cloneable {
 
 	public void setHmin(final int hmin) {
 		this.hmin = hmin;
+	}
+
+	public List<ApiFramework> getApis() {
+		ArrayList<ApiFramework> list = new ArrayList();
+		this.api.forEach(a -> list.add(ApiFramework.convertValue(a)));
+		return list;
+	}
+
+	/*
+	public void setApis(final int[] apis) {
+		this.api = api;
+	}
+	*/
+
+	public void setApis(final List<ApiFramework> apis) {
+		this.api.clear();
+		if (apis != null) {
+			apis.forEach(a -> this.api.add(a.getValue()));
+		}
+	}
+
+	public void addApi(final ApiFramework api) {
+		this.api.add(api.getValue());
+	}
+
+	public Object getExt() {
+		return ext;
+	}
+
+	public void setExt(final Object ext) {
+		this.ext = ext;
 	}
 
 	@Override
@@ -330,7 +336,12 @@ public final class Banner implements Cloneable {
             return this;
         }
 
-        public Banner build() {
+		public Builder addApi(final ApiFramework api) {
+			banner.addApi(api);
+			return this;
+		}
+
+		public Banner build() {
 			return banner;
 		}
 
