@@ -73,14 +73,12 @@ public class VideoObjectEntryValidatorHandler extends EntryValidatorHandler {
             }
         } else if (request.getMethod().equalsIgnoreCase("get")) {
             HashMap<String, String> params = new LinkedHashMap<>();
-            Enumeration<String> penum = request.getParameterNames();
-            while (penum.hasMoreElements()) {
-                String key = penum.nextElement();
-                List<String> values = Arrays.asList(request.getParameterValues(key));
-                if (values.size() > 0) {
-                    params.put(key, values.get(0));
+            Map<String, String[]> penum = request.getParameterMap();
+            for (Map.Entry<String, String[]> entry : penum.entrySet()) {
+                if (entry.getValue().length > 0) {
+                    params.put(entry.getKey(), entry.getValue()[0]);
                 }
-                log.debug("param: " + key + " : " + values);
+                log.debug("param: " + entry.getKey() + " : " + entry.getValue());
             }
             processValidationFromGet(params, pmList, referrer, ipAddress, userAgent);
         } else {
@@ -103,6 +101,7 @@ public class VideoObjectEntryValidatorHandler extends EntryValidatorHandler {
         try {
             is.read(buffer);
             String json = new String(buffer);
+            System.out.println("bks-->"+json);
             StringReader bais = new StringReader(json);
             biddingRequest = gson.fromJson(bais, VideoBiddingRequest.class);
             bais.close();

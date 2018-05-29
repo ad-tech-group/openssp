@@ -62,7 +62,9 @@ public abstract class SessionAgent {
 	}
 
 	public List<ParamValue> getParamValues() throws RequestException {
+    	System.out.println("Lizzard1");
     	if (!paramValueInitialized) {
+			System.out.println("Lizzard2");
 			paramValueList = createParamValue(httpRequest);
 			paramValueInitialized = true;
 		}

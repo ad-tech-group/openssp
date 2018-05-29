@@ -1,6 +1,7 @@
 package com.atg.openssp.common.core.broker.remote;
 
 import com.atg.openssp.common.cache.broker.AbstractAdDataBroker;
+import com.atg.openssp.common.cache.dto.BannerAd;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.common.core.broker.dto.BannerAdDto;
@@ -46,9 +47,9 @@ public final class RemoteBanneradDataBroker extends AbstractAdDataBroker<BannerA
 				long endTS = System.currentTimeMillis();
 				DataBrokerLogProcessor.instance.setLogData("BannerAdData", dto.getBannerAds().size(), startTS, endTS, endTS-startTS);
 				log.debug("sizeof BannerAd data=" + dto.getBannerAds().size());
-				dto.getBannerAds().forEach(ad -> {
+				for (BannerAd ad : dto.getBannerAds()) {
 					BannerAdDataCache.instance.put(ad.getPlacementId(), ad);
-				});
+				}
 				return true;
 			}
 			log.error("no BannerAd data");

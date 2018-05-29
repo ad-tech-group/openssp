@@ -1,21 +1,19 @@
 package com.atg.openssp.common.core.broker.remote;
 
 import com.atg.openssp.common.cache.broker.AbstractAdDataBroker;
+import com.atg.openssp.common.cache.dto.VideoAd;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.common.core.broker.dto.VideoAdDto;
 import com.atg.openssp.common.core.cache.type.VideoAdDataCache;
 import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restful.context.Path;
 import restful.context.PathBuilder;
 import restful.exception.RestException;
-
-import java.util.Arrays;
 
 /**
  * Act as broker between connector which loads the data from the webservice into a data transfer object and the cache.
@@ -49,9 +47,9 @@ public final class RemoteVideoadDataBroker extends AbstractAdDataBroker<VideoAdD
 				long endTS = System.currentTimeMillis();
 				DataBrokerLogProcessor.instance.setLogData("VideoAdData", dto.getVideoAd().size(), startTS, endTS, endTS-startTS);
 				log.debug("sizeof VideoAd data=" + dto.getVideoAd().size());
-				dto.getVideoAd().forEach(ad -> {
+				for (VideoAd ad : dto.getVideoAd()) {
 					VideoAdDataCache.instance.put(ad.getVidId(), ad);
-				});
+				}
 				return true;
 			}
 			log.error("no VideoAd data");

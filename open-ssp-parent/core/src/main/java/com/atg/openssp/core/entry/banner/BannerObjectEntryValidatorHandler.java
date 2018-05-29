@@ -73,14 +73,12 @@ public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
             }
         } else if (request.getMethod().equalsIgnoreCase("get")) {
             HashMap<String, String> params = new LinkedHashMap<>();
-            Enumeration<String> penum = request.getParameterNames();
-            while (penum.hasMoreElements()) {
-                String key = penum.nextElement();
-                List<String> values = Arrays.asList(request.getParameterValues(key));
-                if (values.size() > 0) {
-                    params.put(key, values.get(0));
+            Map<String, String[]> penum = request.getParameterMap();
+            for (Map.Entry<String, String[]> entry : penum.entrySet()) {
+                if (entry.getValue().length > 0) {
+                    params.put(entry.getKey(), entry.getValue()[0]);
                 }
-                log.debug("param: " + key + " : " + values);
+                log.debug("param: " + entry.getKey() + " : " + entry.getValue());
             }
             processValidationFromGet(params, pmList, referrer, ipAddress, userAgent);
         } else {
@@ -142,8 +140,7 @@ public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
         biddingRequest.setHash(biddingRequest.getHash());
         final String adId = params.get(ID_TAG);
         try {
-            BannerAd myAd = BannerAdDataCache.instance.get(adId);
-            biddingRequest.addBannerAdToBidUpon(myAd);
+            biddingRequest.addBannerAdToBidUpon(BannerAdDataCache.instance.get(adId));
         } catch (final EmptyCacheException e) {
             throw new RequestException(e.getMessage());
         }
