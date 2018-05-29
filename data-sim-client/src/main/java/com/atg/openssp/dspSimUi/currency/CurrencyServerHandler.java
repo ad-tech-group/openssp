@@ -105,7 +105,7 @@ public class CurrencyServerHandler implements Runnable {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SITE_HOST, "localhost")+":"+model.lookupProperty(SITE_PORT, "9090")+"/ssp-services/maintain/eurref?t="+ LoginHandler.TOKEN);
-            System.out.println(httpPost);
+            log.debug(httpPost.getURI().toASCIIString());
             CurrencyCommand command = new CurrencyCommand();
             command.setCommand(type);
             command.setCurrency(sb);

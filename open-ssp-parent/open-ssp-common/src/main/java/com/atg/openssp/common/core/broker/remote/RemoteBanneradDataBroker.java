@@ -1,21 +1,19 @@
 package com.atg.openssp.common.core.broker.remote;
 
 import com.atg.openssp.common.cache.broker.AbstractAdDataBroker;
+import com.atg.openssp.common.cache.dto.BannerAd;
 import com.atg.openssp.common.configuration.ContextCache;
 import com.atg.openssp.common.configuration.ContextProperties;
 import com.atg.openssp.common.core.broker.dto.BannerAdDto;
 import com.atg.openssp.common.core.cache.type.BannerAdDataCache;
 import com.atg.openssp.common.exception.EmptyHostException;
 import com.atg.openssp.common.logadapter.DataBrokerLogProcessor;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import restful.context.Path;
 import restful.context.PathBuilder;
 import restful.exception.RestException;
-
-import java.util.Arrays;
 
 /**
  * Act as broker between connector which loads the data from the webservice into a data transfer object and the cache.
@@ -35,6 +33,7 @@ public final class RemoteBanneradDataBroker extends AbstractAdDataBroker<BannerA
 	@Override
 	protected PathBuilder getDefaulPathBuilder() {
 		final PathBuilder pathBuilder = super.getDefaulPathBuilder();
+		pathBuilder.addPath(Path.ADS_CORE);
 		pathBuilder.addPath(Path.BANNER_ADS);
 		return pathBuilder;
 	}
@@ -48,9 +47,9 @@ public final class RemoteBanneradDataBroker extends AbstractAdDataBroker<BannerA
 				long endTS = System.currentTimeMillis();
 				DataBrokerLogProcessor.instance.setLogData("BannerAdData", dto.getBannerAds().size(), startTS, endTS, endTS-startTS);
 				log.debug("sizeof BannerAd data=" + dto.getBannerAds().size());
-				dto.getBannerAds().forEach(ad -> {
-					BannerAdDataCache.instance.put(ad.getId(), ad);
-				});
+				for (BannerAd ad : dto.getBannerAds()) {
+					BannerAdDataCache.instance.put(ad.getPlacementId(), ad);
+				}
 				return true;
 			}
 			log.error("no BannerAd data");

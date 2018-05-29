@@ -76,7 +76,7 @@ public class EcbEuropaDataHandler extends DataHandler {
 //                                    String rateString = cube.getAttribute("rate=");
                                     EurRef ref = new EurRef();
                                     ref.setCurrency(cur);
-//                                        System.out.println(cur+":"+cube.getAttribute("rate"));
+                                    log.debug(cur+":"+cube.getAttribute("rate"));
                                     ref.setRate(Float.parseFloat(cube.getAttribute("rate")));
                                     list.add(ref);
                                 }

@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class VideoAdDataHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(VideoAdDataHandler.class);
-    public static final String CONTEXT = "/ads/video";
+    public static final String CONTEXT = "/ads/videoAd";
 
     public VideoAdDataHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isAdservingChannelEnabled()) {

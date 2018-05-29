@@ -36,6 +36,8 @@ COPY /properties/currency_db.json /usr/local/tomcat/properties
 COPY /properties/price_layer.json /usr/local/tomcat/properties
 COPY /properties/site_db.json /usr/local/tomcat/properties
 COPY /properties/supplier_db.json /usr/local/tomcat/properties
+COPY /properties/banner_ad_db.json /usr/local/tomcat/properties
+COPY /properties/video_ad_db.json /usr/local/tomcat/properties
 
 COPY /properties/server.xml /usr/local/tomcat/conf/server.xml
 

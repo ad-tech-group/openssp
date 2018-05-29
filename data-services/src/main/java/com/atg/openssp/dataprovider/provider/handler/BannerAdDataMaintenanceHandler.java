@@ -1,14 +1,14 @@
 package com.atg.openssp.dataprovider.provider.handler;
 
-import com.atg.openssp.common.cache.dto.VideoAd;
+import com.atg.openssp.common.cache.dto.BannerAd;
 import com.atg.openssp.common.core.system.LocalContext;
 import com.atg.openssp.common.provider.DataHandler;
 import com.atg.openssp.common.provider.LoginHandler;
-import com.atg.openssp.dataprovider.provider.dto.VideoAdMaintenanceDto;
-import com.atg.openssp.dataprovider.provider.dto.VideoAdResponse;
 import com.atg.openssp.dataprovider.provider.dto.MaintenanceCommand;
 import com.atg.openssp.dataprovider.provider.dto.ResponseStatus;
-import com.atg.openssp.dataprovider.provider.model.VideoAdModel;
+import com.atg.openssp.dataprovider.provider.dto.BannerAdMaintenanceDto;
+import com.atg.openssp.dataprovider.provider.dto.BannerAdResponse;
+import com.atg.openssp.dataprovider.provider.model.BannerAdModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -23,12 +23,12 @@ import java.util.Map;
 /**
  * @author Brian Sorensen
  */
-public class VideoAdDataMaintenanceHandler extends DataHandler {
-    private static final Logger log = LoggerFactory.getLogger(VideoAdDataMaintenanceHandler.class);
-    public static final String CONTEXT = "/maintain/videoAds";
+public class BannerAdDataMaintenanceHandler extends DataHandler {
+    private static final Logger log = LoggerFactory.getLogger(BannerAdDataMaintenanceHandler.class);
+    public static final String CONTEXT = "/maintain/bannerAds";
 
-    public VideoAdDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
-        if (LocalContext.isVideoAdDataServiceEnabled()) {
+    public BannerAdDataMaintenanceHandler(HttpServletRequest request, HttpServletResponse response) {
+        if (LocalContext.isBannerAdDataServiceEnabled()) {
             try {
                 Map<String,String> parms = queryToMap(request.getQueryString());
                 String t = parms.get("t");
@@ -42,43 +42,43 @@ public class VideoAdDataMaintenanceHandler extends DataHandler {
 
                     Gson gson = builder.create();
 
-                    VideoAdMaintenanceDto dto = gson.fromJson(request.getReader(), VideoAdMaintenanceDto.class);
+                    BannerAdMaintenanceDto dto = gson.fromJson(request.getReader(), BannerAdMaintenanceDto.class);
 
-                    VideoAdResponse result = new VideoAdResponse();
+                    BannerAdResponse result = new BannerAdResponse();
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                     } else if (dto.getCommand() == MaintenanceCommand.ADD) {
-                        VideoAd s = dto.getVideoAd();
-                        VideoAdModel.getInstance().insert(s);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        BannerAd s = dto.getBannerAd();
+                        BannerAdModel.getInstance().insert(s);
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
-                        VideoAd s = dto.getVideoAd();
-                        VideoAdModel.getInstance().remove(s);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        BannerAd s = dto.getBannerAd();
+                        BannerAdModel.getInstance().remove(s);
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
-                        VideoAd s = dto.getVideoAd();
-                        VideoAdModel.getInstance().update(s);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        BannerAd s = dto.getBannerAd();
+                        BannerAdModel.getInstance().update(s);
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.IMPORT) {
-                        VideoAdModel.getInstance().importVideoAds("videoAds_export_db");
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        BannerAdModel.getInstance().importBannerAds("bannerAds_export_db");
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.EXPORT) {
-                        VideoAdModel.getInstance().exportVideoAds("videoAds_export_db");
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        BannerAdModel.getInstance().exportBannerAds("bannerAds_export_db");
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.LOAD) {
-                        VideoAdModel.getInstance().loadVideoAds();
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        BannerAdModel.getInstance().loadBannerAds();
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.CLEAR) {
-                        VideoAdModel.getInstance().clear();
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
+                        BannerAdModel.getInstance().clear();
+                        result.setBannerAds(BannerAdModel.getInstance().lookupDto().getBannerAds());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

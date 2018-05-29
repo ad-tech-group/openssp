@@ -14,7 +14,7 @@ import openrtb.bidrequest.model.BidRequest;
 public final class BidRequestBuilder {
     private static BidRequestBuilder instance;
     private BidRequestBuilderHandler handler;
-    private boolean initialized;
+//    private boolean initialized;
 
     private BidRequestBuilder() {
     }
@@ -25,8 +25,8 @@ public final class BidRequestBuilder {
      * @return {@see BidRequest}
      */
     public BidRequest build(final RequestSessionAgent agent) throws RequestException {
-        if (!initialized) {
-            initialized = true;
+//        if (!initialized) {
+//            initialized = true;
 
             BiddingServiceInfo info = agent.getBiddingServiceInfo();
             SessionAgentType type = info.getType();
@@ -58,7 +58,7 @@ public final class BidRequestBuilder {
             } else {
                 handler = new TestBidRequestBuilderHandler();
             }
-        }
+//        }
 
         return handler.constructRequest(agent);
     }

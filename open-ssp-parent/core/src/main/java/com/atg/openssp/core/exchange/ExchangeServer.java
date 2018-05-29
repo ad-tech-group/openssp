@@ -113,7 +113,6 @@ public class ExchangeServer implements Exchange<RequestSessionAgent> {
 
 		if (info.isAccessAllowOriginActivated() && winner instanceof Auction.AuctionResult) {
             LOG.debug("is HeaderBid AuctionResult");
-            System.out.println("is HeaderBid AuctionResult");
 			if (((Auction.AuctionResult)winner).getBidRequest() != null) {
 				//TODO:  BKS need app
 				agent.getHttpResponse().addHeader("Access-Control-Allow-Origin", SCHEME+"://" + ((Auction.AuctionResult) winner).getBidRequest().getSite().getDomain());

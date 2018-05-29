@@ -54,11 +54,9 @@ public class JsonPostConnector extends DefaultConnector {
 		try {
 			httpPost.setEntity(entity);
             log.debug("calling: "+httpPost.getURI().toASCIIString());
-            System.out.println("calling: "+httpPost.getURI().toASCIIString());
 			httpResponse = httpClient.execute(httpPost);
 			final int statusCode = httpResponse.getStatusLine().getStatusCode();
             log.debug("status: "+statusCode);
-            System.out.println("status: "+statusCode);
 			if (HttpStatus.SC_OK == statusCode) {
 				respEntity = httpResponse.getEntity();
 				if (respEntity != null) {

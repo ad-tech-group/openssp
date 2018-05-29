@@ -103,7 +103,7 @@ public class PricelayerServerHandler implements Runnable {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SITE_HOST, "localhost")+":"+model.lookupProperty(SITE_PORT, "9090")+"/ssp-services/maintain/pricelayer?t="+ LoginHandler.TOKEN);
-            System.out.println(httpPost);
+            log.debug(httpPost.getURI().toASCIIString());
             PricelayerCommand command = new PricelayerCommand();
             command.setCommand(type);
             command.setPricelayer(sb);

@@ -199,7 +199,7 @@ public class VideoObjectEntryValidatorHandlerTest {
     public void processValidationFromGet() {
         VideoObjectEntryValidatorHandler e = new VideoObjectEntryValidatorHandler();
         Map<String, String> params = new HashMap<>();
-        params.put("videoad_id", "123");
+        params.put("vid_id", "123");
         params.put("site", "1");
         params.put("id", "i-id");
         params.put("page", "page");

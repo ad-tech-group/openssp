@@ -25,7 +25,7 @@ public class DspSim {
     public void start() {
         try {
             int port = Integer.parseInt(dspModel.getProperty("server-port", "8081"));
-            System.out.println("starting sim on port: "+port);
+            log.info("starting sim on port: "+port);
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
             /*
             HttpsServer server = HttpsServer.create(new InetSocketAddress(port), 0);
@@ -75,8 +75,8 @@ public class DspSim {
 
             server.createContext("/dsp-sim/admin", new ClientHandler(dspModel));
             server.createContext("/dsp-sim/DemandService", new DspHandler(dspModel));
-            server.createContext("/dsp-sim/ads/banner", new BannerAdServerHandler(adModel));
-            server.createContext("/dsp-sim/ads/video", new VideoAdServerHandler(adModel));
+            server.createContext("/dsp-sim/ads/bannerAd", new BannerAdServerHandler(adModel));
+            server.createContext("/dsp-sim/ads/videoAd", new VideoAdServerHandler(adModel));
             server.createContext("/win", new DspWinHandler(dspModel));
             server.createContext("/user-sync", new DspUserSyncHandler(dspModel));
             server.setExecutor(null); // creates a default executor

@@ -82,7 +82,6 @@ public class DspModel {
             }
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
-            System.out.println(e.getMessage());
             throw new ModelException("Could not load model from store: "+modelFile.getAbsolutePath());
         }
     }

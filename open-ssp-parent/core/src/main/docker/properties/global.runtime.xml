@@ -26,6 +26,15 @@
 	<!-- credential for remote access -->
 	<entry key="master_user">izod</entry>
 
+	<!-- url of the adserver provider where the cache is updated from -->
+	<entry key="adserver-provider-scheme">http</entry>
+
+	<entry key="adserver-provider-host">192.18.0.11</entry>
+
+	<entry key="adserver-provider-port">9090</entry>
+
+	<entry key="adserver-provider-path">/dsp-sim/myAds</entry>
+
     <entry key="validator-handler-for-video-class">com.atg.openssp.core.entry.video.VideoObjectEntryValidatorHandler</entry>
 
     <entry key="validator-handler-for-banner-class">com.atg.openssp.core.entry.banner.BannerObjectEntryValidatorHandler</entry>
@@ -41,5 +50,7 @@
 	<entry key="adserver-broker-handler-class">channel.adserving.AdserverBrokerHandler</entry>
 
 	<entry key="cookie-sync-handler-class">com.atg.openssp.common.core.exchange.cookiesync.DefaultCookieSyncHandler</entry>
+
+	<entry key="geo-ip-info-handler-class">com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler</entry>
 
 </properties>

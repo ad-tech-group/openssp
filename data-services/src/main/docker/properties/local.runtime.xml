@@ -19,6 +19,12 @@
 	<!-- switch to enable/disable supplier data service support -->
 	<entry key="supplier-data-service-enabled">true</entry>
 
+    <entry key="adserving">true</entry>
+
+    <entry key="banner-ad-data-service-enabled">true</entry>
+
+	<entry key="video-ad-data-service-enabled">true</entry>
+
 	<!-- handler class to use service App Data requests -->
 	<entry key="app-data-handler-class">com.atg.openssp.dataprovider.provider.handler.AppDataHandler</entry>
 
@@ -40,6 +46,11 @@
 	<!-- handler class to use service Supplier Data requests -->
 	<entry key="supplier-data-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataHandler</entry>
 	<entry key="supplier-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.SupplierDataMaintenanceHandler</entry>
+
+	<entry key="banner-ad-data-handler-class">com.atg.openssp.dataprovider.provider.handler.BannerAdDataHandler</entry>
+    <entry key="banner-ad-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.BannerAdDataMaintenanceHandler</entry>
+	<entry key="video-ad-data-handler-class">com.atg.openssp.dataprovider.provider.handler.VideoAdDataHandler</entry>
+    <entry key="video-ad-data-maintenance-handler-class">com.atg.openssp.dataprovider.provider.handler.VideoAdDataMaintenanceHandler</entry>
 
 	<entry key="geo-ip-info-handler-class">com.atg.openssp.common.core.exchange.geo.FreeGeoIpInfoHandler</entry>
 

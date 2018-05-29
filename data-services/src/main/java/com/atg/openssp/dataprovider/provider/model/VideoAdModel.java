@@ -32,7 +32,7 @@ public class VideoAdModel {
 
     private void initVideoAds() {
         synchronized (videoAdDto) {
-            videoAdDto.setVideoAds(DataStore.getInstance().lookupVideoAds().getVideoAds());
+            videoAdDto.setVideoAd(DataStore.getInstance().lookupVideoAds().getVideoAd());
         }
     }
 
@@ -74,7 +74,7 @@ public class VideoAdModel {
                     String content = new String(Files.readAllBytes(Paths.get(location + importName+".json")), StandardCharsets.UTF_8);
                     VideoAdDto newData = gson.fromJson(content, VideoAdDto.class);
                     DataStore.getInstance().clearVideoAds();
-                    for (VideoAd s : newData.getVideoAds()) {
+                    for (VideoAd s : newData.getVideoAd()) {
                         DataStore.getInstance().insert(s);
                     }
                     initVideoAds();
@@ -100,7 +100,7 @@ public class VideoAdModel {
                     String content = new String(Files.readAllBytes(Paths.get(location + "video_ad_db.json")), StandardCharsets.UTF_8);
                     VideoAdDto newData = gson.fromJson(content, VideoAdDto.class);
                     DataStore.getInstance().clearVideoAds();
-                    for (VideoAd s : newData.getVideoAds()) {
+                    for (VideoAd s : newData.getVideoAd()) {
                         DataStore.getInstance().insert(s);
                     }
                     initVideoAds();
@@ -124,7 +124,7 @@ public class VideoAdModel {
     public VideoAdDto lookupDto() {
         synchronized (videoAdDto) {
             VideoAdDto dto = new VideoAdDto();
-            dto.setVideoAds(videoAdDto.getVideoAds());
+            dto.setVideoAd(videoAdDto.getVideoAd());
             return dto;
         }
     }

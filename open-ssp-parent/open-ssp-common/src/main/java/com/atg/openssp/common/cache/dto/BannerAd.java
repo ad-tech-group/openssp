@@ -1,5 +1,6 @@
 package com.atg.openssp.common.cache.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.annotations.SerializedName;
@@ -21,21 +22,25 @@ public class BannerAd implements Serializable {
     @SerializedName("id")
     private String id;
 
+    @JsonProperty("bidfloor_currency")
     @SerializedName("bidfloor_currency")
     private String bidfloorCurrency = "EUR";
 
+    @JsonProperty("bidfloor_price")
     @SerializedName("bidfloor_price")
     private float bidfloorPrice;
 
     private Integer w;
     private Integer h;
 
+    @JsonProperty("placement_id")
+    @SerializedName("placement_id")
+    private String placementId;
+
     private String adUnitCode;
     private String size;
     private String promo_sizes;
 
-    @SerializedName("placement_id")
-    private String placementId;
 
     private List<String> mimes;
     private List<BannerAdType> btypes;
