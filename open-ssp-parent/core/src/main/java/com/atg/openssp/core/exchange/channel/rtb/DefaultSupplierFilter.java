@@ -40,7 +40,8 @@ public class DefaultSupplierFilter extends DemandBrokerFilter {
 //            imp.remove("bidfloorcur");
             imp.remove("pmp");
             JsonObject banner = (JsonObject) imp.get("banner");
-            banner.remove("id");
+            if (banner != null) {
+                banner.remove("id");
 //            banner.remove("pos");
 //            banner.remove("btype");
 //            banner.remove("battr");
@@ -51,6 +52,11 @@ public class DefaultSupplierFilter extends DemandBrokerFilter {
             banner.remove("wmin");
             banner.remove("hmin");
             banner.remove("format");
+            }
+            JsonObject video = (JsonObject) imp.get("video");
+            if (video != null) {
+                video.remove("id");
+            }
         }
         JsonObject device = (JsonObject) req.get("device");
 //        device.remove("geo");
