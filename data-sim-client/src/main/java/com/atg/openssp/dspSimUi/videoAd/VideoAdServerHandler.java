@@ -106,12 +106,12 @@ public class VideoAdServerHandler implements Runnable {
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost("http://"+model.lookupProperty(SITE_HOST, "localhost")+":"+model.lookupProperty(SITE_PORT, "9090")+"/ssp-services/maintain/videoAds?t="+ LoginHandler.TOKEN);
-            System.out.println(httpPost);
+            log.debug(httpPost.getURI().toASCIIString());
             VideoAdCommand command = new VideoAdCommand();
             command.setCommand(type);
             command.setVideoAd(sb);
             String jsonOut = builder.create().toJson(command);
-            System.out.println(jsonOut);
+            log.debug(jsonOut);
             StringEntity entity = new StringEntity(jsonOut);
             httpPost.setEntity(entity);
             httpPost.setHeader("Accept", "application/json");

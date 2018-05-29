@@ -29,7 +29,7 @@ import java.util.*;
  * @author bsorensen
  */
 public class VideoObjectEntryValidatorHandler extends EntryValidatorHandler {
-    private final Logger log = LoggerFactory.getLogger(VideoObjectEntryValidatorHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(VideoObjectEntryValidatorHandler.class);
     public static final String ID_TAG = "vid_id";
     private final Gson gson;
 
@@ -101,7 +101,7 @@ public class VideoObjectEntryValidatorHandler extends EntryValidatorHandler {
         try {
             is.read(buffer);
             String json = new String(buffer);
-            System.out.println("bks-->"+json);
+            log.debug("-->"+json);
             StringReader bais = new StringReader(json);
             biddingRequest = gson.fromJson(bais, VideoBiddingRequest.class);
             bais.close();

@@ -110,18 +110,15 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
             final String jsonBidrequest = brokerFilter.filterRequest(gson, workingBidRequest);
 
 			LOG.debug(supplier.getShortName()+" bidrequest: " + jsonBidrequest);
-            System.out.println(supplier.getShortName()+" bidrequest: " + jsonBidrequest);
 			RtbRequestLogProcessor.instance.setLogData(jsonBidrequest, "bidrequest", supplier.getShortName());
 
 			final String result = connector.connect(jsonBidrequest, headers);
 			if (!StringUtils.isEmpty(result)) {
 				if (JsonPostConnector.NO_CONTENT.equals(result)) {
                     LOG.debug(supplier.getShortName()+" bidresponse: no content");
-                    System.out.println(supplier.getShortName()+" bidresponse: no content");
 					RtbResponseLogProcessor.instance.setLogData("no content", "bidresponse", supplier.getShortName());
 				} else {
 					LOG.debug(supplier.getShortName()+" bidresponse: " + result);
-                    System.out.println(supplier.getShortName()+" bidresponse: " + result);
 					RtbResponseLogProcessor.instance.setLogData(result, "bidresponse", supplier.getShortName());
 					final BidResponse bidResponse = brokerFilter.filterResponse(gson, result);
 
@@ -131,12 +128,10 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
                     String cookieSync = s.getCookieSync();
                     if (cookieSync != null && !"".equals(cookieSync)) {
                         LOG.debug(supplier.getShortName()+" set cookie sync value");
-                        System.out.println(supplier.getShortName()+".. set cookie sync value");
                         StringBuilder sspRedirUrl = new StringBuilder();
                         String uid = workingBidRequest.getUser().getId();
                         //TODO: BKS
                         String addr = "openssp.pub.network";
-                        System.out.println("forgetmenot: "+getSessionAgent().getHttpRequest().getLocalName());
 						String context = getSessionAgent().getHttpRequest().getContextPath();
                         sspRedirUrl.append(SCHEME + "://" + addr + "/"+context+"/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
                         s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
@@ -145,7 +140,6 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 				}
 			} else {
                 LOG.debug(supplier.getShortName()+" bidresponse: is null");
-                System.out.println(supplier.getShortName()+" bidresponse: is null");
                 RtbResponseLogProcessor.instance.setLogData("is null", "bidresponse", supplier.getShortName());
             }
 		} catch (final BidProcessingException e) {

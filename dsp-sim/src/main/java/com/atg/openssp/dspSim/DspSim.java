@@ -25,7 +25,7 @@ public class DspSim {
     public void start() {
         try {
             int port = Integer.parseInt(dspModel.getProperty("server-port", "8081"));
-            System.out.println("starting sim on port: "+port);
+            log.info("starting sim on port: "+port);
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
             /*
             HttpsServer server = HttpsServer.create(new InetSocketAddress(port), 0);

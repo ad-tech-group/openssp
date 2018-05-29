@@ -52,7 +52,7 @@ public abstract class CoreSupplyServlet<T extends SessionAgent> extends HttpServ
         try {
             agent = getAgent(request, response);
             hasResult = server.processExchange(agent);
-            System.out.println("exchange returned result");
+            LOG.info("exchange returned result");
         } catch (final RequestException e) {
             TimeInfoLogProcessor.instance.setLogData(agent.getRequestid(), "fault-401");
             if (e.getCode() == ERROR_CODE.E906) {

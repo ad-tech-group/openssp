@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
     public static final String ID_TAG = "placement_id";
-    private final Logger log = LoggerFactory.getLogger(BannerObjectEntryValidatorHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(BannerObjectEntryValidatorHandler.class);
     private final Gson gson;
 
     public BannerObjectEntryValidatorHandler() {
@@ -101,7 +101,7 @@ public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
         try {
             is.read(buffer);
             String json = new String(buffer);
-            System.out.println("bks-->"+json);
+            log.debug("-->"+json);
             StringReader bais = new StringReader(json);
             biddingRequest = gson.fromJson(bais, BannerBiddingRequest.class);
             bais.close();
