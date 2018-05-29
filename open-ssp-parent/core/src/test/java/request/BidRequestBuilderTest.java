@@ -1,6 +1,7 @@
 package request;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import openrtb.bidrequest.model.*;
 import openrtb.tables.*;
@@ -100,7 +101,7 @@ public class BidRequestBuilderTest {
                                 .setPos(AddPosition.FOOTER)
                                 .addBattr(CreativeAttribute.AD_PROVICES_SKIP_BUTTON)
                                 .addBtype(BannerAdType.XHTML_TEXT_AD)
-                                .setMimes(new String[] {"text/html"})
+                                .setMimes(Arrays.asList(new String[] {"text/html"}))
                                 .build()
                         )
                         .setBidfloor(0.01f)

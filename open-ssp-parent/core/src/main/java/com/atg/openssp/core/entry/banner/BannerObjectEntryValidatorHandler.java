@@ -142,7 +142,8 @@ public class BannerObjectEntryValidatorHandler extends EntryValidatorHandler {
         biddingRequest.setHash(biddingRequest.getHash());
         final String adId = params.get(ID_TAG);
         try {
-            biddingRequest.addBannerAdToBidUpon(BannerAdDataCache.instance.get(adId));
+            BannerAd myAd = BannerAdDataCache.instance.get(adId);
+            biddingRequest.addBannerAdToBidUpon(myAd);
         } catch (final EmptyCacheException e) {
             throw new RequestException(e.getMessage());
         }

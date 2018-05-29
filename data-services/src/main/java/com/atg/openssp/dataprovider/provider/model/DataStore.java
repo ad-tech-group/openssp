@@ -448,7 +448,7 @@ public class DataStore {
 
     public VideoAdDto lookupVideoAds() {
         VideoAdDto dto = new VideoAdDto();
-        dto.setVideoAds(lookupAllVideoAds());
+        dto.setVideoAd(lookupAllVideoAds());
         return dto;
     }
 

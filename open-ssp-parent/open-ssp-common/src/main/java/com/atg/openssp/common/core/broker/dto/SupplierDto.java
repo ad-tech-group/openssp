@@ -32,4 +32,3 @@ public class SupplierDto implements Serializable {
 	}
 
 }
-

@@ -180,7 +180,7 @@ public class BannerObjectBidRequestBuilderHandler extends BidRequestBuilderHandl
         b.setHmin(sizes.get(0).getH());
         b.setWmax(sizes.get(sizes.size() - 1).getW());
         b.setHmax(sizes.get(sizes.size() - 1).getH());
-        b.setFormat(sizes.toArray());
+        b.setFormat(Arrays.asList(sizes.toArray()));
 
         b.setAllBtype(ad.getBtypes());
         b.setAllBattr(ad.getBattrs());

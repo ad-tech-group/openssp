@@ -48,37 +48,37 @@ public class VideoAdDataMaintenanceHandler extends DataHandler {
 
                     if (dto.getCommand() == MaintenanceCommand.LIST) {
                         result.setStatus(ResponseStatus.SUCCESS);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                     } else if (dto.getCommand() == MaintenanceCommand.ADD) {
                         VideoAd s = dto.getVideoAd();
                         VideoAdModel.getInstance().insert(s);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.REMOVE) {
                         VideoAd s = dto.getVideoAd();
                         VideoAdModel.getInstance().remove(s);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.UPDATE) {
                         VideoAd s = dto.getVideoAd();
                         VideoAdModel.getInstance().update(s);
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.IMPORT) {
                         VideoAdModel.getInstance().importVideoAds("videoAds_export_db");
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.EXPORT) {
                         VideoAdModel.getInstance().exportVideoAds("videoAds_export_db");
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.LOAD) {
                         VideoAdModel.getInstance().loadVideoAds();
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else if (dto.getCommand() == MaintenanceCommand.CLEAR) {
                         VideoAdModel.getInstance().clear();
-                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAds());
+                        result.setVideoAds(VideoAdModel.getInstance().lookupDto().getVideoAd());
                         result.setStatus(ResponseStatus.SUCCESS);
                     } else {
                         result.setReason("No request data given");

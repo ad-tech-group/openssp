@@ -23,7 +23,7 @@ public final class Banner implements Cloneable {
 	private Integer pos;
 	private List<Integer> btype;// blocked creative types
 	private List<Integer> battr;
-	private String[] mimes;// commaseparated list
+    private List<String> mimes;
 	private int topframe = 0;
 	private List<Integer> expdir; // expandable directions 1-6
 	private List<Integer> api;
@@ -47,6 +47,7 @@ public final class Banner implements Cloneable {
 		battr = new ArrayList<>();
 		expdir = new ArrayList<>();
 		api = new ArrayList<>();
+        mimes = new ArrayList<>();
 	}
 
 	public String getId() {
@@ -69,18 +70,14 @@ public final class Banner implements Cloneable {
 		this.h = h;
 	}
 
-	public String[] getMimes() {
-		return mimes;
-	}
-
-	public void setMimes(final String[] mimes) {
-		this.mimes = mimes;
-	}
+    public List<String> getMimes() {
+        return mimes;
+    }
 
     public void setMimes(final List<String> mimes) {
-        this.mimes = new String[mimes.size()];
-        for (int i=0; i<mimes.size(); i++) {
-            this.mimes[i] = mimes.get(i);
+        this.mimes.clear();
+        if (mimes != null) {
+            this.mimes.addAll(mimes);
         }
     }
 
@@ -91,15 +88,6 @@ public final class Banner implements Cloneable {
 	public void addExpdir(final ExpandableDirectionType expdir) {
 		if (expdir != null) {
 			this.expdir.add(expdir.getValue());
-		}
-	}
-
-	public void setAllExpdir(final ExpandableDirectionType[] expdir) {
-		this.expdir.clear();
-		if (expdir != null) {
-			for (ExpandableDirectionType t : expdir) {
-				this.expdir.add(t.getValue());
-			}
 		}
 	}
 
@@ -126,15 +114,6 @@ public final class Banner implements Cloneable {
         }
 	}
 
-    public void setAllBtype(final BannerAdType[] btype) {
-        this.btype.clear();
-        if (btype != null) {
-            for (BannerAdType t : btype) {
-                this.btype.add(t.getValue());
-            }
-        }
-    }
-
     public void setAllBtype(final List<BannerAdType> btype) {
         this.btype.clear();
         if (btype != null) {
@@ -149,15 +128,6 @@ public final class Banner implements Cloneable {
 	        this.battr.add(battr.getValue());
         }
 	}
-
-    public void setAllBattr(final CreativeAttribute[] battr) {
-        this.battr.clear();
-        if (battr != null) {
-            for (CreativeAttribute a : battr) {
-                this.battr.add(a.getValue());
-            }
-        }
-    }
 
     public void setAllBattr(final List<CreativeAttribute> battr) {
         this.battr.clear();
@@ -214,12 +184,6 @@ public final class Banner implements Cloneable {
 		return list;
 	}
 
-	/*
-	public void setApis(final int[] apis) {
-		this.api = api;
-	}
-	*/
-
 	public void setApis(final List<ApiFramework> apis) {
 		this.api.clear();
 		if (apis != null) {
@@ -256,19 +220,6 @@ public final class Banner implements Cloneable {
 		        this.format = new ArrayList();
             }
 			this.format.add(format);
-		}
-	}
-
-	public void setFormat(final Object[] format) {
-	    if (this.format == null) {
-	        this.format = new ArrayList();
-        } else {
-            this.format.clear();
-        }
-		if (format != null) {
-			for (Object a : format) {
-				this.format.add(a);
-			}
 		}
 	}
 
@@ -331,7 +282,7 @@ public final class Banner implements Cloneable {
             return this;
         }
 
-        public Builder setMimes(final String[] mimes) {
+        public Builder setMimes(final List<String> mimes) {
             banner.setMimes(mimes);
             return this;
         }

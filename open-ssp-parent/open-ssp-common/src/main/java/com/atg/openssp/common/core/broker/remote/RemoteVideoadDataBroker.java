@@ -47,10 +47,10 @@ public final class RemoteVideoadDataBroker extends AbstractAdDataBroker<VideoAdD
 			final VideoAdDto dto = super.connect(VideoAdDto.class);
             if (dto != null) {
 				long endTS = System.currentTimeMillis();
-				DataBrokerLogProcessor.instance.setLogData("VideoAdData", dto.getVideoAds().size(), startTS, endTS, endTS-startTS);
-				log.debug("sizeof VideoAd data=" + dto.getVideoAds().size());
-				dto.getVideoAds().forEach(ad -> {
-					VideoAdDataCache.instance.put(ad.getId(), ad);
+				DataBrokerLogProcessor.instance.setLogData("VideoAdData", dto.getVideoAd().size(), startTS, endTS, endTS-startTS);
+				log.debug("sizeof VideoAd data=" + dto.getVideoAd().size());
+				dto.getVideoAd().forEach(ad -> {
+					VideoAdDataCache.instance.put(ad.getVidId(), ad);
 				});
 				return true;
 			}

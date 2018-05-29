@@ -3,7 +3,6 @@ package com.atg.openssp.common.core.broker.dto;
 import com.atg.openssp.common.cache.dto.VideoAd;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,27 +12,21 @@ import java.util.List;
 public class VideoAdDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<VideoAd> videoAds = new ArrayList<>();
+    private List<VideoAd> videoAd;
 
-    public VideoAdDto() {
+    public VideoAdDto() {}
+
+    public List<VideoAd> getVideoAd() {
+        return videoAd;
     }
 
-    public List<VideoAd> getVideoAds() {
-        ArrayList<VideoAd> list = new ArrayList();
-        list.addAll(videoAds);
-        return list;
-    }
-
-    public void setVideoAds(final List<VideoAd> videoAds) {
-        this.videoAds.clear();
-        if (videoAds != null) {
-            this.videoAds.addAll(videoAds);
-        }
+    public void setVideoAd(final List<VideoAd> videoAd) {
+        this.videoAd = videoAd;
     }
 
     @Override
     public String toString() {
-        return String.format("VideoAdsDto [videoAds=%s]", videoAds);
+        return String.format("VideoAdsDto [videoAd=%s]", videoAd);
     }
 
 }

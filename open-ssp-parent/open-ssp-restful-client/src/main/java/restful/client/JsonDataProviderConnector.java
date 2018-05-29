@@ -74,6 +74,7 @@ public class JsonDataProviderConnector<T> implements DataProviderConnector<T> {
 		try {
 			return connect(config);
 		} catch (final RestClientException e) {
+			e.printStackTrace();
 			final HttpStatus status = evaluateStatusCode(e.getMessage());
 			if (status == HttpStatus.UNAUTHORIZED) {
 				if (attempts > 0) {

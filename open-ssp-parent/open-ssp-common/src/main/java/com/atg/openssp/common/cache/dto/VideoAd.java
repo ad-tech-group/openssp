@@ -1,5 +1,6 @@
 package com.atg.openssp.common.cache.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import openrtb.bidrequest.model.Banner;
 import openrtb.tables.CreativeAttribute;
@@ -21,21 +22,32 @@ public class VideoAd implements Serializable {
     @SerializedName("id")
     private String id;
 
+    @JsonProperty("bidfloor_currency")
     @SerializedName("bidfloor_currency")
     private String bidfloorCurrency = "EUR";
 
+    @JsonProperty("bidfloor_price")
     @SerializedName("bidfloor_price")
     private float bidfloorPrice;
 
-    private List<String> mimes;
     private Integer w;
     private Integer h;
 
+    @JsonProperty("videoad_id")
+    @SerializedName("videoad_id")
+    private String vidId;
+
+    private List<String> mimes;
+
+    @JsonProperty("min_duration")
     @SerializedName("min_duration")
     private int minDuration;
 
+    @JsonProperty("max_duration")
     @SerializedName("max_duration")
     private int maxDuration;
+
+    @JsonProperty("start_delay")
     @SerializedName("start_delay")
     private Integer startDelay;
     private List<Integer> protocols;
@@ -45,8 +57,6 @@ public class VideoAd implements Serializable {
     private List<Integer> api;
     private Object ext;
 
-    @SerializedName("videoad_id")
-    private String vidId;
 
     public VideoAd() {
         mimes = new ArrayList<>();

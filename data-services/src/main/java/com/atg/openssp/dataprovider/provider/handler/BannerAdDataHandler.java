@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class BannerAdDataHandler extends DataHandler {
     private static final Logger log = LoggerFactory.getLogger(BannerAdDataHandler.class);
-    public static final String CONTEXT = "/ads/banner";
+    public static final String CONTEXT = "/ads/bannerAd";
 
     public BannerAdDataHandler(HttpServletRequest request, HttpServletResponse response) {
         if (LocalContext.isAdservingChannelEnabled()) {

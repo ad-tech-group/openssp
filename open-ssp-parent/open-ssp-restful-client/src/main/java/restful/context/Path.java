@@ -54,12 +54,12 @@ public enum Path {
 	/**
 	 * banner
 	 */
-	BANNER_ADS("banner"),
+	BANNER_ADS("bannerAd"),
 
 	/**
 	 * video
 	 */
-	VIDEO_ADS("video");
+	VIDEO_ADS("videoAd");
 
 	private String value;
 

@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class VideoObjectEntryValidatorHandler extends EntryValidatorHandler {
     private final Logger log = LoggerFactory.getLogger(VideoObjectEntryValidatorHandler.class);
-    public static final String ID_TAG = "videoad_id";
+    public static final String ID_TAG = "vid_id";
     private final Gson gson;
 
     public VideoObjectEntryValidatorHandler() {
