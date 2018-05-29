@@ -16,6 +16,7 @@ import com.atg.openssp.common.logadapter.RtbResponseLogProcessor;
 import com.atg.openssp.common.logadapter.TimeInfoLogProcessor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.org.apache.xalan.internal.xsltc.runtime.ErrorMessages_zh_CN;
 import openrtb.bidrequest.model.BidRequest;
 import openrtb.bidrequest.model.User;
 import openrtb.bidresponse.model.BidResponse;
@@ -127,14 +128,19 @@ public final class DemandBroker extends AbstractBroker implements Callable<Respo
 
                     String cookieSync = s.getCookieSync();
                     if (cookieSync != null && !"".equals(cookieSync)) {
-                        LOG.debug(supplier.getShortName()+" set cookie sync value");
-                        StringBuilder sspRedirUrl = new StringBuilder();
-                        String uid = workingBidRequest.getUser().getId();
-                        //TODO: BKS
-                        String addr = "openssp.pub.network";
-						String context = getSessionAgent().getHttpRequest().getContextPath();
-                        sspRedirUrl.append(SCHEME + "://" + addr + "/"+context+"/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
-                        s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
+                    	try {
+							LOG.debug(supplier.getShortName()+" set cookie sync value");
+							StringBuilder sspRedirUrl = new StringBuilder();
+							String uid = workingBidRequest.getUser().getId();
+							//TODO: BKS
+							String addr = "openssp.pub.network";
+							String context = getSessionAgent().getHttpRequest().getContextPath();
+							sspRedirUrl.append(SCHEME + "://" + addr + "/"+context+"/cookiesync?fsuid=" + uid + "&dsp=" + s.getShortName() + "&dsp_uid={UID}");
+							s.setCookieSync(URLEncoder.encode(cookieSync.replace("{SSP_REDIR_URL}", sspRedirUrl.toString()), "UTF-8"));
+						} catch (Exception ex)
+						{
+							LOG.warn(ex.getMessage(), ex);
+						}
                     }
 					return container;
 				}
