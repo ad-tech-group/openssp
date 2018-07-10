@@ -12,8 +12,6 @@ import java.util.Properties;
 
 import javax.xml.bind.PropertyException;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author André Schmer
  * 
@@ -86,15 +84,16 @@ public class ProjectProperty {
 				propPath = "/" + propPath;
 			}
 			String toDecode = null;
+
 			final String catalinaHome = System.getProperty("catalina.home", System.getProperty("user.dir"));
-			if (StringUtils.isEmpty(catalinaHome) || catalinaHome.contains("workspace") || catalinaHome.contains("git")) {
-				toDecode = Thread.currentThread().getContextClassLoader().getResource("").getFile() + propPath;
-			} else {
-				toDecode = catalinaHome + "/properties" + propPath;
-			}
+			toDecode = catalinaHome + "/properties" + propPath;
 			propFile = new File(URLDecoder.decode(toDecode, "UTF-8"));
 			if (!propFile.exists()) {
-				throw new FileNotFoundException();
+				toDecode = Thread.currentThread().getContextClassLoader().getResource("").getFile() + propPath;
+				propFile = new File(URLDecoder.decode(toDecode, "UTF-8"));
+				if (!propFile.exists()) {
+					throw new FileNotFoundException();
+				}
 			}
 		} catch (final IOException e) {
 			throw new PropertyException(e.getMessage());
