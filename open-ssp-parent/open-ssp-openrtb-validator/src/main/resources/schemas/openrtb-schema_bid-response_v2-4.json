@@ -201,6 +201,11 @@
 			"minimum": 1,
 			"maximum": 3
 		},
+		"nobid_reason": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 8
+		},
 		"currency": {
 			"type": "string",
 			"minLength": 3,
