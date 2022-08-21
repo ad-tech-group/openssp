@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "openrtb-v2_4-schema-bid_response",
-	"description": "json schema for an openrtb v2.4 bid response (http://www.iab.net/media/file/OpenRTB-API-Specification-Version-2-4.pdf)",
+	"title": "openrtb-v2_5-schema-bid_response",
+	"description": "json schema for an openrtb v2.5 bid response (http://www.iab.net/media/file/OpenRTB-API-Specification-Version-2-5.pdf)",
 	"type": "object",
 	"required": [ "id", "seatbid" ],
 	"additionalProperties": false,
@@ -75,6 +75,12 @@
 				"nurl": {
 					"type": "string"
 				},
+				"burl": {
+					"type": "string"
+				},
+				"lurl": {
+					"type": "string"
+				},
 				"adm": {
 					"type": "string"
 				},
@@ -123,10 +129,22 @@
 				"dealid": {
 					"type": "string"
 				},
+				"tactic": {
+					"type": "string"
+				},
+				"language": {
+					"$ref": "#/definitions/language"
+				},
 				"h": {
 					"$ref": "#/definitions/positive_int"
 				},
 				"w": {
+					"$ref": "#/definitions/positive_int"
+				},
+				"wratio": {
+					"$ref": "#/definitions/positive_int"
+				},
+				"hratio": {
 					"$ref": "#/definitions/positive_int"
 				},
 				"ext": {
@@ -204,13 +222,18 @@
 		"nobid_reason": {
 			"type": "integer",
 			"minimum": 1,
-			"maximum": 8
+			"maximum": 10
 		},
 		"currency": {
 			"type": "string",
 			"minLength": 3,
 			"maxLength": 3,
 			"pattern": "[a-zA-Z]{3}"
+		},
+		"language": {
+			"type": "string",
+			"minLength": 2,
+			"maxLength": 2
 		}
 	}	
 }
