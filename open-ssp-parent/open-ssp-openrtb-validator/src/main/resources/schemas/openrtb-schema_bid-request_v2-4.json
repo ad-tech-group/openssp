@@ -386,7 +386,7 @@
 				"battr": {
 					"type": "array",
 					"items": {
-						"$ref": "#definitions/creative_attribute"
+						"$ref": "#/definitions/creative_attribute"
 					}
 				},
 				"maxextended": {
@@ -420,7 +420,7 @@
 				"companiontype": {
 					"type": "array",
 					"items": {
-						"$ref": "#definitions/vast_companion_type"
+						"$ref": "#/definitions/vast_companion_type"
 					}
 				},
 				"maxseq": {
