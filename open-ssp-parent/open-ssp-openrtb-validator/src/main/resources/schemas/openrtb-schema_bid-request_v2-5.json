@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "openrtb-v2_4-schema-bid_request",
-	"description": "json schema for an openrtb v2.4 bid request",
+	"title": "openrtb-v2_5-schema-bid_request",
+	"description": "json schema for an openrtb v2.5 bid request",
 	"type": "object",
 	"required": [ "id", "imp" ],
 	"not": {
@@ -56,6 +56,12 @@
 				"type": "string"
 			}
 		},
+		"bseat": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
 		"allimps": {
 			"$ref": "#/definitions/boolean_int"
 		},
@@ -63,6 +69,12 @@
 			"type": "array",
 			"items": {
 				"$ref": "#/definitions/currency"
+			}
+		},
+		"wlang": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/language"
 			}
 		},
 		"bcat": {
@@ -82,6 +94,9 @@
 			"items": {
 				"type": "string"
 			}
+		},
+		"source": {
+			"$ref": "#/definitions/source"
 		},
 		"regs": {
 			"$ref": "#/definitions/regs"
@@ -120,6 +135,12 @@
 			"properties": {
 				"id": {
 					"type": "string"
+				},
+				"metric": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/metric"
+					}
 				},
 				"banner": {
 					"$ref": "#/definitions/banner"
@@ -242,6 +263,9 @@
 						"$ref": "#/definitions/api_framework"
 					}
 				},
+				"vcm": {
+					"type": "integer"
+				},
 				"ext": {
 					"type": "object"
 				}
@@ -282,6 +306,9 @@
 				"startdelay": {
 					"$ref": "#/definitions/video_start_delay"
 				},
+				"placement" : {
+					"$ref": "#/definitions/placement"
+				},
 				"linearity": {
 					"$ref": "#/definitions/video_linearity"
 				},
@@ -321,6 +348,11 @@
 					"items": {
 						"$ref": "#/definitions/video_playback_method"
 					}
+				},
+				"playbackend" : {
+					"type" : "integer",
+					"minimum" : 1,
+					"maximum" : 3
 				},
 				"delivery": {
 					"type": "array",
@@ -478,6 +510,15 @@
 				},
 				"h": {
 						"$ref": "#/definitions/positive_int"
+				},
+				"wratio": {
+					"$ref": "#/definitions/positive_int"
+				},
+				"hratio": {
+					"$ref": "#/definitions/positive_int"
+				},
+				"wmin": {
+					"$ref": "#/definitions/positive_int"
 				},
 				"ext": {
 					"type": "object"
@@ -811,6 +852,9 @@
 				"carrier": {
 					"type": "string"
 				},
+				"mccmnc": {
+					"type": "string"
+				},
 				"connectiontype": {
 					"$ref": "#/definitions/connection_type"
 				},
@@ -933,7 +977,7 @@
 				"ext": {
 					"type": "object"
 				}
-			}			
+			}
 		},
 		"data": {
 			"type": "object",
@@ -985,6 +1029,40 @@
 					"type": "object"
 				}
 			}
+		},
+		"source": {
+			"type": "object",
+			"properties": {
+				"fd": {
+					"type": "integer"
+				},
+				"tid": {
+					"type": "string"
+				},
+				"pchain": {
+					"type": "string"
+				},
+				"ext": {}
+			}
+		},
+		"metric": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string"
+				},
+				"value": {
+					"type": "number"
+				},
+				"vendor": {
+					"type": "string"
+				},
+				"ext": {}
+			},
+			"required": [
+				"type",
+				"value"
+			]
 		},
 		"pmp": {
 			"type": "object",
@@ -1040,8 +1118,8 @@
 				}
 			}
 		},
-		
-		
+
+
 		"content_category": {
 			"type": "string",
 			"enum": [
@@ -1096,7 +1174,7 @@
 		"api_framework": {
 			"type": "integer",
 			"minimum": 1,
-			"maximum": 5
+			"maximum": 6
 		},
 		"video_linearity": {
 			"type": "integer",
@@ -1111,11 +1189,16 @@
 		"video_playback_method": {
 			"type": "integer",
 			"minimum": 1,
-			"maximum": 4
+			"maximum": 6
 		},
 		"video_start_delay": {
 			"type": "integer",
 			"minimum": -2
+		},
+		"placement": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 5
 		},
 		"production_quality": {
 			"type": "integer",
@@ -1151,7 +1234,7 @@
 			"type": "integer",
 			"minimum": 1,
 			"maximum": 7
-		},		
+		},
 		"connection_type": {
 			"type": "integer",
 			"minimum": 0,
@@ -1192,5 +1275,5 @@
 			"minimum": 0,
 			"maximum": 4
 		}
-	}	
+	}
 }
